@@ -6,8 +6,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
 class TosScreen extends StatelessWidget {
+
+  final VoidCallback callback;
+
   const TosScreen({
     Key key,
+    @required this.callback
   }) : super(key: key);
 
   @override
@@ -57,11 +61,7 @@ class TosScreen extends StatelessWidget {
                                 padding:
                                     const EdgeInsets.symmetric(vertical: 8.0),
                                 child: ElevatedButton(
-                                  onPressed: () => Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) => MapScreen()),
-                                  ),
+                                  onPressed: callback,
                                   child: Text("let_s_start"),
                                 ),
                               ),
