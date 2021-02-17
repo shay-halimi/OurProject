@@ -1,6 +1,6 @@
 {
-    "name": "collaborative_food",
-    "short_name": "collaborative_food",
+    "name": "cookpoint",
+    "short_name": "cookpoint",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",

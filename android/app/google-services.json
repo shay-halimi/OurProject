@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "999901209458",
+    "firebase_url": "https://flutterapp-8f8db-default-rtdb.firebaseio.com",
+    "project_id": "flutterapp-8f8db",
+    "storage_bucket": "flutterapp-8f8db.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:999901209458:android:e99ce630797d70ae26f3eb",
+        "android_client_info": {
+          "package_name": "app.cookpoint.android.dev"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "999901209458-ho8snh50294tians4kgrojlq1onctmf7.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDL3POLIs4-Idq5ipxWX8wfQ9J7L5jQ_AE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "999901209458-ho8snh50294tians4kgrojlq1onctmf7.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "999901209458-chmni99hpl59ll2ogp67thj08sosgv7s.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "app.cookpoint.ios.dev"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

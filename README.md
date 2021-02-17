@@ -1,4 +1,4 @@
-# collaborative_food
+# cookpoint
 
 A new Flutter application.
 
