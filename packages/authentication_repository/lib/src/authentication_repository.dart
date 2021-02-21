@@ -73,8 +73,7 @@ class AuthenticationRepository {
           smsCode: oneTimePassword,
         ),
       );
-    } on Exception catch (e) {
-      print(e);
+    } on Exception {
       throw SignInWithCredentialFailure();
     }
   }
@@ -84,8 +83,7 @@ class AuthenticationRepository {
       await Future.wait([
         _firebaseAuth.signOut(),
       ]);
-    } on Exception catch (e) {
-      print(e);
+    } on Exception {
       throw LogOutFailure();
     }
   }
