@@ -34,7 +34,7 @@ dependencies:
     path: packages/accounts_repository
 
 dependency_overrides:
-  intl: '0.16.1'
+  intl: '>=0.17.0-nullsafety.2 <= 0.17.0-nullsafety.2'
 
 dev_dependencies:
   flutter_test:

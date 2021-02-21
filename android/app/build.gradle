@@ -30,7 +30,7 @@ android {
 
     defaultConfig {
         applicationId "app.cookpoint.android.dev"
-        minSdkVersion 16
+        minSdkVersion 21
         targetSdkVersion 30
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
