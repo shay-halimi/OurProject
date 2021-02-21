@@ -30,6 +30,8 @@ dependencies:
   pedantic: ^1.10.0
   authentication_repository:
     path: packages/authentication_repository
+  accounts_repository:
+    path: packages/accounts_repository
 
 dependency_overrides:
   intl: '0.16.1'
