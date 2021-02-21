@@ -1,12 +1,12 @@
-import 'package:cookpoint/one_time_password/one_time_password.dart';
+import 'package:cookpoint/otp/otp.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:formz/formz.dart';
 
-class OneTimePasswordForm extends StatelessWidget {
+class OTPForm extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return BlocListener<OneTimePasswordCubit, OneTimePasswordState>(
+    return BlocListener<OTPCubit, OTPState>(
       listener: (context, state) {
         if (state.status.isSubmissionFailure) {
           ScaffoldMessenger.of(context)
@@ -21,7 +21,7 @@ class OneTimePasswordForm extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
             const Icon(Icons.fastfood),
-            _OneTimePasswordInput(),
+            _OTPInput(),
             _ContinueButton(),
           ],
         ),
@@ -30,18 +30,18 @@ class OneTimePasswordForm extends StatelessWidget {
   }
 }
 
-class _OneTimePasswordInput extends StatelessWidget {
+class _OTPInput extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<OneTimePasswordCubit, OneTimePasswordState>(
+    return BlocBuilder<OTPCubit, OTPState>(
       buildWhen: (previous, current) =>
           previous.oneTimePassword != current.oneTimePassword,
       builder: (context, state) {
         return TextField(
           key: const Key(
-              'OneTimePasswordForm__OneTimePasswordInput_TextField'),
+              'OTPForm__OTPInput_TextField'),
           onChanged: (password) => context
-              .read<OneTimePasswordCubit>()
+              .read<OTPCubit>()
               .oneTimePasswordChanged(password),
           obscureText: true,
           decoration: InputDecoration(
@@ -60,18 +60,18 @@ class _OneTimePasswordInput extends StatelessWidget {
 class _ContinueButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<OneTimePasswordCubit, OneTimePasswordState>(
+    return BlocBuilder<OTPCubit, OTPState>(
       buildWhen: (previous, current) => previous.status != current.status,
       builder: (context, state) {
         return state.status.isSubmissionInProgress
             ? const CircularProgressIndicator()
             : ElevatedButton(
                 key: const Key(
-                    'OneTimePasswordForm__ContinueButton_ElevatedButton'),
+                    'OTPForm__ContinueButton_ElevatedButton'),
                 child: const Text('המשך'),
                 onPressed: state.status.isValidated
                     ? () => context
-                        .read<OneTimePasswordCubit>()
+                        .read<OTPCubit>()
                         .confirmPhoneNumber()
                     : null,
               );

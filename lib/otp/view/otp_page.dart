@@ -1,11 +1,11 @@
 import 'package:authentication_repository/authentication_repository.dart';
-import 'package:cookpoint/one_time_password/one_time_password.dart';
+import 'package:cookpoint/otp/otp.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-class OneTimePasswordPage extends StatelessWidget {
+class OTPPage extends StatelessWidget {
   static Route route() {
-    return MaterialPageRoute<void>(builder: (_) => OneTimePasswordPage());
+    return MaterialPageRoute<void>(builder: (_) => OTPPage());
   }
 
   @override
@@ -16,8 +16,8 @@ class OneTimePasswordPage extends StatelessWidget {
         padding: const EdgeInsets.all(8.0),
         child: BlocProvider(
           create: (_) =>
-              OneTimePasswordCubit(context.read<AuthenticationRepository>()),
-          child: OneTimePasswordForm(),
+              OTPCubit(context.read<AuthenticationRepository>()),
+          child: OTPForm(),
         ),
       ),
     );

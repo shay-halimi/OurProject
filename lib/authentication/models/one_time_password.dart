@@ -1,18 +1,18 @@
 import 'package:formz/formz.dart';
 
-enum OneTimePasswordError { invalid }
+enum OTPError { invalid }
 
-class OneTimePassword extends FormzInput<String, OneTimePasswordError> {
-  const OneTimePassword.pure() : super.pure('');
-  const OneTimePassword.dirty([String value = '']) : super.dirty(value);
+class OTP extends FormzInput<String, OTPError> {
+  const OTP.pure() : super.pure('');
+  const OTP.dirty([String value = '']) : super.dirty(value);
 
   static final _oneTimePasswordRegExp =
       RegExp(r'^[0-9]{6}$');
 
   @override
-  OneTimePasswordError validator(String value) {
+  OTPError validator(String value) {
     return _oneTimePasswordRegExp.hasMatch(value)
         ? null
-        : OneTimePasswordError.invalid;
+        : OTPError.invalid;
   }
 }

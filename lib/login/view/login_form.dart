@@ -1,5 +1,5 @@
-import 'package:cookpoint/one_time_password/one_time_password.dart';
 import 'package:cookpoint/login/login.dart';
+import 'package:cookpoint/otp/otp.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:formz/formz.dart';
@@ -15,10 +15,8 @@ class LoginForm extends StatelessWidget {
             ..showSnackBar(
               const SnackBar(content: Text('שגיאה בתחברות')),
             );
-        } else if(state.status.isSubmissionSuccess) {
-
-          Navigator.push(context, OneTimePasswordPage.route());
-
+        } else if (state.status.isSubmissionSuccess) {
+          Navigator.push(context, OTPPage.route());
         }
       },
       child: SingleChildScrollView(
@@ -43,17 +41,13 @@ class _PhoneNumberInput extends StatelessWidget {
           previous.phoneNumber != current.phoneNumber,
       builder: (context, state) {
         return TextField(
-          key: const Key(
-              'LoginForm__PhoneNumberInput_TextField'),
-          onChanged: (phoneNumber) => context
-              .read<LoginCubit>()
-              .phoneNumberChanged(phoneNumber),
+          key: const Key('LoginForm__PhoneNumberInput_TextField'),
+          onChanged: (phoneNumber) =>
+              context.read<LoginCubit>().phoneNumberChanged(phoneNumber),
           decoration: InputDecoration(
             labelText: 'מפסר פלאפון',
             helperText: '',
-            errorText: state.phoneNumber.invalid
-                ? 'מספר פלאפון לא תקין'
-                : null,
+            errorText: state.phoneNumber.invalid ? 'מספר פלאפון לא תקין' : null,
           ),
         );
       },
@@ -70,13 +64,10 @@ class _ContinueButton extends StatelessWidget {
         return state.status.isSubmissionInProgress
             ? const CircularProgressIndicator()
             : ElevatedButton(
-                key: const Key(
-                    'LoginForm__ContinueButton_ElevatedButton'),
+                key: const Key('LoginForm__ContinueButton_ElevatedButton'),
                 child: const Text('המשך'),
                 onPressed: state.status.isValidated
-                    ? () => context
-                        .read<LoginCubit>()
-                        .sendOneTimePassword()
+                    ? () => context.read<LoginCubit>().sendOTP()
                     : null,
               );
       },

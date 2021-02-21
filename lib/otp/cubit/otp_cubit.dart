@@ -6,17 +6,17 @@ import 'package:equatable/equatable.dart';
 import 'package:cookpoint/authentication/authentication.dart';
 import 'package:formz/formz.dart';
 
-part 'one_time_password_state.dart';
+part 'otp_state.dart';
 
-class OneTimePasswordCubit extends Cubit<OneTimePasswordState> {
+class OTPCubit extends Cubit<OTPState> {
   final AuthenticationRepository _authenticationRepository;
 
-  OneTimePasswordCubit(this._authenticationRepository)
+  OTPCubit(this._authenticationRepository)
       : assert(_authenticationRepository != null),
-        super(const OneTimePasswordState()) ;
+        super(const OTPState()) ;
 
   void oneTimePasswordChanged(String value) {
-    final oneTimePassword = OneTimePassword.dirty(value);
+    final oneTimePassword = OTP.dirty(value);
     emit(state.copyWith(
       oneTimePassword: oneTimePassword,
       status: Formz.validate([oneTimePassword]),

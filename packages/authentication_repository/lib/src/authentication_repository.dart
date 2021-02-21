@@ -6,7 +6,7 @@ import 'package:meta/meta.dart';
 
 import 'models/models.dart' as domain;
 
-class SendOneTimePasswordFailure implements Exception {}
+class SendOTPFailure implements Exception {}
 
 class SignInWithCredentialFailure implements Exception {}
 
@@ -27,7 +27,7 @@ class AuthenticationRepository {
 
   String _verificationId;
 
-  Future<void> sendOneTimePassword({
+  Future<void> sendOTP({
     @required String phoneNumber,
   }) async {
     assert(phoneNumber != null);

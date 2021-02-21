@@ -21,13 +21,13 @@ class LoginCubit extends Cubit<LoginState> {
     ));
   }
 
-  Future<void> sendOneTimePassword() async {
+  Future<void> sendOTP() async {
     if (!state.status.isValidated) return;
 
     emit(state.copyWith(status: FormzStatus.submissionInProgress));
 
     try {
-      await _authenticationRepository.sendOneTimePassword(
+      await _authenticationRepository.sendOTP(
         phoneNumber: state.phoneNumber.e164,
       );
       emit(state.copyWith(status: FormzStatus.submissionSuccess));
