@@ -1,3 +1,2 @@
-export 'confirmed_password.dart';
-export 'email.dart';
-export 'password.dart';
+export 'phone_number.dart';
+export 'one_time_password.dart';

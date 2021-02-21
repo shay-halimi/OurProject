@@ -2,7 +2,6 @@ import 'package:authentication_repository/authentication_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:cookpoint/authentication/authentication.dart';
-import 'package:cookpoint/home/home.dart';
 import 'dart:async';
 import 'package:flutter/widgets.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -76,34 +75,8 @@ class _Drawer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Drawer(
-      child: ListView(
-        // Important: Remove any padding from the ListView.
-        padding: EdgeInsets.zero,
-        children: <Widget>[
-          UserAccountsDrawerHeader(
-            currentAccountPicture: Avatar(photo: user.photo),
-            accountName: Text(user.name ?? ''),
-            accountEmail: Text(user.email),
-          ),
-          ListTile(
-            key: const Key('homePage_drawer_logout_iconButton'),
-            leading: const Icon(Icons.exit_to_app),
-            title: Text("Logout"),
-            onTap: () => context
-                .read<AuthenticationBloc>()
-                .add(AuthenticationLogoutRequested()),
-          ),
-          Divider(),
-          ListTile(
-            key: const Key('homePage_drawer_bug_report_iconButton'),
-            leading: const Icon(Icons.bug_report),
-            title: Text("Report a bug"),
-            onTap: () => null,
-          ),
-        ],
-      ),
-    );
+    /// todo(matan)
+    return Drawer();
   }
 }
 

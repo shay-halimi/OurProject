@@ -1,32 +1,27 @@
 import 'package:cookpoint/one_time_password/one_time_password.dart';
-import 'package:cookpoint/login/login.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:formz/formz.dart';
 
-class LoginForm extends StatelessWidget {
+class OneTimePasswordForm extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return BlocListener<LoginCubit, LoginState>(
+    return BlocListener<OneTimePasswordCubit, OneTimePasswordState>(
       listener: (context, state) {
         if (state.status.isSubmissionFailure) {
           ScaffoldMessenger.of(context)
             ..hideCurrentSnackBar()
             ..showSnackBar(
-              const SnackBar(content: Text('שגיאה בתחברות')),
+              const SnackBar(content: Text('שגיאה בשליחת קוד אימות')),
             );
-        } else if(state.status.isSubmissionSuccess) {
-
-          Navigator.push(context, OneTimePasswordPage.route());
-
         }
       },
       child: SingleChildScrollView(
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
             const Icon(Icons.fastfood),
-            _PhoneNumberInput(),
+            _OneTimePasswordInput(),
             _ContinueButton(),
           ],
         ),
@@ -35,24 +30,25 @@ class LoginForm extends StatelessWidget {
   }
 }
 
-class _PhoneNumberInput extends StatelessWidget {
+class _OneTimePasswordInput extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<LoginCubit, LoginState>(
+    return BlocBuilder<OneTimePasswordCubit, OneTimePasswordState>(
       buildWhen: (previous, current) =>
-          previous.phoneNumber != current.phoneNumber,
+          previous.oneTimePassword != current.oneTimePassword,
       builder: (context, state) {
         return TextField(
           key: const Key(
-              'LoginForm__PhoneNumberInput_TextField'),
-          onChanged: (phoneNumber) => context
-              .read<LoginCubit>()
-              .phoneNumberChanged(phoneNumber),
+              'OneTimePasswordForm__OneTimePasswordInput_TextField'),
+          onChanged: (password) => context
+              .read<OneTimePasswordCubit>()
+              .oneTimePasswordChanged(password),
+          obscureText: true,
           decoration: InputDecoration(
-            labelText: 'מפסר פלאפון',
+            labelText: 'קוד אימות',
             helperText: '',
-            errorText: state.phoneNumber.invalid
-                ? 'מספר פלאפון לא תקין'
+            errorText: state.oneTimePassword.invalid
+                ? 'קוד אימות לא תקין'
                 : null,
           ),
         );
@@ -64,19 +60,19 @@ class _PhoneNumberInput extends StatelessWidget {
 class _ContinueButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<LoginCubit, LoginState>(
+    return BlocBuilder<OneTimePasswordCubit, OneTimePasswordState>(
       buildWhen: (previous, current) => previous.status != current.status,
       builder: (context, state) {
         return state.status.isSubmissionInProgress
             ? const CircularProgressIndicator()
             : ElevatedButton(
                 key: const Key(
-                    'LoginForm__ContinueButton_ElevatedButton'),
+                    'OneTimePasswordForm__ContinueButton_ElevatedButton'),
                 child: const Text('המשך'),
                 onPressed: state.status.isValidated
                     ? () => context
-                        .read<LoginCubit>()
-                        .sendOneTimePassword()
+                        .read<OneTimePasswordCubit>()
+                        .confirmPhoneNumber()
                     : null,
               );
       },

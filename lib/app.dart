@@ -6,6 +6,7 @@ import 'package:cookpoint/home/home.dart';
 import 'package:cookpoint/login/login.dart';
 import 'package:cookpoint/splash/splash.dart';
 import 'package:cookpoint/theme.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 
 class App extends StatelessWidget {
   const App({
@@ -44,6 +45,14 @@ class _AppViewState extends State<AppView> {
   Widget build(BuildContext context) {
     return MaterialApp(
       theme: theme,
+      localizationsDelegates: [
+        GlobalWidgetsLocalizations.delegate,
+        GlobalMaterialLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate,
+      ],
+      supportedLocales: [
+        const Locale('he', 'IL'),
+      ],
       navigatorKey: _navigatorKey,
       builder: (context, child) {
         return BlocListener<AuthenticationBloc, AuthenticationState>(
