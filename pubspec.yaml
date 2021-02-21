@@ -28,13 +28,11 @@ dependencies:
   formz: ^0.3.2
   google_fonts: ^1.1.2
   pedantic: ^1.10.0
-  intl: any
-  intl_translation: any
   authentication_repository:
     path: packages/authentication_repository
 
 dependency_overrides:
-  intl: '>=0.17.0-nullsafety.2 <= 0.17.0-nullsafety.2'
+  intl: '0.16.1'
 
 dev_dependencies:
   flutter_test:
