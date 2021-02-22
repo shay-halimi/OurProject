@@ -45,7 +45,7 @@ class _PhoneNumberInput extends StatelessWidget {
           onChanged: (phoneNumber) =>
               context.read<LoginCubit>().phoneNumberChanged(phoneNumber),
           decoration: InputDecoration(
-            labelText: 'מפסר פלאפון',
+            labelText: 'מספר טלפון',
             helperText: '',
             errorText: state.phoneNumber.invalid ? 'מספר פלאפון לא תקין' : null,
           ),
