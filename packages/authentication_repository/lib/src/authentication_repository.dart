@@ -63,14 +63,14 @@ class AuthenticationRepository {
   }
 
   Future<void> signInWithCredential({
-    @required String oneTimePassword,
+    @required String otp,
   }) async {
-    assert(oneTimePassword != null);
+    assert(otp != null);
     try {
       await _firebaseAuth.signInWithCredential(
         PhoneAuthProvider.credential(
           verificationId: _verificationId,
-          smsCode: oneTimePassword,
+          smsCode: otp,
         ),
       );
     } on Exception {

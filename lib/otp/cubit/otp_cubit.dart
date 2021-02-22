@@ -15,11 +15,11 @@ class OTPCubit extends Cubit<OTPState> {
       : assert(_authenticationRepository != null),
         super(const OTPState()) ;
 
-  void oneTimePasswordChanged(String value) {
-    final oneTimePassword = OTP.dirty(value);
+  void otpChanged(String value) {
+    final otp = OTP.dirty(value);
     emit(state.copyWith(
-      oneTimePassword: oneTimePassword,
-      status: Formz.validate([oneTimePassword]),
+      otp: otp,
+      status: Formz.validate([otp]),
     ));
   }
 
@@ -30,7 +30,7 @@ class OTPCubit extends Cubit<OTPState> {
 
     try {
       await _authenticationRepository.signInWithCredential(
-        oneTimePassword: state.oneTimePassword.value,
+        otp: state.otp.value,
       );
       emit(state.copyWith(status: FormzStatus.submissionSuccess));
     } on Exception {

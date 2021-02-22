@@ -35,21 +35,17 @@ class _OTPInput extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<OTPCubit, OTPState>(
       buildWhen: (previous, current) =>
-          previous.oneTimePassword != current.oneTimePassword,
+          previous.otp != current.otp,
       builder: (context, state) {
         return TextField(
-          key: const Key(
-              'OTPForm__OTPInput_TextField'),
-          onChanged: (password) => context
-              .read<OTPCubit>()
-              .oneTimePasswordChanged(password),
-          obscureText: true,
+          key: const Key('OTPForm__OTPInput_TextField'),
+          onChanged: (otp) =>
+              context.read<OTPCubit>().otpChanged(otp),
           decoration: InputDecoration(
             labelText: 'קוד אימות',
             helperText: '',
-            errorText: state.oneTimePassword.invalid
-                ? 'קוד אימות לא תקין'
-                : null,
+            errorText:
+                state.otp.invalid ? 'קוד אימות לא תקין' : null,
           ),
         );
       },
@@ -66,13 +62,10 @@ class _ContinueButton extends StatelessWidget {
         return state.status.isSubmissionInProgress
             ? const CircularProgressIndicator()
             : ElevatedButton(
-                key: const Key(
-                    'OTPForm__ContinueButton_ElevatedButton'),
+                key: const Key('OTPForm__ContinueButton_ElevatedButton'),
                 child: const Text('המשך'),
                 onPressed: state.status.isValidated
-                    ? () => context
-                        .read<OTPCubit>()
-                        .confirmPhoneNumber()
+                    ? () => context.read<OTPCubit>().confirmPhoneNumber()
                     : null,
               );
       },

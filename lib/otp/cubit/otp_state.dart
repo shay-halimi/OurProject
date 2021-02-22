@@ -1,24 +1,24 @@
 part of 'otp_cubit.dart';
 
 class OTPState extends Equatable {
-  final OTP oneTimePassword;
+  final OTP otp;
 
   final FormzStatus status;
 
   const OTPState({
-    this.oneTimePassword = const OTP.pure(),
+    this.otp = const OTP.pure(),
     this.status = FormzStatus.pure,
   });
 
   @override
-  List<Object> get props => [oneTimePassword, status];
+  List<Object> get props => [otp, status];
 
   OTPState copyWith({
-    OTP oneTimePassword,
+    OTP otp,
     FormzStatus status,
   }) {
     return OTPState(
-      oneTimePassword: oneTimePassword ?? this.oneTimePassword,
+      otp: otp ?? this.otp,
       status: status ?? this.status,
     );
   }
