@@ -10,4 +10,6 @@ abstract class AccountsRepository {
   Stream<List<Account>> accounts();
 
   Future<void> update(Account account);
+
+  Future<Account> findByUserId(String userId);
 }

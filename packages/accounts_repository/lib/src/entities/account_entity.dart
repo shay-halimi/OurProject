@@ -1,4 +1,5 @@
 import 'package:accounts_repository/src/models/location.dart';
+import 'package:accounts_repository/src/models/models.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equatable/equatable.dart';
 
@@ -10,7 +11,7 @@ class AccountEntity extends Equatable {
   final String about;
   final String phoneNumber;
   final Location location;
-  final bool open;
+  final int status;
 
   const AccountEntity({
     this.id,
@@ -20,7 +21,7 @@ class AccountEntity extends Equatable {
     this.about,
     this.phoneNumber,
     this.location,
-    this.open,
+    this.status,
   });
 
   Map<String, Object> toJson() {
@@ -32,7 +33,7 @@ class AccountEntity extends Equatable {
       'about': about,
       'phoneNumber': phoneNumber,
       'location': location.toJson(),
-      'open': open,
+      'status': status,
     };
   }
 
@@ -45,12 +46,12 @@ class AccountEntity extends Equatable {
         about,
         phoneNumber,
         location,
-        open,
+        status,
       ];
 
   @override
   String toString() {
-    return 'AccountEntity { id: $id, userId: $userId, displayName: $displayName, profilePhoto: $profilePhoto, about: $about, phoneNumber: $phoneNumber, location: $location, open: $open}';
+    return 'AccountEntity { id: $id, userId: $userId, displayName: $displayName, profilePhoto: $profilePhoto, about: $about, phoneNumber: $phoneNumber, location: $location, status: $status}';
   }
 
   static AccountEntity fromJson(Map<String, Object> json) {
@@ -62,7 +63,7 @@ class AccountEntity extends Equatable {
       about: json['about'] as String,
       phoneNumber: json['phoneNumber'] as String,
       location: Location.fromJson(json['location']),
-      open: json['open'] as bool,
+      status: json['status'] as int,
     );
   }
 
@@ -75,7 +76,7 @@ class AccountEntity extends Equatable {
       about: snap.data()['about'] as String,
       phoneNumber: snap.data()['phoneNumber'] as String,
       location: Location.fromJson(snap.data()['location']),
-      open: snap.data()['open'] as bool,
+      status: snap.data()['status'] as int,
     );
   }
 
@@ -87,7 +88,7 @@ class AccountEntity extends Equatable {
       'about': about,
       'phoneNumber': phoneNumber,
       'location': location.toJson(),
-      'open': open,
+      'status': status,
     };
   }
 }

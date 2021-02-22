@@ -30,4 +30,17 @@ class FirebaseAccountsRepository implements AccountsRepository {
   Future<void> update(Account account) {
     return collection.doc(account.id).update(account.toEntity().toDocument());
   }
+
+  @override
+  Future<Account> findByUserId(String userId) {
+    return collection.where('userId', isEqualTo: userId).get().then((value) {
+      if (value.docs.isEmpty) {
+        return Account.empty;
+      }
+
+      return Account.fromEntity(
+        AccountEntity.fromSnapshot(value.docs.first),
+      );
+    });
+  }
 }

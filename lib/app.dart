@@ -1,3 +1,4 @@
+import 'package:accounts_repository/accounts_repository.dart';
 import 'package:authentication_repository/authentication_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -12,15 +13,24 @@ class App extends StatelessWidget {
   const App({
     Key key,
     @required this.authenticationRepository,
+    @required this.accountsRepository,
   })  : assert(authenticationRepository != null),
         super(key: key);
 
   final AuthenticationRepository authenticationRepository;
+  final AccountsRepository accountsRepository;
 
   @override
   Widget build(BuildContext context) {
-    return RepositoryProvider.value(
-      value: authenticationRepository,
+    return MultiRepositoryProvider(
+      providers: [
+        RepositoryProvider.value(
+          value: authenticationRepository,
+        ),
+        RepositoryProvider.value(
+          value: accountsRepository,
+        ),
+      ],
       child: BlocProvider(
         create: (_) => AuthenticationBloc(
           authenticationRepository: authenticationRepository,

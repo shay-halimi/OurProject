@@ -1,3 +1,4 @@
+import 'package:accounts_repository/accounts_repository.dart';
 import 'package:authentication_repository/authentication_repository.dart';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
@@ -12,5 +13,8 @@ void main() async {
   await Firebase.initializeApp();
   EquatableConfig.stringify = kDebugMode;
   Bloc.observer = SimpleBlocObserver();
-  runApp(App(authenticationRepository: AuthenticationRepository()));
+  runApp(App(
+    authenticationRepository: AuthenticationRepository(),
+    accountsRepository: FirebaseAccountsRepository(),
+  ));
 }

@@ -2,6 +2,8 @@ import 'package:meta/meta.dart';
 import '../entities/entities.dart';
 import 'location.dart';
 
+enum AccountStatus { closed, open }
+
 @immutable
 class Account {
   final String id;
@@ -11,17 +13,17 @@ class Account {
   final String about;
   final String phoneNumber;
   final Location location;
-  final bool open;
+  final AccountStatus status;
 
   const Account({
-    this.id,
-    this.userId,
-    this.displayName,
-    this.profilePhoto,
-    this.about,
-    this.phoneNumber,
-    this.location,
-    this.open,
+    @required this.id,
+    @required this.userId,
+    @required this.displayName,
+    @required this.profilePhoto,
+    @required this.about,
+    @required this.phoneNumber,
+    @required this.location,
+    @required this.status,
   });
 
   Account copyWith({
@@ -32,7 +34,7 @@ class Account {
     String about,
     String phoneNumber,
     Location location,
-    bool open,
+    AccountStatus status,
   }) {
     return Account(
       id: id ?? this.id,
@@ -42,7 +44,7 @@ class Account {
       about: about ?? this.about,
       phoneNumber: phoneNumber ?? this.phoneNumber,
       location: location ?? this.location,
-      open: open ?? this.open,
+      status: status ?? this.status,
     );
   }
 
@@ -55,7 +57,7 @@ class Account {
       about.hashCode ^
       phoneNumber.hashCode ^
       location.hashCode ^
-      open.hashCode;
+      status.hashCode;
 
   @override
   bool operator ==(Object other) =>
@@ -69,11 +71,11 @@ class Account {
           about == other.about &&
           phoneNumber == other.phoneNumber &&
           location == other.location &&
-          open == other.open;
+          status == other.status;
 
   @override
   String toString() {
-    return 'Account { id: $id, userId: $userId, displayName: $displayName, profilePhoto: $profilePhoto, about: $about, phoneNumber: $phoneNumber, location: $location, open: $open}';
+    return 'Account { id: $id, userId: $userId, displayName: $displayName, profilePhoto: $profilePhoto, about: $about, phoneNumber: $phoneNumber, location: $location, status: $status}';
   }
 
   AccountEntity toEntity() {
@@ -85,7 +87,7 @@ class Account {
       about: about,
       phoneNumber: phoneNumber,
       location: location,
-      open: open,
+      status: status.index,
     );
   }
 
@@ -98,7 +100,18 @@ class Account {
       about: entity.about,
       phoneNumber: entity.phoneNumber,
       location: entity.location,
-      open: entity.open,
+      status: AccountStatus.values[entity.status],
     );
   }
+
+  static const empty = Account(
+    id: '',
+    userId: '',
+    displayName: '',
+    profilePhoto: '',
+    about: '',
+    phoneNumber: '',
+    location: Location.empty,
+    status: AccountStatus.closed,
+  );
 }
