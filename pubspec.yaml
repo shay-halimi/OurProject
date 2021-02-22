@@ -28,6 +28,7 @@ dependencies:
   formz: ^0.3.2
   google_fonts: ^1.1.2
   pedantic: ^1.10.0
+  toggle_switch: ^0.1.8
   authentication_repository:
     path: packages/authentication_repository
   accounts_repository:
