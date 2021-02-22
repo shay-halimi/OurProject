@@ -1,6 +1,6 @@
 import 'package:cookpoint/otp/otp.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:formz/formz.dart';
 
 class OTPForm extends StatelessWidget {
@@ -34,18 +34,15 @@ class _OTPInput extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<OTPCubit, OTPState>(
-      buildWhen: (previous, current) =>
-          previous.otp != current.otp,
+      buildWhen: (previous, current) => previous.otp != current.otp,
       builder: (context, state) {
         return TextField(
           key: const Key('OTPForm__OTPInput_TextField'),
-          onChanged: (otp) =>
-              context.read<OTPCubit>().otpChanged(otp),
+          onChanged: (otp) => context.read<OTPCubit>().otpChanged(otp),
           decoration: InputDecoration(
             labelText: 'קוד אימות',
             helperText: '',
-            errorText:
-                state.otp.invalid ? 'קוד אימות לא תקין' : null,
+            errorText: state.otp.invalid ? 'קוד אימות לא תקין' : null,
           ),
         );
       },

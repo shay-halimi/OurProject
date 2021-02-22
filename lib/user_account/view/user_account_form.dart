@@ -39,7 +39,9 @@ class UserAccountForm extends StatelessWidget {
                 Row(
                   children: [
                     Text("מצב: "),
-                    Text(state.account.status == AccountStatus.closed ? " ישן " : " על המפה "),
+                    Text(state.account.status == AccountStatus.closed
+                        ? " ישן "
+                        : " על המפה "),
                   ],
                 ),
               ],

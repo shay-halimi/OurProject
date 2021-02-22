@@ -1,9 +1,10 @@
-import 'package:authentication_repository/authentication_repository.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:cookpoint/authentication/authentication.dart';
 import 'dart:async';
+
+import 'package:authentication_repository/authentication_repository.dart';
+import 'package:cookpoint/authentication/authentication.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:location/location.dart';
 

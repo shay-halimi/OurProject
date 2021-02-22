@@ -1,7 +1,7 @@
 import 'package:cookpoint/login/login.dart';
 import 'package:cookpoint/otp/otp.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:formz/formz.dart';
 
 class LoginForm extends StatelessWidget {

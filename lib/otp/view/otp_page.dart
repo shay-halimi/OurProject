@@ -15,8 +15,7 @@ class OTPPage extends StatelessWidget {
       body: Padding(
         padding: const EdgeInsets.all(8.0),
         child: BlocProvider(
-          create: (_) =>
-              OTPCubit(context.read<AuthenticationRepository>()),
+          create: (_) => OTPCubit(context.read<AuthenticationRepository>()),
           child: OTPForm(),
         ),
       ),
