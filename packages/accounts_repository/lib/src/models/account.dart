@@ -1,15 +1,16 @@
 import 'package:meta/meta.dart';
+
 import '../entities/entities.dart';
 import 'location.dart';
 
-enum AccountStatus { closed, open }
+enum AccountStatus { unavailable, available }
 
 @immutable
 class Account {
   final String id;
   final String userId;
   final String displayName;
-  final String profilePhoto;
+  final String photoUrl;
   final String about;
   final String phoneNumber;
   final Location location;
@@ -19,7 +20,7 @@ class Account {
     @required this.id,
     @required this.userId,
     @required this.displayName,
-    @required this.profilePhoto,
+    @required this.photoUrl,
     @required this.about,
     @required this.phoneNumber,
     @required this.location,
@@ -30,7 +31,7 @@ class Account {
     String id,
     String userId,
     String displayName,
-    String profilePhoto,
+    String photoUrl,
     String about,
     String phoneNumber,
     Location location,
@@ -40,7 +41,7 @@ class Account {
       id: id ?? this.id,
       userId: userId ?? this.userId,
       displayName: displayName ?? this.displayName,
-      profilePhoto: profilePhoto ?? this.profilePhoto,
+      photoUrl: photoUrl ?? this.photoUrl,
       about: about ?? this.about,
       phoneNumber: phoneNumber ?? this.phoneNumber,
       location: location ?? this.location,
@@ -53,7 +54,7 @@ class Account {
       id.hashCode ^
       userId.hashCode ^
       displayName.hashCode ^
-      profilePhoto.hashCode ^
+      photoUrl.hashCode ^
       about.hashCode ^
       phoneNumber.hashCode ^
       location.hashCode ^
@@ -67,7 +68,7 @@ class Account {
           id == other.id &&
           userId == other.userId &&
           displayName == other.displayName &&
-          profilePhoto == other.profilePhoto &&
+          photoUrl == other.photoUrl &&
           about == other.about &&
           phoneNumber == other.phoneNumber &&
           location == other.location &&
@@ -75,7 +76,7 @@ class Account {
 
   @override
   String toString() {
-    return 'Account { id: $id, userId: $userId, displayName: $displayName, profilePhoto: $profilePhoto, about: $about, phoneNumber: $phoneNumber, location: $location, status: $status}';
+    return 'Account{id: $id, userId: $userId, displayName: $displayName, photoUrl: $photoUrl, about: $about, phoneNumber: $phoneNumber, location: $location, status: $status}';
   }
 
   AccountEntity toEntity() {
@@ -83,7 +84,7 @@ class Account {
       id: id,
       userId: userId,
       displayName: displayName,
-      profilePhoto: profilePhoto,
+      photoUrl: photoUrl,
       about: about,
       phoneNumber: phoneNumber,
       location: location,
@@ -96,7 +97,7 @@ class Account {
       id: entity.id,
       userId: entity.userId,
       displayName: entity.displayName,
-      profilePhoto: entity.profilePhoto,
+      photoUrl: entity.photoUrl,
       about: entity.about,
       phoneNumber: entity.phoneNumber,
       location: entity.location,
@@ -104,14 +105,14 @@ class Account {
     );
   }
 
-  static const empty = Account(
+  static const empty = const Account(
     id: '',
     userId: '',
     displayName: '',
-    profilePhoto: '',
+    photoUrl: '',
     about: '',
     phoneNumber: '',
     location: Location.empty,
-    status: AccountStatus.closed,
+    status: AccountStatus.unavailable,
   );
 }

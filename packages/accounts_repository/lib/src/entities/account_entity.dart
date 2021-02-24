@@ -1,4 +1,3 @@
-import 'package:accounts_repository/src/models/location.dart';
 import 'package:accounts_repository/src/models/models.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equatable/equatable.dart';
@@ -7,7 +6,7 @@ class AccountEntity extends Equatable {
   final String id;
   final String userId;
   final String displayName;
-  final String profilePhoto;
+  final String photoUrl;
   final String about;
   final String phoneNumber;
   final Location location;
@@ -17,7 +16,7 @@ class AccountEntity extends Equatable {
     this.id,
     this.userId,
     this.displayName,
-    this.profilePhoto,
+    this.photoUrl,
     this.about,
     this.phoneNumber,
     this.location,
@@ -29,7 +28,7 @@ class AccountEntity extends Equatable {
       'id': id,
       'userId': userId,
       'displayName': displayName,
-      'profilePhoto': profilePhoto,
+      'photoUrl': photoUrl,
       'about': about,
       'phoneNumber': phoneNumber,
       'location': location.toJson(),
@@ -42,7 +41,7 @@ class AccountEntity extends Equatable {
         id,
         userId,
         displayName,
-        profilePhoto,
+        photoUrl,
         about,
         phoneNumber,
         location,
@@ -51,7 +50,7 @@ class AccountEntity extends Equatable {
 
   @override
   String toString() {
-    return 'AccountEntity { id: $id, userId: $userId, displayName: $displayName, profilePhoto: $profilePhoto, about: $about, phoneNumber: $phoneNumber, location: $location, status: $status}';
+    return 'AccountEntity { id: $id, userId: $userId, displayName: $displayName, photoUrl: $photoUrl, about: $about, phoneNumber: $phoneNumber, location: $location, status: $status}';
   }
 
   static AccountEntity fromJson(Map<String, Object> json) {
@@ -59,7 +58,7 @@ class AccountEntity extends Equatable {
       id: json['id'] as String,
       userId: json['userId'] as String,
       displayName: json['displayName'] as String,
-      profilePhoto: json['profilePhoto'] as String,
+      photoUrl: json['photoUrl'] as String,
       about: json['about'] as String,
       phoneNumber: json['phoneNumber'] as String,
       location: Location.fromJson(json['location']),
@@ -72,7 +71,7 @@ class AccountEntity extends Equatable {
       id: snap.id,
       userId: snap.data()['userId'] as String,
       displayName: snap.data()['displayName'] as String,
-      profilePhoto: snap.data()['profilePhoto'] as String,
+      photoUrl: snap.data()['photoUrl'] as String,
       about: snap.data()['about'] as String,
       phoneNumber: snap.data()['phoneNumber'] as String,
       location: Location.fromJson(snap.data()['location']),
@@ -84,7 +83,7 @@ class AccountEntity extends Equatable {
     return {
       'userId': userId,
       'displayName': displayName,
-      'profilePhoto': profilePhoto,
+      'photoUrl': photoUrl,
       'about': about,
       'phoneNumber': phoneNumber,
       'location': location.toJson(),

@@ -32,15 +32,14 @@ class FirebaseAccountsRepository implements AccountsRepository {
   }
 
   @override
-  Future<Account> findByUserId(String userId) {
-    return collection.where('userId', isEqualTo: userId).get().then((value) {
-      if (value.docs.isEmpty) {
-        return Account.empty;
-      }
-
-      return Account.fromEntity(
-        AccountEntity.fromSnapshot(value.docs.first),
-      );
+  Stream<List<Account>> findByUserId(String userId) {
+    return collection
+        .where('userId', isEqualTo: userId)
+        .snapshots()
+        .map((snapshot) {
+      return snapshot.docs
+          .map((doc) => Account.fromEntity(AccountEntity.fromSnapshot(doc)))
+          .toList();
     });
   }
 }

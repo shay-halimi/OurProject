@@ -2,56 +2,50 @@ import 'package:meta/meta.dart';
 
 @immutable
 class Location {
-  final String title;
-  final double lan;
-  final double lat;
+  final double latitude;
+  final double longitude;
 
   const Location({
-    this.title = '',
-    @required this.lan,
-    @required this.lat,
+    @required this.latitude,
+    @required this.longitude,
   });
 
-  Location copyWith({String title, String lan, String lat}) {
+  Location copyWith({String latitude, String longitude}) {
     return Location(
-      title: title ?? this.title,
-      lan: lan ?? this.lan,
-      lat: lat ?? this.lat,
+      latitude: latitude ?? this.latitude,
+      longitude: longitude ?? this.longitude,
     );
   }
 
   @override
-  int get hashCode => title.hashCode ^ lan.hashCode ^ lat.hashCode;
+  int get hashCode => latitude.hashCode ^ longitude.hashCode;
 
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
       other is Location &&
           runtimeType == other.runtimeType &&
-          title == other.title &&
-          lan == other.lan &&
-          lat == other.lat;
+          latitude == other.latitude &&
+          longitude == other.longitude;
 
   @override
   String toString() {
-    return 'Location{title: $title, lan: $lan, lat: $lat}';
+    return 'Location{latitude: $latitude, longitude: $longitude}';
   }
 
   Map<String, Object> toJson() {
     return {
-      'title': title,
-      'lan': lan,
-      'lat': lat,
+      'latitude': latitude,
+      'longitude': longitude,
     };
   }
 
   static Location fromJson(Map<String, Object> json) {
     return Location(
-      title: json['title'] as String,
-      lan: (json['lan'] as num).toDouble(),
-      lat: (json['lat'] as num).toDouble(),
+      latitude: (json['latitude'] as num).toDouble(),
+      longitude: (json['longitude'] as num).toDouble(),
     );
   }
 
-  static const empty = Location(lan: 0, lat: 0);
+  static const empty = Location(latitude: 0, longitude: 0);
 }

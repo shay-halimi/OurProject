@@ -1,8 +1,7 @@
 import 'package:accounts_repository/accounts_repository.dart';
 import 'package:authentication_repository/authentication_repository.dart';
+import 'package:cookpoint/app/app.dart';
 import 'package:cookpoint/authentication/authentication.dart';
-import 'package:cookpoint/home/home.dart';
-import 'package:cookpoint/login/login.dart';
 import 'package:cookpoint/splash/splash.dart';
 import 'package:cookpoint/theme.dart';
 import 'package:flutter/material.dart';
@@ -15,6 +14,7 @@ class App extends StatelessWidget {
     @required this.authenticationRepository,
     @required this.accountsRepository,
   })  : assert(authenticationRepository != null),
+        assert(accountsRepository != null),
         super(key: key);
 
   final AuthenticationRepository authenticationRepository;
@@ -76,7 +76,7 @@ class _AppViewState extends State<AppView> {
                 break;
               case AuthenticationStatus.unauthenticated:
                 _navigator.pushAndRemoveUntil<void>(
-                  LoginPage.route(),
+                  AuthenticationPage.route(),
                   (route) => false,
                 );
                 break;
