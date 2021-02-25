@@ -11,5 +11,5 @@ abstract class AccountsRepository {
 
   Future<void> update(Account account);
 
-  Stream<List<Account>> findByUserId(String userId);
+  Stream<List<Account>> findByPhoneNumber(String phoneNumber);
 }

@@ -1,9 +1,8 @@
-import 'package:firebase_picture_uploader/firebase_picture_uploader.dart';
 import 'package:flutter/material.dart';
 
-class CreatePage extends StatelessWidget {
+class AddProductPage extends StatelessWidget {
   static Route route() {
-    return MaterialPageRoute<void>(builder: (_) => CreatePage());
+    return MaterialPageRoute<void>(builder: (_) => AddProductPage());
   }
 
   @override
@@ -15,28 +14,7 @@ class CreatePage extends StatelessWidget {
           padding: const EdgeInsets.all(8.0),
           child: Column(
             children: [
-              PictureUploadWidget(
-                onPicturesChange: (
-                    {List<UploadJob> uploadJobs,
-                    bool pictureUploadProcessing}) {
-                  // uploadJobs.forEach((element) { print(element.oldStorageReference.fullPath); });
-                },
-                buttonStyle: PictureUploadButtonStyle(
-                    iconData: Icons.add_a_photo_outlined),
-                buttonText: 'הוסף תמונה',
-                localization: PictureUploadLocalization(),
-                settings: PictureUploadSettings(
-                  imageSource: ImageSourceExtended.askUser,
-                  minImageCount: 0,
-                  maxImageCount: 8,
-                  imageManipulationSettings:
-                      const ImageManipulationSettings(
-                    enableCropping: true,
-                    compressQuality: 75,
-                  ),
-                ),
-                enabled: true,
-              ),
+              Text("TODO"),
               const Padding(
                 padding: EdgeInsets.only(bottom: 5.0),
               ),
@@ -77,6 +55,7 @@ class CreatePage extends StatelessWidget {
         ),
       ),
       floatingActionButton: FloatingActionButton(
+        heroTag: "FloatingActionButtonCookPoint",
         tooltip: 'פרסם CookPoint',
         child: Icon(Icons.save),
         onPressed: () {

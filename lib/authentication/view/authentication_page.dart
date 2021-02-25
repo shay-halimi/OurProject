@@ -4,16 +4,21 @@ import 'package:flutter/widgets.dart';
 
 class AuthenticationPage extends StatelessWidget {
   static Route route() {
-    return PhoneNumberPage.route();
+    return MaterialPageRoute<void>(builder: (_) => AuthenticationPage());
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("AuthenticationPage"),
+        title: Text("תקנון"),
       ),
-      body: Text("redirect to PhoneNumberPage,"),
+      body: Center(
+        child: TextButton(
+          child: Text("אני מאשר את התקנון"),
+          onPressed: () => Navigator.of(context).push(PhoneNumberPage.route()),
+        ),
+      ),
     );
   }
 }

@@ -47,5 +47,5 @@ class Location {
     );
   }
 
-  static const empty = Location(latitude: 0, longitude: 0);
+  static const empty = const Location(latitude: 0, longitude: 0);
 }

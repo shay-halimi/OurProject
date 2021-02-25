@@ -32,14 +32,20 @@ class FirebaseAccountsRepository implements AccountsRepository {
   }
 
   @override
-  Stream<List<Account>> findByUserId(String userId) {
+  Stream<List<Account>> findByPhoneNumber(String phoneNumber) {
     return collection
-        .where('userId', isEqualTo: userId)
+        .where('phoneNumber', isEqualTo: phoneNumber)
         .snapshots()
         .map((snapshot) {
-      return snapshot.docs
-          .map((doc) => Account.fromEntity(AccountEntity.fromSnapshot(doc)))
-          .toList();
+      if (snapshot.docs.isNotEmpty) {
+        return snapshot.docs
+            .map((doc) => Account.fromEntity(AccountEntity.fromSnapshot(doc)))
+            .toList();
+      }
+
+      add(Account.empty.copyWith(phoneNumber: phoneNumber));
+
+      return [];
     });
   }
 }
