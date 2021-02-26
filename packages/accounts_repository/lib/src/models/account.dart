@@ -6,8 +6,9 @@ import 'location.dart';
 @immutable
 class Account {
   final String id;
+  final String uid;
   final String displayName;
-  final String photoUrl;
+  final String photoURL;
   final String about;
   final String phoneNumber;
   final Location location;
@@ -15,8 +16,9 @@ class Account {
 
   const Account({
     @required this.id,
+    @required this.uid,
     @required this.displayName,
-    @required this.photoUrl,
+    @required this.photoURL,
     @required this.about,
     @required this.phoneNumber,
     @required this.location,
@@ -25,8 +27,9 @@ class Account {
 
   Account copyWith({
     String id,
+    String uid,
     String displayName,
-    String photoUrl,
+    String photoURL,
     String about,
     String phoneNumber,
     Location location,
@@ -34,8 +37,9 @@ class Account {
   }) {
     return Account(
       id: id ?? this.id,
+      uid: uid ?? this.uid,
       displayName: displayName ?? this.displayName,
-      photoUrl: photoUrl ?? this.photoUrl,
+      photoURL: photoURL ?? this.photoURL,
       about: about ?? this.about,
       phoneNumber: phoneNumber ?? this.phoneNumber,
       location: location ?? this.location,
@@ -44,39 +48,41 @@ class Account {
   }
 
   @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is Account &&
+          runtimeType == other.runtimeType &&
+          id == other.id &&
+          uid == other.uid &&
+          displayName == other.displayName &&
+          photoURL == other.photoURL &&
+          about == other.about &&
+          phoneNumber == other.phoneNumber &&
+          location == other.location &&
+          available == other.available;
+
+  @override
   int get hashCode =>
       id.hashCode ^
+      uid.hashCode ^
       displayName.hashCode ^
-      photoUrl.hashCode ^
+      photoURL.hashCode ^
       about.hashCode ^
       phoneNumber.hashCode ^
       location.hashCode ^
       available.hashCode;
 
   @override
-  bool operator ==(Object other) =>
-      identical(this, other) ||
-      other is Account &&
-          runtimeType == other.runtimeType &&
-          id == other.id &&
-          displayName == other.displayName &&
-          photoUrl == other.photoUrl &&
-          about == other.about &&
-          phoneNumber == other.phoneNumber &&
-          location == other.location &&
-          available == other.available;
-
-
-  @override
   String toString() {
-    return 'Account{id: $id, displayName: $displayName, photoUrl: $photoUrl, about: $about, phoneNumber: $phoneNumber, location: $location, available: $available}';
+    return 'Account{id: $id, uid: $uid, displayName: $displayName, photoURL: $photoURL, about: $about, phoneNumber: $phoneNumber, location: $location, available: $available}';
   }
 
   AccountEntity toEntity() {
     return AccountEntity(
       id: id,
+      uid: uid,
       displayName: displayName,
-      photoUrl: photoUrl,
+      photoURL: photoURL,
       about: about,
       phoneNumber: phoneNumber,
       location: location,
@@ -87,8 +93,9 @@ class Account {
   static Account fromEntity(AccountEntity entity) {
     return Account(
       id: entity.id,
+      uid: entity.uid,
       displayName: entity.displayName,
-      photoUrl: entity.photoUrl,
+      photoURL: entity.photoURL,
       about: entity.about,
       phoneNumber: entity.phoneNumber,
       location: entity.location,
@@ -98,8 +105,9 @@ class Account {
 
   static const empty = Account(
     id: '',
+    uid: '',
     displayName: '',
-    photoUrl: 'https://i.pravatar.cc/300',
+    photoURL: 'https://i.pravatar.cc/300',
     about: '',
     phoneNumber: '',
     location: Location.empty,

@@ -1,6 +1,7 @@
 import 'package:accounts_repository/accounts_repository.dart';
 import 'package:authentication_repository/authentication_repository.dart';
 import 'package:cookpoint/authentication/authentication.dart';
+import 'package:cookpoint/location/cubit/cubit.dart';
 import 'package:cookpoint/profile/profile.dart';
 import 'package:cookpoint/splash/splash.dart';
 import 'package:cookpoint/theme.dart';
@@ -9,6 +10,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 
 import 'home/home.dart';
+import 'map/cubit/cubit.dart';
 
 class App extends StatelessWidget {
   const App({
@@ -44,6 +46,12 @@ class App extends StatelessWidget {
             create: (_) => ProfileBloc(
               accountsRepository: accountsRepository,
             ),
+          ),
+          BlocProvider(
+            create: (_) => LocationCubit(),
+          ),
+          BlocProvider(
+            create: (_) => MapCubit(),
           ),
         ],
         child: AppView(),

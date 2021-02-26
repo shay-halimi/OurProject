@@ -12,7 +12,7 @@ part 'profile_state.dart';
 class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
   final AccountsRepository _accountsRepository;
 
-  StreamSubscription<List<Account>> _streamSubscription;
+  StreamSubscription<Account> _streamSubscription;
 
   ProfileBloc({
     @required AccountsRepository accountsRepository,
@@ -29,85 +29,54 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
   @override
   Stream<ProfileState> mapEventToState(ProfileEvent event) async* {
     if (event is ProfileRequestedEvent) {
-      yield* _mapProfileRequestedEventToState(event);
-    }
-
-    if (event is ProfileLoadedEvent) {
-      yield* _mapProfileLoadedEventToState(event);
-    }
-
-    if (event is ProfileAvailabilityChangedEvent) {
-      yield* _mapProfileAvailabilityChangedEventToState(event);
-    }
-
-    if (event is ProfileLocationChangedEvent) {
-      yield* _mapProfileLocationChangedEventToState(event);
-    }
-
-    if (event is ProfilePhotoUrlChangedEvent) {
-      yield* _mapProfilePhotoUrlChangedEventToState(event);
+      yield* _mapProfileRequestedToState(event);
+    } else if (event is ProfileUpdatedEvent) {
+      yield* _mapProfileUpdatedEventToState(event);
+    } else if (event is ProfileLoadedEvent) {
+      yield* _mapProfileLoadedToState(event);
     }
   }
 
-  Stream<ProfileState> _mapProfileRequestedEventToState(
+  Stream<ProfileState> _mapProfileRequestedToState(
     ProfileRequestedEvent event,
   ) async* {
+    yield ProfileState.loading();
+
     _streamSubscription?.cancel();
 
-    _streamSubscription = _accountsRepository
-        .findByPhoneNumber(event.phoneNumber)
-        .listen((event) {
-      event.forEach((element) {
-        add(ProfileLoadedEvent(element));
-      });
+    _streamSubscription =
+        _accountsRepository.account(event.id).listen((profile) {
+      add(ProfileLoadedEvent(profile));
     });
   }
 
-  Stream<ProfileState> _mapProfileLoadedEventToState(
+  Stream<ProfileState> _mapProfileLoadedToState(
     ProfileLoadedEvent event,
   ) async* {
-    yield ProfileState.loaded(event.profile);
+    if (event.profile == Account.empty) {
+      yield ProfileState.empty();
+    } else {
+      yield ProfileState.loaded(event.profile);
+    }
   }
 
-  Stream<ProfileState> _mapProfileAvailabilityChangedEventToState(
-    ProfileAvailabilityChangedEvent event,
+  Stream<ProfileState> _mapProfileUpdatedEventToState(
+    ProfileUpdatedEvent event,
   ) async* {
-    _accountsRepository.update(
-      state.profile.copyWith(
-        available: event.available,
-      ),
-    );
-  }
+    yield ProfileState.loading();
 
-  Stream<ProfileState> _mapProfileLocationChangedEventToState(
-    ProfileLocationChangedEvent event,
-  ) async* {
-    _accountsRepository.update(
-      state.profile.copyWith(
-        location: event.location,
-      ),
-    );
-  }
-
-  Stream<ProfileState> _mapProfilePhotoUrlChangedEventToState(
-    ProfilePhotoUrlChangedEvent event,
-  ) async* {
-    _accountsRepository.update(
-      state.profile.copyWith(
-        photoUrl: event.photoUrl,
-      ),
-    );
+    _accountsRepository.set(event.profile);
   }
 
   void setAvailable(bool available) {
-    add(ProfileAvailabilityChangedEvent(available));
+    add(ProfileUpdatedEvent(state.profile.copyWith(available: available)));
   }
 
   void updateLocation(Location location) {
-    add(ProfileLocationChangedEvent(location));
+    add(ProfileUpdatedEvent(state.profile.copyWith(location: location)));
   }
 
-  void updatePhotoUrl(String photoUrl) {
-    add(ProfilePhotoUrlChangedEvent(photoUrl));
+  void updatePhotoURL(String photoURL) {
+    add(ProfileUpdatedEvent(state.profile.copyWith(photoURL: photoURL)));
   }
 }

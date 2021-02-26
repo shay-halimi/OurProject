@@ -9,7 +9,12 @@ class SplashPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Center(
-        child: const Icon(Icons.fastfood),
+        child: Column(
+          children: const [
+            Icon(Icons.fastfood),
+            CircularProgressIndicator(),
+          ],
+        ),
       ),
     );
   }

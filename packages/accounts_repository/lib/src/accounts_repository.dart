@@ -3,13 +3,17 @@ import 'dart:async';
 import 'package:accounts_repository/accounts_repository.dart';
 
 abstract class AccountsRepository {
+  Stream<Account> account(String id);
+
+  Stream<List<Account>> accounts();
+
+  Stream<List<Account>> accountsByLocation(Location location);
+
+  Future<void> set(Account account);
+
   Future<void> add(Account account);
 
   Future<void> delete(Account account);
 
-  Stream<List<Account>> accounts();
-
   Future<void> update(Account account);
-
-  Stream<List<Account>> findByPhoneNumber(String phoneNumber);
 }

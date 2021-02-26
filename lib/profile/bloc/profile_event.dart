@@ -8,12 +8,12 @@ abstract class ProfileEvent extends Equatable {
 }
 
 class ProfileRequestedEvent extends ProfileEvent {
-  const ProfileRequestedEvent(this.phoneNumber);
+  const ProfileRequestedEvent(this.id);
 
-  final String phoneNumber;
+  final String id;
 
   @override
-  List<Object> get props => [];
+  List<Object> get props => [id];
 }
 
 class ProfileLoadedEvent extends ProfileEvent {
@@ -25,47 +25,11 @@ class ProfileLoadedEvent extends ProfileEvent {
   List<Object> get props => [profile];
 }
 
-class ProfileAvailabilityChangedEvent extends ProfileEvent {
-  const ProfileAvailabilityChangedEvent(this.available);
+class ProfileUpdatedEvent extends ProfileEvent {
+  const ProfileUpdatedEvent(this.profile);
 
-  final bool available;
-
-  @override
-  List<Object> get props => [available];
-}
-
-class ProfileLocationChangedEvent extends ProfileEvent {
-  const ProfileLocationChangedEvent(this.location);
-
-  final Location location;
+  final Account profile;
 
   @override
-  List<Object> get props => [location];
-}
-
-class ProfilePhotoUrlChangedEvent extends ProfileEvent {
-  const ProfilePhotoUrlChangedEvent(this.photoUrl);
-
-  final String photoUrl;
-
-  @override
-  List<Object> get props => [photoUrl];
-}
-
-class ProfileDisplayNameChangedEvent extends ProfileEvent {
-  const ProfileDisplayNameChangedEvent(this.displayName);
-
-  final String displayName;
-
-  @override
-  List<Object> get props => [displayName];
-}
-
-class ProfileAboutChangedEvent extends ProfileEvent {
-  const ProfileAboutChangedEvent(this.about);
-
-  final String about;
-
-  @override
-  List<Object> get props => [about];
+  List<Object> get props => [profile];
 }

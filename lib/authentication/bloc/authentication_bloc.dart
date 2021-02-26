@@ -7,6 +7,7 @@ import 'package:meta/meta.dart';
 import 'package:pedantic/pedantic.dart';
 
 part 'authentication_event.dart';
+
 part 'authentication_state.dart';
 
 class AuthenticationBloc
@@ -25,6 +26,12 @@ class AuthenticationBloc
   StreamSubscription<User> _userSubscription;
 
   @override
+  Future<void> close() {
+    _userSubscription?.cancel();
+    return super.close();
+  }
+
+  @override
   Stream<AuthenticationState> mapEventToState(
     AuthenticationEvent event,
   ) async* {
@@ -33,12 +40,6 @@ class AuthenticationBloc
     } else if (event is AuthenticationLogoutRequested) {
       unawaited(_authenticationRepository.logOut());
     }
-  }
-
-  @override
-  Future<void> close() {
-    _userSubscription?.cancel();
-    return super.close();
   }
 
   AuthenticationState _mapAuthenticationUserChangedToState(

@@ -1,6 +1,6 @@
 part of 'profile_bloc.dart';
 
-enum ProfileStateStatus { loading, loaded, empty, created, unknown }
+enum ProfileStateStatus { loading, loaded, empty, unknown, error }
 
 class ProfileState extends Equatable {
   const ProfileState._({
@@ -15,9 +15,9 @@ class ProfileState extends Equatable {
 
   const ProfileState.empty() : this._(status: ProfileStateStatus.empty);
 
-  const ProfileState.created() : this._(status: ProfileStateStatus.created);
-
   const ProfileState.unknown() : this._();
+
+  const ProfileState.error() : this._(status: ProfileStateStatus.error);
 
   final ProfileStateStatus status;
   final Account profile;

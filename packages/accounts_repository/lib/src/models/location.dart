@@ -5,16 +5,15 @@ class Location {
   final double latitude;
   final double longitude;
 
-  const Location({
-    @required this.latitude,
-    @required this.longitude,
-  });
+  const Location(double latitude, double longitude)
+      : assert(latitude != null),
+        assert(longitude != null),
+        latitude =
+            (latitude < -90.0 ? -90.0 : (90.0 < latitude ? 90.0 : latitude)),
+        longitude = (longitude + 180.0) % 360.0 - 180.0;
 
-  Location copyWith({String latitude, String longitude}) {
-    return Location(
-      latitude: latitude ?? this.latitude,
-      longitude: longitude ?? this.longitude,
-    );
+  Location copyWith({double latitude, double longitude}) {
+    return Location(latitude ?? this.latitude, longitude ?? this.longitude);
   }
 
   @override
@@ -42,10 +41,10 @@ class Location {
 
   static Location fromJson(Map<String, Object> json) {
     return Location(
-      latitude: (json['latitude'] as num).toDouble(),
-      longitude: (json['longitude'] as num).toDouble(),
+      (json['latitude'] as num).toDouble(),
+      (json['longitude'] as num).toDouble(),
     );
   }
 
-  static const empty = const Location(latitude: 0, longitude: 0);
+  static const empty = Location(0, 0);
 }

@@ -1,12 +1,12 @@
 import 'package:cookpoint/authentication/authentication.dart';
 import 'package:cookpoint/home/home.dart';
+import 'package:cookpoint/location/cubit/cubit.dart';
+import 'package:cookpoint/map/map.dart';
 import 'package:cookpoint/product/create/view/create_page.dart';
-import 'package:cookpoint/profile/bloc/bloc.dart';
 import 'package:cookpoint/profile/profile.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:provider/provider.dart';
 
 class HomePage extends StatelessWidget {
@@ -16,10 +16,6 @@ class HomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final user = context.select((AuthenticationBloc bloc) => bloc.state.user);
-
-    context.read<ProfileBloc>()..add(ProfileRequestedEvent(user.phoneNumber));
-
     return HomeView();
   }
 }
@@ -35,6 +31,18 @@ class HomeView extends StatelessWidget {
       appBar: SearchAppBar(),
       drawer: SettingsDrawer(),
       body: HomeWidget(),
+      floatingActionButton: BlocBuilder<LocationCubit, LocationState>(
+          buildWhen: (previous, current) => previous != current,
+          builder: (context, state) {
+            return FloatingActionButton(
+              heroTag: "FloatingActionButtonMyLocation",
+              tooltip: "המיקום שלי",
+              child: Icon(Icons.my_location),
+              onPressed: () {
+                context.read<MapCubit>().changeCameraPosition(state.location);
+              },
+            );
+          }),
     );
   }
 }
@@ -104,55 +112,6 @@ class ProductsWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container();
-  }
-}
-
-class MapWidget extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return GoogleMap(
-      onTap: (_) => Navigator.of(context).push(ProfilePage.route()),
-      compassEnabled: false,
-      mapToolbarEnabled: false,
-      zoomControlsEnabled: false,
-      myLocationButtonEnabled: false,
-      initialCameraPosition: CameraPosition(
-        target: LatLng(
-          31.804939,
-          35.151100,
-        ),
-        zoom: 15.00,
-      ),
-      markers: Set<Marker>.of([
-        Marker(
-          markerId: MarkerId(
-            "1",
-          ),
-          position: LatLng(
-            31.804930,
-            35.151109,
-          ),
-        ),
-        Marker(
-          markerId: MarkerId(
-            "1",
-          ),
-          position: LatLng(
-            31.804948,
-            35.151119,
-          ),
-        ),
-        Marker(
-          markerId: MarkerId(
-            "1",
-          ),
-          position: LatLng(
-            31.804920,
-            35.151100,
-          ),
-        ),
-      ]),
-    );
   }
 }
 

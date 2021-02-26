@@ -1,10 +1,9 @@
 import 'dart:async';
 
-import 'package:firebase_auth/firebase_auth.dart'
-    show FirebaseAuth, PhoneAuthCredential, PhoneAuthProvider, User;
+import 'package:firebase_auth/firebase_auth.dart' as firebase_auth;
 import 'package:meta/meta.dart';
 
-import 'models/models.dart' as domain;
+import 'models/models.dart';
 
 class SendOTPFailure implements Exception {}
 
@@ -14,14 +13,14 @@ class LogOutFailure implements Exception {}
 
 class AuthenticationRepository {
   AuthenticationRepository({
-    FirebaseAuth firebaseAuth,
-  }) : _firebaseAuth = firebaseAuth ?? FirebaseAuth.instance;
+    firebase_auth.FirebaseAuth firebaseAuth,
+  }) : _firebaseAuth = firebaseAuth ?? firebase_auth.FirebaseAuth.instance;
 
-  final FirebaseAuth _firebaseAuth;
+  final firebase_auth.FirebaseAuth _firebaseAuth;
 
-  Stream<domain.User> get user {
+  Stream<User> get user {
     return _firebaseAuth.authStateChanges().map((firebaseUser) {
-      return firebaseUser == null ? domain.User.empty : firebaseUser.toUser;
+      return firebaseUser == null ? User.empty : firebaseUser.toUser;
     });
   }
 
@@ -39,7 +38,7 @@ class AuthenticationRepository {
       timeout: const Duration(
         seconds: 60,
       ),
-      verificationCompleted: (PhoneAuthCredential pac) async {
+      verificationCompleted: (firebase_auth.PhoneAuthCredential pac) async {
         await _firebaseAuth.signInWithCredential(pac);
 
         completer.complete();
@@ -68,7 +67,7 @@ class AuthenticationRepository {
     assert(otp != null);
     try {
       await _firebaseAuth.signInWithCredential(
-        PhoneAuthProvider.credential(
+        firebase_auth.PhoneAuthProvider.credential(
           verificationId: _verificationId,
           smsCode: otp,
         ),
@@ -89,8 +88,13 @@ class AuthenticationRepository {
   }
 }
 
-extension on User {
-  domain.User get toUser {
-    return domain.User(id: uid, phoneNumber: phoneNumber);
+extension on firebase_auth.User {
+  User get toUser {
+    return User(
+      id: uid,
+      displayName: displayName,
+      photoURL: photoURL,
+      phoneNumber: phoneNumber,
+    );
   }
 }
