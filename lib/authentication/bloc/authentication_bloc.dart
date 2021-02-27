@@ -7,7 +7,6 @@ import 'package:meta/meta.dart';
 import 'package:pedantic/pedantic.dart';
 
 part 'authentication_event.dart';
-
 part 'authentication_state.dart';
 
 class AuthenticationBloc
@@ -36,13 +35,13 @@ class AuthenticationBloc
     AuthenticationEvent event,
   ) async* {
     if (event is AuthenticationUserChanged) {
-      yield _mapAuthenticationUserChangedToState(event);
+      yield _mapAuthenticationUserChangedEventToState(event);
     } else if (event is AuthenticationLogoutRequested) {
       unawaited(_authenticationRepository.logOut());
     }
   }
 
-  AuthenticationState _mapAuthenticationUserChangedToState(
+  AuthenticationState _mapAuthenticationUserChangedEventToState(
     AuthenticationUserChanged event,
   ) {
     return event.user != User.empty

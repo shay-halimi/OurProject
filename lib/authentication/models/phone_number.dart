@@ -19,5 +19,5 @@ class PhoneNumber extends FormzInput<String, PhoneNumberValidationError> {
         : PhoneNumberValidationError.invalid;
   }
 
-  String get e164 => '+972' + value.substring(1);
+  String get e164 => '+972${value.substring(1)}';
 }

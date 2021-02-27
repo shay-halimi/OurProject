@@ -1,12 +1,13 @@
 import 'package:cookpoint/authentication/authentication.dart';
-import 'package:cookpoint/home/home.dart';
 import 'package:cookpoint/location/cubit/cubit.dart';
 import 'package:cookpoint/map/map.dart';
-import 'package:cookpoint/product/create/view/create_page.dart';
+import 'package:cookpoint/points/points.dart';
 import 'package:cookpoint/profile/profile.dart';
+import 'package:cookpoint/splash/splash.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:points_repository/points_repository.dart';
 import 'package:provider/provider.dart';
 
 class HomePage extends StatelessWidget {
@@ -16,119 +17,45 @@ class HomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return HomeView();
-  }
-}
+    final user = context.select((AuthenticationBloc bloc) => bloc.state.user);
 
-class HomeView extends StatelessWidget {
-  const HomeView({
-    Key key,
-  }) : super(key: key);
+    context.read<ProfileBloc>().add(ProfileRequestedEvent(user.id));
 
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: SearchAppBar(),
-      drawer: SettingsDrawer(),
-      body: HomeWidget(),
-      floatingActionButton: BlocBuilder<LocationCubit, LocationState>(
-          buildWhen: (previous, current) => previous != current,
-          builder: (context, state) {
-            return FloatingActionButton(
-              heroTag: "FloatingActionButtonMyLocation",
-              tooltip: "המיקום שלי",
-              child: Icon(Icons.my_location),
-              onPressed: () {
-                context.read<MapCubit>().changeCameraPosition(state.location);
-              },
-            );
-          }),
-    );
-  }
-}
+    return BlocListener<LocationCubit, LocationState>(
+      listenWhen: (previous, current) => previous != current,
+      listener: (_, state) async {
+        if (state.status == LocationStateStatus.located) {
+          final point = Point.empty.copyWith(
+            id: user.id,
+            latitude: state.location.latitude,
+            longitude: state.location.longitude,
+          );
 
-class SettingsDrawer extends StatelessWidget {
-  SettingsDrawer({
-    Key key,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    // todo(Matan) account bloc provider here
-    return Drawer(
-      child: Center(
-        child: ListView(
-          shrinkWrap: true,
-          padding: EdgeInsets.zero,
-          children: <Widget>[
-            ListTile(
-              key: const Key('homePage_AddProductPage'),
-              leading: const Icon(Icons.add_location_alt_rounded),
-              title: Text("פרסום מוצר"),
-              onTap: () => Navigator.of(context).push(AddProductPage.route()),
-            ),
-            ListTile(
-              key: const Key('homePage_MyProfile'),
-              leading: const Icon(Icons.face_rounded),
-              title: Text("הפרופיל שלי"),
-              onTap: () => Navigator.of(context).push(ProfilePage.route()),
-            ),
-            ListTile(
-              key: const Key('homePage_LogoutRequested'),
-              leading: const Icon(Icons.exit_to_app),
-              title: Text("התנתק"),
-              onTap: () => context
-                  .read<AuthenticationBloc>()
-                  .add(AuthenticationLogoutRequested()),
-            ),
-          ],
-        ),
+          await context.read<PointsCubit>().pointChanged(point);
+        }
+      },
+      child: BlocBuilder<ProfileBloc, ProfileState>(
+        buildWhen: (previous, current) => previous != current,
+        builder: (context, state) {
+          switch (state.status) {
+            case ProfileStateStatus.loading:
+              return SplashPage();
+              break;
+            case ProfileStateStatus.loaded:
+              return BlocProvider(
+                create: (_) => MapCubit(),
+                child: MapPage(),
+              );
+              break;
+            case ProfileStateStatus.empty:
+              return CreateProfilePage();
+              break;
+            default:
+              return const Text('unknown');
+              break;
+          }
+        },
       ),
     );
   }
-}
-
-class HomeWidget extends StatelessWidget {
-  const HomeWidget({
-    Key key,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Stack(
-      children: [
-        MapWidget(),
-        ProductsWidget(),
-      ],
-    );
-  }
-}
-
-class ProductsWidget extends StatelessWidget {
-  const ProductsWidget({
-    Key key,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Container();
-  }
-}
-
-class SearchAppBar extends AppBar {
-  /// todo https://github.com/ArcticZeroo/flutter-search-bar
-
-  SearchAppBar({
-    Key key,
-  }) : super(
-          key: key,
-          title: AppTitle(),
-          centerTitle: true,
-          actions: [
-            IconButton(
-              icon: Icon(Icons.search),
-              onPressed: () => null,
-            ),
-          ],
-        );
 }

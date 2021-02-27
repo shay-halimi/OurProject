@@ -7,11 +7,11 @@ import 'package:formz/formz.dart';
 part 'phone_number_state.dart';
 
 class PhoneNumberCubit extends Cubit<PhoneNumberState> {
-  final AuthenticationRepository _authenticationRepository;
-
   PhoneNumberCubit(this._authenticationRepository)
       : assert(_authenticationRepository != null),
         super(const PhoneNumberState());
+
+  final AuthenticationRepository _authenticationRepository;
 
   void phoneNumberChanged(String value) {
     final phoneNumber = PhoneNumber.dirty(value);

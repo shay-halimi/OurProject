@@ -7,8 +7,6 @@ abstract class AccountsRepository {
 
   Stream<List<Account>> accounts();
 
-  Stream<List<Account>> accountsByLocation(Location location);
-
   Future<void> set(Account account);
 
   Future<void> add(Account account);

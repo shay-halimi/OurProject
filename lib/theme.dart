@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 final theme = ThemeData(
-  primarySwatch: MaterialColor(
+  primarySwatch: const MaterialColor(
     0xFF2F3D58,
     <int, Color>{
       50: Color(0xFFECEDEF),
@@ -15,11 +15,5 @@ final theme = ThemeData(
       800: Color(0xFF161C28),
       900: Color(0xFF050608),
     },
-  ),
-
-  textTheme: TextTheme(
-    headline1: TextStyle(fontSize: 72.0),
-    headline6: TextStyle(fontSize: 36.0),
-    bodyText2: TextStyle(fontSize: 14.0),
   ),
 );

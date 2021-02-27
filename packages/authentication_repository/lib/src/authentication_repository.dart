@@ -1,13 +1,14 @@
 import 'dart:async';
 
 import 'package:firebase_auth/firebase_auth.dart' as firebase_auth;
+import 'package:flutter/foundation.dart';
 import 'package:meta/meta.dart';
 
 import 'models/models.dart';
 
 class SendOTPFailure implements Exception {}
 
-class SignInWithCredentialFailure implements Exception {}
+class SignInFailure implements Exception {}
 
 class LogOutFailure implements Exception {}
 
@@ -73,7 +74,7 @@ class AuthenticationRepository {
         ),
       );
     } on Exception {
-      throw SignInWithCredentialFailure();
+      throw SignInFailure();
     }
   }
 

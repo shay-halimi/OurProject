@@ -15,7 +15,7 @@ class PhoneNumberForm extends StatelessWidget {
               const SnackBar(content: Text('שגיאה בתחברות')),
             );
         } else if (state.status.isSubmissionSuccess) {
-          Navigator.push(context, OTPPage.route());
+          Navigator.of(context).push<void>(OTPPage.route());
         }
       },
       child: SingleChildScrollView(
@@ -63,7 +63,8 @@ class _ContinueButton extends StatelessWidget {
         return state.status.isSubmissionInProgress
             ? const CircularProgressIndicator()
             : ElevatedButton(
-                key: const Key('PhoneNumberForm__ContinueButton_ElevatedButton'),
+                key:
+                    const Key('PhoneNumberForm__ContinueButton_ElevatedButton'),
                 child: const Text('המשך'),
                 onPressed: state.status.isValidated
                     ? () => context.read<PhoneNumberCubit>().sendOTP()

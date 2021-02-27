@@ -1,15 +1,7 @@
 part of 'create_cubit.dart';
 
-class CreateState extends Equatable {
-  final Description description;
-  final Price price;
-  final Tags tags;
-  final Set<String> media;
-  final Title title;
-
-  final FormzStatus status;
-
-  const CreateState({
+class CreateProductState extends Equatable {
+  const CreateProductState({
     this.description = const Description.pure(),
     this.price = const Price.pure(),
     this.tags = const Tags.pure(),
@@ -18,10 +10,18 @@ class CreateState extends Equatable {
     this.media = const {},
   });
 
+  final Description description;
+  final Price price;
+  final Tags tags;
+  final Set<String> media;
+  final Title title;
+
+  final FormzStatus status;
+
   @override
   List<Object> get props => [description, price, tags, title, status, media];
 
-  CreateState copyWith({
+  CreateProductState copyWith({
     Description description,
     Price price,
     Tags tags,
@@ -29,7 +29,7 @@ class CreateState extends Equatable {
     Title title,
     FormzStatus status,
   }) {
-    return new CreateState(
+    return CreateProductState(
       description: description ?? this.description,
       price: price ?? this.price,
       tags: tags ?? this.tags,

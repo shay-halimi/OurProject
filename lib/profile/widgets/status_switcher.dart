@@ -9,12 +9,14 @@ class StatusSwitcher extends StatelessWidget {
         buildWhen: (previous, current) => previous.status != current.status,
         builder: (context, state) {
           if (state.status == ProfileStateStatus.loaded) {
-            return Text(state.profile.available
-                ? "אתה זמין, מספר הטלפון שלך מוצג ללקוחות והם יכולים להתקשר"
-                : "אתה לא זמין, לקוחות יכולים לשלוח הזמנות");
+            return Text(
+              state.profile.available
+                  ? 'אתה זמין, מספר הטלפון שלך מוצג ללקוחות והם יכולים להתקשר'
+                  : 'אתה לא זמין, לקוחות יכולים לשלוח הזמנות',
+            );
           }
 
-          return CircularProgressIndicator();
+          return const CircularProgressIndicator();
         });
   }
 }

@@ -1,8 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-import 'products_repository.dart';
 import 'entities/entities.dart';
 import 'models/models.dart';
+import 'products_repository.dart';
 
 class FirebaseProductsRepository implements ProductsRepository {
   final collection = FirebaseFirestore.instance.collection('products');

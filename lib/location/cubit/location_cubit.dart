@@ -1,26 +1,40 @@
 import 'dart:async';
 
-import 'package:accounts_repository/accounts_repository.dart';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
-import 'package:location/location.dart' as location_location;
+import 'package:location_repository/location_repository.dart';
+import 'package:meta/meta.dart';
 
 part 'location_state.dart';
 
 class LocationCubit extends Cubit<LocationState> {
-  final location_location.Location _location = new location_location.Location();
-
-  StreamSubscription<location_location.LocationData> _listen;
-
-  LocationCubit() : super(LocationState.empty) {
-    _listen = _location.onLocationChanged.listen((event) {
-      emit(LocationState(Location(event.latitude, event.longitude)));
+  LocationCubit({
+    @required LocationRepository locationRepository,
+  })  : assert(locationRepository != null),
+        _locationRepository = locationRepository,
+        super(const LocationState.unknown()) {
+    _locationSubscription = _locationRepository.current().listen((event) {
+      emit(LocationState.located(event));
     });
   }
 
+  final LocationRepository _locationRepository;
+
+  StreamSubscription<Location> _locationSubscription;
+
   @override
   Future<void> close() {
-    _listen.cancel();
+    _locationSubscription?.cancel();
     return super.close();
+  }
+
+  Future<void> locate() async {
+    emit(const LocationState.locating());
+
+    try {
+      await _locationRepository.locate();
+    } on LocateFailure {
+      emit(const LocationState.error());
+    }
   }
 }

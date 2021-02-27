@@ -11,12 +11,14 @@ class AuthenticationPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("תקנון"),
+        title: const Text('תקנון'),
       ),
       body: Center(
         child: TextButton(
-          child: Text("אני מאשר את התקנון"),
-          onPressed: () => Navigator.of(context).push(PhoneNumberPage.route()),
+          child: const Text('אני מאשר את התקנון'),
+          onPressed: () => Navigator.of(context).push<void>(
+            PhoneNumberPage.route(),
+          ),
         ),
       ),
     );

@@ -1,7 +1,4 @@
-import 'package:cookpoint/authentication/authentication.dart';
-import 'package:cookpoint/gallery/gallery_widget.dart';
 import 'package:cookpoint/profile/profile.dart';
-import 'package:cookpoint/splash/splash.dart';
 import 'package:cookpoint/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -14,101 +11,46 @@ class ProfilePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final user = context.select((AuthenticationBloc bloc) => bloc.state.user);
-
-    context.read<ProfileBloc>().add(ProfileRequestedEvent(user.id));
-
-    return BlocBuilder<ProfileBloc, ProfileState>(
-      buildWhen: (previous, current) => previous != current,
-      builder: (context, state) {
-        switch (state.status) {
-          case ProfileStateStatus.loading:
-            return SplashPage();
-            break;
-          case ProfileStateStatus.loaded:
-            return ProfileView();
-            break;
-          case ProfileStateStatus.empty:
-            return CreateProfilePage();
-            break;
-
-          case ProfileStateStatus.error:
-            return Text("error");
-            break;
-
-          default:
-            return Text("unknown");
-            break;
-        }
-      },
-    );
-  }
-}
-
-class ProfileView extends StatelessWidget {
-  const ProfileView({
-    Key key,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("פרופיל"),
+        title: const Text('פרופיל'),
         actions: [
-          GalleryWidget(
-            icon: Icon(FontAwesomeIcons.camera),
-            onDownloadUrl: context.read<ProfileBloc>().updatePhotoURL,
-          ),
+          const ChangePhotoURLWidget(),
         ],
       ),
-      body: BlocBuilder<ProfileBloc, ProfileState>(
-          buildWhen: (previous, current) => previous.status != current.status,
-          builder: (context, state) {
-            return Text(state.status.toString());
-          }),
-    );
-  }
-
-  Column backup() {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        _PhotoURL(),
-        Expanded(
-          child: SingleChildScrollView(
+      body: Column(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          const _PhotoURL(),
+          SingleChildScrollView(
             child: Column(
               children: [
-                Row(
-                  children: [
-                    _DisplayName(),
-                    _About(),
-                  ],
-                ),
+                const _DisplayName(),
+                const _About(),
               ],
             ),
           ),
-        ),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: [
-            Expanded(
-              child: TextButton.icon(
-                onPressed: () => null,
-                icon: Icon(FontAwesomeIcons.whatsapp),
-                label: Text("שלח הודעה"),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              Expanded(
+                child: TextButton.icon(
+                  onPressed: () => null,
+                  icon: const Icon(FontAwesomeIcons.whatsapp),
+                  label: const Text('שלח הודעה'),
+                ),
               ),
-            ),
-            Expanded(
-              child: TextButton.icon(
-                onPressed: () => null,
-                icon: Icon(FontAwesomeIcons.phone),
-                label: Text("התקשר"),
+              Expanded(
+                child: TextButton.icon(
+                  onPressed: () => null,
+                  icon: const Icon(FontAwesomeIcons.phone),
+                  label: const Text('התקשר'),
+                ),
               ),
-            ),
-          ],
-        ),
-      ],
+            ],
+          ),
+        ],
+      ),
     );
   }
 }
@@ -133,7 +75,7 @@ class _DisplayName extends StatelessWidget {
             ],
           );
         }
-        return LinearProgressIndicator();
+        return const LinearProgressIndicator();
       },
     );
   }
@@ -158,7 +100,7 @@ class _PhotoURL extends StatelessWidget {
             ),
           );
         }
-        return LinearProgressIndicator();
+        return const LinearProgressIndicator();
       },
     );
   }
@@ -177,7 +119,7 @@ class _About extends StatelessWidget {
         if (state.status == ProfileStateStatus.loaded) {
           return Text(state.profile.about);
         }
-        return LinearProgressIndicator();
+        return const LinearProgressIndicator();
       },
     );
   }

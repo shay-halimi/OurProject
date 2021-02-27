@@ -1,28 +1,33 @@
 import 'package:accounts_repository/accounts_repository.dart';
 import 'package:authentication_repository/authentication_repository.dart';
 import 'package:cookpoint/authentication/authentication.dart';
-import 'package:cookpoint/location/cubit/cubit.dart';
+import 'package:cookpoint/points/points.dart';
 import 'package:cookpoint/profile/profile.dart';
 import 'package:cookpoint/splash/splash.dart';
 import 'package:cookpoint/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:location_repository/location_repository.dart';
+import 'package:points_repository/points_repository.dart';
 
 import 'home/home.dart';
-import 'map/cubit/cubit.dart';
+import 'location/location.dart';
 
 class App extends StatelessWidget {
   const App({
     Key key,
     @required this.authenticationRepository,
     @required this.accountsRepository,
+    @required this.locationRepository,
   })  : assert(authenticationRepository != null),
         assert(accountsRepository != null),
+        assert(locationRepository != null),
         super(key: key);
 
   final AuthenticationRepository authenticationRepository;
   final AccountsRepository accountsRepository;
+  final LocationRepository locationRepository;
 
   @override
   Widget build(BuildContext context) {
@@ -33,6 +38,9 @@ class App extends StatelessWidget {
         ),
         RepositoryProvider.value(
           value: accountsRepository,
+        ),
+        RepositoryProvider.value(
+          value: locationRepository,
         ),
       ],
       child: MultiBlocProvider(
@@ -48,10 +56,14 @@ class App extends StatelessWidget {
             ),
           ),
           BlocProvider(
-            create: (_) => LocationCubit(),
+            create: (_) => LocationCubit(
+              locationRepository: locationRepository,
+            ),
           ),
           BlocProvider(
-            create: (_) => MapCubit(),
+            create: (_) => PointsCubit(
+              pointsRepository: FirebasePointsRepository(),
+            ),
           ),
         ],
         child: AppView(),

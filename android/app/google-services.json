@@ -8,12 +8,20 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:999901209458:android:e99ce630797d70ae26f3eb",
+        "mobilesdk_app_id": "1:999901209458:android:b2b30aec3fcc0ab226f3eb",
         "android_client_info": {
-          "package_name": "app.cookpoint.android.dev"
+          "package_name": "app.cookpoint.flutter"
         }
       },
       "oauth_client": [
+        {
+          "client_id": "999901209458-nucpr07t9cpclcrf5njq7cofu1d6v3hg.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "app.cookpoint.flutter",
+            "certificate_hash": "d8436bd050ace15d388ec2f8ebfe07977ca29e70"
+          }
+        },
         {
           "client_id": "999901209458-ho8snh50294tians4kgrojlq1onctmf7.apps.googleusercontent.com",
           "client_type": 3

@@ -1,0 +1,17 @@
+name: points_repository
+
+version: 1.0.0+1
+
+environment:
+  sdk: ">=2.10.5 <3.0.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+  cloud_firestore: ^0.14.0+2
+  equatable: ^1.2.6
+  firebase_core: ^0.5.1
+  geoflutterfire: ^2.2.1
+
+

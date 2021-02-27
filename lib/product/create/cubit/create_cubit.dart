@@ -8,12 +8,12 @@ import 'package:products_repository/products_repository.dart';
 
 part 'create_state.dart';
 
-class CreateCubit extends Cubit<CreateState> {
-  final ProductsRepository _productsRepository;
-
+class CreateCubit extends Cubit<CreateProductState> {
   CreateCubit(this._productsRepository)
       : assert(_productsRepository != null),
-        super(const CreateState());
+        super(const CreateProductState());
+
+  final ProductsRepository _productsRepository;
 
   Future<void> confirmPhoneNumber() async {
     if (!state.status.isValidated) return;
@@ -23,12 +23,13 @@ class CreateCubit extends Cubit<CreateState> {
     try {
       await _productsRepository.add(
         Product.empty.copyWith(
-          supplierId: "todo", // todo
+          supplierId: 'todo',
+          // todo
           title: state.title.value,
           description: state.description.value,
           price: Money(
             amount: num.parse(state.price.value).toDouble(),
-            currency: Money.CURRENCY_NIS,
+            currency: const Currency.nis(),
           ),
           media: state.media,
           tags: state.tags.value.split(',').toSet(),

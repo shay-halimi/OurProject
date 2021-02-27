@@ -15,7 +15,9 @@ class PhoneNumberPage extends StatelessWidget {
       body: Padding(
         padding: const EdgeInsets.all(8.0),
         child: BlocProvider(
-          create: (_) => PhoneNumberCubit(context.read<AuthenticationRepository>()),
+          create: (_) => PhoneNumberCubit(
+            context.read<AuthenticationRepository>(),
+          ),
           child: PhoneNumberForm(),
         ),
       ),

@@ -2,22 +2,35 @@ import 'package:meta/meta.dart';
 
 @immutable
 class Location {
-  final double latitude;
-  final double longitude;
-
-  const Location(double latitude, double longitude)
-      : assert(latitude != null),
+  const Location({
+    @required double latitude,
+    @required double longitude,
+  })  : assert(latitude != null),
         assert(longitude != null),
         latitude =
             (latitude < -90.0 ? -90.0 : (90.0 < latitude ? 90.0 : latitude)),
         longitude = (longitude + 180.0) % 360.0 - 180.0;
 
-  Location copyWith({double latitude, double longitude}) {
-    return Location(latitude ?? this.latitude, longitude ?? this.longitude);
+  factory Location.fromJson(Map<String, Object> map) {
+    return Location(
+      latitude: (map['latitude'] as num).toDouble(),
+      longitude: (map['longitude'] as num).toDouble(),
+    );
   }
 
-  @override
-  int get hashCode => latitude.hashCode ^ longitude.hashCode;
+  final double latitude;
+  final double longitude;
+
+  Location copyWith({
+    String id,
+    double latitude,
+    double longitude,
+  }) {
+    return Location(
+      latitude: latitude ?? this.latitude,
+      longitude: longitude ?? this.longitude,
+    );
+  }
 
   @override
   bool operator ==(Object other) =>
@@ -26,6 +39,9 @@ class Location {
           runtimeType == other.runtimeType &&
           latitude == other.latitude &&
           longitude == other.longitude;
+
+  @override
+  int get hashCode => latitude.hashCode ^ longitude.hashCode;
 
   @override
   String toString() {
@@ -39,12 +55,5 @@ class Location {
     };
   }
 
-  static Location fromJson(Map<String, Object> json) {
-    return Location(
-      (json['latitude'] as num).toDouble(),
-      (json['longitude'] as num).toDouble(),
-    );
-  }
-
-  static const empty = Location(0, 0);
+  static const empty = Location(latitude: 0, longitude: 0);
 }

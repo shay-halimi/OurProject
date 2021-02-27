@@ -7,6 +7,7 @@ import 'package:equatable/equatable.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
+import 'package:location_repository/location_location_repository.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -16,5 +17,6 @@ void main() async {
   runApp(App(
     authenticationRepository: AuthenticationRepository(),
     accountsRepository: FirebaseAccountsRepository(),
+    locationRepository: LocationLocationRepository(),
   ));
 }

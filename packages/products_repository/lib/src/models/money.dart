@@ -1,25 +1,46 @@
 import 'package:meta/meta.dart';
 
+class Currency {
+  const Currency._({
+    @required this.value,
+  });
+
+  const Currency.unknown() : this._(value: 'XXX');
+
+  const Currency.nis() : this._(value: 'NIS');
+
+  const Currency.fromString(String value) : this._(value: value);
+
+  final String value;
+}
+
 @immutable
 class Money {
-  final double amount;
-  final String currency;
-
   const Money({
     @required this.amount,
     @required this.currency,
   });
 
+  factory Money.fromJson(Map<String, Object> map) {
+    return Money(
+      amount: (map['amount'] as num).toDouble(),
+      currency: Currency.fromString(map['currency'] as String),
+    );
+  }
+
+  final double amount;
+  final Currency currency;
+
   Money copyWith({
     double amount,
-    String currency,
+    Currency currency,
   }) {
     if ((amount == null || identical(amount, this.amount)) &&
         (currency == null || identical(currency, this.currency))) {
       return this;
     }
 
-    return new Money(
+    return Money(
       amount: amount ?? this.amount,
       currency: currency ?? this.currency,
     );
@@ -41,22 +62,12 @@ class Money {
     return 'Money{amount: $amount, currency: $currency}';
   }
 
-  factory Money.fromJson(Map<String, Object> map) {
-    return new Money(
-      amount: (map['amount'] as num).toDouble(),
-      currency: map['currency'] as String,
-    );
-  }
-
   Map<String, Object> toJson() {
     return {
-      'amount': this.amount,
-      'currency': this.currency,
+      'amount': amount,
+      'currency': currency,
     };
   }
 
-  static const empty = Money(amount: 0, currency: CURRENCY_UNKNOWN);
-
-  static const CURRENCY_UNKNOWN = 'XXX';
-  static const CURRENCY_NIS = 'NIS';
+  static const empty = Money(amount: 0, currency: Currency.unknown());
 }

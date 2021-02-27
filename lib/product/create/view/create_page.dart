@@ -14,11 +14,11 @@ class AddProductPage extends StatelessWidget {
           padding: const EdgeInsets.all(8.0),
           child: Column(
             children: [
-              Text("TODO"),
+              const Text('TODO'),
               const Padding(
                 padding: EdgeInsets.only(bottom: 5.0),
               ),
-              TextField(
+              const TextField(
                 decoration: InputDecoration(
                   labelText: 'שם המאכל',
                 ),
@@ -26,7 +26,7 @@ class AddProductPage extends StatelessWidget {
               const Padding(
                 padding: EdgeInsets.only(bottom: 5.0),
               ),
-              TextField(
+              const TextField(
                 decoration: InputDecoration(
                   labelText: 'מחיר',
                 ),
@@ -34,7 +34,7 @@ class AddProductPage extends StatelessWidget {
               const Padding(
                 padding: EdgeInsets.only(bottom: 5.0),
               ),
-              TextField(
+              const TextField(
                 maxLines: null,
                 decoration: InputDecoration(
                   labelText: 'תיאור המוצר',
@@ -43,7 +43,7 @@ class AddProductPage extends StatelessWidget {
               const Padding(
                 padding: EdgeInsets.only(bottom: 5.0),
               ),
-              TextField(
+              const TextField(
                 decoration: InputDecoration(
                   labelText: 'תגיות',
                   hintText: 'טבעוני, צמחוני וכו',
@@ -55,9 +55,9 @@ class AddProductPage extends StatelessWidget {
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        heroTag: "FloatingActionButtonCookPoint",
+        heroTag: 'FloatingActionButtonCookPoint',
         tooltip: 'פרסם CookPoint',
-        child: Icon(Icons.save),
+        child: const Icon(Icons.save),
         onPressed: () {
           Navigator.pop(context);
         },

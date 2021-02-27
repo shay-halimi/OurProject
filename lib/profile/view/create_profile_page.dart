@@ -14,15 +14,14 @@ class CreateProfilePage extends StatelessWidget {
   Widget build(BuildContext context) {
     final user = context.select((AuthenticationBloc bloc) => bloc.state.user);
 
-    final profile = ProfileUpdatedEvent(Account.empty.copyWith(
+    final profile = Account.empty.copyWith(
       id: user.id,
-      uid: user.id,
       displayName: user.displayName,
       photoURL: user.photoURL,
       phoneNumber: user.phoneNumber,
-    ));
+    );
 
-    context.read<ProfileBloc>().add(profile);
+    context.read<ProfileBloc>().add(ProfileCreatedEvent(profile));
 
     return SplashPage();
   }

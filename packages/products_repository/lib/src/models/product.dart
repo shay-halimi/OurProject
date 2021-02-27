@@ -5,14 +5,6 @@ import 'models.dart';
 
 @immutable
 class Product {
-  final String id;
-  final String supplierId;
-  final String title;
-  final String description;
-  final Money price;
-  final Set<String> media;
-  final Set<String> tags;
-
   const Product({
     @required this.id,
     @required this.supplierId,
@@ -22,6 +14,14 @@ class Product {
     @required this.media,
     @required this.tags,
   });
+
+  final String id;
+  final String supplierId;
+  final String title;
+  final String description;
+  final Money price;
+  final Set<String> media;
+  final Set<String> tags;
 
   Product copyWith({
     String id,
@@ -68,11 +68,12 @@ class Product {
 
   @override
   String toString() {
-    return 'Product{id: $id, supplierId: $supplierId, title: $title, description: $description, price: $price, media: $media, tags: $tags}';
+    return 'Product{id: $id, supplierId: $supplierId, title: $title, '
+        'description: $description, price: $price, media: $media, tags: $tags}';
   }
 
   ProductEntity toEntity() {
-    return ProductEntity();
+    return const ProductEntity();
   }
 
   static Product fromEntity(ProductEntity entity) {
@@ -87,7 +88,7 @@ class Product {
     );
   }
 
-  static const empty = const Product(
+  static const empty = Product(
     id: '',
     supplierId: '',
     title: '',

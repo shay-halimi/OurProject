@@ -6,19 +6,18 @@ import 'package:equatable/equatable.dart';
 import 'package:meta/meta.dart';
 
 part 'profile_event.dart';
-
 part 'profile_state.dart';
 
 class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
-  final AccountsRepository _accountsRepository;
-
-  StreamSubscription<Account> _streamSubscription;
-
   ProfileBloc({
     @required AccountsRepository accountsRepository,
   })  : assert(accountsRepository != null),
         _accountsRepository = accountsRepository,
         super(const ProfileState.unknown());
+
+  final AccountsRepository _accountsRepository;
+
+  StreamSubscription<Account> _streamSubscription;
 
   @override
   Future<void> close() {
@@ -29,20 +28,22 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
   @override
   Stream<ProfileState> mapEventToState(ProfileEvent event) async* {
     if (event is ProfileRequestedEvent) {
-      yield* _mapProfileRequestedToState(event);
+      yield* _mapProfileRequestedEventToState(event);
     } else if (event is ProfileUpdatedEvent) {
       yield* _mapProfileUpdatedEventToState(event);
+    } else if (event is ProfileCreatedEvent) {
+      yield* _mapProfileCreatedEventToState(event);
     } else if (event is ProfileLoadedEvent) {
-      yield* _mapProfileLoadedToState(event);
+      yield* _mapProfileLoadedEventToState(event);
     }
   }
 
-  Stream<ProfileState> _mapProfileRequestedToState(
+  Stream<ProfileState> _mapProfileRequestedEventToState(
     ProfileRequestedEvent event,
   ) async* {
-    yield ProfileState.loading();
+    yield const ProfileState.loading();
 
-    _streamSubscription?.cancel();
+    await _streamSubscription?.cancel();
 
     _streamSubscription =
         _accountsRepository.account(event.id).listen((profile) {
@@ -50,11 +51,11 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
     });
   }
 
-  Stream<ProfileState> _mapProfileLoadedToState(
+  Stream<ProfileState> _mapProfileLoadedEventToState(
     ProfileLoadedEvent event,
   ) async* {
     if (event.profile == Account.empty) {
-      yield ProfileState.empty();
+      yield const ProfileState.empty();
     } else {
       yield ProfileState.loaded(event.profile);
     }
@@ -63,17 +64,17 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
   Stream<ProfileState> _mapProfileUpdatedEventToState(
     ProfileUpdatedEvent event,
   ) async* {
-    yield ProfileState.loading();
+    await _accountsRepository.update(event.profile);
+  }
 
-    _accountsRepository.set(event.profile);
+  Stream<ProfileState> _mapProfileCreatedEventToState(
+    ProfileCreatedEvent event,
+  ) async* {
+    await _accountsRepository.set(event.profile);
   }
 
   void setAvailable(bool available) {
     add(ProfileUpdatedEvent(state.profile.copyWith(available: available)));
-  }
-
-  void updateLocation(Location location) {
-    add(ProfileUpdatedEvent(state.profile.copyWith(location: location)));
   }
 
   void updatePhotoURL(String photoURL) {

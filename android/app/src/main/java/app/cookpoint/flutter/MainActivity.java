@@ -1,4 +1,4 @@
-package app.cookpoint.android.dev;
+package app.cookpoint.flutter;
 
 import io.flutter.embedding.android.FlutterActivity;
 

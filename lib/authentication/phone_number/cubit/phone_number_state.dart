@@ -1,14 +1,13 @@
 part of 'phone_number_cubit.dart';
 
 class PhoneNumberState extends Equatable {
-  final PhoneNumber phoneNumber;
-
-  final FormzStatus status;
-
   const PhoneNumberState({
     this.phoneNumber = const PhoneNumber.pure(),
     this.status = FormzStatus.pure,
   });
+
+  final PhoneNumber phoneNumber;
+  final FormzStatus status;
 
   @override
   List<Object> get props => [phoneNumber, status];

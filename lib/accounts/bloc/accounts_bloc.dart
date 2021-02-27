@@ -6,7 +6,6 @@ import 'package:equatable/equatable.dart';
 import 'package:meta/meta.dart';
 
 part 'accounts_event.dart';
-
 part 'accounts_state.dart';
 
 class AccountsBloc extends Bloc<AccountsEvent, AccountsState> {
@@ -14,7 +13,11 @@ class AccountsBloc extends Bloc<AccountsEvent, AccountsState> {
     @required AccountsRepository accountsRepository,
   })  : assert(accountsRepository != null),
         _accountsRepository = accountsRepository,
-        super(const AccountsState.unknown());
+        super(const AccountsState.unknown()) {
+    _accountsSubscription = _accountsRepository.accounts().listen((event) {
+      add(AccountsLoadedEvent(event));
+    });
+  }
 
   final AccountsRepository _accountsRepository;
   StreamSubscription<List<Account>> _accountsSubscription;
@@ -29,23 +32,13 @@ class AccountsBloc extends Bloc<AccountsEvent, AccountsState> {
   Stream<AccountsState> mapEventToState(
     AccountsEvent event,
   ) async* {
-    if (event is AccountsLocationQueryEvent) {
-      yield* _mapAccountsLocationQueryToState(event);
+    if (event is AccountsStringQueryEvent) {
+      /// todo
+      yield const AccountsState.loading();
     } else if (event is AccountsLoadedEvent) {
       yield AccountsState.loaded(event.accounts);
     } else {
-      yield AccountsState.unknown();
+      yield const AccountsState.unknown();
     }
-  }
-
-  Stream<AccountsState> _mapAccountsLocationQueryToState(AccountsLocationQueryEvent event) async* {
-    yield AccountsState.loading();
-
-    _accountsSubscription?.cancel();
-
-    _accountsSubscription =
-        _accountsRepository.accountsByLocation(event.location).listen((event) {
-      add(AccountsLoadedEvent(event));
-    });
   }
 }

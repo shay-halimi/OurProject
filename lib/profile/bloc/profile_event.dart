@@ -25,6 +25,15 @@ class ProfileLoadedEvent extends ProfileEvent {
   List<Object> get props => [profile];
 }
 
+class ProfileCreatedEvent extends ProfileEvent {
+  const ProfileCreatedEvent(this.profile);
+
+  final Account profile;
+
+  @override
+  List<Object> get props => [profile];
+}
+
 class ProfileUpdatedEvent extends ProfileEvent {
   const ProfileUpdatedEvent(this.profile);
 

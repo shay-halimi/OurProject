@@ -9,11 +9,11 @@ import 'package:formz/formz.dart';
 part 'otp_state.dart';
 
 class OTPCubit extends Cubit<OTPState> {
-  final AuthenticationRepository _authenticationRepository;
-
   OTPCubit(this._authenticationRepository)
       : assert(_authenticationRepository != null),
         super(const OTPState());
+
+  final AuthenticationRepository _authenticationRepository;
 
   void otpChanged(String value) {
     final otp = OTP.dirty(value);

@@ -16,15 +16,6 @@ class AccountsStringQueryEvent extends AccountsEvent {
   List<Object> get props => [query];
 }
 
-class AccountsLocationQueryEvent extends AccountsEvent {
-  const AccountsLocationQueryEvent(this.location);
-
-  final Location location;
-
-  @override
-  List<Object> get props => [location];
-}
-
 class AccountsLoadedEvent extends AccountsEvent {
   const AccountsLoadedEvent(this.accounts);
 
