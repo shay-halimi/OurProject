@@ -1,2 +1,2 @@
-export 'app_drawer.dart';
-export 'app_title.dart';
+export 'view/view.dart';
+export 'widgets/widgets.dart';

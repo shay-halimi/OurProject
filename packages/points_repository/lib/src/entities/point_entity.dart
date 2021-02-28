@@ -2,55 +2,65 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equatable/equatable.dart';
 import 'package:geoflutterfire/geoflutterfire.dart';
 import 'package:meta/meta.dart';
+import 'package:points_repository/points_repository.dart';
 
 class PointEntity extends Equatable {
   const PointEntity({
     @required this.id,
-    @required this.latitude,
-    @required this.longitude,
+    @required this.location,
+    @required this.available,
   });
 
   factory PointEntity.fromJson(Map<String, Object> map) {
     return PointEntity(
       id: map['id'] as String,
-      latitude: (map['latitude'] as num).toDouble(),
-      longitude: (map['longitude'] as num).toDouble(),
+      location: Location.fromJson(map['location'] as Map<String, Object>),
+      available: map['available'] as bool,
     );
   }
 
   factory PointEntity.fromSnapshot(DocumentSnapshot snap) {
-    var point = snap.data()['geoPoint'] as GeoPoint;
+    final point = snap.data()['location']['geopoint'] as GeoPoint;
 
     return PointEntity(
       id: snap.id,
-      latitude: point.latitude,
-      longitude: point.latitude,
+      location: Location.empty.copyWith(
+        latitude: point?.latitude,
+        longitude: point?.longitude,
+      ),
+      available: snap.data()['available'] as bool,
     );
   }
 
   final String id;
-  final double latitude;
-  final double longitude;
+  final Location location;
+  final bool available;
 
   @override
-  List<Object> get props => [id, latitude, longitude];
+  List<Object> get props => [id, location, available];
 
   @override
   String toString() {
-    return 'PointEntity{id: $id, latitude: $latitude, longitude: $longitude}';
+    return 'PointEntity{id: $id, location: $location, available: $available}';
   }
 
   Map<String, Object> toJson() {
     return {
       'id': id,
-      'latitude': latitude,
-      'longitude': longitude,
+      'location': location.toJson(),
+      'available': available,
     };
   }
 
   Map<String, Object> toDocument() {
+    final data = GeoFirePoint(
+      location.latitude,
+      location.longitude,
+    ).data as Map<String, Object>;
+
     return {
-      'geoPoint': GeoFirePoint(latitude, longitude).data,
+      'location': data,
+      'available': available,
     };
   }
 }

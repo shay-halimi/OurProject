@@ -1,33 +1,37 @@
-import 'package:accounts_repository/accounts_repository.dart';
 import 'package:authentication_repository/authentication_repository.dart';
+import 'package:cookpoint/app/app.dart';
 import 'package:cookpoint/authentication/authentication.dart';
+import 'package:cookpoint/orders/orders.dart';
+import 'package:cookpoint/places/places.dart';
 import 'package:cookpoint/points/points.dart';
-import 'package:cookpoint/profile/profile.dart';
+import 'package:cookpoint/products/products.dart';
+import 'package:cookpoint/profiles/profiles.dart';
 import 'package:cookpoint/splash/splash.dart';
 import 'package:cookpoint/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:location_repository/location_repository.dart';
+import 'package:places_repository/places_repository.dart';
 import 'package:points_repository/points_repository.dart';
-
-import 'home/home.dart';
-import 'location/location.dart';
+import 'package:profiles_repository/profiles_repository.dart';
 
 class App extends StatelessWidget {
   const App({
     Key key,
     @required this.authenticationRepository,
-    @required this.accountsRepository,
-    @required this.locationRepository,
+    @required this.profilesRepository,
+    @required this.pointsRepository,
+    @required this.placesRepository,
   })  : assert(authenticationRepository != null),
-        assert(accountsRepository != null),
-        assert(locationRepository != null),
+        assert(profilesRepository != null),
+        assert(pointsRepository != null),
+        assert(placesRepository != null),
         super(key: key);
 
   final AuthenticationRepository authenticationRepository;
-  final AccountsRepository accountsRepository;
-  final LocationRepository locationRepository;
+  final ProfilesRepository profilesRepository;
+  final PointsRepository pointsRepository;
+  final PlacesRepository placesRepository;
 
   @override
   Widget build(BuildContext context) {
@@ -37,10 +41,10 @@ class App extends StatelessWidget {
           value: authenticationRepository,
         ),
         RepositoryProvider.value(
-          value: accountsRepository,
+          value: profilesRepository,
         ),
         RepositoryProvider.value(
-          value: locationRepository,
+          value: placesRepository,
         ),
       ],
       child: MultiBlocProvider(
@@ -51,19 +55,30 @@ class App extends StatelessWidget {
             ),
           ),
           BlocProvider(
-            create: (_) => ProfileBloc(
-              accountsRepository: accountsRepository,
+            create: (_) => ProfilesBloc(
+              profilesRepository: profilesRepository,
             ),
           ),
           BlocProvider(
-            create: (_) => LocationCubit(
-              locationRepository: locationRepository,
+            create: (_) => PointsBloc(
+              pointsRepository: pointsRepository,
             ),
           ),
           BlocProvider(
-            create: (_) => PointsCubit(
-              pointsRepository: FirebasePointsRepository(),
+            create: (_) => PlacesCubit(
+              placesRepository: placesRepository,
             ),
+          ),
+          BlocProvider(
+            create: (_) => PlacesCubit(
+              placesRepository: placesRepository,
+            ),
+          ),
+          BlocProvider(
+            create: (_) => ProductCubit(),
+          ),
+          BlocProvider(
+            create: (_) => OrderCubit(),
           ),
         ],
         child: AppView(),

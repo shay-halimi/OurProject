@@ -1,46 +1,47 @@
 import 'package:meta/meta.dart';
 
 import '../entities/entities.dart';
+import 'models.dart';
 
 @immutable
 class Point {
   const Point({
     @required this.id,
-    @required this.latitude,
-    @required this.longitude,
+    @required this.location,
+    @required this.available,
   })  : assert(id != null),
-        assert(latitude != null),
-        assert(longitude != null);
+        assert(location != null),
+        assert(available != null);
 
   factory Point.fromJson(Map<String, Object> map) {
     return Point(
       id: map['id'] as String,
-      latitude: (map['latitude'] as num).toDouble(),
-      longitude: (map['longitude'] as num).toDouble(),
+      location: Location.fromJson(map['location'] as Map<String, Object>),
+      available: map['available'] as bool,
     );
   }
 
   factory Point.fromEntity(PointEntity entity) {
     return Point(
       id: entity.id,
-      latitude: entity.latitude,
-      longitude: entity.longitude,
+      location: entity.location,
+      available: entity.available,
     );
   }
 
   final String id;
-  final double latitude;
-  final double longitude;
+  final Location location;
+  final bool available;
 
   Point copyWith({
     String id,
-    double latitude,
-    double longitude,
+    Location location,
+    bool available,
   }) {
     return Point(
       id: id ?? this.id,
-      latitude: latitude ?? this.latitude,
-      longitude: longitude ?? this.longitude,
+      location: location ?? this.location,
+      available: available ?? this.available,
     );
   }
 
@@ -50,36 +51,36 @@ class Point {
       other is Point &&
           runtimeType == other.runtimeType &&
           id == other.id &&
-          latitude == other.latitude &&
-          longitude == other.longitude;
+          location == other.location &&
+          available == other.available;
 
   @override
-  int get hashCode => id.hashCode ^ latitude.hashCode ^ longitude.hashCode;
+  int get hashCode => id.hashCode ^ location.hashCode ^ available.hashCode;
 
   @override
   String toString() {
-    return 'Point{id: $id, latitude: $latitude, longitude: $longitude}';
+    return 'Point{id: $id, location: $location, available: $available}';
   }
 
   Map<String, Object> toJson() {
     return {
       'id': id,
-      'latitude': latitude,
-      'longitude': longitude,
+      'location': location.toJson(),
+      'available': available,
     };
   }
 
   PointEntity toEntity() {
     return PointEntity(
       id: id,
-      latitude: latitude,
-      longitude: longitude,
+      location: location,
+      available: available,
     );
   }
 
   static const empty = Point(
     id: '',
-    latitude: 0,
-    longitude: 0,
+    location: Location.empty,
+    available: false,
   );
 }
