@@ -7,13 +7,14 @@ import 'package:cookpoint/points/points.dart';
 import 'package:cookpoint/products/products.dart';
 import 'package:cookpoint/profiles/profiles.dart';
 import 'package:cookpoint/splash/splash.dart';
-import 'package:cookpoint/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:location_services/location_services.dart';
 import 'package:points_repository/points_repository.dart';
 import 'package:profiles_repository/profiles_repository.dart';
+
+import 'file:///C:/Users/Matan/StudioProjects/flutter_app/lib/theme/theme.dart';
 
 class App extends StatelessWidget {
   const App({
@@ -68,9 +69,6 @@ class App extends StatelessWidget {
             create: (context) => LocationCubit(
               locationServices: locationServices,
             ),
-          ),
-          BlocProvider(
-            create: (_) => MapCubit(),
           ),
           BlocProvider(
             create: (_) => ProductCubit(),

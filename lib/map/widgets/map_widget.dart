@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'dart:math';
 
-import 'package:cookpoint/map/cubit/cubit.dart';
+import 'package:cookpoint/map/map.dart';
 import 'package:cookpoint/points/points.dart';
 import 'package:cookpoint/profiles/profiles.dart';
 import 'package:flutter/material.dart';
@@ -16,6 +16,8 @@ class MapWidget extends StatefulWidget {
 
 class _MapWidgetState extends State<MapWidget> {
   final Completer<google_maps.GoogleMapController> _controller = Completer();
+
+  double zoom = 17.5;
 
   @override
   Widget build(BuildContext context) {
@@ -35,7 +37,7 @@ class _MapWidgetState extends State<MapWidget> {
                   state.location.longitude,
                 ),
                 bearing: state.location.heading,
-                zoom: 17.5,
+                zoom: zoom,
               ),
             ),
           );
@@ -51,7 +53,7 @@ class _MapWidgetState extends State<MapWidget> {
               state.location.longitude,
             ),
             bearing: state.location.heading,
-            zoom: 17.5,
+            zoom: zoom,
           ),
           markers: context
               .select((PointsBloc bloc) => bloc.state.points)
@@ -69,12 +71,27 @@ class _MapWidgetState extends State<MapWidget> {
                           : google_maps.BitmapDescriptor.hueRed,
                     ),
                   ))
-              .toSet(),
+              .toSet()
+                ..add(
+                  google_maps.Marker(
+                    markerId: google_maps.MarkerId('LOCATION_INDICATOR'),
+                    position: google_maps.LatLng(
+                      state.location.latitude,
+                      state.location.longitude,
+                    ),
+                    icon: google_maps.BitmapDescriptor.defaultMarkerWithHue(
+                      google_maps.BitmapDescriptor.hueAzure,
+                    ),
+                    onTap: () {
+                      zoom = 17.5;
+                      context.read<MapCubit>().updateLocation(state.location);
+                    },
+                  ),
+                ),
           compassEnabled: false,
           mapToolbarEnabled: false,
           zoomControlsEnabled: false,
           myLocationButtonEnabled: false,
-          onCameraMove: print,
           onTap: (lanLat) => context.read<PointsBloc>().add(
                 PointCreatedEvent(
                   Point.empty.copyWith(
@@ -84,6 +101,7 @@ class _MapWidgetState extends State<MapWidget> {
                   ),
                 ),
               ),
+          onCameraMove: (pos) => zoom = pos.zoom,
         );
       },
     );

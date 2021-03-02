@@ -16,7 +16,7 @@ class LocationPage extends StatelessWidget {
       body: Center(
         child: ElevatedButton(
           child: const Text('הפעל שירותי מיקום'),
-          onPressed: () => context.read<LocationCubit>().locate(),
+          onPressed: context.read<LocationCubit>().locate,
         ),
       ),
     );

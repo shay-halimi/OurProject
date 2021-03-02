@@ -1,6 +1,6 @@
 part of 'map_cubit.dart';
 
-enum MapStateStatus { unknown, loading, loaded, error }
+enum MapStateStatus { unknown, loading, loaded }
 
 class MapState extends Equatable {
   const MapState._({
@@ -14,8 +14,6 @@ class MapState extends Equatable {
 
   const MapState.loaded(Location location)
       : this._(status: MapStateStatus.loaded, location: location);
-
-  const MapState.error() : this._(status: MapStateStatus.error);
 
   final MapStateStatus status;
   final Location location;

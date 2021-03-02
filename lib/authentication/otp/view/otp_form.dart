@@ -1,4 +1,5 @@
 import 'package:cookpoint/authentication/authentication.dart';
+import 'package:cookpoint/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:formz/formz.dart';
@@ -12,19 +13,21 @@ class OTPForm extends StatelessWidget {
           ScaffoldMessenger.of(context)
             ..hideCurrentSnackBar()
             ..showSnackBar(
-              const SnackBar(content: Text('שגיאה בשליחת קוד אימות')),
+              const SnackBar(
+                content: Text(
+                  'שגיאה באימות מספר הטלפון, בדוק את הקוד ששלחנו לך ונסה שוב',
+                ),
+              ),
             );
         }
       },
-      child: SingleChildScrollView(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
-          children: [
-            const Icon(Icons.fastfood),
-            _OTPInput(),
-            _ContinueButton(),
-          ],
-        ),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: [
+          const AppLogo(),
+          _OTPInput(),
+          _ContinueButton(),
+        ],
       ),
     );
   }
@@ -38,10 +41,16 @@ class _OTPInput extends StatelessWidget {
       builder: (context, state) {
         return TextField(
           key: const Key('OTPForm__OTPInput_TextField'),
+          keyboardType: TextInputType.number,
+          autofocus: true,
           onChanged: (otp) => context.read<OTPCubit>().otpChanged(otp),
           decoration: InputDecoration(
-            labelText: 'קוד אימות',
-            helperText: '',
+            border: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(4.0),
+              borderSide:
+                  const BorderSide(width: 1.0, style: BorderStyle.solid),
+            ),
+            labelText: 'קוד האימות ששלחנו אלייך',
             errorText: state.otp.invalid ? 'קוד אימות לא תקין' : null,
           ),
         );

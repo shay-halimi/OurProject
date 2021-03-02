@@ -1,4 +1,5 @@
 import 'package:cookpoint/authentication/authentication.dart';
+import 'package:cookpoint/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:formz/formz.dart';
@@ -12,21 +13,22 @@ class PhoneNumberForm extends StatelessWidget {
           ScaffoldMessenger.of(context)
             ..hideCurrentSnackBar()
             ..showSnackBar(
-              const SnackBar(content: Text('שגיאה בתחברות')),
+              const SnackBar(
+                  content: Text(
+                'שגיאה בשליחת מסרון, נסה שוב מאוחר יותר',
+              )),
             );
         } else if (state.status.isSubmissionSuccess) {
           Navigator.of(context).push<void>(OTPPage.route());
         }
       },
-      child: SingleChildScrollView(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: [
-            const Icon(Icons.fastfood),
-            _PhoneNumberInput(),
-            _ContinueButton(),
-          ],
-        ),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: [
+          const AppLogo(),
+          _PhoneNumberInput(),
+          _ContinueButton(),
+        ],
       ),
     );
   }
@@ -41,12 +43,20 @@ class _PhoneNumberInput extends StatelessWidget {
       builder: (context, state) {
         return TextField(
           key: const Key('PhoneNumberForm__PhoneNumberInput_TextField'),
+          keyboardType: TextInputType.phone,
+          autofocus: true,
           onChanged: (phoneNumber) =>
               context.read<PhoneNumberCubit>().phoneNumberChanged(phoneNumber),
           decoration: InputDecoration(
-            labelText: 'מספר טלפון',
-            helperText: '',
-            errorText: state.phoneNumber.invalid ? 'מספר פלאפון לא תקין' : null,
+            border: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(4.0),
+              borderSide:
+                  const BorderSide(width: 1.0, style: BorderStyle.solid),
+            ),
+            labelText: 'מספר הטלפון שלך',
+            errorText: state.phoneNumber.invalid
+                ? 'ספרות בלבד, ללא מקפים או רווחים'
+                : null,
           ),
         );
       },

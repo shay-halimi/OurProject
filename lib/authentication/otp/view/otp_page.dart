@@ -11,7 +11,7 @@ class OTPPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('אמת מספר טלפון')),
+      appBar: AppBar(title: const Text('אימות מספר הטלפון')),
       body: Padding(
         padding: const EdgeInsets.all(8.0),
         child: BlocProvider(
