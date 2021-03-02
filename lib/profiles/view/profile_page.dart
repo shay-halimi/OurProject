@@ -1,4 +1,5 @@
 import 'package:cookpoint/profiles/profiles.dart';
+import 'package:cookpoint/splash/splash.dart';
 import 'package:cookpoint/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -8,6 +9,35 @@ class ProfilePage extends StatelessWidget {
   static Route route() {
     return MaterialPageRoute<void>(builder: (_) => ProfilePage());
   }
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<ProfilesBloc, ProfilesState>(
+      buildWhen: (previous, current) => previous != current,
+      builder: (_, state) {
+        switch (state.status) {
+          case ProfileStateStatus.loading:
+            return const SplashPage();
+            break;
+          case ProfileStateStatus.loaded:
+            return const ProfileView();
+            break;
+          case ProfileStateStatus.empty:
+            return CreateProfilePage();
+            break;
+          default:
+            return const Text('no profile');
+            break;
+        }
+      },
+    );
+  }
+}
+
+class ProfileView extends StatelessWidget {
+  const ProfileView({
+    Key key,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

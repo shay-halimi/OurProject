@@ -29,10 +29,10 @@ dependencies:
   line_icons: ^1.3.2
   authentication_repository:
     path: packages/authentication_repository
+  location_services:
+    path: packages/location_services
   orders_repository:
     path: packages/orders_repository
-  places_repository:
-    path: packages/places_repository
   points_repository:
     path: packages/points_repository
   products_repository:

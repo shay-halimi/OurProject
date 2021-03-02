@@ -17,16 +17,7 @@ class PointsLoadedEvent extends PointsEvent {
 }
 
 class PointSubscribedEvent extends PointsEvent {
-  const PointSubscribedEvent(this.id);
-
-  final String id;
-
-  @override
-  List<Object> get props => [id];
-}
-
-class PointCreatedEvent extends PointsEvent {
-  const PointCreatedEvent(this.point);
+  const PointSubscribedEvent(this.point);
 
   final Point point;
 
@@ -34,8 +25,8 @@ class PointCreatedEvent extends PointsEvent {
   List<Object> get props => [point];
 }
 
-class PointUpdatedEvent extends PointsEvent {
-  const PointUpdatedEvent(this.point);
+class PointCreatedEvent extends PointsEvent {
+  const PointCreatedEvent(this.point);
 
   final Point point;
 

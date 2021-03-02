@@ -14,7 +14,7 @@ class AuthenticationPage extends StatelessWidget {
         title: const Text('תקנון'),
       ),
       body: Center(
-        child: TextButton(
+        child: ElevatedButton(
           child: const Text('אני מאשר את התקנון'),
           onPressed: () => Navigator.of(context).push<void>(
             PhoneNumberPage.route(),

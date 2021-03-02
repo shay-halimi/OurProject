@@ -413,6 +413,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.1.0"
+  location_services:
+    dependency: "direct main"
+    description:
+      path: "packages/location_services"
+      relative: true
+    source: path
+    version: "1.0.0+1"
   location_web:
     dependency: transitive
     description:
@@ -532,13 +539,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.10.0"
-  places_repository:
-    dependency: "direct main"
-    description:
-      path: "packages/places_repository"
-      relative: true
-    source: path
-    version: "1.0.0+1"
   platform:
     dependency: transitive
     description:

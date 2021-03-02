@@ -17,12 +17,10 @@ class PointsBloc extends Bloc<PointsEvent, PointsState> {
         super(const PointsState.unknown());
 
   final PointsRepository _pointsRepository;
-  StreamSubscription<Point> _pointSubscription;
   StreamSubscription<List<Point>> _pointsSubscription;
 
   @override
   Future<void> close() {
-    _pointSubscription?.cancel();
     _pointsSubscription?.cancel();
     return super.close();
   }
@@ -33,12 +31,10 @@ class PointsBloc extends Bloc<PointsEvent, PointsState> {
   ) async* {
     if (event is PointSubscribedEvent) {
       yield* _mapPointSubscribedEventToState(event);
-    } else if (event is PointUpdatedEvent) {
-      yield* _mapPointLocationUpdatedEventToState(event);
     } else if (event is PointCreatedEvent) {
       yield* _mapPointCreatedEventToState(event);
     } else if (event is PointsLoadedEvent) {
-      yield* _mapPointLoadedEventToState(event);
+      yield* _mapPointsLoadedEventToState(event);
     }
   }
 
@@ -47,21 +43,12 @@ class PointsBloc extends Bloc<PointsEvent, PointsState> {
   ) async* {
     yield const PointsState.loading();
 
-    await _pointSubscription?.cancel();
+    await _pointsSubscription?.cancel();
 
-    _pointSubscription =
-        _pointsRepository.point(event.id).listen((point) async {
-      await _pointsSubscription?.cancel();
-      _pointsSubscription = _pointsRepository.near(point).listen((points) {
-        add(PointsLoadedEvent(points));
-      });
+    _pointsSubscription =
+        _pointsRepository.nearby(event.point).listen((points) {
+      add(PointsLoadedEvent(points));
     });
-  }
-
-  Stream<PointsState> _mapPointLocationUpdatedEventToState(
-    PointUpdatedEvent event,
-  ) async* {
-    await _pointsRepository.update(event.point);
   }
 
   Stream<PointsState> _mapPointCreatedEventToState(
@@ -70,9 +57,15 @@ class PointsBloc extends Bloc<PointsEvent, PointsState> {
     await _pointsRepository.create(event.point);
   }
 
-  Stream<PointsState> _mapPointLoadedEventToState(
+  Stream<PointsState> _mapPointsLoadedEventToState(
     PointsLoadedEvent event,
   ) async* {
     yield PointsState.loaded(event.points);
+  }
+
+  Future<void> toggleAvailability(Point point) async {
+    add(PointCreatedEvent(point.copyWith(
+      available: !point.available,
+    )));
   }
 }

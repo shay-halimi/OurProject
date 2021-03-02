@@ -1,8 +1,8 @@
 import 'package:authentication_repository/authentication_repository.dart';
-import 'package:cookpoint/app/app.dart';
 import 'package:cookpoint/authentication/authentication.dart';
+import 'package:cookpoint/location/location.dart';
+import 'package:cookpoint/map/map.dart';
 import 'package:cookpoint/orders/orders.dart';
-import 'package:cookpoint/places/places.dart';
 import 'package:cookpoint/points/points.dart';
 import 'package:cookpoint/products/products.dart';
 import 'package:cookpoint/profiles/profiles.dart';
@@ -11,7 +11,7 @@ import 'package:cookpoint/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:places_repository/places_repository.dart';
+import 'package:location_services/location_services.dart';
 import 'package:points_repository/points_repository.dart';
 import 'package:profiles_repository/profiles_repository.dart';
 
@@ -21,17 +21,17 @@ class App extends StatelessWidget {
     @required this.authenticationRepository,
     @required this.profilesRepository,
     @required this.pointsRepository,
-    @required this.placesRepository,
+    @required this.locationServices,
   })  : assert(authenticationRepository != null),
         assert(profilesRepository != null),
         assert(pointsRepository != null),
-        assert(placesRepository != null),
+        assert(locationServices != null),
         super(key: key);
 
   final AuthenticationRepository authenticationRepository;
   final ProfilesRepository profilesRepository;
   final PointsRepository pointsRepository;
-  final PlacesRepository placesRepository;
+  final LocationServices locationServices;
 
   @override
   Widget build(BuildContext context) {
@@ -44,7 +44,7 @@ class App extends StatelessWidget {
           value: profilesRepository,
         ),
         RepositoryProvider.value(
-          value: placesRepository,
+          value: pointsRepository,
         ),
       ],
       child: MultiBlocProvider(
@@ -65,14 +65,12 @@ class App extends StatelessWidget {
             ),
           ),
           BlocProvider(
-            create: (_) => PlacesCubit(
-              placesRepository: placesRepository,
+            create: (context) => LocationCubit(
+              locationServices: locationServices,
             ),
           ),
           BlocProvider(
-            create: (_) => PlacesCubit(
-              placesRepository: placesRepository,
-            ),
+            create: (_) => MapCubit(),
           ),
           BlocProvider(
             create: (_) => ProductCubit(),
@@ -116,7 +114,7 @@ class _AppViewState extends State<AppView> {
             switch (state.status) {
               case AuthenticationStatus.authenticated:
                 _navigator.pushAndRemoveUntil<void>(
-                  HomePage.route(),
+                  MapPage.route(),
                   (route) => false,
                 );
                 break;

@@ -13,14 +13,19 @@ class FirebasePointsRepository extends PointsRepository {
 
   @override
   Future<void> create(Point point) {
-    return _collection.doc(point.id).set(point.toEntity().toDocument());
+    return _collection.add(point.toEntity().toDocument());
   }
 
   @override
-  Stream<List<Point>> near(Point point, {num radiusInKM = 3.14159265}) {
+  Future<void> update(Point point) {
+    return _collection.doc(point.id).update(point.toEntity().toDocument());
+  }
+
+  @override
+  Stream<List<Point>> nearby(Point point, {num radiusInKM = 3.14}) {
     final center = _geo.point(
-      latitude: point.location.latitude,
-      longitude: point.location.longitude,
+      latitude: point.latitude,
+      longitude: point.longitude,
     );
 
     return _geo
@@ -28,28 +33,12 @@ class FirebasePointsRepository extends PointsRepository {
         .within(
           center: center,
           radius: radiusInKM.toDouble(),
-          field: 'location',
+          field: PointEntity.geoPointField,
         )
-        .map((List<DocumentSnapshot> snapshot) {
-      return snapshot.map((DocumentSnapshot doc) {
+        .map((snapshot) {
+      return snapshot.map((doc) {
         return Point.fromEntity(PointEntity.fromSnapshot(doc));
       }).toList();
     });
-  }
-
-  @override
-  Stream<Point> point(String id) {
-    return _collection.doc(id).snapshots().map((snapshot) {
-      if (snapshot.exists) {
-        return Point.fromEntity(PointEntity.fromSnapshot(snapshot));
-      }
-
-      return Point.empty;
-    });
-  }
-
-  @override
-  Future<void> update(Point point) {
-    return _collection.doc(point.id).update(point.toEntity().toDocument());
   }
 }

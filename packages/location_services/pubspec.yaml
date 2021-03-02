@@ -1,4 +1,4 @@
-name: places_repository
+name: location_services
 
 version: 1.0.0+1
 
@@ -10,6 +10,5 @@ dependencies:
     sdk: flutter
 
   location: ^3.2.4
-  pedantic: ^1.9.2
 
 
