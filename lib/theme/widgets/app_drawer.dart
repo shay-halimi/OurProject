@@ -4,7 +4,7 @@ import 'package:cookpoint/profiles/profiles.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-class ThemeDrawer extends StatelessWidget {
+class AppDrawer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Drawer(

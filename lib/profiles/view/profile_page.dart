@@ -1,10 +1,9 @@
 import 'package:cookpoint/profiles/profiles.dart';
 import 'package:cookpoint/splash/splash.dart';
+import 'package:cookpoint/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-
-import 'file:///C:/Users/Matan/StudioProjects/flutter_app/lib/theme/theme.dart';
 
 class ProfilePage extends StatelessWidget {
   static Route route() {

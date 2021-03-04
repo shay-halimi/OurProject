@@ -9,7 +9,7 @@ const baseFontSize = 16.0;
 
 final theme = ThemeData(
   primarySwatch: const MaterialColor(
-    0xFF2F3D58,
+    0xFFECEDEF,
     <int, Color>{
       50: Color(0xFFECEDEF),
       100: Color(0xFFC6CAD1),

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-class ThemeTextField extends StatelessWidget {
-  const ThemeTextField({
+class AppTextField extends StatelessWidget {
+  const AppTextField({
     Key key,
     this.onTap,
     this.onChanged,

@@ -5,27 +5,15 @@ import 'package:location/location.dart' as gps;
 import 'location_services.dart';
 
 class GPSLocationServices extends LocationServices {
-  GPSLocationServices() {
-    _locationController
-      ..onListen = locate
-      ..onCancel = () {
-        _timer?.cancel();
-      };
-  }
-
   final gps.Location _gps = gps.Location();
 
   final StreamController<Location> _locationController = StreamController();
-
-  Timer _timer;
 
   @override
   Stream<Location> get onLocationChange => _locationController.stream;
 
   @override
   Future<void> locate() async {
-    _timer?.cancel();
-
     bool _serviceEnabled;
     gps.PermissionStatus _permissionGranted;
 
@@ -47,8 +35,6 @@ class GPSLocationServices extends LocationServices {
 
     try {
       final data = await _gps.getLocation();
-
-      _timer = Timer(const Duration(seconds: 1), locate);
 
       return _locationController.add(Location(
         latitude: data.latitude,
