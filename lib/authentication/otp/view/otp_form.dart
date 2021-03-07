@@ -20,6 +20,10 @@ class OTPForm extends StatelessWidget {
               ),
             );
         }
+
+        if (state.status.isSubmissionSuccess) {
+          Navigator.of(context).pop();
+        }
       },
       child: Column(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,

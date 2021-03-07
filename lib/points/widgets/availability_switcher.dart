@@ -12,7 +12,7 @@ class AvailabilitySwitcher extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Text(
-      point.available
+      point.relevant
           ? 'אתה זמין, מספר הטלפון שלך מוצג ללקוחות והם יכולים להתקשר'
           : 'אתה לא זמין, לקוחות יכולים לשלוח הזמנות',
     );

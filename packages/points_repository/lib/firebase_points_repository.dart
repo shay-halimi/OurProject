@@ -12,7 +12,7 @@ class FirebasePointsRepository extends PointsRepository {
   final _geo = Geoflutterfire();
 
   @override
-  Future<void> create(Point point) {
+  Future<void> add(Point point) {
     return _collection.add(point.toEntity().toDocument());
   }
 
@@ -22,10 +22,27 @@ class FirebasePointsRepository extends PointsRepository {
   }
 
   @override
-  Stream<List<Point>> nearby(Point point, {num radiusInKM = 3.14}) {
+  Stream<List<Point>> points() {
+    return _collection.snapshots().map((snapshot) {
+      return snapshot.docs
+          .map((doc) => Point.fromEntity(PointEntity.fromSnapshot(doc)))
+          .toList();
+    });
+  }
+
+  @override
+  Stream<List<Point>> near({
+    double latitude,
+    double longitude,
+    num radiusInKM = 3.14,
+  }) {
+    assert(latitude != null);
+    assert(longitude != null);
+    assert(radiusInKM != null && radiusInKM > 0);
+
     final center = _geo.point(
-      latitude: point.latitude,
-      longitude: point.longitude,
+      latitude: latitude,
+      longitude: longitude,
     );
 
     return _geo
@@ -33,12 +50,17 @@ class FirebasePointsRepository extends PointsRepository {
         .within(
           center: center,
           radius: radiusInKM.toDouble(),
-          field: PointEntity.geoPointField,
+          field: 'location',
         )
         .map((snapshot) {
       return snapshot.map((doc) {
         return Point.fromEntity(PointEntity.fromSnapshot(doc));
       }).toList();
     });
+  }
+
+  @override
+  Future<void> delete(Point point) {
+    return _collection.doc(point.id).delete();
   }
 }

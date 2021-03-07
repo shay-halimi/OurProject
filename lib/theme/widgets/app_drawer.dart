@@ -1,12 +1,13 @@
 import 'package:cookpoint/authentication/authentication.dart';
-import 'package:cookpoint/products/products.dart';
-import 'package:cookpoint/profiles/profiles.dart';
+import 'package:cookpoint/points/points.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class AppDrawer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    final user = context.select((AuthenticationBloc bloc) => bloc.state.user);
+
     return Drawer(
       child: Center(
         child: ListView(
@@ -16,24 +17,62 @@ class AppDrawer extends StatelessWidget {
             ListTile(
               key: const Key('homePage_MyProfile'),
               leading: const Icon(Icons.face_rounded),
-              title: const Text('הפרופיל שלי'),
+              title: const Text('חשבון'),
               onTap: () => Navigator.of(context).push<void>(
-                ProfilePage.route(),
+                AuthenticationPage.route(),
               ),
             ),
+            if (!user.isEmpty)
+              ListTile(
+                key: const Key('homePage_LogoutRequested'),
+                leading: const Icon(Icons.exit_to_app),
+                title: const Text('התנתק'),
+                onTap: () => context
+                    .read<AuthenticationBloc>()
+                    .add(AuthenticationLogoutRequested()),
+              ),
+            const Divider(),
             ListTile(
-              key: const Key('homePage_AddProductPage'),
+              key: const Key('homePage_AddPointPage'),
               leading: const Icon(Icons.fastfood_outlined),
-              title: const Text('התפריט שלי'),
+              title: const Text('המאכלים שלי'),
               onTap: () => Navigator.of(context).push<void>(
-                AddProductPage.route(),
+                CreatePointPage.route(),
               ),
             ),
             const Divider(),
             ListTile(
-              key: const Key('homePage_LogoutRequested'),
-              leading: const Icon(Icons.exit_to_app),
-              title: const Text('התנתק'),
+              dense: true,
+              key: const Key('homePage_REPORT_BUG'),
+              leading: const Icon(Icons.bug_report),
+              title: const Text('דיווח על בעיות'),
+              onTap: () => context
+                  .read<AuthenticationBloc>()
+                  .add(AuthenticationLogoutRequested()),
+            ),
+            ListTile(
+              dense: true,
+              key: const Key('homePage_EMAIL_US'),
+              leading: const Icon(Icons.support_agent),
+              title: const Text('צרו קשר'),
+              onTap: () => context
+                  .read<AuthenticationBloc>()
+                  .add(AuthenticationLogoutRequested()),
+            ),
+            ListTile(
+              dense: true,
+              key: const Key('homePage_TOS'),
+              leading: const Icon(Icons.description),
+              title: const Text('תנאים ומדיניות פרטיות'),
+              onTap: () => context
+                  .read<AuthenticationBloc>()
+                  .add(AuthenticationLogoutRequested()),
+            ),
+            ListTile(
+              dense: true,
+              key: const Key('homePage_ABOUT_US'),
+              leading: const Icon(Icons.info),
+              title: const Text('אודות CookPoint'),
               onTap: () => context
                   .read<AuthenticationBloc>()
                   .add(AuthenticationLogoutRequested()),

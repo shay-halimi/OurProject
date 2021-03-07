@@ -28,18 +28,14 @@ dependencies:
   pedantic: ^1.9.2
   sliding_sheet: ^0.4.1
   flutter_swiper: ^1.1.6
+  image_picker: ^0.6.7+22
+  uuid: ^2.2.2
   authentication_repository:
     path: packages/authentication_repository
   location_services:
     path: packages/location_services
-  orders_repository:
-    path: packages/orders_repository
   points_repository:
     path: packages/points_repository
-  products_repository:
-    path: packages/products_repository
-  profiles_repository:
-    path: packages/profiles_repository
 
 dependency_overrides:
   intl: '>=0.17.0-nullsafety.2 <= 0.17.0-nullsafety.2'

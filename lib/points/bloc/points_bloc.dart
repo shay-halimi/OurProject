@@ -29,32 +29,34 @@ class PointsBloc extends Bloc<PointsEvent, PointsState> {
   Stream<PointsState> mapEventToState(
     PointsEvent event,
   ) async* {
-    if (event is PointSubscribedEvent) {
-      yield* _mapPointSubscribedEventToState(event);
-    } else if (event is PointCreatedEvent) {
-      yield* _mapPointCreatedEventToState(event);
+    if (event is PointsRequestedEvent) {
+      yield* _mapPointsRequestedEventToState(event);
     } else if (event is PointsLoadedEvent) {
       yield* _mapPointsLoadedEventToState(event);
+    } else if (event is PointCreatedEvent) {
+      yield* _mapPointCreatedEventToState(event);
+    } else if (event is PointUpdatedEvent) {
+      yield* _mapPointUpdatedEventToState(event);
+    } else if (event is PointDeletedEvent) {
+      yield* _mapPointDeletedEventToState(event);
     }
   }
 
-  Stream<PointsState> _mapPointSubscribedEventToState(
-    PointSubscribedEvent event,
+  Stream<PointsState> _mapPointsRequestedEventToState(
+    PointsRequestedEvent event,
   ) async* {
     yield const PointsState.loading();
 
     await _pointsSubscription?.cancel();
 
-    _pointsSubscription =
-        _pointsRepository.nearby(event.point).listen((points) {
+    _pointsSubscription = _pointsRepository
+        .near(
+      longitude: event.longitude,
+      latitude: event.latitude,
+    )
+        .listen((points) {
       add(PointsLoadedEvent(points));
     });
-  }
-
-  Stream<PointsState> _mapPointCreatedEventToState(
-    PointCreatedEvent event,
-  ) async* {
-    await _pointsRepository.create(event.point);
   }
 
   Stream<PointsState> _mapPointsLoadedEventToState(
@@ -63,9 +65,21 @@ class PointsBloc extends Bloc<PointsEvent, PointsState> {
     yield PointsState.loaded(event.points);
   }
 
-  Future<void> toggleAvailability(Point point) async {
-    add(PointCreatedEvent(point.copyWith(
-      available: !point.available,
-    )));
+  Stream<PointsState> _mapPointCreatedEventToState(
+    PointCreatedEvent event,
+  ) async* {
+    await _pointsRepository.add(event.point);
+  }
+
+  Stream<PointsState> _mapPointUpdatedEventToState(
+    PointUpdatedEvent event,
+  ) async* {
+    await _pointsRepository.update(event.point);
+  }
+
+  Stream<PointsState> _mapPointDeletedEventToState(
+    PointDeletedEvent event,
+  ) async* {
+    await _pointsRepository.delete(event.point);
   }
 }

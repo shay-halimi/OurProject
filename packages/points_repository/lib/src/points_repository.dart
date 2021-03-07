@@ -3,12 +3,17 @@ library points_repository;
 import 'models/models.dart';
 
 abstract class PointsRepository {
-  /// find near by points for the giving point
-  Stream<List<Point>> nearby(Point point, {num radiusInKM = 3.14});
+  Stream<List<Point>> near({
+    double latitude,
+    double longitude,
+    num radiusInKM = 3.14,
+  });
 
-  /// create a point
-  Future<void> create(Point point);
+  Future<void> add(Point point);
 
-  /// update a point
   Future<void> update(Point point);
+
+  Stream<List<Point>> points();
+
+  Future<void> delete(Point point);
 }

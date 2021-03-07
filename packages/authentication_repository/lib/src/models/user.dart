@@ -19,4 +19,6 @@ class User extends Equatable {
 
   @override
   List<Object> get props => [id, displayName, photoURL, phoneNumber];
+
+  bool get isEmpty => this == empty;
 }

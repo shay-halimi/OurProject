@@ -8,7 +8,6 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
 import 'package:location_services/location_services.dart';
 import 'package:points_repository/points_repository.dart';
-import 'package:profiles_repository/profiles_repository.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -17,7 +16,6 @@ void main() async {
   Bloc.observer = SimpleBlocObserver();
   runApp(App(
     authenticationRepository: AuthenticationRepository(),
-    profilesRepository: FirebaseProfilesRepository(),
     pointsRepository: FirebasePointsRepository(),
     locationServices: GPSLocationServices(),
   ));

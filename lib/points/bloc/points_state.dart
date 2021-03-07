@@ -10,7 +10,7 @@ class PointsState extends Equatable {
 
   const PointsState.loading() : this._(status: PointStateStatus.loading);
 
-  const PointsState.loaded(List<Point> points)
+  const PointsState.loaded([List<Point> points = const []])
       : this._(points: points, status: PointStateStatus.loaded);
 
   const PointsState.unknown() : this._(status: PointStateStatus.unknown);
