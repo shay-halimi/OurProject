@@ -8,6 +8,9 @@ const baseFontSize = 16.0;
 final theme = ThemeData(
   primarySwatch: Colors.lightBlue,
   accentColor: const Color.fromARGB(255, 221, 85, 52),
+  appBarTheme: const AppBarTheme(
+    backgroundColor: Colors.white,
+  ),
   textTheme: const TextTheme(
     headline1: TextStyle(
       fontSize: 6 * baseFontSize,

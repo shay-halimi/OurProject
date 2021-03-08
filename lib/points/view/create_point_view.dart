@@ -13,7 +13,7 @@ class CreatePointForm extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocListener<CreatePointFormCubit, CreatePointFormState>(
+    return BlocListener<PointFormCubit, PointFormState>(
       listener: (context, state) {
         if (state.status.isSubmissionFailure) {
           ScaffoldMessenger.of(context)
@@ -53,7 +53,7 @@ class _ContinueButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<CreatePointFormCubit, CreatePointFormState>(
+    return BlocBuilder<PointFormCubit, PointFormState>(
       buildWhen: (previous, current) => previous.status != current.status,
       builder: (context, state) {
         return state.status.isSubmissionInProgress
@@ -62,7 +62,7 @@ class _ContinueButton extends StatelessWidget {
                 key: const Key('_ContinueButton'),
                 child: const Text('פרסם!'),
                 onPressed: state.status.isValidated
-                    ? () => context.read<CreatePointFormCubit>().submit()
+                    ? () => context.read<PointFormCubit>().submit()
                     : null,
               );
       },
@@ -80,13 +80,13 @@ class _TagsInput extends StatelessWidget {
     return Row(
       children: [
         for (var _tag in ['טבעוני', 'צמחוני'])
-          BlocBuilder<CreatePointFormCubit, CreatePointFormState>(
+          BlocBuilder<PointFormCubit, PointFormState>(
             buildWhen: (previous, current) => previous != current,
             builder: (context, state) {
               return InputChip(
                 label: Text(_tag),
                 onSelected: (selected) =>
-                    context.read<CreatePointFormCubit>().tagToggled(_tag),
+                    context.read<PointFormCubit>().toggledTag(_tag),
                 selected: state.tagsInput.value.contains(_tag),
               );
             },
@@ -105,7 +105,7 @@ class _LocationInput extends StatelessWidget {
   Widget build(BuildContext context) {
     final location = context.select((LocationCubit bloc) => bloc.state.current);
 
-    context.read<CreatePointFormCubit>().locationChanged(
+    context.read<PointFormCubit>().changeLocation(
           location.latitude,
           location.longitude,
         );
@@ -121,7 +121,7 @@ class _PriceInput extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<CreatePointFormCubit, CreatePointFormState>(
+    return BlocBuilder<PointFormCubit, PointFormState>(
       buildWhen: (previous, current) =>
           previous.priceInput != current.priceInput,
       builder: (context, state) {
@@ -130,7 +130,7 @@ class _PriceInput extends StatelessWidget {
           keyboardType: TextInputType.text,
           maxLines: null,
           onChanged: (value) =>
-              context.read<CreatePointFormCubit>().priceChanged(value),
+              context.read<PointFormCubit>().changePrice(value),
           decoration: InputDecoration(
             border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(4.0),
@@ -153,7 +153,7 @@ class _DescriptionInput extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<CreatePointFormCubit, CreatePointFormState>(
+    return BlocBuilder<PointFormCubit, PointFormState>(
       buildWhen: (previous, current) =>
           previous.descriptionInput != current.descriptionInput,
       builder: (context, state) {
@@ -162,7 +162,7 @@ class _DescriptionInput extends StatelessWidget {
           keyboardType: TextInputType.text,
           maxLines: null,
           onChanged: (value) =>
-              context.read<CreatePointFormCubit>().descriptionChanged(value),
+              context.read<PointFormCubit>().changeDescription(value),
           decoration: InputDecoration(
             border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(4.0),
@@ -185,7 +185,7 @@ class _TitleInput extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<CreatePointFormCubit, CreatePointFormState>(
+    return BlocBuilder<PointFormCubit, PointFormState>(
       buildWhen: (previous, current) =>
           previous.titleInput != current.titleInput,
       builder: (context, state) {
@@ -194,7 +194,7 @@ class _TitleInput extends StatelessWidget {
           keyboardType: TextInputType.text,
           maxLines: 1,
           onChanged: (value) =>
-              context.read<CreatePointFormCubit>().titleChanged(value),
+              context.read<PointFormCubit>().changeTitle(value),
           decoration: InputDecoration(
             border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(4.0),
@@ -221,7 +221,7 @@ class _MediaInput extends StatelessWidget {
       create: (_) => MediaDialogCubit(),
       child: MediaDialog(
         onMediaCreated: (media) =>
-            context.read<CreatePointFormCubit>().mediaChanged({media}),
+            context.read<PointFormCubit>().changeMedia({media}),
       ),
     );
   }

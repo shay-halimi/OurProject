@@ -17,6 +17,15 @@ class PointsRequestedEvent extends PointsEvent {
   List<Object> get props => [latitude, longitude];
 }
 
+class PointsOfCookerRequestedEvent extends PointsEvent {
+  const PointsOfCookerRequestedEvent(this.cookerId);
+
+  final String cookerId;
+
+  @override
+  List<Object> get props => [cookerId];
+}
+
 class PointsLoadedEvent extends PointsEvent {
   const PointsLoadedEvent(this.points);
 

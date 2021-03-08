@@ -1,36 +1,43 @@
-import 'package:cookpoint/authentication/authentication.dart';
 import 'package:cookpoint/location/location.dart';
-import 'package:cookpoint/map/map.dart';
 import 'package:cookpoint/points/points.dart';
+import 'package:cookpoint/points/search/bloc/search_bloc.dart';
 import 'package:cookpoint/points/widgets/points_bar.dart';
 import 'package:cookpoint/theme/theme.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:provider/provider.dart';
 
 class MapView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final user = context.select((AuthenticationBloc bloc) => bloc.state.user);
-    final points = context.select((PointsBloc bloc) => bloc.state.points);
+    final location =
+        context.select((LocationCubit cubit) => cubit.state.current);
+    final points = context.select((SearchBloc bloc) => bloc.state.results);
 
     return Scaffold(
       extendBodyBehindAppBar: true,
       resizeToAvoidBottomInset: false,
       body: Stack(
         children: [
-          MapWidget(
-            points: points,
+          MapWidget(location: location, points: points),
+          Column(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              PointsBar(points: points),
+              const LocateButton(),
+            ],
           ),
-          const LocateButton(),
         ],
       ),
       appBar: MapAppBar(
-        title: const TextField(
-          decoration: InputDecoration(
+        title: TextField(
+          decoration: const InputDecoration(
             border: InputBorder.none,
             hintText: 'מה בא לך לאכול?',
           ),
           keyboardType: TextInputType.text,
+          onChanged: (value) =>
+              context.read<SearchBloc>().add(SearchTermUpdated(value)),
         ),
       ),
       endDrawer: AppDrawer(),
@@ -39,18 +46,8 @@ class MapView extends StatelessWidget {
         tooltip: 'פרסם CookPoint',
         child: const Icon(Icons.add_location),
         onPressed: () {
-          if (user.isEmpty) {
-            Navigator.of(context).push<void>(AuthenticationPage.route());
-          } else {
-            Navigator.of(context).push<void>(CreatePointPage.route());
-          }
+          Navigator.of(context).push<void>(CreatePointPage.route());
         },
-      ),
-      bottomSheet: Container(
-        height: MediaQuery.of(context).size.height / 3,
-        child: PointsBar(
-          points: points,
-        ),
       ),
     );
   }

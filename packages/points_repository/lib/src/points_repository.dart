@@ -16,4 +16,6 @@ abstract class PointsRepository {
   Stream<List<Point>> points();
 
   Future<void> delete(Point point);
+
+  Stream<List<Point>> byCookerId(String cookerId);
 }

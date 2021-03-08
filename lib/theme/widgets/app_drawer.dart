@@ -6,8 +6,6 @@ import 'package:provider/provider.dart';
 class AppDrawer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final user = context.select((AuthenticationBloc bloc) => bloc.state.user);
-
     return Drawer(
       child: Center(
         child: ListView(
@@ -22,22 +20,12 @@ class AppDrawer extends StatelessWidget {
                 AuthenticationPage.route(),
               ),
             ),
-            if (!user.isEmpty)
-              ListTile(
-                key: const Key('homePage_LogoutRequested'),
-                leading: const Icon(Icons.exit_to_app),
-                title: const Text('התנתק'),
-                onTap: () => context
-                    .read<AuthenticationBloc>()
-                    .add(AuthenticationLogoutRequested()),
-              ),
-            const Divider(),
             ListTile(
               key: const Key('homePage_AddPointPage'),
               leading: const Icon(Icons.fastfood_outlined),
               title: const Text('המאכלים שלי'),
               onTap: () => Navigator.of(context).push<void>(
-                CreatePointPage.route(),
+                MyPointsPage.route(),
               ),
             ),
             const Divider(),

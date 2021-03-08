@@ -31,6 +31,8 @@ class PointsBloc extends Bloc<PointsEvent, PointsState> {
   ) async* {
     if (event is PointsRequestedEvent) {
       yield* _mapPointsRequestedEventToState(event);
+    } else if (event is PointsOfCookerRequestedEvent) {
+      yield* _mapPointsOfCookerRequestedEventToState(event);
     } else if (event is PointsLoadedEvent) {
       yield* _mapPointsLoadedEventToState(event);
     } else if (event is PointCreatedEvent) {
@@ -55,6 +57,18 @@ class PointsBloc extends Bloc<PointsEvent, PointsState> {
       latitude: event.latitude,
     )
         .listen((points) {
+      add(PointsLoadedEvent(points));
+    });
+  }
+
+  Stream<PointsState> _mapPointsOfCookerRequestedEventToState(
+      PointsOfCookerRequestedEvent event) async* {
+    yield const PointsState.loading();
+
+    await _pointsSubscription?.cancel();
+
+    _pointsSubscription =
+        _pointsRepository.byCookerId(event.cookerId).listen((points) {
       add(PointsLoadedEvent(points));
     });
   }

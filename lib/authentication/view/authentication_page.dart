@@ -1,8 +1,7 @@
 import 'package:cookpoint/authentication/authentication.dart';
-import 'package:cookpoint/splash/splash.dart';
+import 'package:cookpoint/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 
 class AuthenticationPage extends StatelessWidget {
   static Route route() {
@@ -11,20 +10,22 @@ class AuthenticationPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<AuthenticationBloc, AuthenticationState>(
-        buildWhen: (previous, current) => previous != current,
-        builder: (context, state) {
-          switch (state.status) {
-            case AuthenticationStatus.authenticated:
-              return ProfilePage();
-              break;
-            case AuthenticationStatus.unauthenticated:
-              return PhoneNumberPage();
-              break;
-            default:
-              return const SplashPage();
-              break;
-          }
-        });
+    return Scaffold(
+      body: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: [
+            const AppLogo(),
+            ElevatedButton(
+              child: const Text('אני מאשר את התקנון'),
+              onPressed: () => Navigator.of(context).push<void>(
+                PhoneNumberPage.route(),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
   }
 }

@@ -1,4 +1,5 @@
 import 'package:cookpoint/authentication/authentication.dart';
+import 'package:cookpoint/profile/profile.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -10,6 +11,10 @@ class ProfilePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final user = context.select((AuthenticationBloc bloc) => bloc.state.user);
+
+    if (user.isEmpty) {
+      return AuthenticationPage();
+    }
 
     return Scaffold(
       appBar: AppBar(

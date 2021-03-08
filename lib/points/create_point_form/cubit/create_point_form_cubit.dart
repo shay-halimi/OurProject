@@ -7,14 +7,14 @@ import 'package:points_repository/points_repository.dart';
 
 part 'create_point_form_state.dart';
 
-class CreatePointFormCubit extends Cubit<CreatePointFormState> {
-  CreatePointFormCubit(this._pointsRepository)
+class PointFormCubit extends Cubit<PointFormState> {
+  PointFormCubit(this._pointsRepository)
       : assert(_pointsRepository != null),
-        super(const CreatePointFormState());
+        super(const PointFormState());
 
   final PointsRepository _pointsRepository;
 
-  void cookedIdChanged(String value) {
+  void changeCookerId(String value) {
     final cookedIdInput = CookedIdInput.dirty(value);
     emit(state.copyWith(
       cookedIdInput: cookedIdInput,
@@ -32,7 +32,7 @@ class CreatePointFormCubit extends Cubit<CreatePointFormState> {
     ));
   }
 
-  void locationChanged(double latitude, double longitude) {
+  void changeLocation(double latitude, double longitude) {
     final latitudeInput = LatitudeInput.dirty(latitude);
     final longitudeInput = LongitudeInput.dirty(longitude);
     emit(state.copyWith(
@@ -52,7 +52,7 @@ class CreatePointFormCubit extends Cubit<CreatePointFormState> {
     ));
   }
 
-  void relevantChanged(bool value) {
+  void changeRelevant(bool value) {
     final relevantInput = RelevantInput.dirty(value);
     emit(state.copyWith(
       relevantInput: relevantInput,
@@ -70,7 +70,7 @@ class CreatePointFormCubit extends Cubit<CreatePointFormState> {
     ));
   }
 
-  void titleChanged(String value) {
+  void changeTitle(String value) {
     final titleInput = TitleInput.dirty(value);
     emit(state.copyWith(
       titleInput: titleInput,
@@ -88,7 +88,7 @@ class CreatePointFormCubit extends Cubit<CreatePointFormState> {
     ));
   }
 
-  void descriptionChanged(String value) {
+  void changeDescription(String value) {
     final descriptionInput = DescriptionInput.dirty(value);
     emit(state.copyWith(
       descriptionInput: descriptionInput,
@@ -106,7 +106,7 @@ class CreatePointFormCubit extends Cubit<CreatePointFormState> {
     ));
   }
 
-  void priceChanged(String value) {
+  void changePrice(String value) {
     final priceInput = PriceInput.dirty(value);
     emit(state.copyWith(
       priceInput: priceInput,
@@ -124,7 +124,7 @@ class CreatePointFormCubit extends Cubit<CreatePointFormState> {
     ));
   }
 
-  void mediaChanged(Set<String> value) {
+  void changeMedia(Set<String> value) {
     final mediaInput = MediaInput.dirty(value);
     emit(state.copyWith(
       mediaInput: mediaInput,
@@ -142,7 +142,7 @@ class CreatePointFormCubit extends Cubit<CreatePointFormState> {
     ));
   }
 
-  void tagToggled(String value) {
+  void toggledTag(String value) {
     var tags = {...state.tagsInput.value};
 
     if (tags.contains(value)) {

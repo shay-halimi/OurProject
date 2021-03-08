@@ -15,14 +15,18 @@ class CreatePointPage extends StatelessWidget {
   Widget build(BuildContext context) {
     final user = context.select((AuthenticationBloc bloc) => bloc.state.user);
 
+    if (user.isEmpty) {
+      return AuthenticationPage();
+    }
+
     return Scaffold(
       resizeToAvoidBottomInset: true,
       appBar: AppBar(title: const Text('הוספת נקודת בישול')),
       body: Padding(
         padding: const EdgeInsets.all(8.0),
         child: BlocProvider(
-          create: (_) => CreatePointFormCubit(context.read<PointsRepository>())
-            ..cookedIdChanged(user.id),
+          create: (_) => PointFormCubit(context.read<PointsRepository>())
+            ..changeCookerId(user.id),
           child: const CreatePointForm(),
         ),
       ),

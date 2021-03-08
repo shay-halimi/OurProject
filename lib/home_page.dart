@@ -1,12 +1,12 @@
 import 'package:cookpoint/location/location.dart';
 import 'package:cookpoint/points/bloc/bloc.dart';
+import 'package:cookpoint/points/points.dart';
+import 'package:cookpoint/points/search/bloc/search_bloc.dart';
 import 'package:cookpoint/splash/splash.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:points_repository/points_repository.dart';
 import 'package:provider/provider.dart';
-
-import 'map/map.dart';
 
 class HomePage extends StatelessWidget {
   static Route route() {
@@ -19,11 +19,11 @@ class HomePage extends StatelessWidget {
       buildWhen: (previous, current) => previous.status != current.status,
       builder: (_, state) {
         switch (state.status) {
-          case LocationStateStatus.located:
+          case LocationStatus.located:
             return MultiBlocProvider(
               providers: [
                 BlocProvider(
-                  create: (_) => MapCubit()..updateLocation(state.current),
+                  create: (_) => SelectedPointCubit(),
                 ),
                 BlocProvider(
                   create: (_) => PointsBloc(
@@ -35,10 +35,15 @@ class HomePage extends StatelessWidget {
                       ),
                     ),
                 ),
+                BlocProvider(
+                  create: (createContext) => SearchBloc(
+                    pointsBloc: createContext.read<PointsBloc>(),
+                  ),
+                ),
               ],
               child: MapView(),
             );
-          case LocationStateStatus.error:
+          case LocationStatus.error:
             return LocationPage();
           default:
             return const SplashPage();

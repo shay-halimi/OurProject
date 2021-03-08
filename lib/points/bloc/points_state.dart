@@ -1,23 +1,23 @@
 part of 'points_bloc.dart';
 
-enum PointStateStatus { loading, loaded, error, unknown }
+enum PointStatus { loading, loaded, error, unknown }
 
 class PointsState extends Equatable {
   const PointsState._({
     this.points = const [],
-    this.status = PointStateStatus.unknown,
+    this.status = PointStatus.unknown,
   }) : assert(points != null);
 
-  const PointsState.loading() : this._(status: PointStateStatus.loading);
+  const PointsState.loading() : this._(status: PointStatus.loading);
 
   const PointsState.loaded([List<Point> points = const []])
-      : this._(points: points, status: PointStateStatus.loaded);
+      : this._(points: points, status: PointStatus.loaded);
 
-  const PointsState.unknown() : this._(status: PointStateStatus.unknown);
+  const PointsState.unknown() : this._(status: PointStatus.unknown);
 
-  const PointsState.error() : this._(status: PointStateStatus.error);
+  const PointsState.error() : this._(status: PointStatus.error);
 
-  final PointStateStatus status;
+  final PointStatus status;
   final List<Point> points;
 
   @override

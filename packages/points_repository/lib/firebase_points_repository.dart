@@ -63,4 +63,16 @@ class FirebasePointsRepository extends PointsRepository {
   Future<void> delete(Point point) {
     return _collection.doc(point.id).delete();
   }
+
+  @override
+  Stream<List<Point>> byCookerId(String cookerId) {
+    return _collection
+        .where('cookerId', isEqualTo: cookerId)
+        .snapshots()
+        .map((snapshot) {
+      return snapshot.docs
+          .map((doc) => Point.fromEntity(PointEntity.fromSnapshot(doc)))
+          .toList();
+    });
+  }
 }

@@ -1,5 +1,5 @@
 import 'package:cookpoint/location/location.dart';
-import 'package:cookpoint/map/map.dart';
+import 'package:cookpoint/points/points.dart';
 import 'package:cookpoint/splash/splash.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -15,12 +15,12 @@ class MapPage extends StatelessWidget {
       buildWhen: (previous, current) => previous.status != current.status,
       builder: (_, state) {
         switch (state.status) {
-          case LocationStateStatus.located:
+          case LocationStatus.located:
             return BlocProvider(
-              create: (_) => MapCubit()..updateLocation(state.current),
+              create: (_) => SelectedPointCubit(),
               child: MapView(),
             );
-          case LocationStateStatus.error:
+          case LocationStatus.error:
             return LocationPage();
           default:
             return const SplashPage();

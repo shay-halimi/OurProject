@@ -1,5 +1,7 @@
+import 'package:cookpoint/points/search/bloc/search_bloc.dart';
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:provider/provider.dart';
 
 class MapAppBar extends StatelessWidget implements PreferredSizeWidget {
   MapAppBar({
@@ -36,36 +38,9 @@ class MapAppBar extends StatelessWidget implements PreferredSizeWidget {
           _appBar,
           Padding(
             padding: EdgeInsets.only(top: _padding),
-            child: Row(
-              children: [
-                _searchFilter(
-                  icon: const Icon(FontAwesomeIcons.envira),
-                  label: const Text('צמחוני'),
-                ),
-
-                /// todo<Matan> salad icon
-                _searchFilter(
-                  icon: const Icon(FontAwesomeIcons.envira),
-                  label: const Text('טבעוני'),
-                ),
-              ],
-            ),
+            child: const _TagsFilter(),
           ),
         ],
-      ),
-    );
-  }
-
-  Widget _searchFilter({
-    Widget icon,
-    Widget label,
-  }) {
-    return Padding(
-      padding: EdgeInsets.symmetric(horizontal: _padding / 2),
-      child: ElevatedButton.icon(
-        onPressed: () => null,
-        icon: icon,
-        label: label,
       ),
     );
   }
@@ -73,4 +48,30 @@ class MapAppBar extends StatelessWidget implements PreferredSizeWidget {
   @override
   Size get preferredSize =>
       Size.fromHeight(_appBar.preferredSize.height + _searchFiltersHeight);
+}
+
+class _TagsFilter extends StatelessWidget {
+  const _TagsFilter({
+    Key key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children: [
+        for (var _tag in ['טבעוני', 'צמחוני'])
+          BlocBuilder<SearchBloc, SearchState>(
+            buildWhen: (previous, current) => previous != current,
+            builder: (context, state) {
+              return InputChip(
+                label: Text(_tag),
+                onSelected: (selected) =>
+                    context.read<SearchBloc>().add(SearchTagSelected(_tag)),
+                selected: state.tags.contains(_tag),
+              );
+            },
+          ),
+      ],
+    );
+  }
 }

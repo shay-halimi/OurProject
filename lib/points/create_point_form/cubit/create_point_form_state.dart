@@ -1,7 +1,7 @@
 part of 'create_point_form_cubit.dart';
 
-class CreatePointFormState extends Equatable {
-  const CreatePointFormState({
+class PointFormState extends Equatable {
+  const PointFormState({
     this.cookedIdInput = const CookedIdInput.pure(),
     this.latitudeInput = const LatitudeInput.pure(),
     this.longitudeInput = const LongitudeInput.pure(),
@@ -40,7 +40,7 @@ class CreatePointFormState extends Equatable {
         status,
       ];
 
-  CreatePointFormState copyWith({
+  PointFormState copyWith({
     CookedIdInput cookedIdInput,
     LatitudeInput latitudeInput,
     LongitudeInput longitudeInput,
@@ -52,7 +52,7 @@ class CreatePointFormState extends Equatable {
     TagsInput tagsInput,
     FormzStatus status,
   }) {
-    return CreatePointFormState(
+    return PointFormState(
       cookedIdInput: cookedIdInput ?? this.cookedIdInput,
       latitudeInput: latitudeInput ?? this.latitudeInput,
       longitudeInput: longitudeInput ?? this.longitudeInput,
@@ -109,9 +109,9 @@ class LongitudeInput extends FormzInput<double, LongitudeInputValidationError> {
 enum RelevantInputValidationError { invalid }
 
 class RelevantInput extends FormzInput<bool, RelevantInputValidationError> {
-  const RelevantInput.pure() : super.pure(false);
+  const RelevantInput.pure() : super.pure(true);
 
-  const RelevantInput.dirty([bool value = false]) : super.dirty(value);
+  const RelevantInput.dirty([bool value = true]) : super.dirty(value);
 
   @override
   RelevantInputValidationError validator(bool value) {

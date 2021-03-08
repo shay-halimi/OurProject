@@ -71,9 +71,10 @@ class MediaDialog extends StatelessWidget {
                 builder: (context, state) {
                   if (state is MediaDialogInitial) {
                     return const Center(child: Text('בחר תמונה'));
-                  }
-
-                  if (state is MediaDialogLoaded) {
+                  } else if (state is MediaDialogError) {
+                    return const Center(
+                        child: Text('שגיאה, נסה שוב מאוחר יותר'));
+                  } else if (state is MediaDialogLoaded) {
                     return Image.network(
                       state.photoURL,
                       fit: BoxFit.cover,
