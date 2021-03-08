@@ -13,13 +13,13 @@ class LocateButton extends StatelessWidget {
       buildWhen: (previous, current) => previous != current,
       builder: (context, state) {
         switch (state.status) {
-          case LocationStateStatus.unknown:
+          case LocationStatus.unknown:
             return ElevatedButton(
               onPressed: () => context.read<LocationCubit>().locate(),
               child: const Icon(Icons.explore),
             );
 
-          case LocationStateStatus.locating:
+          case LocationStatus.locating:
             return ElevatedButton(
               onPressed: () => context.read<LocationCubit>().locate(),
               child: const Icon(
@@ -28,7 +28,7 @@ class LocateButton extends StatelessWidget {
               ),
             );
 
-          case LocationStateStatus.located:
+          case LocationStatus.located:
             return ElevatedButton(
               onPressed: () => context.read<LocationCubit>().locate(),
               child: const Icon(
@@ -37,7 +37,7 @@ class LocateButton extends StatelessWidget {
               ),
             );
 
-          case LocationStateStatus.error:
+          case LocationStatus.error:
           default:
             return ElevatedButton(
               onPressed: () => context.read<LocationCubit>().locate(),
