@@ -1,5 +1,7 @@
 import 'package:authentication_repository/authentication_repository.dart';
+import 'package:cookers_repository/cookers_repository.dart';
 import 'package:cookpoint/authentication/authentication.dart';
+import 'package:cookpoint/cooker/bloc/bloc.dart';
 import 'package:cookpoint/home_page.dart';
 import 'package:cookpoint/location/location.dart';
 import 'package:cookpoint/splash/splash.dart';
@@ -16,14 +18,17 @@ class App extends StatelessWidget {
     @required this.authenticationRepository,
     @required this.pointsRepository,
     @required this.locationServices,
+    @required this.cookersRepository,
   })  : assert(authenticationRepository != null),
         assert(pointsRepository != null),
         assert(locationServices != null),
+        assert(cookersRepository != null),
         super(key: key);
 
   final AuthenticationRepository authenticationRepository;
   final PointsRepository pointsRepository;
   final LocationServices locationServices;
+  final CookersRepository cookersRepository;
 
   @override
   Widget build(BuildContext context) {
@@ -44,9 +49,15 @@ class App extends StatelessWidget {
             ),
           ),
           BlocProvider(
-            create: (context) => LocationCubit(
+            create: (_) => LocationCubit(
               locationServices: locationServices,
             )..locate(),
+          ),
+          BlocProvider(
+            create: (_context) => CookerBloc(
+              cookersRepository: cookersRepository,
+              authenticationBloc: _context.read<AuthenticationBloc>(),
+            ),
           ),
         ],
         child: AppView(),

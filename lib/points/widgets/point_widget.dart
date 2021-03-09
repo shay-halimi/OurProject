@@ -15,8 +15,8 @@ class PointWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: () =>
-          Navigator.of(context).push<void>(PointPage.route(point: point)),
+      onTap: () => Navigator.of(context)
+          .push<void>(CreateUpdatePointPage.route(point: point)),
       child: Card(
         child: Column(
           children: [

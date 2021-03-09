@@ -1,8 +1,9 @@
+import 'package:cookers_repository/cookers_repository.dart';
 import 'package:cookpoint/authentication/authentication.dart';
-import 'package:cookpoint/cooker/cooker.dart';
 import 'package:cookpoint/media/media_widget.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class CookerPage extends StatelessWidget {
   static Route route() {
@@ -11,34 +12,54 @@ class CookerPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final user = context.select((AuthenticationBloc bloc) => bloc.state.user);
+    return AuthenticationPage();
+  }
+}
 
-    if (user.isEmpty) {
-      return AuthenticationPage();
-    }
+class _CookerView extends StatelessWidget {
+  const _CookerView({
+    Key key,
+    @required this.cooker,
+  }) : super(key: key);
+
+  final Cooker cooker;
+
+  @override
+  Widget build(BuildContext context) {
+    final _whatsappURL = 'https://wa.me/${cooker.phoneNumber}';
+    final _phoneNumberURL = 'tel:${cooker.phoneNumber}';
 
     return Scaffold(
       appBar: AppBar(
         title: const Text('החשבון שלי'),
-        actions: [
-          const ChangePhotoURLWidget(),
-        ],
       ),
       body: Column(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          AspectRatio(
-            aspectRatio: 16 / 9,
-            child: MediaWidget(
-                media: user.photoURL ??
-                    'https://upload.wikimedia.org/wikipedia/commons/thumb/6/6a/Gal_Gadot_2018_cropped_retouched.jpg/250px-Gal_Gadot_2018_cropped_retouched.jpg'),
-          ),
-          Text(user.displayName ?? 'גל גדות'),
-          ElevatedButton(
-            child: const Text('שמור שינויים'),
-            onPressed: () => Navigator.of(context).push<void>(
-              PhoneNumberPage.route(),
-            ),
+          MediaWidget(media: cooker.photoURL),
+          Text(cooker.displayName),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              Expanded(
+                child: TextButton.icon(
+                  onPressed: () async => await canLaunch(_whatsappURL)
+                      ? await launch(_whatsappURL)
+                      : null,
+                  icon: const Icon(FontAwesomeIcons.whatsapp),
+                  label: const Text('שלח הודעה'),
+                ),
+              ),
+              Expanded(
+                child: TextButton.icon(
+                  onPressed: () async => await canLaunch(_phoneNumberURL)
+                      ? await launch(_phoneNumberURL)
+                      : null,
+                  icon: const Icon(FontAwesomeIcons.phone),
+                  label: const Text('התקשר'),
+                ),
+              ),
+            ],
           ),
         ],
       ),

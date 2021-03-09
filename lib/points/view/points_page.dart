@@ -1,21 +1,22 @@
-import 'package:cookpoint/authentication/authentication.dart';
+import 'package:cookpoint/cooker/bloc/bloc.dart';
+import 'package:cookpoint/cooker/cooker.dart';
 import 'package:cookpoint/points/points.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:points_repository/points_repository.dart';
 import 'package:provider/provider.dart';
 
-class MyPointsPage extends StatelessWidget {
+class PointsPage extends StatelessWidget {
   static Route route() {
-    return MaterialPageRoute<void>(builder: (_) => MyPointsPage());
+    return MaterialPageRoute<void>(builder: (_) => PointsPage());
   }
 
   @override
   Widget build(BuildContext context) {
-    final user = context.select((AuthenticationBloc bloc) => bloc.state.user);
+    final cooker = context.select((CookerBloc bloc) => bloc.state.cooker);
 
-    if (user.isEmpty) {
-      return AuthenticationPage();
+    if (cooker.isEmpty) {
+      return CookerPage();
     }
 
     return Scaffold(
@@ -24,7 +25,7 @@ class MyPointsPage extends StatelessWidget {
       body: BlocProvider(
         create: (_) => PointsBloc(
           pointsRepository: context.read<PointsRepository>(),
-        )..add(PointsOfCookerRequestedEvent(user.id)),
+        )..add(PointsOfCookerRequestedEvent(cooker.id)),
         child: BlocBuilder<PointsBloc, PointsState>(
             buildWhen: (previous, current) => previous != current,
             builder: (context, state) {
@@ -39,9 +40,8 @@ class MyPointsPage extends StatelessWidget {
                           key: const Key(
                               'PointsOfCookerRequestedEventElevatedButton'),
                           child: const Text('הוסף מאכל'),
-                          onPressed: () => Navigator.of(context).push<void>(
-                            CreatePointPage.route(),
-                          ),
+                          onPressed: () => Navigator.of(context)
+                              .push<void>(CreatePointPage.route()),
                         ),
                       ],
                     ),
@@ -49,15 +49,16 @@ class MyPointsPage extends StatelessWidget {
                 }
 
                 return SingleChildScrollView(
-                    child: Column(
-                  children: [
-                    for (var point in state.points)
-                      Container(
-                        height: MediaQuery.of(context).size.height / 3,
-                        child: PointWidget(point: point),
-                      ),
-                  ],
-                ));
+                  child: Column(
+                    children: [
+                      for (var point in state.points)
+                        Container(
+                          height: MediaQuery.of(context).size.height / 3,
+                          child: PointWidget(point: point),
+                        ),
+                    ],
+                  ),
+                );
               }
 
               return const Center(child: CircularProgressIndicator());

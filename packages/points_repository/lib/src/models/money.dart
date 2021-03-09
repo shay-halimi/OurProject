@@ -57,6 +57,10 @@ class Money {
   }
 
   static const empty = Money(amount: 0, currency: Currency.unknown());
+
+  bool get isEmpty => this == empty;
+
+  bool get isNotEmpty => !isEmpty;
 }
 
 class Currency {

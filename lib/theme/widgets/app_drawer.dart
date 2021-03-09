@@ -13,7 +13,7 @@ class AppDrawer extends StatelessWidget {
           padding: EdgeInsets.zero,
           children: <Widget>[
             ListTile(
-              key: const Key('homePage_MyProfile'),
+              key: const Key('homePage_MyCooker'),
               leading: const Icon(Icons.face_rounded),
               title: const Text('חשבון'),
               onTap: () => Navigator.of(context).push<void>(
@@ -25,7 +25,7 @@ class AppDrawer extends StatelessWidget {
               leading: const Icon(Icons.fastfood_outlined),
               title: const Text('המאכלים שלי'),
               onTap: () => Navigator.of(context).push<void>(
-                MyPointsPage.route(),
+                PointsPage.route(),
               ),
             ),
             const Divider(),

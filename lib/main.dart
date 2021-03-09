@@ -1,5 +1,6 @@
 import 'package:authentication_repository/authentication_repository.dart';
 import 'package:bloc/bloc.dart';
+import 'package:cookers_repository/cookers_repository.dart';
 import 'package:cookpoint/app.dart';
 import 'package:cookpoint/simple_bloc_observer.dart';
 import 'package:equatable/equatable.dart';
@@ -18,5 +19,6 @@ void main() async {
     authenticationRepository: AuthenticationRepository(),
     pointsRepository: FirebasePointsRepository(),
     locationServices: GPSLocationServices(),
+    cookersRepository: FirebaseCookersRepository(),
   ));
 }

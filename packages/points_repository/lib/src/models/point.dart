@@ -159,6 +159,6 @@ class Point {
       media.hashCode ^
       tags.hashCode;
 
-  bool get isEmpty => this == Point.empty;
+  bool get isEmpty => this == empty;
   bool get isNotEmpty => !isEmpty;
 }

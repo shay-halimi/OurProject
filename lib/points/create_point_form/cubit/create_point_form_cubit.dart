@@ -2,54 +2,59 @@ import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:formz/formz.dart';
 import 'package:points_repository/points_repository.dart';
 
 part 'create_point_form_state.dart';
 
 class PointFormCubit extends Cubit<PointFormState> {
-  PointFormCubit(this._pointsRepository)
-      : assert(_pointsRepository != null),
-        super(const PointFormState());
-
-  final PointsRepository _pointsRepository;
-
-  void changeCookerId(String value) {
-    final cookedIdInput = CookedIdInput.dirty(value);
+  PointFormCubit({
+    @required Point point,
+    @required PointsRepository pointsRepository,
+  })  : assert(point != null),
+        assert(pointsRepository != null),
+        _point = point,
+        _pointsRepository = pointsRepository,
+        super(const PointFormState()) {
     emit(state.copyWith(
-      cookedIdInput: cookedIdInput,
-      status: Formz.validate([
-        cookedIdInput,
-        state.latitudeInput,
-        state.longitudeInput,
-        state.relevantInput,
-        state.titleInput,
-        state.descriptionInput,
-        state.priceInput,
-        state.mediaInput,
-        state.tagsInput,
-      ]),
+      relevantInput: RelevantInput.dirty(point.relevant),
+      titleInput: TitleInput.dirty(point.title),
+      descriptionInput: DescriptionInput.dirty(point.description),
+      priceInput: PriceInput.dirty(point.price),
+      mediaInput: MediaInput.dirty(point.media),
+      tagsInput: TagsInput.dirty(point.tags),
     ));
   }
 
-  void changeLocation(double latitude, double longitude) {
-    final latitudeInput = LatitudeInput.dirty(latitude);
-    final longitudeInput = LongitudeInput.dirty(longitude);
-    emit(state.copyWith(
-      latitudeInput: latitudeInput,
-      longitudeInput: longitudeInput,
-      status: Formz.validate([
-        state.cookedIdInput,
-        latitudeInput,
-        longitudeInput,
-        state.relevantInput,
-        state.titleInput,
-        state.descriptionInput,
-        state.priceInput,
-        state.mediaInput,
-        state.tagsInput,
-      ]),
-    ));
+  final Point _point;
+  final PointsRepository _pointsRepository;
+
+  Future<void> submit() async {
+    if (!state.status.isValidated) return;
+
+    emit(state.copyWith(status: FormzStatus.submissionInProgress));
+
+    try {
+      final point = _point.copyWith(
+        relevant: state.relevantInput.value,
+        title: state.titleInput.value,
+        description: state.descriptionInput.value,
+        price: state.priceInput.value,
+        media: state.mediaInput.value,
+        tags: state.tagsInput.value,
+      );
+
+      if (point.id.isEmpty) {
+        await _pointsRepository.add(point);
+      } else {
+        await _pointsRepository.update(point);
+      }
+
+      emit(state.copyWith(status: FormzStatus.submissionSuccess));
+    } on Exception {
+      emit(state.copyWith(status: FormzStatus.submissionFailure));
+    }
   }
 
   void changeRelevant(bool value) {
@@ -57,9 +62,6 @@ class PointFormCubit extends Cubit<PointFormState> {
     emit(state.copyWith(
       relevantInput: relevantInput,
       status: Formz.validate([
-        state.cookedIdInput,
-        state.latitudeInput,
-        state.longitudeInput,
         relevantInput,
         state.titleInput,
         state.descriptionInput,
@@ -75,9 +77,6 @@ class PointFormCubit extends Cubit<PointFormState> {
     emit(state.copyWith(
       titleInput: titleInput,
       status: Formz.validate([
-        state.cookedIdInput,
-        state.latitudeInput,
-        state.longitudeInput,
         state.relevantInput,
         titleInput,
         state.descriptionInput,
@@ -93,9 +92,6 @@ class PointFormCubit extends Cubit<PointFormState> {
     emit(state.copyWith(
       descriptionInput: descriptionInput,
       status: Formz.validate([
-        state.cookedIdInput,
-        state.latitudeInput,
-        state.longitudeInput,
         state.relevantInput,
         state.titleInput,
         descriptionInput,
@@ -107,13 +103,14 @@ class PointFormCubit extends Cubit<PointFormState> {
   }
 
   void changePrice(String value) {
-    final priceInput = PriceInput.dirty(value);
+    final priceInput = PriceInput.dirty(Money(
+      amount: (num.tryParse(value) ?? -1).toDouble(),
+      currency: const Currency.nis(),
+    ));
+
     emit(state.copyWith(
       priceInput: priceInput,
       status: Formz.validate([
-        state.cookedIdInput,
-        state.latitudeInput,
-        state.longitudeInput,
         state.relevantInput,
         state.titleInput,
         state.descriptionInput,
@@ -129,9 +126,6 @@ class PointFormCubit extends Cubit<PointFormState> {
     emit(state.copyWith(
       mediaInput: mediaInput,
       status: Formz.validate([
-        state.cookedIdInput,
-        state.latitudeInput,
-        state.longitudeInput,
         state.relevantInput,
         state.titleInput,
         state.descriptionInput,
@@ -156,9 +150,6 @@ class PointFormCubit extends Cubit<PointFormState> {
     emit(state.copyWith(
       tagsInput: tagsInput,
       status: Formz.validate([
-        state.cookedIdInput,
-        state.latitudeInput,
-        state.longitudeInput,
         state.relevantInput,
         state.titleInput,
         state.descriptionInput,
@@ -167,31 +158,5 @@ class PointFormCubit extends Cubit<PointFormState> {
         tagsInput,
       ]),
     ));
-  }
-
-  Future<void> submit() async {
-    if (!state.status.isValidated) return;
-
-    emit(state.copyWith(status: FormzStatus.submissionInProgress));
-
-    try {
-      await _pointsRepository.add(Point.empty.copyWith(
-        cookerId: state.cookedIdInput.value,
-        latitude: state.latitudeInput.value,
-        longitude: state.longitudeInput.value,
-        relevant: state.relevantInput.value,
-        title: state.titleInput.value,
-        description: state.descriptionInput.value,
-        price: Money(
-          amount: num.parse(state.priceInput.value).toDouble(),
-          currency: const Currency.nis(),
-        ),
-        media: state.mediaInput.value,
-        tags: state.tagsInput.value,
-      ));
-      emit(state.copyWith(status: FormzStatus.submissionSuccess));
-    } on Exception {
-      emit(state.copyWith(status: FormzStatus.submissionFailure));
-    }
   }
 }

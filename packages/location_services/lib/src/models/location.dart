@@ -67,4 +67,8 @@ class Location {
 
   @override
   int get hashCode => latitude.hashCode ^ longitude.hashCode ^ heading.hashCode;
+
+  bool get isEmpty => this == empty;
+
+  bool get isNotEmpty => !isEmpty;
 }

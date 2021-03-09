@@ -11,12 +11,32 @@ import 'media_dialog_cubit.dart';
 class MediaDialog extends StatelessWidget {
   MediaDialog({
     Key key,
-    @required this.onMediaCreated,
+    @required this.media,
+    @required this.onMediaChanged,
   }) : super(key: key);
 
-  final ImagePicker _picker = ImagePicker();
+  final Set<String> media;
+  final ValueChanged<Set<String>> onMediaChanged;
 
-  final ValueChanged<String> onMediaCreated;
+  @override
+  Widget build(BuildContext context) {
+    return BlocProvider(
+      create: (_) => MediaDialogCubit(),
+      child: MediaDialogView(onMediaChanged: onMediaChanged, media: media),
+    );
+  }
+}
+
+class MediaDialogView extends StatelessWidget {
+  MediaDialogView({
+    Key key,
+    @required this.onMediaChanged,
+    @required this.media,
+  }) : super(key: key);
+
+  final ValueChanged<Set<String>> onMediaChanged;
+  final ImagePicker _picker = ImagePicker();
+  final Set<String> media;
 
   @override
   Widget build(BuildContext context) {
@@ -24,7 +44,7 @@ class MediaDialog extends StatelessWidget {
       listenWhen: (previous, current) => previous != current,
       listener: (context, state) {
         if (state is MediaDialogLoaded) {
-          onMediaCreated(state.photoURL);
+          onMediaChanged({state.photoURL});
         }
       },
       child: Column(
@@ -77,7 +97,12 @@ class MediaDialog extends StatelessWidget {
                 if (state is MediaDialogInitial) {
                   return AspectRatio(
                     aspectRatio: aspectRatio,
-                    child: const Center(child: Text('בחר תמונה')),
+                    child: media.isEmpty
+                        ? const Center(child: Text('בחר תמונה'))
+                        : Image.network(
+                            media.first,
+                            fit: BoxFit.cover,
+                          ),
                   );
                 } else if (state is MediaDialogError) {
                   return AspectRatio(
