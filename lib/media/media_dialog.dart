@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:cookpoint/media/media_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
@@ -57,33 +58,58 @@ class MediaDialog extends StatelessWidget {
                   );
                 }).then((value) async {
               if (value != null) {
-                await _picker.getImage(source: value).then((value) async {
-                  await context
-                      .read<MediaDialogCubit>()
-                      .fileChanged(File(value.path));
-                });
+                final pickedFile = await _picker.getImage(
+                  source: value,
+                  maxWidth: 1280,
+                  maxHeight: 720,
+                );
+
+                await context
+                    .read<MediaDialogCubit>()
+                    .fileChanged(File(pickedFile.path));
               }
             }),
-            child: AspectRatio(
-              aspectRatio: 3 / 1,
-              child: BlocBuilder<MediaDialogCubit, MediaDialogState>(
-                buildWhen: (previous, current) => previous != current,
-                builder: (context, state) {
-                  if (state is MediaDialogInitial) {
-                    return const Center(child: Text('בחר תמונה'));
-                  } else if (state is MediaDialogError) {
-                    return const Center(
-                        child: Text('שגיאה, נסה שוב מאוחר יותר'));
-                  } else if (state is MediaDialogLoaded) {
-                    return Image.network(
-                      state.photoURL,
-                      fit: BoxFit.cover,
-                    );
-                  }
+            child: BlocBuilder<MediaDialogCubit, MediaDialogState>(
+              buildWhen: (previous, current) => previous != current,
+              builder: (context, state) {
+                final aspectRatio = 3 / 1;
 
-                  return const Center(child: CircularProgressIndicator());
-                },
-              ),
+                if (state is MediaDialogInitial) {
+                  return AspectRatio(
+                    aspectRatio: aspectRatio,
+                    child: const Center(child: Text('בחר תמונה')),
+                  );
+                } else if (state is MediaDialogError) {
+                  return AspectRatio(
+                    aspectRatio: aspectRatio,
+                    child:
+                        const Center(child: Text('שגיאה, נסה שוב מאוחר יותר')),
+                  );
+                } else if (state is MediaDialogLoading) {
+                  return Stack(
+                      alignment: AlignmentDirectional.center,
+                      children: [
+                        AspectRatio(
+                          aspectRatio: aspectRatio,
+                          child: Image.file(
+                            state.file,
+                            fit: BoxFit.cover,
+                          ),
+                        ),
+                        const CircularProgressIndicator(),
+                      ]);
+                } else if (state is MediaDialogLoaded) {
+                  return AspectRatio(
+                    aspectRatio: aspectRatio,
+                    child: MediaWidget(media: state.photoURL),
+                  );
+                }
+
+                return AspectRatio(
+                  aspectRatio: aspectRatio,
+                  child: const Center(child: CircularProgressIndicator()),
+                );
+              },
             ),
           ),
         ],

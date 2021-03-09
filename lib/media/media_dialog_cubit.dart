@@ -32,7 +32,7 @@ class MediaDialogCubit extends Cubit<MediaDialogState> {
           break;
 
         case TaskState.running:
-          emit(MediaDialogLoading());
+          emit(MediaDialogLoading(file));
           break;
 
         case TaskState.paused:

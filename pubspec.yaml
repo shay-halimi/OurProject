@@ -30,6 +30,7 @@ dependencies:
   flutter_swiper: ^1.1.6
   image_picker: ^0.6.7+22
   uuid: ^2.2.2
+  dough: ^0.3.7
   authentication_repository:
     path: packages/authentication_repository
   location_services:
@@ -48,3 +49,11 @@ dev_dependencies:
 
 flutter:
   uses-material-design: true
+
+  assets:
+    - assets/images/cookpoint.png
+
+  fonts:
+    - family:  CookPoint
+      fonts:
+        - asset: assets/flutter-icons-56ec1470/fonts/CookPoint.ttf

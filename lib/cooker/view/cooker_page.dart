@@ -1,11 +1,12 @@
 import 'package:cookpoint/authentication/authentication.dart';
-import 'package:cookpoint/profile/profile.dart';
+import 'package:cookpoint/cooker/cooker.dart';
+import 'package:cookpoint/media/media_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-class ProfilePage extends StatelessWidget {
+class CookerPage extends StatelessWidget {
   static Route route() {
-    return MaterialPageRoute<void>(builder: (_) => ProfilePage());
+    return MaterialPageRoute<void>(builder: (_) => CookerPage());
   }
 
   @override
@@ -28,11 +29,9 @@ class ProfilePage extends StatelessWidget {
         children: [
           AspectRatio(
             aspectRatio: 16 / 9,
-            child: Image.network(
-              user.photoURL ??
-                  'https://upload.wikimedia.org/wikipedia/commons/thumb/6/6a/Gal_Gadot_2018_cropped_retouched.jpg/250px-Gal_Gadot_2018_cropped_retouched.jpg',
-              fit: BoxFit.cover,
-            ),
+            child: MediaWidget(
+                media: user.photoURL ??
+                    'https://upload.wikimedia.org/wikipedia/commons/thumb/6/6a/Gal_Gadot_2018_cropped_retouched.jpg/250px-Gal_Gadot_2018_cropped_retouched.jpg'),
           ),
           Text(user.displayName ?? 'גל גדות'),
           ElevatedButton(

@@ -26,7 +26,21 @@ class MapWidget extends StatefulWidget {
 class _MapWidgetState extends State<MapWidget> {
   final Completer<google_maps.GoogleMapController> _controller = Completer();
 
-  double zoom = 14.5;
+  double _zoom = 14.5;
+
+  google_maps.BitmapDescriptor _cookpointIcon =
+      google_maps.BitmapDescriptor.defaultMarker;
+
+  @override
+  void initState() {
+    super.initState();
+    google_maps.BitmapDescriptor.fromAssetImage(
+      const ImageConfiguration(size: Size(48, 48)),
+      'assets/images/cookpoint.png',
+    ).then((onValue) {
+      _cookpointIcon = onValue;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -45,7 +59,7 @@ class _MapWidgetState extends State<MapWidget> {
                 state.point.longitude,
               ),
               bearing: widget.location.heading,
-              zoom: zoom,
+              zoom: _zoom,
             ),
           ),
         );
@@ -60,7 +74,7 @@ class _MapWidgetState extends State<MapWidget> {
               widget.location.longitude,
             ),
             bearing: widget.location.heading,
-            zoom: zoom,
+            zoom: _zoom,
           ),
           markers: widget.points
               .map((point) => google_maps.Marker(
@@ -72,12 +86,7 @@ class _MapWidgetState extends State<MapWidget> {
                     onTap: () {
                       context.read<SelectedPointCubit>().selectPoint(point);
                     },
-                    icon: google_maps.BitmapDescriptor.defaultMarkerWithHue(
-                      point.latitude == state.point.latitude &&
-                              point.longitude == state.point.longitude
-                          ? google_maps.BitmapDescriptor.hueGreen
-                          : google_maps.BitmapDescriptor.hueRed,
-                    ),
+                    icon: _cookpointIcon,
                   ))
               .toSet(),
           compassEnabled: false,
@@ -86,7 +95,7 @@ class _MapWidgetState extends State<MapWidget> {
           myLocationButtonEnabled: false,
           onTap: (lanLat) =>
               context.read<SelectedPointCubit>().selectPoint(Point.empty),
-          onCameraMove: (pos) => zoom = pos.zoom,
+          onCameraMove: (pos) => _zoom = pos.zoom,
         );
       },
     );

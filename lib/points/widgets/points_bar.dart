@@ -38,7 +38,7 @@ class _PointsBarState extends State<PointsBar> {
         }
 
         return Container(
-          height: MediaQuery.of(context).size.height / 3,
+          height: MediaQuery.of(context).size.height / 5 * 2,
           child: Swiper(
             loop: false,
             itemWidth: MediaQuery.of(context).size.width - 16.0,

@@ -34,7 +34,7 @@ class MyPointsPage extends StatelessWidget {
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Text('רשימת המאכלים שלך ריקה כרגע'),
+                        const Text('רשימת המאכלים שלך ריקה כרגע'),
                         ElevatedButton(
                           key: const Key(
                               'PointsOfCookerRequestedEventElevatedButton'),
@@ -48,23 +48,19 @@ class MyPointsPage extends StatelessWidget {
                   );
                 }
 
-                return Column(
+                return SingleChildScrollView(
+                    child: Column(
                   children: [
                     for (var point in state.points)
-                      Expanded(child: PointWidget(point: point)),
-                    ElevatedButton(
-                      key: const Key(
-                          'PointsOfCookerRequestedEventElevatedButton'),
-                      child: const Text('הוסף מאכל'),
-                      onPressed: () => Navigator.of(context).push<void>(
-                        CreatePointPage.route(),
+                      Container(
+                        height: MediaQuery.of(context).size.height / 3,
+                        child: PointWidget(point: point),
                       ),
-                    ),
                   ],
-                );
+                ));
               }
 
-              return Center(child: const CircularProgressIndicator());
+              return const Center(child: CircularProgressIndicator());
             }),
       ),
     );

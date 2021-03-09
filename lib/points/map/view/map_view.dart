@@ -5,7 +5,6 @@ import 'package:cookpoint/points/widgets/points_bar.dart';
 import 'package:cookpoint/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:provider/provider.dart';
 
 class MapView extends StatelessWidget {
   @override
@@ -17,18 +16,6 @@ class MapView extends StatelessWidget {
     return Scaffold(
       extendBodyBehindAppBar: true,
       resizeToAvoidBottomInset: false,
-      body: Stack(
-        children: [
-          MapWidget(location: location, points: points),
-          Column(
-            mainAxisAlignment: MainAxisAlignment.end,
-            children: [
-              PointsBar(points: points),
-              const LocateButton(),
-            ],
-          ),
-        ],
-      ),
       appBar: MapAppBar(
         title: TextField(
           decoration: const InputDecoration(
@@ -40,15 +27,19 @@ class MapView extends StatelessWidget {
               context.read<SearchBloc>().add(SearchTermUpdated(value)),
         ),
       ),
-      endDrawer: AppDrawer(),
-      floatingActionButton: FloatingActionButton(
-        heroTag: 'FloatingActionButtonCookPoint',
-        tooltip: 'פרסם CookPoint',
-        child: const Icon(Icons.add_location),
-        onPressed: () {
-          Navigator.of(context).push<void>(CreatePointPage.route());
-        },
+      body: Stack(
+        children: [
+          MapWidget(location: location, points: points),
+          Column(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              PointsBar(points: points),
+            ],
+          ),
+        ],
       ),
+      endDrawer: AppDrawer(),
+      floatingActionButton: const CreatePointButton(),
     );
   }
 }

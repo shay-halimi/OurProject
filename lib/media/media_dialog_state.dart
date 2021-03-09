@@ -11,6 +11,10 @@ class MediaDialogLoaded extends MediaDialogState {
   final String photoURL;
 }
 
-class MediaDialogLoading extends MediaDialogState {}
+class MediaDialogLoading extends MediaDialogState {
+  MediaDialogLoading(this.file);
+
+  final File file;
+}
 
 class MediaDialogError extends MediaDialogState {}

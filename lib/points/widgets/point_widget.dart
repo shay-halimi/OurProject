@@ -1,3 +1,4 @@
+import 'package:cookpoint/media/media_widget.dart';
 import 'package:cookpoint/points/points.dart';
 import 'package:cookpoint/theme/theme.dart';
 import 'package:flutter/material.dart';
@@ -20,10 +21,12 @@ class PointWidget extends StatelessWidget {
         child: Column(
           children: [
             Flexible(
-              flex: 2,
+              flex: 3,
+              fit: FlexFit.tight,
               child: _PhotoWidget(photo: point.media.first),
             ),
             Flexible(
+              flex: 2,
               child: _TitleWidget(point: point),
             ),
           ],
@@ -48,10 +51,7 @@ class _PhotoWidget extends StatelessWidget {
         Expanded(
           child: Hero(
             tag: photo,
-            child: Image.network(
-              photo,
-              fit: BoxFit.cover,
-            ),
+            child: MediaWidget(media: photo),
           ),
         ),
       ],
@@ -69,26 +69,41 @@ class _TitleWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ListTile(
-      title: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Text(
-            point.title,
-            style: theme.textTheme.headline6,
-            maxLines: 1,
-            overflow: TextOverflow.ellipsis,
-          ),
-          Text(
-            '${point.price.amount.toStringAsFixed(2)} ₪',
-            style:
-                theme.textTheme.headline6.copyWith(fontWeight: FontWeight.w300),
-            maxLines: 1,
-            overflow: TextOverflow.ellipsis,
-          ),
-        ],
+    return SingleChildScrollView(
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Column(
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  point.title,
+                  style: theme.textTheme.headline6,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                ),
+                Text(
+                  '${point.price.amount.toStringAsFixed(2)} ₪',
+                  style: theme.textTheme.headline6
+                      .copyWith(fontWeight: FontWeight.w300),
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                ),
+              ],
+            ),
+            TagsWidget(tags: point.tags),
+            Row(
+              children: [
+                Text(
+                  point.description,
+                  overflow: TextOverflow.fade,
+                )
+              ],
+            )
+          ],
+        ),
       ),
-      subtitle: TagsWidget(tags: point.tags),
     );
   }
 }

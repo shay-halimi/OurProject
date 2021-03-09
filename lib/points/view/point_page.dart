@@ -1,3 +1,4 @@
+import 'package:cookpoint/media/media_widget.dart';
 import 'package:cookpoint/points/points.dart';
 import 'package:cookpoint/theme/theme.dart';
 import 'package:flutter/material.dart';
@@ -103,10 +104,7 @@ class PointPage extends StatelessWidget {
       aspectRatio: 16 / 9,
       child: Hero(
         tag: point.media.first,
-        child: Image.network(
-          point.media.first,
-          fit: BoxFit.cover,
-        ),
+        child: MediaWidget(media: point.media.first),
       ),
     );
   }
