@@ -68,7 +68,7 @@ class CookerForm extends StatelessWidget {
       body: BlocListener<CookerFormCubit, CookerFormState>(
         listener: (context, state) {
           if (state.status.isSubmissionFailure) {
-            ScaffoldMessenger.of(context)
+            Scaffold.of(context)
               ..hideCurrentSnackBar()
               ..showSnackBar(const SnackBar(
                   content: Text(
@@ -76,7 +76,7 @@ class CookerForm extends StatelessWidget {
           }
 
           if (state.status.isSubmissionSuccess) {
-            ScaffoldMessenger.of(context)
+            Scaffold.of(context)
               ..hideCurrentSnackBar()
               ..showSnackBar(
                   const SnackBar(content: Text('חשבונך עודכן בהצלחה')));

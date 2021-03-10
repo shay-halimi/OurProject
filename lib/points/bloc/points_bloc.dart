@@ -55,6 +55,7 @@ class PointsBloc extends Bloc<PointsEvent, PointsState> {
         .near(
       longitude: event.longitude,
       latitude: event.latitude,
+      radiusInKM: 100,
     )
         .listen((points) {
       add(PointsLoadedEvent(points));

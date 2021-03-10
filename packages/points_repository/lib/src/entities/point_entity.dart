@@ -2,7 +2,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equatable/equatable.dart';
 import 'package:geoflutterfire/geoflutterfire.dart';
 import 'package:meta/meta.dart';
-import 'package:points_repository/src/models/money.dart';
+
+import '../models/models.dart';
 
 class PointEntity extends Equatable {
   const PointEntity({

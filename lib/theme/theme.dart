@@ -65,8 +65,7 @@ final theme = ThemeData(
 );
 
 final appBarTheme = const AppBarTheme(
-  backgroundColor: Colors.white,
-  foregroundColor: Colors.black,
+  color: Colors.white,
   iconTheme: IconThemeData(color: Colors.black),
   actionsIconTheme: IconThemeData(color: Colors.black),
   textTheme: TextTheme(
@@ -136,6 +135,4 @@ final appBarTheme = const AppBarTheme(
       fontWeight: FontWeight.w500,
     ),
   ),
-  toolbarTextStyle: TextStyle(color: Colors.black),
-  titleTextStyle: TextStyle(color: Colors.black),
 );

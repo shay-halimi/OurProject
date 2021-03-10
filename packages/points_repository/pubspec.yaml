@@ -14,5 +14,6 @@ dependencies:
   firebase_core: ^0.5.1
   geoflutterfire: ^2.2.1
   lipsum: ^1.0.1
+  meta: ^1.2.4
 
 

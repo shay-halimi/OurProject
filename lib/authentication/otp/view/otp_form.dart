@@ -10,7 +10,7 @@ class OTPForm extends StatelessWidget {
     return BlocListener<OTPCubit, OTPState>(
       listener: (context, state) {
         if (state.status.isSubmissionFailure) {
-          ScaffoldMessenger.of(context)
+          Scaffold.of(context)
             ..hideCurrentSnackBar()
             ..showSnackBar(
               const SnackBar(

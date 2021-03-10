@@ -10,7 +10,7 @@ class PhoneNumberForm extends StatelessWidget {
     return BlocListener<PhoneNumberCubit, PhoneNumberState>(
       listener: (context, state) {
         if (state.status.isSubmissionFailure) {
-          ScaffoldMessenger.of(context)
+          Scaffold.of(context)
             ..hideCurrentSnackBar()
             ..showSnackBar(
               const SnackBar(

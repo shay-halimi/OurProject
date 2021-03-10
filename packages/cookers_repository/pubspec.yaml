@@ -12,3 +12,4 @@ dependencies:
   cloud_firestore: ^0.14.0+2
   equatable: ^1.2.6
   firebase_core: ^0.5.1
+  meta: ^1.2.4

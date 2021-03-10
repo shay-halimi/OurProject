@@ -9,6 +9,5 @@ dependencies:
   flutter:
     sdk: flutter
 
-  location: ^3.2.4
-
-
+  location: 3.0.2
+  meta: ^1.2.4

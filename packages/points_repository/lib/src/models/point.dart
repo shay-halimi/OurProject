@@ -1,7 +1,7 @@
 import 'package:meta/meta.dart';
 
 import '../entities/entities.dart';
-import 'money.dart';
+import 'models.dart';
 
 @immutable
 class Point {
