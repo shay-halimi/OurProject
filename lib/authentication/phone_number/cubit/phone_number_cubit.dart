@@ -1,6 +1,5 @@
 import 'package:authentication_repository/authentication_repository.dart';
 import 'package:bloc/bloc.dart';
-import 'package:cookpoint/authentication/authentication.dart';
 import 'package:equatable/equatable.dart';
 import 'package:formz/formz.dart';
 
@@ -14,7 +13,7 @@ class PhoneNumberCubit extends Cubit<PhoneNumberState> {
   final AuthenticationRepository _authenticationRepository;
 
   void phoneNumberChanged(String value) {
-    final phoneNumber = PhoneNumber.dirty(value);
+    final phoneNumber = PhoneNumberInput.dirty(value);
     emit(state.copyWith(
       phoneNumber: phoneNumber,
       status: Formz.validate([phoneNumber]),

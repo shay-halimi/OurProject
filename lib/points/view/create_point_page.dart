@@ -32,6 +32,7 @@ class CreatePointPage extends StatelessWidget {
         latitude: location.latitude,
         longitude: location.longitude,
       ),
+      isUpdating: false,
     );
   }
 }

@@ -8,15 +8,16 @@ class PointWidget extends StatelessWidget {
   const PointWidget({
     Key key,
     @required this.point,
+    this.onTap,
   }) : super(key: key);
 
   final Point point;
+  final GestureTapCallback onTap;
 
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: () => Navigator.of(context)
-          .push<void>(CreateUpdatePointPage.route(point: point)),
+      onTap: onTap,
       child: Card(
         child: Column(
           children: [

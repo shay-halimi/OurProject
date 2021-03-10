@@ -92,7 +92,7 @@ class MediaDialogView extends StatelessWidget {
             child: BlocBuilder<MediaDialogCubit, MediaDialogState>(
               buildWhen: (previous, current) => previous != current,
               builder: (context, state) {
-                final aspectRatio = 3 / 1;
+                final aspectRatio = 1280 / 720;
 
                 if (state is MediaDialogInitial) {
                   return AspectRatio(

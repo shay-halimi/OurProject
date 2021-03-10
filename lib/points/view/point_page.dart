@@ -1,8 +1,8 @@
+import 'package:cookpoint/cooker/cooker.dart';
 import 'package:cookpoint/media/media_widget.dart';
 import 'package:cookpoint/points/points.dart';
 import 'package:cookpoint/theme/theme.dart';
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:points_repository/points_repository.dart';
 
 class PointPage extends StatelessWidget {
@@ -18,6 +18,7 @@ class PointPage extends StatelessWidget {
   }) {
     return MaterialPageRoute<void>(
       builder: (_) => PointPage(point: point),
+      fullscreenDialog: true,
     );
   }
 
@@ -68,34 +69,7 @@ class PointPage extends StatelessWidget {
           ],
         ),
       ),
-      bottomNavigationBar: ListTile(
-        dense: true,
-        leading: const CircleAvatar(
-          backgroundImage: NetworkImage(
-            'https://upload.wikimedia.org/wikipedia/commons/thumb/6/6a/Gal_Gadot_2018_cropped_retouched.jpg/250px-Gal_Gadot_2018_cropped_retouched.jpg',
-          ),
-        ),
-        title: const Text('גל גדות'),
-        subtitle: const Text('פתח תקווה'),
-        trailing: Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            IconButton(
-              icon: const Icon(FontAwesomeIcons.whatsapp),
-              onPressed: () => null,
-            ),
-            IconButton(
-              icon: const Icon(Icons.call),
-              onPressed: () => null,
-            ),
-            IconButton(
-              icon: const Icon(Icons.directions),
-              onPressed: () => null,
-            ),
-          ],
-        ),
-        onTap: () => null,
-      ),
+      bottomNavigationBar: CookerWidget(cookerId: point.cookerId),
     );
   }
 

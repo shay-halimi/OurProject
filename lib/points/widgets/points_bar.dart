@@ -43,8 +43,13 @@ class _PointsBarState extends State<PointsBar> {
             loop: false,
             itemWidth: MediaQuery.of(context).size.width - 16.0,
             itemBuilder: (_, index) {
+              final point = widget.points.elementAt(index);
+
               return PointWidget(
-                point: widget.points.elementAt(index),
+                point: point,
+                onTap: () => Navigator.of(context).push<void>(
+                  PointPage.route(point: point),
+                ),
               );
             },
             onIndexChanged: (index) {

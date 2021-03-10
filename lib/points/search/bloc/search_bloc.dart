@@ -33,7 +33,7 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
 
   List<Point> _filter(List<Point> points, String term, Set<String> tags) {
     return points.where((point) {
-      if (point.tags.containsAll(tags)) {
+      if (point.relevant && point.tags.containsAll(tags)) {
         if (term.isNotEmpty) {
           return point.title.contains(term) || point.description.contains(term);
         }

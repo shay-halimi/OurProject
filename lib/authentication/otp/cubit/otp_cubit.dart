@@ -2,7 +2,6 @@ import 'dart:async';
 
 import 'package:authentication_repository/authentication_repository.dart';
 import 'package:bloc/bloc.dart';
-import 'package:cookpoint/authentication/authentication.dart';
 import 'package:equatable/equatable.dart';
 import 'package:formz/formz.dart';
 
@@ -16,7 +15,7 @@ class OTPCubit extends Cubit<OTPState> {
   final AuthenticationRepository _authenticationRepository;
 
   void otpChanged(String value) {
-    final otp = OTP.dirty(value);
+    final otp = OTPInput.dirty(value);
     emit(state.copyWith(
       otp: otp,
       status: Formz.validate([otp]),

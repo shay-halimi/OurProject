@@ -1,4 +1,4 @@
-part of 'create_point_form_cubit.dart';
+part of 'point_form_cubit.dart';
 
 class PointFormState extends Equatable {
   const PointFormState({

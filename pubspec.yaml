@@ -32,6 +32,8 @@ dependencies:
   uuid: ^2.2.2
   dough: ^0.3.7
   url_launcher: ^5.7.10
+  android_intent: ^0.3.7+7
+  fluttertoast: ^7.1.6
   authentication_repository:
     path: packages/authentication_repository
   location_services:
@@ -55,8 +57,3 @@ flutter:
 
   assets:
     - assets/images/cookpoint.png
-
-  fonts:
-    - family:  CookPoint
-      fonts:
-        - asset: assets/flutter-icons-56ec1470/fonts/CookPoint.ttf

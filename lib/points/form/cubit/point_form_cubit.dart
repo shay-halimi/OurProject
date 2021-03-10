@@ -6,7 +6,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:formz/formz.dart';
 import 'package:points_repository/points_repository.dart';
 
-part 'create_point_form_state.dart';
+part 'point_form_state.dart';
 
 class PointFormCubit extends Cubit<PointFormState> {
   PointFormCubit({
@@ -30,7 +30,7 @@ class PointFormCubit extends Cubit<PointFormState> {
   final Point _point;
   final PointsRepository _pointsRepository;
 
-  Future<void> submit() async {
+  Future<void> save() async {
     if (!state.status.isValidated) return;
 
     emit(state.copyWith(status: FormzStatus.submissionInProgress));
@@ -45,11 +45,30 @@ class PointFormCubit extends Cubit<PointFormState> {
         tags: state.tagsInput.value,
       );
 
-      if (point.id.isEmpty) {
-        await _pointsRepository.add(point);
-      } else {
-        await _pointsRepository.update(point);
-      }
+      await _pointsRepository.add(point);
+
+      emit(state.copyWith(status: FormzStatus.submissionSuccess));
+    } on Exception {
+      emit(state.copyWith(status: FormzStatus.submissionFailure));
+    }
+  }
+
+  Future<void> update() async {
+    if (!state.status.isValidated) return;
+
+    emit(state.copyWith(status: FormzStatus.submissionInProgress));
+
+    try {
+      final point = _point.copyWith(
+        relevant: state.relevantInput.value,
+        title: state.titleInput.value,
+        description: state.descriptionInput.value,
+        price: state.priceInput.value,
+        media: state.mediaInput.value,
+        tags: state.tagsInput.value,
+      );
+
+      await _pointsRepository.update(point);
 
       emit(state.copyWith(status: FormzStatus.submissionSuccess));
     } on Exception {

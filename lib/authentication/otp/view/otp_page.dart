@@ -5,7 +5,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 class OTPPage extends StatelessWidget {
   static Route route() {
-    return MaterialPageRoute<void>(builder: (_) => OTPPage());
+    return MaterialPageRoute<void>(
+      builder: (_) => OTPPage(),
+      fullscreenDialog: true,
+    );
   }
 
   @override

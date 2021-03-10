@@ -40,6 +40,9 @@ class App extends StatelessWidget {
         RepositoryProvider.value(
           value: pointsRepository,
         ),
+        RepositoryProvider.value(
+          value: cookersRepository,
+        ),
       ],
       child: MultiBlocProvider(
         providers: [
@@ -47,6 +50,7 @@ class App extends StatelessWidget {
             create: (_) => AuthenticationBloc(
               authenticationRepository: authenticationRepository,
             ),
+            lazy: false,
           ),
           BlocProvider(
             create: (_) => LocationCubit(
@@ -58,6 +62,7 @@ class App extends StatelessWidget {
               cookersRepository: cookersRepository,
               authenticationBloc: _context.read<AuthenticationBloc>(),
             ),
+            lazy: false,
           ),
         ],
         child: AppView(),

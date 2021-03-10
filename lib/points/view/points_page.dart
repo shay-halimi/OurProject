@@ -21,7 +21,7 @@ class PointsPage extends StatelessWidget {
 
     return Scaffold(
       resizeToAvoidBottomInset: true,
-      appBar: AppBar(title: const Text('הנקודות בישול שלי')),
+      appBar: AppBar(title: const Text('המאכלים שלי')),
       body: BlocProvider(
         create: (_) => PointsBloc(
           pointsRepository: context.read<PointsRepository>(),
@@ -54,7 +54,12 @@ class PointsPage extends StatelessWidget {
                       for (var point in state.points)
                         Container(
                           height: MediaQuery.of(context).size.height / 3,
-                          child: PointWidget(point: point),
+                          child: PointWidget(
+                            point: point,
+                            onTap: () => Navigator.of(context).push<void>(
+                              CreateUpdatePointPage.route(point: point),
+                            ),
+                          ),
                         ),
                     ],
                   ),

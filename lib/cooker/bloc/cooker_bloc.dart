@@ -37,6 +37,8 @@ class CookerBloc extends Bloc<CookerEvent, CookerState> {
             add(CookerLoadedEvent(cooker));
           }
         });
+      } else {
+        add(const CookerLoadedEvent(Cooker.empty));
       }
     });
   }
