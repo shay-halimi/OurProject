@@ -1,14 +1,13 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="app.cookpoint.flutter">
+    package="app.cookpoint.cookpoint">
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
-    <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION" />
 
     <application
         android:icon="@mipmap/ic_launcher"
-        android:label="Cook Point"
+        android:label="cookpoint"
         android:requestLegacyExternalStorage="true">
         <activity
             android:name=".MainActivity"
@@ -43,12 +42,8 @@
             android:name="flutterEmbedding"
             android:value="2" />
 
-
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyCLYSd7jriUAec0xNrL2fYG3C-wGc9mOps" />
-
     </application>
-
-
 </manifest>

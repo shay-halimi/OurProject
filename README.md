@@ -1,6 +1,6 @@
 # cookpoint
 
-A new Flutter application.
+CookPoint flutter app
 
 ## Getting Started
 

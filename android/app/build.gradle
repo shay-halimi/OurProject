@@ -29,7 +29,7 @@ android {
     compileSdkVersion 30
 
     defaultConfig {
-        applicationId "app.cookpoint.flutter"
+        applicationId "app.cookpoint.cookpoint"
         minSdkVersion 21
         targetSdkVersion 30
         versionCode flutterVersionCode.toInteger()

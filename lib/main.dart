@@ -18,7 +18,7 @@ void main() async {
   runApp(App(
     authenticationRepository: AuthenticationRepository(),
     pointsRepository: FirebasePointsRepository(),
-    locationServices: GPSLocationServices(),
+    locationServices: GeoLocatorLocationServices(),
     cookersRepository: FirebaseCookersRepository(),
   ));
 }

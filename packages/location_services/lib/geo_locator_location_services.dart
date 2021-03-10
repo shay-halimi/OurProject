@@ -1,12 +1,10 @@
 import 'dart:async';
 
-import 'package:location/location.dart' as gps;
+import 'package:geolocator/geolocator.dart';
 
 import 'location_services.dart';
 
-class GPSLocationServices extends LocationServices {
-  final gps.Location _gps = gps.Location();
-
+class GeoLocatorLocationServices extends LocationServices {
   final StreamController<Location> _locationController = StreamController();
 
   @override
@@ -14,27 +12,28 @@ class GPSLocationServices extends LocationServices {
 
   @override
   Future<void> locate() async {
-    bool _serviceEnabled;
-    gps.PermissionStatus _permissionGranted;
+    bool serviceEnabled;
+    LocationPermission permission;
 
-    _serviceEnabled = await _gps.serviceEnabled();
-    if (!_serviceEnabled) {
-      _serviceEnabled = await _gps.requestService();
-      if (!_serviceEnabled) {
-        return _locationController.add(Location.empty);
-      }
+    serviceEnabled = await Geolocator.isLocationServiceEnabled();
+    if (!serviceEnabled) {
+      return _locationController.add(Location.empty);
     }
 
-    _permissionGranted = await _gps.hasPermission();
-    if (_permissionGranted == gps.PermissionStatus.denied) {
-      _permissionGranted = await _gps.requestPermission();
-      if (_permissionGranted != gps.PermissionStatus.granted) {
+    permission = await Geolocator.checkPermission();
+    if (permission == LocationPermission.denied) {
+      permission = await Geolocator.requestPermission();
+      if (permission == LocationPermission.deniedForever) {
+        return _locationController.add(Location.empty);
+      }
+
+      if (permission == LocationPermission.denied) {
         return _locationController.add(Location.empty);
       }
     }
 
     try {
-      final data = await _gps.getLocation();
+      final data = await Geolocator.getCurrentPosition();
 
       return _locationController.add(Location(
         latitude: data.latitude,

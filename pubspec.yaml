@@ -1,12 +1,12 @@
 name: cookpoint
-description: Cook Point flutter app.
+description: CookPoint flutter app
 
-publish_to: none
+publish_to: 'none'
 
 version: 1.0.0+1
 
 environment:
-  sdk: ">=2.10.5 <3.0.0"
+  sdk: ">=2.7.0 <3.0.0"
 
 dependencies:
   flutter:
