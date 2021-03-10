@@ -79,5 +79,6 @@ class Cooker {
   );
 
   bool get isEmpty => this == empty;
+
   bool get isNotEmpty => !isEmpty;
 }

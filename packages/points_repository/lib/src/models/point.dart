@@ -160,5 +160,6 @@ class Point {
       tags.hashCode;
 
   bool get isEmpty => this == empty;
+
   bool get isNotEmpty => !isEmpty;
 }

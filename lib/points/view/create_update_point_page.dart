@@ -57,7 +57,7 @@ class PointForm extends StatelessWidget {
       body: BlocListener<PointFormCubit, PointFormState>(
         listener: (context, state) {
           if (state.status.isSubmissionFailure) {
-            Scaffold.of(context)
+            ScaffoldMessenger.of(context)
               ..hideCurrentSnackBar()
               ..showSnackBar(
                 SnackBar(
