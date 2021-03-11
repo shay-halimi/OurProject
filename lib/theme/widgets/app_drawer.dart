@@ -2,6 +2,7 @@ import 'package:cookpoint/authentication/authentication.dart';
 import 'package:cookpoint/cooker/cooker.dart';
 import 'package:cookpoint/launcher.dart';
 import 'package:cookpoint/points/points.dart';
+import 'package:cookpoint/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -14,9 +15,7 @@ class AppDrawer extends StatelessWidget {
           shrinkWrap: true,
           padding: EdgeInsets.zero,
           children: <Widget>[
-            Image.asset(
-              'assets/images/cookpoint.png',
-            ),
+            const AppLogo(),
             const Divider(),
             ListTile(
               key: const Key('AppDrawer_CookerPage_route'),

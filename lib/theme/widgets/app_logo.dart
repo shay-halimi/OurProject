@@ -9,11 +9,8 @@ class AppLogo extends StatelessWidget {
   Widget build(BuildContext context) {
     return Hero(
       tag: 'AppLogo',
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          const Icon(Icons.fastfood),
-        ],
+      child: Image.asset(
+        'assets/images/cookpoint.png',
       ),
     );
   }

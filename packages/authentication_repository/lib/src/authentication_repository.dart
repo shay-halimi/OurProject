@@ -24,14 +24,10 @@ class AuthenticationRepository {
     });
   }
 
-  String _verificationId;
-
-  Future<void> sendOTP({
+  Future<String> sendOTP({
     @required String phoneNumber,
   }) async {
-    assert(phoneNumber != null);
-
-    var completer = Completer<void>();
+    final completer = Completer<String>();
 
     await _firebaseAuth.verifyPhoneNumber(
       phoneNumber: phoneNumber,
@@ -40,21 +36,16 @@ class AuthenticationRepository {
       ),
       verificationCompleted: (firebase_auth.PhoneAuthCredential pac) async {
         await _firebaseAuth.signInWithCredential(pac);
-
-        completer.complete();
+        completer.complete('');
       },
       verificationFailed: (e) {
         completer.completeError(e);
       },
       codeSent: (String verificationId, [int forceResendingToken]) {
-        _verificationId = verificationId;
-
-        completer.complete();
+        completer.complete(verificationId);
       },
       codeAutoRetrievalTimeout: (String verificationId) {
-        _verificationId = verificationId;
-
-        completer.complete();
+        completer.complete(verificationId);
       },
     );
 
@@ -63,12 +54,12 @@ class AuthenticationRepository {
 
   Future<void> signInWithCredential({
     @required String otp,
+    @required String verificationId,
   }) async {
-    assert(otp != null);
     try {
       await _firebaseAuth.signInWithCredential(
         firebase_auth.PhoneAuthProvider.credential(
-          verificationId: _verificationId,
+          verificationId: verificationId,
           smsCode: otp,
         ),
       );

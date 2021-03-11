@@ -9,6 +9,6 @@ class AuthenticationPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return PhoneNumberPage();
+    return LoginPage();
   }
 }

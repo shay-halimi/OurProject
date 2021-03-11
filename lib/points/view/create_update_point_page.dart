@@ -111,20 +111,14 @@ class _SubmitButton extends StatelessWidget {
         if (state.status.isSubmissionInProgress) {
           return const Center(child: CircularProgressIndicator());
         } else {
-          return Row(
-            children: [
-              Expanded(
-                child: ElevatedButton(
-                  key: Key('CreateUpdatePointPage_SubmitButton_$isUpdating'),
-                  child: Text(isUpdating ? 'שמור' : 'פרסם!'),
-                  onPressed: state.status.isValidated
-                      ? () => isUpdating
-                          ? context.read<PointFormCubit>().update()
-                          : context.read<PointFormCubit>().save()
-                      : null,
-                ),
-              ),
-            ],
+          return ElevatedButton(
+            key: Key('CreateUpdatePointPage_SubmitButton_$isUpdating'),
+            child: Text(isUpdating ? 'שמור' : 'פרסם!'),
+            onPressed: state.status.isValidated
+                ? () => isUpdating
+                    ? context.read<PointFormCubit>().update()
+                    : context.read<PointFormCubit>().save()
+                : null,
           );
         }
       },
