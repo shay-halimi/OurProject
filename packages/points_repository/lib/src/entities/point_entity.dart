@@ -9,9 +9,7 @@ class PointEntity extends Equatable {
   const PointEntity({
     @required this.id,
     @required this.cookerId,
-    @required this.latitude,
-    @required this.longitude,
-    @required this.relevant,
+    @required this.latLng,
     @required this.title,
     @required this.description,
     @required this.price,
@@ -20,14 +18,15 @@ class PointEntity extends Equatable {
   });
 
   factory PointEntity.fromSnapshot(DocumentSnapshot snap) {
-    final geoPoint = snap.data()['location']['geopoint'] as GeoPoint;
+    final geoPoint = snap.data()['latLng']['geopoint'] as GeoPoint;
 
     return PointEntity(
       id: snap.id,
       cookerId: snap.data()['cookerId'] as String,
-      latitude: geoPoint.latitude,
-      longitude: geoPoint.longitude,
-      relevant: snap.data()['relevant'] as bool,
+      latLng: LatLng(
+        latitude: geoPoint.latitude,
+        longitude: geoPoint.longitude,
+      ),
       title: snap.data()['title'] as String,
       description: snap.data()['description'] as String,
       price: Money.fromJson(snap.data()['price'] as Map<String, Object>),
@@ -38,9 +37,7 @@ class PointEntity extends Equatable {
 
   final String id;
   final String cookerId;
-  final double latitude;
-  final double longitude;
-  final bool relevant;
+  final LatLng latLng;
   final String title;
   final String description;
   final Money price;
@@ -51,9 +48,7 @@ class PointEntity extends Equatable {
   List<Object> get props => [
         id,
         cookerId,
-        latitude,
-        longitude,
-        relevant,
+        latLng,
         title,
         description,
         price,
@@ -65,9 +60,7 @@ class PointEntity extends Equatable {
     return {
       'id': id,
       'cookerId': cookerId,
-      'latitude': latitude,
-      'longitude': longitude,
-      'relevant': relevant,
+      'latLng': latLng.toJson(),
       'title': title,
       'description': description,
       'price': price.toJson(),
@@ -77,15 +70,10 @@ class PointEntity extends Equatable {
   }
 
   Map<String, Object> toDocument() {
-    final location = GeoFirePoint(
-      latitude,
-      longitude,
-    ).data as Map<String, Object>;
-
     return {
       'cookerId': cookerId,
-      'location': location,
-      'relevant': relevant,
+      'latLng': GeoFirePoint(latLng.latitude, latLng.longitude).data
+          as Map<String, Object>,
       'title': title,
       'description': description,
       'price': price.toJson(),

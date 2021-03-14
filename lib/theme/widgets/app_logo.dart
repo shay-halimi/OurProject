@@ -10,7 +10,7 @@ class AppLogo extends StatelessWidget {
     return Hero(
       tag: 'AppLogo',
       child: Image.asset(
-        'assets/images/cookpoint.png',
+        'assets/images/logo.png',
       ),
     );
   }

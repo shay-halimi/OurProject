@@ -18,7 +18,6 @@ class PointFormCubit extends Cubit<PointFormState> {
         _pointsRepository = pointsRepository,
         super(const PointFormState()) {
     emit(state.copyWith(
-      relevantInput: RelevantInput.dirty(point.relevant),
       titleInput: TitleInput.dirty(point.title),
       descriptionInput: DescriptionInput.dirty(point.description),
       priceInput: PriceInput.dirty(point.price),
@@ -37,7 +36,6 @@ class PointFormCubit extends Cubit<PointFormState> {
 
     try {
       final point = _point.copyWith(
-        relevant: state.relevantInput.value,
         title: state.titleInput.value,
         description: state.descriptionInput.value,
         price: state.priceInput.value,
@@ -60,7 +58,6 @@ class PointFormCubit extends Cubit<PointFormState> {
 
     try {
       final point = _point.copyWith(
-        relevant: state.relevantInput.value,
         title: state.titleInput.value,
         description: state.descriptionInput.value,
         price: state.priceInput.value,
@@ -76,27 +73,11 @@ class PointFormCubit extends Cubit<PointFormState> {
     }
   }
 
-  void changeRelevant(bool value) {
-    final relevantInput = RelevantInput.dirty(value);
-    emit(state.copyWith(
-      relevantInput: relevantInput,
-      status: Formz.validate([
-        relevantInput,
-        state.titleInput,
-        state.descriptionInput,
-        state.priceInput,
-        state.mediaInput,
-        state.tagsInput,
-      ]),
-    ));
-  }
-
   void changeTitle(String value) {
     final titleInput = TitleInput.dirty(value);
     emit(state.copyWith(
       titleInput: titleInput,
       status: Formz.validate([
-        state.relevantInput,
         titleInput,
         state.descriptionInput,
         state.priceInput,
@@ -111,7 +92,6 @@ class PointFormCubit extends Cubit<PointFormState> {
     emit(state.copyWith(
       descriptionInput: descriptionInput,
       status: Formz.validate([
-        state.relevantInput,
         state.titleInput,
         descriptionInput,
         state.priceInput,
@@ -130,7 +110,6 @@ class PointFormCubit extends Cubit<PointFormState> {
     emit(state.copyWith(
       priceInput: priceInput,
       status: Formz.validate([
-        state.relevantInput,
         state.titleInput,
         state.descriptionInput,
         priceInput,
@@ -145,7 +124,6 @@ class PointFormCubit extends Cubit<PointFormState> {
     emit(state.copyWith(
       mediaInput: mediaInput,
       status: Formz.validate([
-        state.relevantInput,
         state.titleInput,
         state.descriptionInput,
         state.priceInput,
@@ -169,7 +147,6 @@ class PointFormCubit extends Cubit<PointFormState> {
     emit(state.copyWith(
       tagsInput: tagsInput,
       status: Formz.validate([
-        state.relevantInput,
         state.titleInput,
         state.descriptionInput,
         state.priceInput,

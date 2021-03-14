@@ -23,21 +23,23 @@ class HomePage extends StatelessWidget {
             return MultiBlocProvider(
               providers: [
                 BlocProvider(
-                  create: (_) => SelectedPointCubit(),
-                ),
-                BlocProvider(
                   create: (_) => PointsBloc(
                     pointsRepository: context.read<PointsRepository>(),
                   )..add(
-                      PointsRequestedEvent(
-                        state.current.latitude,
-                        state.current.longitude,
-                      ),
+                      PointsRequestedEvent(LatLng(
+                        latitude: state.current.latitude,
+                        longitude: state.current.longitude,
+                      )),
                     ),
                 ),
                 BlocProvider(
                   create: (createContext) => SearchBloc(
                     pointsBloc: createContext.read<PointsBloc>(),
+                  ),
+                ),
+                BlocProvider(
+                  create: (createContext) => SelectedPointCubit(
+                    searchBloc: createContext.read<SearchBloc>(),
                   ),
                 ),
               ],

@@ -17,11 +17,7 @@ class FakePointsRepository extends PointsRepository {
   Stream<List<Point>> points() async* {}
 
   @override
-  Stream<List<Point>> near({
-    double latitude,
-    double longitude,
-    num radiusInKM = 3.14,
-  }) async* {
+  Stream<List<Point>> near({LatLng latLng, num radiusInKM = 3.14}) async* {
     final rand = Random();
 
     yield [];
@@ -34,12 +30,14 @@ class FakePointsRepository extends PointsRepository {
             description: rand.nextBool()
                 ? lipsum.createSentence()
                 : lipsum.createParagraph(),
-            latitude: latitude +
-                ((rand.nextDouble() - rand.nextDouble()) *
-                    (rand.nextBool() ? 90 : -90)),
-            longitude: longitude +
-                ((rand.nextDouble() - rand.nextDouble()) *
-                    (rand.nextBool() ? 90 : -90)),
+            latLng: LatLng(
+              latitude: latLng.latitude +
+                  ((rand.nextDouble() - rand.nextDouble()) *
+                      (rand.nextBool() ? 90 : -90)),
+              longitude: latLng.longitude +
+                  ((rand.nextDouble() - rand.nextDouble()) *
+                      (rand.nextBool() ? 90 : -90)),
+            ),
             price: Money.empty.copyWith(amount: rand.nextDouble() * 1000),
             media: {
               'https://picsum.photos/seed/${lipsum.createWord()}/1280/720',

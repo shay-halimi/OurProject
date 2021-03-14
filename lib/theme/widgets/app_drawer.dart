@@ -1,7 +1,7 @@
 import 'package:cookpoint/authentication/authentication.dart';
 import 'package:cookpoint/cooker/cooker.dart';
+import 'package:cookpoint/cooker_points/cooker_points.dart';
 import 'package:cookpoint/launcher.dart';
-import 'package:cookpoint/points/points.dart';
 import 'package:cookpoint/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -33,7 +33,7 @@ class AppDrawer extends StatelessWidget {
               leading: const Icon(Icons.fastfood_outlined),
               title: const Text('המאכלים שלי'),
               onTap: () => Navigator.of(context).push<void>(
-                PointsPage.route(),
+                CookerPointsPage.route(),
               ),
             ),
             const Divider(),

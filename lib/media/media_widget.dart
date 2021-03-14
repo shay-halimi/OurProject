@@ -10,20 +10,23 @@ class MediaWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Image.network(
-      media,
-      fit: BoxFit.cover,
-      loadingBuilder: (context, child, loadingProgress) {
-        if (loadingProgress == null) return child;
-        return Center(
-          child: CircularProgressIndicator(
-            value: loadingProgress.expectedTotalBytes != null
-                ? loadingProgress.cumulativeBytesLoaded /
-                    loadingProgress.expectedTotalBytes
-                : null,
-          ),
-        );
-      },
+    return Opacity(
+      opacity: 0.9,
+      child: Image.network(
+        media,
+        fit: BoxFit.cover,
+        loadingBuilder: (context, child, loadingProgress) {
+          if (loadingProgress == null) return child;
+          return Center(
+            child: CircularProgressIndicator(
+              value: loadingProgress.expectedTotalBytes != null
+                  ? loadingProgress.cumulativeBytesLoaded /
+                      loadingProgress.expectedTotalBytes
+                  : null,
+            ),
+          );
+        },
+      ),
     );
   }
 }

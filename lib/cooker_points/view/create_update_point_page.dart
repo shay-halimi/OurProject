@@ -1,5 +1,5 @@
+import 'package:cookpoint/cooker_points/cooker_points.dart';
 import 'package:cookpoint/media/media_dialog.dart';
-import 'package:cookpoint/points/points.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:formz/formz.dart';
@@ -10,13 +10,13 @@ class CreateUpdatePointPage extends StatelessWidget {
   const CreateUpdatePointPage({
     Key key,
     @required this.point,
-    this.isUpdating = true,
+    @required this.isUpdating,
   }) : super(key: key);
 
   final Point point;
   final bool isUpdating;
 
-  static Route route({@required Point point, bool isUpdating = true}) {
+  static Route route({@required Point point, @required bool isUpdating}) {
     return MaterialPageRoute<void>(
       builder: (_) =>
           CreateUpdatePointPage(point: point, isUpdating: isUpdating),
@@ -61,12 +61,7 @@ class PointForm extends StatelessWidget {
               ..hideCurrentSnackBar()
               ..showSnackBar(
                 SnackBar(
-                  content: Text(
-                    isUpdating
-                        ? 'שגיאה בעדכון ${point.title},'
-                            ' בדוק את המידע שהזנת ונסה שנית'
-                        : 'שגיאה בהוספת המאכל, בדוק את המידע שהזנת ונסה שנית',
-                  ),
+                  content: Text('שגיאה, אמת.י המידע שהזנת ונסה.י שנית.'),
                 ),
               );
           }
@@ -82,15 +77,12 @@ class PointForm extends StatelessWidget {
               const _TitleInput(),
               const _DescriptionInput(),
               const _PriceInput(),
-              const _RelevantInput(),
               const _TagsInput(),
+              _SubmitButton(isUpdating: isUpdating),
             ],
           ),
         ),
       ),
-      persistentFooterButtons: [
-        _SubmitButton(isUpdating: isUpdating),
-      ],
     );
   }
 }
@@ -109,7 +101,7 @@ class _SubmitButton extends StatelessWidget {
       buildWhen: (previous, current) => previous.status != current.status,
       builder: (context, state) {
         if (state.status.isSubmissionInProgress) {
-          return const Center(child: CircularProgressIndicator());
+          return CircularProgressIndicator();
         } else {
           return ElevatedButton(
             key: Key('CreateUpdatePointPage_SubmitButton_$isUpdating'),
@@ -140,12 +132,12 @@ class _TagsInput extends StatelessWidget {
         builder: (context, state) {
           return Row(
             children: [
-              for (var _tag in ['טבעוני', 'צמחוני'])
+              for (var tag in Point.defaultTags)
                 InputChip(
-                  label: Text(_tag),
+                  label: Text(tag),
                   onSelected: (selected) =>
-                      context.read<PointFormCubit>().toggledTag(_tag),
-                  selected: state.tagsInput.value.contains(_tag),
+                      context.read<PointFormCubit>().toggledTag(tag),
+                  selected: state.tagsInput.value.contains(tag),
                 ),
             ],
           );
@@ -291,30 +283,6 @@ class _MediaInput extends StatelessWidget {
           );
         },
       ),
-    );
-  }
-}
-
-class _RelevantInput extends StatelessWidget {
-  const _RelevantInput({
-    Key key,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return BlocBuilder<PointFormCubit, PointFormState>(
-      buildWhen: (previous, current) =>
-          previous.relevantInput != current.relevantInput,
-      builder: (_, state) {
-        return SwitchListTile(
-          title: const Text('רלוונטי?'),
-          subtitle: const Text('האם להציג את המאכל על המפה?'),
-          value: state.relevantInput.value ?? false,
-          onChanged: (bool value) {
-            context.read<PointFormCubit>().changeRelevant(value);
-          },
-        );
-      },
     );
   }
 }

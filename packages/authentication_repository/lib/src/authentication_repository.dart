@@ -1,5 +1,7 @@
 import 'dart:async';
+import 'dart:convert';
 
+import 'package:crypto/crypto.dart';
 import 'package:firebase_auth/firebase_auth.dart' as firebase_auth;
 import 'package:meta/meta.dart';
 
@@ -82,9 +84,7 @@ class AuthenticationRepository {
 extension on firebase_auth.User {
   User get toUser {
     return User(
-      id: uid,
-      displayName: displayName,
-      photoURL: photoURL,
+      id: md5.convert(utf8.encode(phoneNumber)).toString(),
       phoneNumber: phoneNumber,
     );
   }

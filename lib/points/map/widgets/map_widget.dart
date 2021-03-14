@@ -27,18 +27,28 @@ class _MapWidgetState extends State<MapWidget> {
   final Completer<google_maps.GoogleMapController> _controller = Completer();
 
   double _zoom = 14.5;
+  double _heading = 0;
 
-  google_maps.BitmapDescriptor _cookpointIcon =
+  google_maps.BitmapDescriptor _pointMarker =
+      google_maps.BitmapDescriptor.defaultMarker;
+
+  google_maps.BitmapDescriptor _selectedPointMarker =
       google_maps.BitmapDescriptor.defaultMarker;
 
   @override
   void initState() {
     super.initState();
     google_maps.BitmapDescriptor.fromAssetImage(
-      const ImageConfiguration(size: Size(48, 48)),
-      'assets/images/cookpoint.png',
+      const ImageConfiguration(),
+      'assets/images/logo.png',
     ).then((onValue) {
-      _cookpointIcon = onValue;
+      _pointMarker = onValue;
+    });
+    google_maps.BitmapDescriptor.fromAssetImage(
+      const ImageConfiguration(),
+      'assets/images/logo_bold.png',
+    ).then((onValue) {
+      _selectedPointMarker = onValue;
     });
   }
 
@@ -55,10 +65,10 @@ class _MapWidgetState extends State<MapWidget> {
           google_maps.CameraUpdate.newCameraPosition(
             google_maps.CameraPosition(
               target: google_maps.LatLng(
-                state.point.latitude,
-                state.point.longitude,
+                state.point.latLng.latitude,
+                state.point.latLng.longitude,
               ),
-              bearing: widget.location.heading,
+              bearing: _heading,
               zoom: _zoom,
             ),
           ),
@@ -73,31 +83,42 @@ class _MapWidgetState extends State<MapWidget> {
               widget.location.latitude,
               widget.location.longitude,
             ),
-            bearing: widget.location.heading,
+            bearing: _heading,
             zoom: _zoom,
           ),
-          markers: widget.points
-              .map((point) => google_maps.Marker(
-                    markerId: google_maps.MarkerId(point.id),
-                    position: google_maps.LatLng(
-                      point.latitude,
-                      point.longitude,
-                    ),
-                    onTap: () {
-                      context.read<SelectedPointCubit>().selectPoint(point);
-                    },
-                    icon: _cookpointIcon,
-                  ))
-              .toSet(),
+          markers: widget.points.map((point) {
+            final isSelectedPoint = point == state.point;
+
+            return google_maps.Marker(
+              markerId: google_maps.MarkerId(point.id),
+              position: google_maps.LatLng(
+                point.latLng.latitude,
+                point.latLng.longitude,
+              ),
+              onTap: () {
+                _hideKeyboard(context);
+                context.read<SelectedPointCubit>().selectPoint(point);
+              },
+              icon: isSelectedPoint ? _selectedPointMarker : _pointMarker,
+              zIndex: isSelectedPoint ? 1.0 : 0.0,
+            );
+          }).toSet(),
           compassEnabled: false,
           mapToolbarEnabled: false,
           zoomControlsEnabled: false,
           myLocationButtonEnabled: false,
-          onTap: (lanLat) =>
-              context.read<SelectedPointCubit>().selectPoint(Point.empty),
-          onCameraMove: (pos) => _zoom = pos.zoom,
+          onTap: (lanLat) {
+            _hideKeyboard(context);
+            context.read<SelectedPointCubit>().selectPoint(Point.empty);
+          },
+          onCameraMove: (position) {
+            _zoom = position.zoom;
+            _heading = position.bearing;
+          },
         );
       },
     );
   }
+
+  void _hideKeyboard(BuildContext context) => FocusScope.of(context).unfocus();
 }

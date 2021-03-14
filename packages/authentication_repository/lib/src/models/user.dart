@@ -5,20 +5,16 @@ import 'package:meta/meta.dart';
 class User extends Equatable {
   const User({
     @required this.id,
-    this.displayName = '',
-    this.photoURL = '',
     this.phoneNumber = '',
   }) : assert(id != null);
 
   final String id;
-  final String displayName;
-  final String photoURL;
   final String phoneNumber;
 
-  static const empty = User(id: '');
+  static const empty = User(id: '', phoneNumber: '');
 
   @override
-  List<Object> get props => [id, displayName, photoURL, phoneNumber];
+  List<Object> get props => [id, phoneNumber];
 
   bool get isEmpty => this == empty;
 }

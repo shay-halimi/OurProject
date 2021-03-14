@@ -16,10 +16,7 @@ class MapPage extends StatelessWidget {
       builder: (_, state) {
         switch (state.status) {
           case LocationStatus.located:
-            return BlocProvider(
-              create: (_) => SelectedPointCubit(),
-              child: MapView(),
-            );
+            return MapView();
           case LocationStatus.error:
             return LocationPage();
           default:

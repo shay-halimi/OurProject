@@ -1,13 +1,14 @@
+import 'package:cookpoint/location/location.dart';
 import 'package:cookpoint/points/search/bloc/search_bloc.dart';
+import 'package:dough/dough.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:points_repository/points_repository.dart';
 import 'package:provider/provider.dart';
 
 class MapAppBar extends StatelessWidget implements PreferredSizeWidget {
-  MapAppBar({
-    Key key,
-    Widget title,
-  })  : _appBar = AppBar(
+  MapAppBar({Key key, Widget title, List<Widget> actions})
+      : _appBar = AppBar(
           primary: false,
           shape: const RoundedRectangleBorder(
             borderRadius: BorderRadius.all(
@@ -15,6 +16,7 @@ class MapAppBar extends StatelessWidget implements PreferredSizeWidget {
             ),
           ),
           title: title,
+          actions: actions,
         ),
         super(key: key);
 
@@ -26,22 +28,29 @@ class MapAppBar extends StatelessWidget implements PreferredSizeWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: EdgeInsets.only(
-        top: MediaQuery.of(context).padding.top + _padding,
-        right: _padding,
-        left: _padding,
-        bottom: _padding,
+    return PressableDough(
+      child: Padding(
+        padding: EdgeInsets.only(
+          top: MediaQuery.of(context).padding.top + _padding,
+          right: _padding,
+          left: _padding,
+          bottom: _padding,
+        ),
+        child: Column(
+          children: [
+            _appBar,
+            Padding(
+              padding: EdgeInsets.only(top: _padding),
+              child: const _TagsFilter(),
+            ),
+          ],
+        ),
       ),
-      child: Column(
-        children: [
-          _appBar,
-          Padding(
-            padding: EdgeInsets.only(top: _padding),
-            child: const _TagsFilter(),
-          ),
-        ],
-      ),
+      onReleased: (details) {
+        if (details.delta.distance >= 200) {
+          return context.read<LocationCubit>().locate();
+        }
+      },
     );
   }
 
@@ -59,15 +68,15 @@ class _TagsFilter extends StatelessWidget {
   Widget build(BuildContext context) {
     return Row(
       children: [
-        for (var _tag in ['טבעוני', 'צמחוני'])
+        for (var tag in Point.defaultTags)
           BlocBuilder<SearchBloc, SearchState>(
             buildWhen: (previous, current) => previous != current,
             builder: (context, state) {
               return InputChip(
-                label: Text(_tag),
+                label: Text(tag),
                 onSelected: (selected) =>
-                    context.read<SearchBloc>().add(SearchTagSelected(_tag)),
-                selected: state.tags.contains(_tag),
+                    context.read<SearchBloc>().add(SearchTagSelected(tag)),
+                selected: state.tags.contains(tag),
               );
             },
           ),

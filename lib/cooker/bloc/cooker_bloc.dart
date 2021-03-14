@@ -22,20 +22,9 @@ class CookerBloc extends Bloc<CookerEvent, CookerState> {
       _cookerSubscription?.cancel();
 
       if (state.status == AuthenticationStatus.authenticated) {
-        final user = state.user;
-
         _cookerSubscription =
-            _cookersRepository.cooker(user.id).listen((cooker) {
-          if (cooker.isEmpty) {
-            add(CookerCreatedEvent(cooker.copyWith(
-              id: user.id,
-              displayName: user.displayName,
-              photoURL: user.photoURL,
-              phoneNumber: user.phoneNumber,
-            )));
-          } else {
-            add(CookerLoadedEvent(cooker));
-          }
+            _cookersRepository.cooker(state.user.id).listen((cooker) {
+          add(CookerLoadedEvent(cooker));
         });
       } else {
         add(const CookerLoadedEvent(Cooker.empty));
@@ -83,13 +72,5 @@ class CookerBloc extends Bloc<CookerEvent, CookerState> {
     CookerCreatedEvent event,
   ) async* {
     await _cookersRepository.create(event.cooker);
-  }
-
-  void updatePhotoURL(String photoURL) {
-    add(CookerUpdatedEvent(state.cooker.copyWith(photoURL: photoURL)));
-  }
-
-  void updateDisplayName(String displayName) {
-    add(CookerUpdatedEvent(state.cooker.copyWith(displayName: displayName)));
   }
 }

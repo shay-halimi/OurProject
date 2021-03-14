@@ -8,13 +8,12 @@ abstract class PointsEvent extends Equatable {
 }
 
 class PointsRequestedEvent extends PointsEvent {
-  const PointsRequestedEvent(this.latitude, this.longitude);
+  const PointsRequestedEvent(this.latLng);
 
-  final double latitude;
-  final double longitude;
+  final LatLng latLng;
 
   @override
-  List<Object> get props => [latitude, longitude];
+  List<Object> get props => [latLng];
 }
 
 class PointsOfCookerRequestedEvent extends PointsEvent {

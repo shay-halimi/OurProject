@@ -107,8 +107,8 @@ class MediaDialogView extends StatelessWidget {
                 } else if (state is MediaDialogError) {
                   return AspectRatio(
                     aspectRatio: aspectRatio,
-                    child:
-                        const Center(child: Text('שגיאה, נסה שוב מאוחר יותר')),
+                    child: const Center(
+                        child: Text('שגיאה, אמת.י המידע שהזנת ונסה.י שנית.')),
                   );
                 } else if (state is MediaDialogLoading) {
                   return Stack(

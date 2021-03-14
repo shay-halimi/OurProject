@@ -1,10 +1,11 @@
 import 'package:cookers_repository/cookers_repository.dart';
+import 'package:cookpoint/cooker/cooker.dart';
 import 'package:cookpoint/launcher.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
-import 'cubit/cubit.dart';
+export 'cubit/cubit.dart';
 
 class CookerWidget extends StatelessWidget {
   const CookerWidget({

@@ -47,16 +47,14 @@ class PointsBloc extends Bloc<PointsEvent, PointsState> {
   Stream<PointsState> _mapPointsRequestedEventToState(
     PointsRequestedEvent event,
   ) async* {
+    if (event.latLng.isEmpty) return;
+
     yield const PointsState.loading();
 
     await _pointsSubscription?.cancel();
 
     _pointsSubscription = _pointsRepository
-        .near(
-      longitude: event.longitude,
-      latitude: event.latitude,
-      radiusInKM: 100,
-    )
+        .near(latLng: event.latLng, radiusInKM: 100)
         .listen((points) {
       add(PointsLoadedEvent(points));
     });
@@ -96,5 +94,11 @@ class PointsBloc extends Bloc<PointsEvent, PointsState> {
     PointDeletedEvent event,
   ) async* {
     await _pointsRepository.delete(event.point);
+  }
+
+  void changeLatLng(Set<Point> points, LatLng latLng) {
+    points.forEach((point) {
+      add(PointUpdatedEvent(point.copyWith(latLng: latLng)));
+    });
   }
 }

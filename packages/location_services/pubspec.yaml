@@ -10,4 +10,5 @@ dependencies:
     sdk: flutter
 
   geolocator: ^6.2.1
+  geocoding: ^1.0.5
   meta: ^1.2.4

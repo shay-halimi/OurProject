@@ -41,6 +41,9 @@ class App extends StatelessWidget {
           value: pointsRepository,
         ),
         RepositoryProvider.value(
+          value: locationServices,
+        ),
+        RepositoryProvider.value(
           value: cookersRepository,
         ),
       ],

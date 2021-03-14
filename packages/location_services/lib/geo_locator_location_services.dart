@@ -1,6 +1,7 @@
 import 'dart:async';
 
-import 'package:geolocator/geolocator.dart';
+import 'package:geocoding/geocoding.dart' as geocoding;
+import 'package:geolocator/geolocator.dart' as geolocator;
 
 import 'location_services.dart';
 
@@ -13,27 +14,27 @@ class GeoLocatorLocationServices extends LocationServices {
   @override
   Future<void> locate() async {
     bool serviceEnabled;
-    LocationPermission permission;
+    geolocator.LocationPermission permission;
 
-    serviceEnabled = await Geolocator.isLocationServiceEnabled();
+    serviceEnabled = await geolocator.Geolocator.isLocationServiceEnabled();
     if (!serviceEnabled) {
       return _locationController.add(Location.empty);
     }
 
-    permission = await Geolocator.checkPermission();
-    if (permission == LocationPermission.denied) {
-      permission = await Geolocator.requestPermission();
-      if (permission == LocationPermission.deniedForever) {
+    permission = await geolocator.Geolocator.checkPermission();
+    if (permission == geolocator.LocationPermission.denied) {
+      permission = await geolocator.Geolocator.requestPermission();
+      if (permission == geolocator.LocationPermission.deniedForever) {
         return _locationController.add(Location.empty);
       }
 
-      if (permission == LocationPermission.denied) {
+      if (permission == geolocator.LocationPermission.denied) {
         return _locationController.add(Location.empty);
       }
     }
 
     try {
-      final data = await Geolocator.getCurrentPosition();
+      final data = await geolocator.Geolocator.getCurrentPosition();
 
       return _locationController.add(Location(
         latitude: data.latitude,
@@ -46,7 +47,23 @@ class GeoLocatorLocationServices extends LocationServices {
   }
 
   @override
-  Future<String> getAddress(Location location) {
-    throw UnimplementedError();
+  Future<Location> fromAddress(String address) async {
+    try {
+      final value = await geocoding.locationFromAddress(
+        address,
+        localeIdentifier: 'he_IL',
+      );
+
+      if (value.isEmpty) {
+        return Location.empty;
+      }
+
+      return Location(
+        latitude: value.first.latitude,
+        longitude: value.first.longitude,
+      );
+    } on Exception {
+      return Location.empty;
+    }
   }
 }

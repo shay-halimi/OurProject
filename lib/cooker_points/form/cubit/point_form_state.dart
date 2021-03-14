@@ -2,7 +2,6 @@ part of 'point_form_cubit.dart';
 
 class PointFormState extends Equatable {
   const PointFormState({
-    this.relevantInput = const RelevantInput.pure(),
     this.titleInput = const TitleInput.pure(),
     this.descriptionInput = const DescriptionInput.pure(),
     this.priceInput = const PriceInput.pure(),
@@ -11,7 +10,6 @@ class PointFormState extends Equatable {
     this.status = FormzStatus.pure,
   });
 
-  final RelevantInput relevantInput;
   final TitleInput titleInput;
   final DescriptionInput descriptionInput;
   final PriceInput priceInput;
@@ -22,7 +20,6 @@ class PointFormState extends Equatable {
 
   @override
   List<Object> get props => [
-        relevantInput,
         titleInput,
         descriptionInput,
         priceInput,
@@ -32,7 +29,6 @@ class PointFormState extends Equatable {
       ];
 
   PointFormState copyWith({
-    RelevantInput relevantInput,
     TitleInput titleInput,
     DescriptionInput descriptionInput,
     PriceInput priceInput,
@@ -41,7 +37,6 @@ class PointFormState extends Equatable {
     FormzStatus status,
   }) {
     return PointFormState(
-      relevantInput: relevantInput ?? this.relevantInput,
       titleInput: titleInput ?? this.titleInput,
       descriptionInput: descriptionInput ?? this.descriptionInput,
       priceInput: priceInput ?? this.priceInput,
@@ -49,19 +44,6 @@ class PointFormState extends Equatable {
       tagsInput: tagsInput ?? this.tagsInput,
       status: status ?? this.status,
     );
-  }
-}
-
-enum RelevantInputValidationError { invalid }
-
-class RelevantInput extends FormzInput<bool, RelevantInputValidationError> {
-  const RelevantInput.pure() : super.pure(false);
-
-  const RelevantInput.dirty([bool value = false]) : super.dirty(value);
-
-  @override
-  RelevantInputValidationError validator(bool value) {
-    return value != null ? null : RelevantInputValidationError.invalid;
   }
 }
 

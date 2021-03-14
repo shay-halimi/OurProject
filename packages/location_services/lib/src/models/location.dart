@@ -5,9 +5,10 @@ class Location {
   const Location({
     @required double latitude,
     @required double longitude,
-    @required this.heading,
+    this.heading = 0,
   })  : assert(latitude != null),
         assert(longitude != null),
+        assert(heading != null),
         latitude =
             (latitude < -90.0 ? -90.0 : (90.0 < latitude ? 90.0 : latitude)),
         longitude = (longitude + 180.0) % 360.0 - 180.0;

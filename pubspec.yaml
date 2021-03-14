@@ -56,4 +56,5 @@ flutter:
   uses-material-design: true
 
   assets:
-    - assets/images/cookpoint.png
+    - assets/images/logo.png
+    - assets/images/logo_bold.png

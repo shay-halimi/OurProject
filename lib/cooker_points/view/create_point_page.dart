@@ -1,6 +1,5 @@
 import 'package:cookpoint/cooker/cooker.dart';
-import 'package:cookpoint/location/location.dart';
-import 'package:cookpoint/points/points.dart';
+import 'package:cookpoint/cooker_points/cooker_points.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:points_repository/points_repository.dart';
@@ -13,13 +12,6 @@ class CreatePointPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final location =
-        context.select((LocationCubit cubit) => cubit.state.current);
-
-    if (location.isEmpty) {
-      return LocationPage();
-    }
-
     final cooker = context.select((CookerBloc bloc) => bloc.state.cooker);
 
     if (cooker.isEmpty) {
@@ -29,8 +21,10 @@ class CreatePointPage extends StatelessWidget {
     return CreateUpdatePointPage(
       point: Point.empty.copyWith(
         cookerId: cooker.id,
-        latitude: location.latitude,
-        longitude: location.longitude,
+        latLng: LatLng(
+          latitude: cooker.address.latitude,
+          longitude: cooker.address.longitude,
+        ),
       ),
       isUpdating: false,
     );

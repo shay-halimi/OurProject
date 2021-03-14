@@ -1,6 +1,7 @@
 import 'package:cookpoint/authentication/authentication.dart';
 import 'package:cookpoint/theme/theme.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:formz/formz.dart';
 
@@ -32,7 +33,7 @@ class _PhoneNumberForm extends StatelessWidget {
             ..showSnackBar(
               const SnackBar(
                   content: Text(
-                'שגיאה בשליחת מסרון, נסה שוב מאוחר יותר',
+                'שגיאה, אמת.י המידע שהזנת ונסה.י שנית.',
               )),
             );
         }
@@ -43,10 +44,6 @@ class _PhoneNumberForm extends StatelessWidget {
           const AppLogo(),
           _PhoneNumberInput(),
           _SendOTPButton(),
-          Text(
-            'מספרך משמש אך ורק למניעת ספאם ולא יוצג למשתמשים אחרים ללא אישורך.',
-            textAlign: TextAlign.center,
-          ),
         ],
       ),
     );
@@ -60,13 +57,21 @@ class _PhoneNumberInput extends StatelessWidget {
       buildWhen: (previous, current) =>
           previous.phoneNumberInput != current.phoneNumberInput,
       builder: (context, state) {
+        final initialValue =
+            state.phoneNumberInput.pure ? '05' : state.phoneNumberInput.value;
         return TextFormField(
-          initialValue: state.phoneNumberInput.value,
+          initialValue: initialValue,
           key: const Key('PhoneNumberForm__PhoneNumberInput_TextField'),
           keyboardType: TextInputType.phone,
+          textAlign: TextAlign.end,
           autofocus: true,
+          maxLength: 10,
+          maxLengthEnforcement: MaxLengthEnforcement.enforced,
           onChanged: (phoneNumber) =>
               context.read<LoginCubit>().phoneNumberChanged(phoneNumber),
+          onEditingComplete: state.status.isValidated
+              ? () => context.read<LoginCubit>().sendOTP()
+              : null,
           decoration: InputDecoration(
             border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(4.0),
@@ -119,9 +124,7 @@ class _OTPForm extends StatelessWidget {
             ..hideCurrentSnackBar()
             ..showSnackBar(
               const SnackBar(
-                content: Text(
-                  'שגיאה באימות מספר הטלפון, בדוק את הקוד ששלחנו לך ונסה שוב',
-                ),
+                content: Text('שגיאה, אמת.י המידע שהזנת ונסה.י שנית.'),
               ),
             );
         }
@@ -132,13 +135,23 @@ class _OTPForm extends StatelessWidget {
           const AppLogo(),
           _OTPInput(),
           _ConfirmPhoneNumberButton(),
-          TextButton(
-            onPressed: () =>
-                context.read<LoginCubit>().verificationIdChanged(''),
-            child: Text('אם לא קיבלת את הקוד, לחץ כאן.'),
-          ),
+          const _ClearVerificationIdButton(),
         ],
       ),
+    );
+  }
+}
+
+class _ClearVerificationIdButton extends StatelessWidget {
+  const _ClearVerificationIdButton({
+    Key key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return TextButton(
+      onPressed: () => context.read<LoginCubit>().verificationIdChanged(''),
+      child: Text('אם לא קיבלת SMS מאיתנו, לחץ.י כאן.'),
     );
   }
 }
@@ -164,6 +177,12 @@ class _OTPInput extends StatelessWidget {
             labelText: 'קוד האימות',
             errorText: state.otpInput.invalid ? 'קוד אימות לא תקין' : null,
           ),
+          textAlign: TextAlign.end,
+          maxLength: 6,
+          maxLengthEnforcement: MaxLengthEnforcement.enforced,
+          onEditingComplete: state.status.isValidated
+              ? () => context.read<LoginCubit>().confirmPhoneNumber()
+              : null,
         );
       },
     );

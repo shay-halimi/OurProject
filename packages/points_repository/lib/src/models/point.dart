@@ -8,9 +8,7 @@ class Point {
   const Point({
     @required this.id,
     @required this.cookerId,
-    @required this.latitude,
-    @required this.longitude,
-    @required this.relevant,
+    @required this.latLng,
     @required this.title,
     @required this.description,
     @required this.price,
@@ -18,9 +16,7 @@ class Point {
     @required this.tags,
   })  : assert(id != null),
         assert(cookerId != null),
-        assert(latitude != null),
-        assert(longitude != null),
-        assert(relevant != null),
+        assert(latLng != null),
         assert(title != null),
         assert(description != null),
         assert(price != null),
@@ -31,9 +27,7 @@ class Point {
     return Point(
       id: entity.id,
       cookerId: entity.cookerId,
-      latitude: entity.latitude,
-      longitude: entity.longitude,
-      relevant: entity.relevant,
+      latLng: entity.latLng,
       title: entity.title,
       description: entity.description,
       price: entity.price,
@@ -44,9 +38,7 @@ class Point {
 
   final String id;
   final String cookerId;
-  final double latitude;
-  final double longitude;
-  final bool relevant;
+  final LatLng latLng;
   final String title;
   final String description;
   final Money price;
@@ -56,9 +48,7 @@ class Point {
   static const empty = Point(
     id: '',
     cookerId: '',
-    latitude: 0.0,
-    longitude: 0.0,
-    relevant: false,
+    latLng: LatLng.empty,
     title: '',
     description: '',
     price: Money.empty,
@@ -66,12 +56,16 @@ class Point {
     tags: {},
   );
 
+  bool get isEmpty => this == empty;
+
+  bool get isNotEmpty => !isEmpty;
+
+  static const Set<String> defaultTags = {'טבעוני', 'צמחוני', 'ללא גלוטן'};
+
   Point copyWith({
     String id,
     String cookerId,
-    double latitude,
-    double longitude,
-    bool relevant,
+    LatLng latLng,
     String title,
     String description,
     Money price,
@@ -81,9 +75,7 @@ class Point {
     return Point(
       id: id ?? this.id,
       cookerId: cookerId ?? this.cookerId,
-      latitude: latitude ?? this.latitude,
-      longitude: longitude ?? this.longitude,
-      relevant: relevant ?? this.relevant,
+      latLng: latLng ?? this.latLng,
       title: title ?? this.title,
       description: description ?? this.description,
       price: price ?? this.price,
@@ -96,12 +88,10 @@ class Point {
     return {
       'id': id,
       'cookerId': cookerId,
-      'latitude': latitude,
-      'longitude': longitude,
-      'relevant': relevant,
+      'latLng': latLng.toJson(),
       'title': title,
       'description': description,
-      'price': price,
+      'price': price.toJson(),
       'media': media,
       'tags': tags,
     };
@@ -111,9 +101,7 @@ class Point {
     return PointEntity(
       id: id,
       cookerId: cookerId,
-      latitude: latitude,
-      longitude: longitude,
-      relevant: relevant,
+      latLng: latLng,
       title: title,
       description: description,
       price: price,
@@ -124,8 +112,7 @@ class Point {
 
   @override
   String toString() {
-    return 'Point{id: $id, cookerId: $cookerId, latitude: $latitude,'
-        ' longitude: $longitude, relevant: $relevant,'
+    return 'Point{id: $id, cookerId: $cookerId, latLng: $latLng,'
         ' title: $title, description: $description,'
         ' price: $price, media: $media, tags: $tags}';
   }
@@ -137,9 +124,7 @@ class Point {
           runtimeType == other.runtimeType &&
           id == other.id &&
           cookerId == other.cookerId &&
-          latitude == other.latitude &&
-          longitude == other.longitude &&
-          relevant == other.relevant &&
+          latLng == other.latLng &&
           title == other.title &&
           description == other.description &&
           price == other.price &&
@@ -150,16 +135,10 @@ class Point {
   int get hashCode =>
       id.hashCode ^
       cookerId.hashCode ^
-      latitude.hashCode ^
-      longitude.hashCode ^
-      relevant.hashCode ^
+      latLng.hashCode ^
       title.hashCode ^
       description.hashCode ^
       price.hashCode ^
       media.hashCode ^
       tags.hashCode;
-
-  bool get isEmpty => this == empty;
-
-  bool get isNotEmpty => !isEmpty;
 }

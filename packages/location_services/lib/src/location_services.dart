@@ -7,5 +7,5 @@ abstract class LocationServices {
 
   Future<void> locate();
 
-  Future<String> getAddress(Location location);
+  Future<Location> fromAddress(String address);
 }

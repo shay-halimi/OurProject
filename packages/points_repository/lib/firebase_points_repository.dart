@@ -31,26 +31,16 @@ class FirebasePointsRepository extends PointsRepository {
   }
 
   @override
-  Stream<List<Point>> near({
-    double latitude,
-    double longitude,
-    num radiusInKM = 3.14,
-  }) {
-    assert(latitude != null);
-    assert(longitude != null);
-    assert(radiusInKM != null && radiusInKM > 0);
-
-    final center = _geo.point(
-      latitude: latitude,
-      longitude: longitude,
-    );
-
+  Stream<List<Point>> near({LatLng latLng, num radiusInKM = 3.14}) {
     return _geo
         .collection(collectionRef: _collection)
         .within(
-          center: center,
+          center: _geo.point(
+            latitude: latLng.latitude,
+            longitude: latLng.longitude,
+          ),
           radius: radiusInKM.toDouble(),
-          field: 'location',
+          field: 'latLng',
         )
         .map((snapshot) {
       return snapshot.map((doc) {
