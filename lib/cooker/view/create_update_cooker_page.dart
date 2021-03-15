@@ -1,38 +1,51 @@
 import 'package:cookers_repository/cookers_repository.dart';
 import 'package:cookpoint/cooker/cooker.dart';
 import 'package:cookpoint/media/media.dart';
+import 'package:cookpoint/points/bloc/bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:formz/formz.dart';
 import 'package:location_services/location_services.dart';
+import 'package:points_repository/points_repository.dart';
 import 'package:provider/provider.dart';
 
 class CreateUpdateCookerPage extends StatelessWidget {
   const CreateUpdateCookerPage({
     Key key,
     @required this.cooker,
-    @required this.isUpdating,
   }) : super(key: key);
 
   final Cooker cooker;
-  final bool isUpdating;
 
-  static Route route({@required Cooker cooker, @required bool isUpdating}) {
+  static Route route({@required Cooker cooker}) {
     return MaterialPageRoute<void>(
-      builder: (_) =>
-          CreateUpdateCookerPage(cooker: cooker, isUpdating: isUpdating),
+      builder: (_) => CreateUpdateCookerPage(
+        cooker: cooker,
+      ),
     );
   }
 
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (_) => CookerFormCubit(
-        cooker: cooker,
-        cookerBloc: context.read<CookerBloc>(),
-        locationServices: context.read<LocationServices>(),
-      ),
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(
+          create: (context) =>
+              PointsBloc(pointsRepository: context.read<PointsRepository>())
+                ..add(
+                  PointsOfCookerRequestedEvent(
+                    cooker.id,
+                  ),
+                ),
+        ),
+        BlocProvider(
+          create: (context) => CookerFormCubit(
+            pointsBloc: context.read<PointsBloc>(),
+            cookerBloc: context.read<CookerBloc>(),
+            locationServices: context.read<LocationServices>(),
+          ),
+        ),
+      ],
       child: CookerForm(
-        isUpdating: isUpdating,
         cooker: cooker,
       ),
     );
@@ -42,11 +55,9 @@ class CreateUpdateCookerPage extends StatelessWidget {
 class CookerForm extends StatelessWidget {
   const CookerForm({
     Key key,
-    @required this.isUpdating,
     @required this.cooker,
   }) : super(key: key);
 
-  final bool isUpdating;
   final Cooker cooker;
 
   @override
@@ -54,7 +65,7 @@ class CookerForm extends StatelessWidget {
     return Scaffold(
       resizeToAvoidBottomInset: true,
       appBar: AppBar(
-        title: Text(isUpdating ? 'עריכת חשבון' : 'יצירת חשבון'),
+        title: Text(cooker.isNotEmpty ? 'עריכת החשבון' : 'יצירת חשבון'),
       ),
       body: BlocListener<CookerFormCubit, CookerFormState>(
         listener: (context, state) {
@@ -66,7 +77,7 @@ class CookerForm extends StatelessWidget {
           }
 
           if (state.status.isSubmissionSuccess) {
-            if (isUpdating) {
+            if (cooker.isNotEmpty) {
               ScaffoldMessenger.of(context)
                 ..hideCurrentSnackBar()
                 ..showSnackBar(
@@ -77,15 +88,24 @@ class CookerForm extends StatelessWidget {
           }
         },
         child: SingleChildScrollView(
-          child: Column(
-            children: [
-              const _PhotoURLInput(),
-              const _DisplayNameInput(),
-              const _AddressInput(),
-              _SubmitButton(
-                isUpdating: isUpdating,
-              ),
-            ],
+          child: Padding(
+            padding: const EdgeInsets.all(32.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Center(child: const _PhotoURLInput()),
+                ConstrainedBox(constraints: BoxConstraints(minHeight: 16)),
+                const _DisplayNameInput(),
+                ConstrainedBox(constraints: BoxConstraints(minHeight: 16)),
+                const _AddressInput(),
+                ConstrainedBox(constraints: BoxConstraints(minHeight: 16)),
+                Center(
+                  child: _SubmitButton(
+                    cooker: cooker,
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
       ),
@@ -190,10 +210,10 @@ class _PhotoURLInput extends StatelessWidget {
 class _SubmitButton extends StatelessWidget {
   const _SubmitButton({
     Key key,
-    @required this.isUpdating,
+    @required this.cooker,
   }) : super(key: key);
 
-  final bool isUpdating;
+  final Cooker cooker;
 
   @override
   Widget build(BuildContext context) {
@@ -204,12 +224,10 @@ class _SubmitButton extends StatelessWidget {
           return CircularProgressIndicator();
         } else {
           return ElevatedButton(
-            key: Key('CreateUpdatePointPage_SubmitButton_$isUpdating'),
-            child: Text(isUpdating ? 'שמור' : 'המשך'),
+            key: Key('CreateUpdatePointPage_SubmitButton_${cooker.isNotEmpty}'),
+            child: Text(cooker.isNotEmpty ? 'שמור' : 'המשך'),
             onPressed: state.status.isValidated
-                ? () => isUpdating
-                    ? context.read<CookerFormCubit>().update()
-                    : context.read<CookerFormCubit>().create()
+                ? () => context.read<CookerFormCubit>().save()
                 : null,
           );
         }

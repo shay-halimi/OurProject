@@ -71,6 +71,13 @@ class CookerBloc extends Bloc<CookerEvent, CookerState> {
   Stream<CookerState> _mapCookerCreatedEventToState(
     CookerCreatedEvent event,
   ) async* {
-    await _cookersRepository.create(event.cooker);
+    final user = _authenticationBloc.state.user;
+
+    assert(user.isNotEmpty);
+
+    await _cookersRepository.create(event.cooker.copyWith(
+      id: user.id,
+      phoneNumber: user.phoneNumber,
+    ));
   }
 }

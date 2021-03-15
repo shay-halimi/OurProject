@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cookpoint/media/media_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -99,8 +100,8 @@ class MediaDialogView extends StatelessWidget {
                     aspectRatio: aspectRatio,
                     child: media.isEmpty
                         ? const Center(child: Text('בחר תמונה'))
-                        : Image.network(
-                            media.first,
+                        : Image(
+                            image: CachedNetworkImageProvider(media.first),
                             fit: BoxFit.cover,
                           ),
                   );

@@ -1,6 +1,9 @@
+import 'package:cookpoint/cooker/cooker.dart';
 import 'package:cookpoint/cooker_points/cooker_points.dart';
 import 'package:cookpoint/media/media_dialog.dart';
+import 'package:cookpoint/points/bloc/bloc.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:formz/formz.dart';
 import 'package:points_repository/points_repository.dart';
@@ -10,27 +13,38 @@ class CreateUpdatePointPage extends StatelessWidget {
   const CreateUpdatePointPage({
     Key key,
     @required this.point,
-    @required this.isUpdating,
   }) : super(key: key);
 
   final Point point;
-  final bool isUpdating;
 
-  static Route route({@required Point point, @required bool isUpdating}) {
+  static Route route({@required Point point}) {
     return MaterialPageRoute<void>(
-      builder: (_) =>
-          CreateUpdatePointPage(point: point, isUpdating: isUpdating),
+      builder: (_) => CreateUpdatePointPage(point: point),
     );
   }
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (_) => PointFormCubit(
-        point: point,
-        pointsRepository: context.read<PointsRepository>(),
-      ),
-      child: PointForm(isUpdating: isUpdating, point: point),
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(
+          create: (_) =>
+              PointsBloc(pointsRepository: context.read<PointsRepository>())
+                ..add(
+                  PointsOfCookerRequestedEvent(
+                    point.cookerId,
+                  ),
+                ),
+        ),
+        BlocProvider(
+          create: (context) => PointFormCubit(
+            point: point,
+            cookerBloc: context.read<CookerBloc>(),
+            pointsBloc: context.read<PointsBloc>(),
+          ),
+        )
+      ],
+      child: PointForm(point: point),
     );
   }
 }
@@ -38,11 +52,9 @@ class CreateUpdatePointPage extends StatelessWidget {
 class PointForm extends StatelessWidget {
   const PointForm({
     Key key,
-    @required this.isUpdating,
     @required this.point,
   }) : super(key: key);
 
-  final bool isUpdating;
   final Point point;
 
   @override
@@ -51,7 +63,7 @@ class PointForm extends StatelessWidget {
       resizeToAvoidBottomInset: true,
       appBar: AppBar(
         title: Text(
-          isUpdating ? 'עדכון ${point.title}' : 'הוספת מאכל',
+          point.isNotEmpty ? 'עדכון ${point.title}' : 'הוספת מאכל',
         ),
       ),
       body: BlocListener<PointFormCubit, PointFormState>(
@@ -78,7 +90,9 @@ class PointForm extends StatelessWidget {
               const _DescriptionInput(),
               const _PriceInput(),
               const _TagsInput(),
-              _SubmitButton(isUpdating: isUpdating),
+              _SubmitButton(
+                point: point,
+              ),
             ],
           ),
         ),
@@ -90,30 +104,72 @@ class PointForm extends StatelessWidget {
 class _SubmitButton extends StatelessWidget {
   const _SubmitButton({
     Key key,
-    @required this.isUpdating,
+    @required this.point,
   }) : super(key: key);
 
-  final bool isUpdating;
+  final Point point;
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<PointFormCubit, PointFormState>(
-      buildWhen: (previous, current) => previous.status != current.status,
-      builder: (context, state) {
-        if (state.status.isSubmissionInProgress) {
-          return CircularProgressIndicator();
-        } else {
-          return ElevatedButton(
-            key: Key('CreateUpdatePointPage_SubmitButton_$isUpdating'),
-            child: Text(isUpdating ? 'שמור' : 'פרסם!'),
-            onPressed: state.status.isValidated
-                ? () => isUpdating
-                    ? context.read<PointFormCubit>().update()
-                    : context.read<PointFormCubit>().save()
-                : null,
-          );
-        }
-      },
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      children: [
+        if (point.isNotEmpty)
+          Expanded(
+            child: TextButton(
+              key:
+                  Key('CreateUpdatePointPage_SubmitButton_${point.isNotEmpty}'),
+              child: Text('מחק'),
+              onPressed: () => showDialog<bool>(
+                  context: context,
+                  builder: (context) {
+                    return AlertDialog(
+                      title: Text('האם אתה בטוח?'),
+                      content: Text(
+                          'האם אתה בטוח שברצונך למחוק את המאכל ${point.title} ?'),
+                      actions: [
+                        TextButton(
+                          child: const Text('כן, מחק לצמיתות'),
+                          onPressed: () {
+                            Navigator.of(context).pop(true);
+                          },
+                        ),
+                        ElevatedButton(
+                          child: const Text('לא'),
+                          onPressed: () {
+                            Navigator.of(context).pop(false);
+                          },
+                        ),
+                      ],
+                    );
+                  }).then((value) {
+                if (value != null && value) {
+                  context.read<PointsBloc>().add(PointDeletedEvent(point));
+                  Navigator.of(context).pop();
+                }
+              }),
+            ),
+          ),
+        BlocBuilder<PointFormCubit, PointFormState>(
+          buildWhen: (previous, current) => previous.status != current.status,
+          builder: (context, state) {
+            if (state.status.isSubmissionInProgress) {
+              return CircularProgressIndicator();
+            } else {
+              return Expanded(
+                child: ElevatedButton(
+                  key: Key(
+                      'CreateUpdatePointPage_SubmitButton_${point.isNotEmpty}'),
+                  child: Text(point.isNotEmpty ? 'שמור' : 'פרסם!'),
+                  onPressed: state.status.isValidated
+                      ? () => context.read<PointFormCubit>().save()
+                      : null,
+                ),
+              );
+            }
+          },
+        ),
+      ],
     );
   }
 }
@@ -205,6 +261,8 @@ class _DescriptionInput extends StatelessWidget {
             keyboardType: TextInputType.multiline,
             minLines: 3,
             maxLines: 6,
+            maxLength: 1000,
+            maxLengthEnforcement: MaxLengthEnforcement.enforced,
             onChanged: (value) =>
                 context.read<PointFormCubit>().changeDescription(value),
             decoration: InputDecoration(

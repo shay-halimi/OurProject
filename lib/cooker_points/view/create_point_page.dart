@@ -1,5 +1,6 @@
 import 'package:cookpoint/cooker/cooker.dart';
 import 'package:cookpoint/cooker_points/cooker_points.dart';
+import 'package:cookpoint/points/points.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:points_repository/points_repository.dart';
@@ -18,15 +19,31 @@ class CreatePointPage extends StatelessWidget {
       return CookerPage();
     }
 
-    return CreateUpdatePointPage(
-      point: Point.empty.copyWith(
-        cookerId: cooker.id,
-        latLng: LatLng(
-          latitude: cooker.address.latitude,
-          longitude: cooker.address.longitude,
-        ),
+    return BlocProvider(
+      create: (_) =>
+          PointsBloc(pointsRepository: context.read<PointsRepository>())
+            ..add(
+              PointsOfCookerRequestedEvent(
+                cooker.id,
+              ),
+            ),
+      child: BlocListener<PointsBloc, PointsState>(
+        listenWhen: (previous, current) => previous != current,
+        listener: (context, state) {
+          if (state.status == PointStatus.loaded && state.points.length >= 3) {
+            ScaffoldMessenger.of(context)
+              ..hideCurrentSnackBar()
+              ..showSnackBar(
+                const SnackBar(
+                    content: Text(
+                  'אין אפשרות להוסיף יותר משלושה מאכלים כרגע',
+                )),
+              );
+            Navigator.of(context).pop();
+          }
+        },
+        child: CreateUpdatePointPage(point: Point.empty),
       ),
-      isUpdating: false,
     );
   }
 }

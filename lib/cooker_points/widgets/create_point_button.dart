@@ -9,7 +9,7 @@ class CreatePointButton extends StatelessWidget {
     return FloatingActionButton.extended(
       heroTag: 'FloatingActionButtonCookPoint',
       tooltip: 'פרסם CookPoint',
-      label: Text('פרסם עכשיו בחינם!'),
+      label: Text('הוסף מאכל'),
       onPressed: () {
         Navigator.of(context).push<void>(CreatePointPage.route());
       },

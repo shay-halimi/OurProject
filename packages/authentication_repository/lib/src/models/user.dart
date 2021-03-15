@@ -17,4 +17,6 @@ class User extends Equatable {
   List<Object> get props => [id, phoneNumber];
 
   bool get isEmpty => this == empty;
+
+  bool get isNotEmpty => !isEmpty;
 }

@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
@@ -62,7 +63,8 @@ class _PhotoURLDialogView extends StatelessWidget {
               if (state is MediaDialogInitial) {
                 return photoURL.isNotEmpty
                     ? CircleAvatar(
-                        radius: radius, backgroundImage: NetworkImage(photoURL))
+                        radius: radius,
+                        backgroundImage: CachedNetworkImageProvider(photoURL))
                     : CircleAvatar(
                         radius: radius, child: Text('בחר.י תמונת פרופיל'));
               } else if (state is MediaDialogError) {
@@ -75,7 +77,7 @@ class _PhotoURLDialogView extends StatelessWidget {
               } else if (state is MediaDialogLoaded) {
                 return CircleAvatar(
                   radius: radius,
-                  backgroundImage: NetworkImage(state.photoURL),
+                  backgroundImage: CachedNetworkImageProvider(state.photoURL),
                 );
               }
 

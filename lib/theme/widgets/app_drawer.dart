@@ -30,8 +30,8 @@ class AppDrawer extends StatelessWidget {
             ),
             ListTile(
               key: const Key('AppDrawer_PointsPage_ListTile'),
-              leading: const Icon(Icons.fastfood_outlined),
-              title: const Text('המאכלים שלי'),
+              leading: const Icon(Icons.kitchen),
+              title: const Text('המטבח שלי'),
               onTap: () => Navigator.of(context).push<void>(
                 CookerPointsPage.route(),
               ),

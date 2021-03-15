@@ -87,7 +87,7 @@ class _MapWidgetState extends State<MapWidget> {
             zoom: _zoom,
           ),
           markers: widget.points.map((point) {
-            final isSelectedPoint = point == state.point;
+            final isSelectedPoint = point.latLng == state.point.latLng;
 
             return google_maps.Marker(
               markerId: google_maps.MarkerId(point.id),

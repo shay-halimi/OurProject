@@ -3,43 +3,43 @@ import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:cookers_repository/cookers_repository.dart';
 import 'package:cookpoint/cooker/cooker.dart';
+import 'package:cookpoint/points/points.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:formz/formz.dart';
 import 'package:location_services/location_services.dart';
+import 'package:points_repository/points_repository.dart';
 
 part 'cooker_form_state.dart';
 
 class CookerFormCubit extends Cubit<CookerFormState> {
   CookerFormCubit({
-    @required Cooker cooker,
     @required CookerBloc cookerBloc,
+    @required PointsBloc pointsBloc,
     @required LocationServices locationServices,
-  })  : assert(cooker != null),
-        assert(cookerBloc != null),
+  })  : assert(cookerBloc != null),
+        assert(pointsBloc != null),
         assert(locationServices != null),
-        _cooker = cooker,
         _cookerBloc = cookerBloc,
+        _pointsBloc = pointsBloc,
         _locationServices = locationServices,
         super(const CookerFormState()) {
-    emit(state.copyWith(
-      displayNameInput: _cooker.displayName.isEmpty
-          ? DisplayNameInput.pure()
-          : DisplayNameInput.dirty(_cooker.displayName),
-      photoURLInput: _cooker.photoURL.isEmpty
-          ? PhotoURLInput.pure()
-          : PhotoURLInput.dirty(_cooker.photoURL),
-      addressInput: _cooker.address.isEmpty
-          ? AddressInput.pure()
-          : AddressInput.dirty(_cooker.address),
-    ));
+    if (_cooker.isNotEmpty) {
+      emit(state.copyWith(
+        displayNameInput: DisplayNameInput.dirty(_cooker.displayName),
+        photoURLInput: PhotoURLInput.dirty(_cooker.photoURL),
+        addressInput: AddressInput.dirty(_cooker.address),
+      ));
+    }
   }
 
-  final Cooker _cooker;
+  Cooker get _cooker => _cookerBloc.state.cooker;
+
   final CookerBloc _cookerBloc;
+  final PointsBloc _pointsBloc;
   final LocationServices _locationServices;
 
-  Future<void> update() async {
+  Future<void> save() async {
     emit(state.copyWith(status: FormzStatus.submissionInProgress));
 
     final location =
@@ -63,40 +63,26 @@ class CookerFormCubit extends Cubit<CookerFormState> {
         address: state.addressInput.value,
       );
 
-      _cookerBloc.add(CookerUpdatedEvent(cooker));
-
-      emit(state.copyWith(status: FormzStatus.submissionSuccess));
-    } on Exception {
-      emit(state.copyWith(status: FormzStatus.submissionFailure));
-    }
-  }
-
-  Future<void> create() async {
-    emit(state.copyWith(status: FormzStatus.submissionInProgress));
-
-    final location =
-        await _locationServices.fromAddress(state.addressInput.value.name);
-
-    if (location.isEmpty) {
-      changeAddress(Address.empty);
-    } else {
-      changeAddress(state.addressInput.value.copyWith(
-        latitude: location.latitude,
-        longitude: location.longitude,
-      ));
-    }
-
-    if (!state.status.isValidated) return;
-
-    try {
-      final cooker = _cooker.copyWith(
-        displayName: state.displayNameInput.value,
-        photoURL: state.photoURLInput.value,
-        address: state.addressInput.value,
+      _cookerBloc.add(
+        _cooker.isEmpty
+            ? CookerCreatedEvent(cooker)
+            : CookerUpdatedEvent(cooker),
       );
 
-      _cookerBloc.add(CookerCreatedEvent(cooker));
-
+      _pointsBloc.state.points.forEach((point) {
+        if (point.latLng.isNotEmpty) {
+          _pointsBloc.add(
+            PointUpdatedEvent(
+              point.copyWith(
+                latLng: LatLng(
+                  latitude: cooker.address.latitude,
+                  longitude: cooker.address.longitude,
+                ),
+              ),
+            ),
+          );
+        }
+      });
       emit(state.copyWith(status: FormzStatus.submissionSuccess));
     } on Exception {
       emit(state.copyWith(status: FormzStatus.submissionFailure));

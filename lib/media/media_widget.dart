@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 
 class MediaWidget extends StatelessWidget {
@@ -12,8 +13,8 @@ class MediaWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Opacity(
       opacity: 0.9,
-      child: Image.network(
-        media,
+      child: Image(
+        image: CachedNetworkImageProvider(media),
         fit: BoxFit.cover,
         loadingBuilder: (context, child, loadingProgress) {
           if (loadingProgress == null) return child;
