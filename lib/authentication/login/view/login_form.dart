@@ -43,6 +43,10 @@ class _PhoneNumberForm extends StatelessWidget {
         children: [
           const AppLogo(),
           _PhoneNumberInput(),
+          Text(
+            'מספרך משמש אך ורק למניעת ספאם ולא יוצג למשתמשים אחרים ללא אישורך.',
+            textAlign: TextAlign.center,
+          ),
           _SendOTPButton(),
         ],
       ),

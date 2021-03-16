@@ -7,6 +7,7 @@ class PointFormState extends Equatable {
     this.priceInput = const PriceInput.pure(),
     this.mediaInput = const MediaInput.pure(),
     this.tagsInput = const TagsInput.pure(),
+    this.availableInput = const AvailableInput.pure(),
     this.status = FormzStatus.pure,
   });
 
@@ -15,6 +16,7 @@ class PointFormState extends Equatable {
   final PriceInput priceInput;
   final MediaInput mediaInput;
   final TagsInput tagsInput;
+  final AvailableInput availableInput;
 
   final FormzStatus status;
 
@@ -25,6 +27,7 @@ class PointFormState extends Equatable {
         priceInput,
         mediaInput,
         tagsInput,
+        availableInput,
         status,
       ];
 
@@ -34,6 +37,7 @@ class PointFormState extends Equatable {
     PriceInput priceInput,
     MediaInput mediaInput,
     TagsInput tagsInput,
+    AvailableInput availableInput,
     FormzStatus status,
   }) {
     return PointFormState(
@@ -42,8 +46,22 @@ class PointFormState extends Equatable {
       priceInput: priceInput ?? this.priceInput,
       mediaInput: mediaInput ?? this.mediaInput,
       tagsInput: tagsInput ?? this.tagsInput,
+      availableInput: availableInput ?? this.availableInput,
       status: status ?? this.status,
     );
+  }
+}
+
+enum AvailableInputValidationError { invalid }
+
+class AvailableInput extends FormzInput<bool, AvailableInputValidationError> {
+  const AvailableInput.pure() : super.pure(true);
+
+  const AvailableInput.dirty([bool value = true]) : super.dirty(value);
+
+  @override
+  AvailableInputValidationError validator(bool value) {
+    return value != null ? null : AvailableInputValidationError.invalid;
   }
 }
 
@@ -72,7 +90,9 @@ class DescriptionInput
 
   @override
   DescriptionInputValidationError validator(String value) {
-    return value.length < 1000 ? null : DescriptionInputValidationError.invalid;
+    return value.length > 0 && value.length < 1000
+        ? null
+        : DescriptionInputValidationError.invalid;
   }
 }
 

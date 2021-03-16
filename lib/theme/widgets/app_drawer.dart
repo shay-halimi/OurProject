@@ -18,9 +18,9 @@ class AppDrawer extends StatelessWidget {
             const AppLogo(),
             const Divider(),
             ListTile(
-              key: const Key('AppDrawer_CookerPage_route'),
-              leading: const Icon(Icons.face_rounded),
-              title: const Text('חשבון'),
+              key: const Key('AppDrawer_PointsPage_ListTile'),
+              leading: const Icon(Icons.kitchen),
+              title: const Text('המטבח שלי'),
               onTap: () => Navigator.of(context).push<void>(
                 CookerPage.route(),
               ),
@@ -29,9 +29,9 @@ class AppDrawer extends StatelessWidget {
                   .add(AuthenticationLogoutRequested()),
             ),
             ListTile(
-              key: const Key('AppDrawer_PointsPage_ListTile'),
-              leading: const Icon(Icons.kitchen),
-              title: const Text('המטבח שלי'),
+              key: const Key('AppDrawer_CookerPage_route'),
+              leading: const Icon(Icons.face_rounded),
+              title: const Text('המאכלים שלי'),
               onTap: () => Navigator.of(context).push<void>(
                 CookerPointsPage.route(),
               ),

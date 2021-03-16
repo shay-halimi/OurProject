@@ -90,6 +90,7 @@ class PointForm extends StatelessWidget {
               const _DescriptionInput(),
               const _PriceInput(),
               const _TagsInput(),
+              const _AvailableInput(),
               _SubmitButton(
                 point: point,
               ),
@@ -115,40 +116,37 @@ class _SubmitButton extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: [
         if (point.isNotEmpty)
-          Expanded(
-            child: TextButton(
-              key:
-                  Key('CreateUpdatePointPage_SubmitButton_${point.isNotEmpty}'),
-              child: Text('מחק'),
-              onPressed: () => showDialog<bool>(
-                  context: context,
-                  builder: (context) {
-                    return AlertDialog(
-                      title: Text('האם אתה בטוח?'),
-                      content: Text(
-                          'האם אתה בטוח שברצונך למחוק את המאכל ${point.title} ?'),
-                      actions: [
-                        TextButton(
-                          child: const Text('כן, מחק לצמיתות'),
-                          onPressed: () {
-                            Navigator.of(context).pop(true);
-                          },
-                        ),
-                        ElevatedButton(
-                          child: const Text('לא'),
-                          onPressed: () {
-                            Navigator.of(context).pop(false);
-                          },
-                        ),
-                      ],
-                    );
-                  }).then((value) {
-                if (value != null && value) {
-                  context.read<PointsBloc>().add(PointDeletedEvent(point));
-                  Navigator.of(context).pop();
-                }
-              }),
-            ),
+          TextButton(
+            key: Key('CreateUpdatePointPage_SubmitButton_${point.isNotEmpty}'),
+            child: Text('מחק'),
+            onPressed: () => showDialog<bool>(
+                context: context,
+                builder: (context) {
+                  return AlertDialog(
+                    title: Text('האם אתה בטוח?'),
+                    content: Text(
+                        'האם אתה בטוח שברצונך למחוק את המאכל ${point.title} ?'),
+                    actions: [
+                      TextButton(
+                        child: const Text('כן, מחק לצמיתות'),
+                        onPressed: () {
+                          Navigator.of(context).pop(true);
+                        },
+                      ),
+                      ElevatedButton(
+                        child: const Text('לא'),
+                        onPressed: () {
+                          Navigator.of(context).pop(false);
+                        },
+                      ),
+                    ],
+                  );
+                }).then((value) {
+              if (value != null && value) {
+                context.read<PointsBloc>().add(PointDeletedEvent(point));
+                Navigator.of(context).pop();
+              }
+            }),
           ),
         BlocBuilder<PointFormCubit, PointFormState>(
           buildWhen: (previous, current) => previous.status != current.status,
@@ -156,20 +154,41 @@ class _SubmitButton extends StatelessWidget {
             if (state.status.isSubmissionInProgress) {
               return CircularProgressIndicator();
             } else {
-              return Expanded(
-                child: ElevatedButton(
-                  key: Key(
-                      'CreateUpdatePointPage_SubmitButton_${point.isNotEmpty}'),
-                  child: Text(point.isNotEmpty ? 'שמור' : 'פרסם!'),
-                  onPressed: state.status.isValidated
-                      ? () => context.read<PointFormCubit>().save()
-                      : null,
-                ),
+              return ElevatedButton(
+                child: Text(point.isNotEmpty ? 'שמור' : 'פרסם!'),
+                onPressed: state.status.isValidated
+                    ? () => context.read<PointFormCubit>().save()
+                    : null,
               );
             }
           },
         ),
       ],
+    );
+  }
+}
+
+class _AvailableInput extends StatelessWidget {
+  const _AvailableInput({
+    Key key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<PointFormCubit, PointFormState>(
+      buildWhen: (previous, current) =>
+          previous.availableInput != current.availableInput,
+      builder: (_, state) {
+        return SwitchListTile(
+          title: const Text('זמין'),
+          subtitle: const Text(
+              'מאכלים זמינים מופיעים על המפה עם שמכם, כתובתכם ומספר הטלפון איתו נרשמתם.'),
+          value: state.availableInput.value ?? false,
+          onChanged: (bool value) {
+            context.read<PointFormCubit>().changeAvailable(value);
+          },
+        );
+      },
     );
   }
 }

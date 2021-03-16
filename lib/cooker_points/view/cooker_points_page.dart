@@ -29,9 +29,7 @@ class CookerPointsPage extends StatelessWidget {
           create: (context) =>
               PointsBloc(pointsRepository: context.read<PointsRepository>())
                 ..add(
-                  PointsOfCookerRequestedEvent(
-                    cooker.id,
-                  ),
+                  PointsOfCookerRequestedEvent(cooker.id),
                 ),
         ),
       ],
@@ -52,34 +50,48 @@ class CookerPointsPageView extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomInset: true,
-      appBar: AppBar(title: const Text('המטבח שלי')),
-      body: BlocBuilder<PointsBloc, PointsState>(
-        buildWhen: (previous, current) => previous != current,
-        builder: (context, state) {
-          if (state.status == PointStatus.loaded) {
-            if (state.points.isEmpty) {
-              return Center(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    AppLogo(),
-                    ConstrainedBox(constraints: BoxConstraints(minHeight: 64)),
-                    const Text('רשימת המאכלים שלך ריקה כרגע'),
-                  ],
-                ),
-              );
-            }
+      appBar: AppBar(title: const Text('המאכלים שלי')),
+      body: CookerPointsPageViewBody(cooker: cooker),
+      floatingActionButton: const CreatePointButton(),
+    );
+  }
+}
 
-            return _PointsWidget(
-              points: state.points,
-              cooker: cooker,
+class CookerPointsPageViewBody extends StatelessWidget {
+  const CookerPointsPageViewBody({
+    Key key,
+    @required this.cooker,
+  }) : super(key: key);
+
+  final Cooker cooker;
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<PointsBloc, PointsState>(
+      buildWhen: (previous, current) => previous != current,
+      builder: (context, state) {
+        if (state.status == PointStatus.loaded) {
+          if (state.points.isEmpty) {
+            return Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  AppLogo(),
+                  ConstrainedBox(constraints: BoxConstraints(minHeight: 64)),
+                  const Text('רשימת המאכלים שלך ריקה כרגע'),
+                ],
+              ),
             );
           }
 
-          return const Center(child: CircularProgressIndicator());
-        },
-      ),
-      floatingActionButton: const CreatePointButton(),
+          return _PointsWidget(
+            points: state.points,
+            cooker: cooker,
+          );
+        }
+
+        return const Center(child: CircularProgressIndicator());
+      },
     );
   }
 }
@@ -104,47 +116,37 @@ class _PointsWidget extends StatelessWidget {
       child: Column(
         children: [
           for (var point in points) ...[
-            Card(
-              child: Column(
-                children: [
-                  InkWell(
-                    child: AspectRatio(
+            InkWell(
+              child: Card(
+                child: Column(
+                  children: [
+                    AspectRatio(
                       aspectRatio: 3 / 1,
-                      child: Card(
-                        child: MediaWidget(
-                          media: point.media.first,
-                        ),
+                      child: MediaWidget(
+                        media: point.media.first,
                       ),
                     ),
-                    onTap: () => Navigator.of(context).push<void>(
-                      CreateUpdatePointPage.route(point: point),
+                    ListTile(
+                      isThreeLine: true,
+                      title: Text(point.title),
+                      subtitle: Text(
+                        point.description,
+                        maxLines: 2,
+                        overflow: TextOverflow.fade,
+                      ),
+                      trailing: Icon(Icons.edit),
                     ),
-                  ),
-                  SwitchListTile(
-                    title: Text("הצג על המפה"),
-                    value: point.latLng.isNotEmpty,
-                    onChanged: (value) =>
-                        context.read<PointsBloc>().changeLatLng(
-                      {point},
-                      value ? cooker.address.toLatLng() : LatLng.empty,
-                    ),
-                  ),
-                ],
+                  ],
+                ),
+              ),
+              onTap: () => Navigator.of(context).push<void>(
+                CreateUpdatePointPage.route(point: point),
               ),
             ),
           ],
           ConstrainedBox(constraints: BoxConstraints(minHeight: 64)),
         ],
       ),
-    );
-  }
-}
-
-extension _XAddress on Address {
-  LatLng toLatLng() {
-    return LatLng(
-      latitude: latitude,
-      longitude: longitude,
     );
   }
 }

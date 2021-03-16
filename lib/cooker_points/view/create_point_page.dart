@@ -27,22 +27,40 @@ class CreatePointPage extends StatelessWidget {
                 cooker.id,
               ),
             ),
-      child: BlocListener<PointsBloc, PointsState>(
-        listenWhen: (previous, current) => previous != current,
-        listener: (context, state) {
-          if (state.status == PointStatus.loaded && state.points.length >= 3) {
-            ScaffoldMessenger.of(context)
-              ..hideCurrentSnackBar()
-              ..showSnackBar(
-                const SnackBar(
-                    content: Text(
-                  'אין אפשרות להוסיף יותר משלושה מאכלים כרגע',
-                )),
-              );
-            Navigator.of(context).pop();
+      child: BlocBuilder<PointsBloc, PointsState>(
+        buildWhen: (previous, current) => previous != current,
+        builder: (context, state) {
+          if (state.status == PointStatus.loaded && state.points.length >= 2) {
+            return Scaffold(
+              body: Container(
+                child: Center(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Text(
+                          'אין אפשרות להוסיף יותר משלושה מאכלים כרגע',
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: ElevatedButton(
+                          onPressed: () {
+                            Navigator.of(context).pop();
+                          },
+                          child: Text('סגור'),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            );
           }
+
+          return CreateUpdatePointPage(point: Point.empty);
         },
-        child: CreateUpdatePointPage(point: Point.empty),
       ),
     );
   }

@@ -65,7 +65,7 @@ class CookerForm extends StatelessWidget {
     return Scaffold(
       resizeToAvoidBottomInset: true,
       appBar: AppBar(
-        title: Text(cooker.isNotEmpty ? 'עריכת החשבון' : 'יצירת חשבון'),
+        title: Text(cooker.isNotEmpty ? 'עדכון מטבח' : 'יצירת מטבח'),
       ),
       body: BlocListener<CookerFormCubit, CookerFormState>(
         listener: (context, state) {

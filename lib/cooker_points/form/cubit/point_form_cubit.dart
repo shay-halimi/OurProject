@@ -47,28 +47,19 @@ class PointFormCubit extends Cubit<PointFormState> {
 
     try {
       final point = _point.copyWith(
+        cookerId: _cooker.id,
         title: state.titleInput.value,
         description: state.descriptionInput.value,
         price: state.priceInput.value,
         media: state.mediaInput.value,
         tags: state.tagsInput.value,
+        latLng: state.availableInput.value
+            ? _cooker.address.toLatLng()
+            : LatLng.empty,
       );
 
-      if (_point.isEmpty) {
-        _pointsBloc.add(
-          PointCreatedEvent(
-            point.copyWith(
-              cookerId: _cooker.id,
-              latLng: LatLng(
-                latitude: _cooker.address.latitude,
-                longitude: _cooker.address.longitude,
-              ),
-            ),
-          ),
-        );
-      } else {
-        _pointsBloc.add(PointUpdatedEvent(point));
-      }
+      _pointsBloc.add(
+          _point.isEmpty ? PointCreatedEvent(point) : PointUpdatedEvent(point));
 
       emit(state.copyWith(status: FormzStatus.submissionSuccess));
     } on Exception {
@@ -86,6 +77,7 @@ class PointFormCubit extends Cubit<PointFormState> {
         state.priceInput,
         state.mediaInput,
         state.tagsInput,
+        state.availableInput
       ]),
     ));
   }
@@ -100,6 +92,7 @@ class PointFormCubit extends Cubit<PointFormState> {
         state.priceInput,
         state.mediaInput,
         state.tagsInput,
+        state.availableInput
       ]),
     ));
   }
@@ -118,6 +111,7 @@ class PointFormCubit extends Cubit<PointFormState> {
         priceInput,
         state.mediaInput,
         state.tagsInput,
+        state.availableInput
       ]),
     ));
   }
@@ -132,6 +126,7 @@ class PointFormCubit extends Cubit<PointFormState> {
         state.priceInput,
         mediaInput,
         state.tagsInput,
+        state.availableInput
       ]),
     ));
   }
@@ -155,7 +150,32 @@ class PointFormCubit extends Cubit<PointFormState> {
         state.priceInput,
         state.mediaInput,
         tagsInput,
+        state.availableInput
       ]),
     ));
+  }
+
+  void changeAvailable(bool value) {
+    final availableInput = AvailableInput.dirty(value);
+    emit(state.copyWith(
+      availableInput: availableInput,
+      status: Formz.validate([
+        state.titleInput,
+        state.descriptionInput,
+        state.priceInput,
+        state.mediaInput,
+        state.tagsInput,
+        availableInput,
+      ]),
+    ));
+  }
+}
+
+extension _XAddress on Address {
+  LatLng toLatLng() {
+    return LatLng(
+      latitude: latitude,
+      longitude: longitude,
+    );
   }
 }

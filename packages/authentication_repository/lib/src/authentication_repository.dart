@@ -1,7 +1,5 @@
 import 'dart:async';
-import 'dart:convert';
 
-import 'package:crypto/crypto.dart';
 import 'package:firebase_auth/firebase_auth.dart' as firebase_auth;
 import 'package:meta/meta.dart';
 
@@ -46,9 +44,7 @@ class AuthenticationRepository {
       codeSent: (String verificationId, [int forceResendingToken]) {
         completer.complete(verificationId);
       },
-      codeAutoRetrievalTimeout: (String verificationId) {
-        completer.complete(verificationId);
-      },
+      codeAutoRetrievalTimeout: (String verificationId) {},
     );
 
     return completer.future;
@@ -84,7 +80,7 @@ class AuthenticationRepository {
 extension on firebase_auth.User {
   User get toUser {
     return User(
-      id: md5.convert(utf8.encode(phoneNumber)).toString(),
+      id: uid,
       phoneNumber: phoneNumber,
     );
   }
