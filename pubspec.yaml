@@ -1,9 +1,9 @@
 name: cookpoint
-description: CookPoint flutter app
+description: CookPoint
 
 publish_to: 'none'
 
-version: 1.0.0+1
+version: 1.0.0+3
 
 environment:
   sdk: ">=2.7.0 <3.0.0"
@@ -52,10 +52,17 @@ dev_dependencies:
     sdk: flutter
   bloc_test: ^7.1.0
   mockito: ^4.1.4
+  flutter_launcher_icons: "^0.8.0"
+
+flutter_icons:
+  android: true
+  ios: true
+  image_path: "assets/images/logo.png"
 
 flutter:
   uses-material-design: true
 
   assets:
     - assets/images/logo.png
-    - assets/images/logo_bold.png
+    - assets/images/logo_128px_128px.png
+    - assets/images/logo_bold_192px_192px.png

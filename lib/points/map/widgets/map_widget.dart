@@ -40,13 +40,13 @@ class _MapWidgetState extends State<MapWidget> {
     super.initState();
     google_maps.BitmapDescriptor.fromAssetImage(
       const ImageConfiguration(),
-      'assets/images/logo.png',
+      'assets/images/logo_128px_128px.png',
     ).then((onValue) {
       _pointMarker = onValue;
     });
     google_maps.BitmapDescriptor.fromAssetImage(
       const ImageConfiguration(),
-      'assets/images/logo_bold.png',
+      'assets/images/logo_bold_192px_192px.png',
     ).then((onValue) {
       _selectedPointMarker = onValue;
     });

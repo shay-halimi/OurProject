@@ -76,13 +76,14 @@ class _TitleWidget extends StatelessWidget {
         child: Column(
           children: [
             Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text(
-                  point.title,
-                  style: theme.textTheme.headline6,
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
+                Expanded(
+                  child: Text(
+                    point.title,
+                    style: theme.textTheme.headline6,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                  ),
                 ),
                 Text(
                   '${point.price.amount.toStringAsFixed(2)} ₪',
@@ -94,14 +95,10 @@ class _TitleWidget extends StatelessWidget {
               ],
             ),
             TagsWidget(tags: point.tags),
-            Row(
-              children: [
-                Text(
-                  point.description,
-                  overflow: TextOverflow.fade,
-                )
-              ],
-            )
+            Text(
+              point.description,
+              overflow: TextOverflow.fade,
+            ),
           ],
         ),
       ),

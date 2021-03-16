@@ -11,6 +11,8 @@ class AppLogo extends StatelessWidget {
       tag: 'AppLogo',
       child: Image.asset(
         'assets/images/logo.png',
+        width: 128,
+        height: 128,
       ),
     );
   }

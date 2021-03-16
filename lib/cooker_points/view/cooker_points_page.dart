@@ -100,39 +100,42 @@ class _PointsWidget extends StatelessWidget {
       return Container();
     }
 
-    return Column(
-      children: [
-        for (var point in points) ...[
-          Card(
-            child: Column(
-              children: [
-                InkWell(
-                  child: AspectRatio(
-                    aspectRatio: 3 / 1,
-                    child: Card(
-                      child: MediaWidget(
-                        media: point.media.first,
+    return SingleChildScrollView(
+      child: Column(
+        children: [
+          for (var point in points) ...[
+            Card(
+              child: Column(
+                children: [
+                  InkWell(
+                    child: AspectRatio(
+                      aspectRatio: 3 / 1,
+                      child: Card(
+                        child: MediaWidget(
+                          media: point.media.first,
+                        ),
                       ),
                     ),
+                    onTap: () => Navigator.of(context).push<void>(
+                      CreateUpdatePointPage.route(point: point),
+                    ),
                   ),
-                  onTap: () => Navigator.of(context).push<void>(
-                    CreateUpdatePointPage.route(point: point),
+                  SwitchListTile(
+                    title: Text("הצג על המפה"),
+                    value: point.latLng.isNotEmpty,
+                    onChanged: (value) =>
+                        context.read<PointsBloc>().changeLatLng(
+                      {point},
+                      value ? cooker.address.toLatLng() : LatLng.empty,
+                    ),
                   ),
-                ),
-                SwitchListTile(
-                  title: Text("הצג על המפה"),
-                  value: point.latLng.isNotEmpty,
-                  onChanged: (value) => context.read<PointsBloc>().changeLatLng(
-                    {point},
-                    value ? cooker.address.toLatLng() : LatLng.empty,
-                  ),
-                ),
-              ],
+                ],
+              ),
             ),
-          ),
+          ],
+          ConstrainedBox(constraints: BoxConstraints(minHeight: 64)),
         ],
-        ConstrainedBox(constraints: BoxConstraints(minHeight: 64)),
-      ],
+      ),
     );
   }
 }

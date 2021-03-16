@@ -23,7 +23,7 @@ class FakePointsRepository extends PointsRepository {
     yield [];
 
     final list = [
-      for (var i = 0; i <= 5000; i++)
+      for (var i = 0; i <= 300; i++)
         Point.empty.copyWith(
             id: rand.nextInt(999999999).toString(),
             title: lipsum.createWord(numWords: 1 + rand.nextInt(5)),
@@ -33,10 +33,10 @@ class FakePointsRepository extends PointsRepository {
             latLng: LatLng(
               latitude: latLng.latitude +
                   ((rand.nextDouble() - rand.nextDouble()) *
-                      (rand.nextBool() ? 90 : -90)),
+                      (rand.nextBool() ? 9 : -9)),
               longitude: latLng.longitude +
                   ((rand.nextDouble() - rand.nextDouble()) *
-                      (rand.nextBool() ? 90 : -90)),
+                      (rand.nextBool() ? 9 : -9)),
             ),
             price: Money.empty.copyWith(amount: rand.nextDouble() * 1000),
             media: {
@@ -45,6 +45,7 @@ class FakePointsRepository extends PointsRepository {
             tags: {
               if (rand.nextBool()) 'צמחוני',
               if (rand.nextBool()) 'טבעוני',
+              if (rand.nextBool()) 'ללא גלוטן',
             })
     ];
 

@@ -85,6 +85,7 @@ class _AppViewState extends State<AppView> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      title: 'Cook Point',
       theme: theme,
       localizationsDelegates: [
         GlobalWidgetsLocalizations.delegate,
