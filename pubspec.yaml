@@ -3,7 +3,7 @@ description: CookPoint
 
 publish_to: 'none'
 
-version: 1.0.0+5
+version: 1.0.0+6
 
 environment:
   sdk: ">=2.7.0 <3.0.0"
@@ -19,14 +19,12 @@ dependencies:
   firebase_core: ^0.5.1
   firebase_storage: ^5.0.1
   provider: ^4.3.3
-  shared_preferences: ^0.5.12+4
   meta: ^1.2.4
   flutter_bloc: ^6.1.2
   equatable: ^1.2.6
   bloc: ^6.1.1
   formz: ^0.3.2
   pedantic: ^1.9.2
-  sliding_sheet: ^0.4.1
   carousel_slider: ^3.0.0
   image_picker: ^0.6.7+22
   uuid: ^2.2.2
