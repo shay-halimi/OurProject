@@ -55,13 +55,13 @@ class PointFormState extends Equatable {
 enum AvailableInputValidationError { invalid }
 
 class AvailableInput extends FormzInput<bool, AvailableInputValidationError> {
-  const AvailableInput.pure() : super.pure(true);
+  const AvailableInput.pure() : super.pure(false);
 
-  const AvailableInput.dirty([bool value = true]) : super.dirty(value);
+  const AvailableInput.dirty([bool value = false]) : super.dirty(value);
 
   @override
   AvailableInputValidationError validator(bool value) {
-    return value != null ? null : AvailableInputValidationError.invalid;
+    return null;
   }
 }
 

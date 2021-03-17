@@ -22,12 +22,12 @@ class PointWidget extends StatelessWidget {
         child: Column(
           children: [
             Flexible(
-              flex: 3,
+              flex: 7,
               fit: FlexFit.tight,
               child: _PhotoWidget(photo: point.media.first),
             ),
             Flexible(
-              flex: 2,
+              flex: 3,
               child: _TitleWidget(point: point),
             ),
           ],
@@ -70,37 +70,32 @@ class _TitleWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      child: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Column(
-          children: [
-            Row(
-              children: [
-                Expanded(
-                  child: Text(
-                    point.title,
-                    style: theme.textTheme.headline6,
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                ),
-                Text(
-                  '${point.price.amount.toStringAsFixed(2)} ₪',
-                  style: theme.textTheme.headline6
-                      .copyWith(fontWeight: FontWeight.w300),
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: [
+          Row(
+            children: [
+              Expanded(
+                child: Text(
+                  point.title,
+                  style: theme.textTheme.headline6,
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
                 ),
-              ],
-            ),
-            TagsWidget(tags: point.tags),
-            Text(
-              point.description,
-              overflow: TextOverflow.fade,
-            ),
-          ],
-        ),
+              ),
+              Text(
+                '${point.price.amount.toStringAsFixed(2)} ₪',
+                style: theme.textTheme.headline6
+                    .copyWith(fontWeight: FontWeight.w300),
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+              ),
+            ],
+          ),
+          if (point.tags.isNotEmpty) TagsWidget(tags: point.tags),
+        ],
       ),
     );
   }

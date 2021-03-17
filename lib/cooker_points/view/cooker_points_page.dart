@@ -29,7 +29,9 @@ class CookerPointsPage extends StatelessWidget {
           create: (context) =>
               PointsBloc(pointsRepository: context.read<PointsRepository>())
                 ..add(
-                  PointsOfCookerRequestedEvent(cooker.id),
+                  PointsOfCookerRequestedEvent(
+                    cooker.id,
+                  ),
                 ),
         ),
       ],

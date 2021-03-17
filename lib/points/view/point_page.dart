@@ -13,46 +13,53 @@ class PointPage extends StatelessWidget {
 
   final Point point;
 
-  static Route route({
-    @required Point point,
-  }) {
-    return MaterialPageRoute<void>(
-      builder: (_) => PointPage(point: point),
-      fullscreenDialog: true,
-    );
+  static Route route({@required Point point}) {
+    return MaterialPageRoute<void>(builder: (_) => PointPage(point: point));
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      extendBodyBehindAppBar: true,
-      appBar: AppBar(
-        backgroundColor: Colors.transparent,
-        elevation: 0,
-      ),
       body: SingleChildScrollView(
         child: Column(
           children: [
             _photos(context),
             Padding(
-              padding: const EdgeInsets.all(8.0),
+              padding: const EdgeInsets.all(16.0),
               child: Column(
                 children: [
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(
-                        point.title,
-                        style: theme.textTheme.headline5,
+                      Expanded(
+                        child: Text(
+                          point.title,
+                          style: theme.textTheme.headline5,
+                        ),
                       ),
-                      Text(
-                        '${point.price.amount.toStringAsFixed(2)} ₪',
-                        style: theme.textTheme.headline5
-                            .copyWith(fontWeight: FontWeight.w300),
+                      Column(
+                        children: [
+                          Text(
+                            '${point.price.amount.toStringAsFixed(2)} ₪',
+                            style: theme.textTheme.headline5
+                                .copyWith(fontWeight: FontWeight.w300),
+                            maxLines: 1,
+                            overflow: TextOverflow.fade,
+                          ),
+                          TagsWidget(tags: point.tags),
+                        ],
                       ),
                     ],
                   ),
-                  TagsWidget(tags: point.tags),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [],
+                    ),
+                  ),
                   Row(
                     children: [
                       Expanded(

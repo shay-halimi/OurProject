@@ -31,7 +31,7 @@ class CookerWidget extends StatelessWidget {
             );
           }
 
-          return const Center(child: CircularProgressIndicator());
+          return LinearProgressIndicator();
         },
       ),
     );
@@ -49,7 +49,6 @@ class CookerWidgetView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListTile(
-      dense: true,
       leading: CircleAvatar(
         backgroundImage: CachedNetworkImageProvider(cooker.photoURL),
       ),

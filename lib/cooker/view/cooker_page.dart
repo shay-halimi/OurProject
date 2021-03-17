@@ -2,10 +2,8 @@ import 'package:cookers_repository/cookers_repository.dart';
 import 'package:cookpoint/authentication/authentication.dart';
 import 'package:cookpoint/cooker/cooker.dart';
 import 'package:cookpoint/media/media.dart';
-import 'package:cookpoint/points/points.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:points_repository/points_repository.dart';
 import 'package:provider/provider.dart';
 
 class CookerPage extends StatelessWidget {
@@ -29,17 +27,8 @@ class CookerPage extends StatelessWidget {
       );
     }
 
-    return MultiBlocProvider(
-      providers: [
-        BlocProvider(
-          create: (context) =>
-              PointsBloc(pointsRepository: context.read<PointsRepository>())
-                ..add(
-                  PointsOfCookerRequestedEvent(cooker.id),
-                ),
-        ),
-      ],
-      child: CookerView(cooker: cooker),
+    return CookerView(
+      cooker: cooker,
     );
   }
 }

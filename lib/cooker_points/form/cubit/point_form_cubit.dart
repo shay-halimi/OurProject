@@ -30,6 +30,7 @@ class PointFormCubit extends Cubit<PointFormState> {
         priceInput: PriceInput.dirty(point.price),
         mediaInput: MediaInput.dirty(point.media),
         tagsInput: TagsInput.dirty(point.tags),
+        availableInput: AvailableInput.dirty(point.latLng.isNotEmpty),
       ));
     }
   }

@@ -23,7 +23,11 @@ class _PointsBarState extends State<PointsBar> {
   Widget build(BuildContext context) {
     return BlocConsumer<SelectedPointCubit, SelectedPointState>(
       listenWhen: (previous, current) => previous != current,
-      listener: (_, state) async {},
+      listener: (_, state) async {
+        if (_controller.ready && widget.points.contains(state.point)) {
+          _controller.animateToPage(widget.points.indexOf(state.point));
+        }
+      },
       buildWhen: (previous, current) => previous != current,
       builder: (_, state) {
         if (state.point.isEmpty) {

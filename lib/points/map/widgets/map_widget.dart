@@ -26,7 +26,7 @@ class MapWidget extends StatefulWidget {
 class _MapWidgetState extends State<MapWidget> {
   final Completer<google_maps.GoogleMapController> _controller = Completer();
 
-  double _zoom = 14.5;
+  double _zoom = 7.5;
   double _heading = 0;
 
   google_maps.BitmapDescriptor _pointMarker =

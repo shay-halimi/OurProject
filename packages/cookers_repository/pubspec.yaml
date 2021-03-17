@@ -13,3 +13,4 @@ dependencies:
   equatable: ^1.2.6
   firebase_core: ^0.5.1
   meta: ^1.2.4
+  lipsum: ^1.0.1

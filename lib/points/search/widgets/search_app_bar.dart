@@ -1,13 +1,13 @@
 import 'package:cookpoint/location/location.dart';
-import 'package:cookpoint/points/search/bloc/search_bloc.dart';
+import 'package:cookpoint/points/search/search.dart';
 import 'package:dough/dough.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:points_repository/points_repository.dart';
 import 'package:provider/provider.dart';
 
-class MapAppBar extends StatelessWidget implements PreferredSizeWidget {
-  MapAppBar({Key key, Widget title, List<Widget> actions})
+class SearchAppBar extends StatelessWidget implements PreferredSizeWidget {
+  SearchAppBar({Key key, Widget title, List<Widget> actions})
       : _appBar = AppBar(
           primary: false,
           shape: const RoundedRectangleBorder(
@@ -29,22 +29,26 @@ class MapAppBar extends StatelessWidget implements PreferredSizeWidget {
   @override
   Widget build(BuildContext context) {
     return PressableDough(
-      child: Padding(
-        padding: EdgeInsets.only(
-          top: MediaQuery.of(context).padding.top + _padding,
-          right: _padding,
-          left: _padding,
-          bottom: _padding,
-        ),
-        child: Column(
-          children: [
-            _appBar,
-            Padding(
-              padding: EdgeInsets.only(top: _padding),
-              child: const _TagsFilter(),
+      child: Column(
+        children: [
+          Padding(
+            padding: EdgeInsets.only(
+              top: MediaQuery.of(context).padding.top + _padding,
+              right: _padding,
+              left: _padding,
+              bottom: _padding,
             ),
-          ],
-        ),
+            child: Column(
+              children: [
+                _appBar,
+                Padding(
+                  padding: EdgeInsets.only(top: _padding),
+                  child: const _TagsFilter(),
+                ),
+              ],
+            ),
+          ),
+        ],
       ),
       onReleased: (details) {
         if (details.delta.distance >= 200) {

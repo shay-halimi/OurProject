@@ -51,7 +51,11 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
       yield state.copyWith(
         status: SearchStatus.loaded,
         term: event.term,
-        results: _filter(_pointsBloc.state.points, event.term, state.tags),
+        results: _filter(
+          _pointsBloc.state.points,
+          event.term,
+          state.tags,
+        ),
       );
     } else if (event is SearchTagSelected) {
       var tags = {...state.tags};
@@ -65,12 +69,20 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
       yield state.copyWith(
         status: SearchStatus.loaded,
         tags: tags,
-        results: _filter(_pointsBloc.state.points, state.term, tags),
+        results: _filter(
+          _pointsBloc.state.points,
+          state.term,
+          tags,
+        ),
       );
     } else if (event is SearchPointsUpdated) {
       yield state.copyWith(
         status: SearchStatus.loaded,
-        results: _filter(event.points, state.term, state.tags),
+        results: _filter(
+          event.points,
+          state.term,
+          state.tags,
+        ),
       );
     }
   }
