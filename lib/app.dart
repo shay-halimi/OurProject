@@ -1,7 +1,7 @@
 import 'package:authentication_repository/authentication_repository.dart';
 import 'package:cookers_repository/cookers_repository.dart';
 import 'package:cookpoint/authentication/authentication.dart';
-import 'package:cookpoint/cooker/bloc/bloc.dart';
+import 'package:cookpoint/cooker/cooker.dart';
 import 'package:cookpoint/home_page.dart';
 import 'package:cookpoint/location/location.dart';
 import 'package:cookpoint/splash/splash.dart';

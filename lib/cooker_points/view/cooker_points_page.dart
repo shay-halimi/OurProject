@@ -52,7 +52,7 @@ class CookerPointsPageView extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomInset: true,
-      appBar: AppBar(title: const Text('המאכלים שלי')),
+      appBar: AppBar(title: const Text('התפריט שלי')),
       body: CookerPointsPageViewBody(cooker: cooker),
       floatingActionButton: const CreatePointButton(),
     );
@@ -78,9 +78,15 @@ class CookerPointsPageViewBody extends StatelessWidget {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  AppLogo(),
-                  ConstrainedBox(constraints: BoxConstraints(minHeight: 64)),
-                  const Text('רשימת המאכלים שלך ריקה כרגע'),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: AppLogo(),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child:
+                        const Text('נראה שעדיין לא הוספת מאכלים לתפריט שלך.'),
+                  ),
                 ],
               ),
             );
@@ -114,41 +120,39 @@ class _PointsWidget extends StatelessWidget {
       return Container();
     }
 
-    return SingleChildScrollView(
-      child: Column(
-        children: [
-          for (var point in points) ...[
-            InkWell(
-              child: Card(
-                child: Column(
-                  children: [
-                    AspectRatio(
-                      aspectRatio: 3 / 1,
-                      child: MediaWidget(
-                        media: point.media.first,
-                      ),
+    return ListView(
+      children: [
+        for (var point in points) ...[
+          InkWell(
+            child: Card(
+              child: Column(
+                children: [
+                  AspectRatio(
+                    aspectRatio: 3 / 1,
+                    child: MediaWidget(
+                      media: point.media.first,
                     ),
-                    ListTile(
-                      isThreeLine: true,
-                      title: Text(point.title),
-                      subtitle: Text(
-                        point.description,
-                        maxLines: 2,
-                        overflow: TextOverflow.fade,
-                      ),
-                      trailing: Icon(Icons.edit),
+                  ),
+                  ListTile(
+                    isThreeLine: true,
+                    title: Text(point.title),
+                    subtitle: Text(
+                      point.description,
+                      maxLines: 2,
+                      overflow: TextOverflow.fade,
                     ),
-                  ],
-                ),
-              ),
-              onTap: () => Navigator.of(context).push<void>(
-                CreateUpdatePointPage.route(point: point),
+                    trailing: Icon(Icons.edit),
+                  ),
+                ],
               ),
             ),
-          ],
-          ConstrainedBox(constraints: BoxConstraints(minHeight: 64)),
+            onTap: () => Navigator.of(context).push<void>(
+              CreateUpdatePointPage.route(point: point),
+            ),
+          ),
         ],
-      ),
+        ConstrainedBox(constraints: BoxConstraints(minHeight: 64)),
+      ],
     );
   }
 }

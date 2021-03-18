@@ -8,7 +8,7 @@
 
     <application
         android:allowBackup="false"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@mipmap/icon"
         android:label="CookPoint"
         android:requestLegacyExternalStorage="true"
         tools:ignore="AllowBackup">
@@ -33,7 +33,7 @@
                  Flutter's first frame. -->
             <meta-data
                 android:name="io.flutter.embedding.android.SplashScreenDrawable"
-                android:resource="@drawable/launch_background" />
+                android:resource="@drawable/screen" />
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />

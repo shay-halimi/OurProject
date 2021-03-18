@@ -9,17 +9,22 @@ import 'package:provider/provider.dart';
 class AppDrawer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    final user = context.select((AuthenticationBloc bloc) => bloc.state.user);
+
     return Drawer(
       child: Center(
         child: ListView(
           shrinkWrap: true,
           padding: EdgeInsets.zero,
           children: <Widget>[
-            const AppLogo(),
+            Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: const AppLogo(),
+            ),
             const Divider(),
             ListTile(
-              key: const Key('AppDrawer_PointsPage_ListTile'),
-              leading: const Icon(Icons.kitchen),
+              key: const Key('AppDrawer_CookerPage_ListTile'),
+              leading: const Icon(Icons.account_circle),
               title: const Text('המטבח שלי'),
               onTap: () => Navigator.of(context).push<void>(
                 CookerPage.route(),
@@ -28,14 +33,16 @@ class AppDrawer extends StatelessWidget {
                   .read<AuthenticationBloc>()
                   .add(AuthenticationLogoutRequested()),
             ),
-            ListTile(
-              key: const Key('AppDrawer_CookerPage_route'),
-              leading: const Icon(Icons.face_rounded),
-              title: const Text('המאכלים שלי'),
-              onTap: () => Navigator.of(context).push<void>(
-                CookerPointsPage.route(),
+            if (user.isNotEmpty) ...[
+              ListTile(
+                key: const Key('AppDrawer_CookerPointsPage_ListTile'),
+                leading: const Icon(Icons.restaurant),
+                title: const Text('התפריט שלי'),
+                onTap: () => Navigator.of(context).push<void>(
+                  CookerPointsPage.route(),
+                ),
               ),
-            ),
+            ],
             const Divider(),
             ListTile(
               dense: true,

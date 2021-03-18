@@ -2,6 +2,7 @@ import 'package:cookers_repository/cookers_repository.dart';
 import 'package:cookpoint/authentication/authentication.dart';
 import 'package:cookpoint/cooker/cooker.dart';
 import 'package:cookpoint/media/media.dart';
+import 'package:cookpoint/splash/splash.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:provider/provider.dart';
@@ -19,16 +20,23 @@ class CookerPage extends StatelessWidget {
       return AuthenticationPage();
     }
 
-    final cooker = context.select((CookerBloc bloc) => bloc.state.cooker);
+    return BlocBuilder<CookerBloc, CookerState>(
+      buildWhen: (previous, current) => previous != current,
+      builder: (_, state) {
+        if (state.status == CookerStatus.loaded) {
+          if (state.cooker.isEmpty) {
+            return CreateUpdateCookerPage(
+              cooker: state.cooker,
+            );
+          }
 
-    if (cooker.isEmpty) {
-      return CreateUpdateCookerPage(
-        cooker: cooker,
-      );
-    }
+          return CookerView(
+            cooker: state.cooker,
+          );
+        }
 
-    return CookerView(
-      cooker: cooker,
+        return SplashPage();
+      },
     );
   }
 }

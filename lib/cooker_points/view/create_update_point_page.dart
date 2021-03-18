@@ -180,10 +180,12 @@ class _AvailableInput extends StatelessWidget {
           previous.availableInput != current.availableInput,
       builder: (_, state) {
         return SwitchListTile(
-          title: const Text('זמין'),
+          title: state.availableInput.value
+              ? const Text('זמין')
+              : const Text('לא זמין'),
           subtitle: const Text(
               'מאכלים זמינים מופיעים על המפה עם שמכם, כתובתכם ומספר הטלפון איתו נרשמתם.'),
-          value: state.availableInput.value ?? false,
+          value: state.availableInput.value,
           onChanged: (bool value) {
             context.read<PointFormCubit>().changeAvailable(value);
           },

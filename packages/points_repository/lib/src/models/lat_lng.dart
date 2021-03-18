@@ -1,3 +1,5 @@
+import 'dart:math' show cos, sqrt, asin;
+
 import 'package:meta/meta.dart';
 
 @immutable
@@ -56,4 +58,20 @@ class LatLng {
   bool get isEmpty => this == empty;
 
   bool get isNotEmpty => !isEmpty;
+
+  /// https://stackoverflow.com/questions/54138750/total-distance-calculation-from-latlng-list
+  double distanceInKM(LatLng other) {
+    if ((latitude == other.latitude) && (longitude == other.longitude)) {
+      return 0;
+    } else {
+      final p = 0.017453292519943295;
+      return 12742 *
+          asin(sqrt(0.5 -
+              cos((other.latitude - latitude) * p) / 2 +
+              cos(latitude * p) *
+                  cos(other.latitude * p) *
+                  (1 - cos((other.longitude - longitude) * p)) /
+                  2));
+    }
+  }
 }

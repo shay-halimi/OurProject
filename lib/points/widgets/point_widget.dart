@@ -9,26 +9,38 @@ class PointWidget extends StatelessWidget {
     Key key,
     @required this.point,
     this.onTap,
+    this.height,
   }) : super(key: key);
 
   final Point point;
   final GestureTapCallback onTap;
+  final double height;
 
   @override
   Widget build(BuildContext context) {
-    return InkWell(
-      onTap: onTap,
-      child: Card(
-        child: Column(
+    return Container(
+      height: height,
+      child: InkWell(
+        onTap: onTap,
+        child: Stack(
+          alignment: AlignmentDirectional.bottomCenter,
           children: [
-            Flexible(
-              flex: 7,
-              fit: FlexFit.tight,
-              child: _PhotoWidget(photo: point.media.first),
-            ),
-            Flexible(
-              flex: 3,
-              child: _TitleWidget(point: point),
+            Card(child: _PhotoWidget(photo: point.media.first)),
+            Container(
+              color: Colors.white,
+              child: Opacity(
+                opacity: 0.9,
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      TagsWidget(tags: point.tags),
+                      _TitleWidget(point: point),
+                    ],
+                  ),
+                ),
+              ),
             ),
           ],
         ),
@@ -52,7 +64,10 @@ class _PhotoWidget extends StatelessWidget {
         Expanded(
           child: Hero(
             tag: photo,
-            child: MediaWidget(media: photo),
+            child: AspectRatio(
+              child: MediaWidget(media: photo),
+              aspectRatio: 1 / 1,
+            ),
           ),
         ),
       ],
@@ -70,33 +85,24 @@ class _TitleWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        children: [
-          Row(
-            children: [
-              Expanded(
-                child: Text(
-                  point.title,
-                  style: theme.textTheme.headline6,
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                ),
-              ),
-              Text(
-                '${point.price.amount.toStringAsFixed(2)} ₪',
-                style: theme.textTheme.headline6
-                    .copyWith(fontWeight: FontWeight.w300),
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
-              ),
-            ],
+    final priceTextStyle =
+        theme.textTheme.headline6.copyWith(fontWeight: FontWeight.w300);
+
+    return Row(
+      children: [
+        Expanded(
+          child: Text(
+            point.title,
+            style: theme.textTheme.headline6,
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
           ),
-          if (point.tags.isNotEmpty) TagsWidget(tags: point.tags),
-        ],
-      ),
+        ),
+        Text(
+          '${point.price.amount.toStringAsFixed(2)} ₪',
+          style: priceTextStyle,
+        ),
+      ],
     );
   }
 }

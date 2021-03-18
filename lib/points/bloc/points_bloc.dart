@@ -56,7 +56,17 @@ class PointsBloc extends Bloc<PointsEvent, PointsState> {
     _pointsSubscription = _pointsRepository
         .near(latLng: event.latLng, radiusInKM: 100)
         .listen((points) {
-      add(PointsLoadedEvent(points));
+      add(PointsLoadedEvent(points
+        ..sort((point1, point2) {
+          final distance1 = point1.latLng.distanceInKM(event.latLng);
+          final distance2 = point2.latLng.distanceInKM(event.latLng);
+
+          if (distance1 == distance2) {
+            return 0;
+          }
+
+          return distance1 < distance2 ? -1 : 1;
+        })));
     });
   }
 
@@ -94,11 +104,5 @@ class PointsBloc extends Bloc<PointsEvent, PointsState> {
     PointDeletedEvent event,
   ) async* {
     await _pointsRepository.delete(event.point);
-  }
-
-  void changeLatLng(Set<Point> points, LatLng latLng) {
-    points.forEach((point) {
-      add(PointUpdatedEvent(point.copyWith(latLng: latLng)));
-    });
   }
 }

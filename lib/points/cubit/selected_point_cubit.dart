@@ -14,7 +14,8 @@ class SelectedPointCubit extends Cubit<SelectedPointState> {
         _searchBloc = searchBloc,
         super(const SelectedPointState()) {
     _streamSubscription = _searchBloc.listen((state) {
-      if (state.results.isNotEmpty && state.term.isNotEmpty) {
+      if (state.results.isNotEmpty &&
+          (state.term.isNotEmpty || state.tags.isNotEmpty)) {
         selectPoint(state.results.first);
       }
     });

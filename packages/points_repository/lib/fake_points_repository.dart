@@ -27,30 +27,26 @@ class FakePointsRepository extends PointsRepository {
     final list = [
       for (var i = 0; i <= 500; i++)
         Point.empty.copyWith(
-            id: rand.nextInt(999999999).toString(),
-            title: lipsum.createWord(numWords: 1 + rand.nextInt(20)),
-            description: rand.nextBool()
-                ? lipsum.createSentence(numSentences: 1 + rand.nextInt(20))
-                : lipsum.createParagraph(numParagraphs: 1 + rand.nextInt(20)),
-            latLng: rand.nextBool()
-                ? LatLng.empty
-                : LatLng(
-                    latitude: latLng.latitude +
-                        ((rand.nextDouble() - rand.nextDouble()) *
-                            (rand.nextBool() ? 9 : -9)),
-                    longitude: latLng.longitude +
-                        ((rand.nextDouble() - rand.nextDouble()) *
-                            (rand.nextBool() ? 9 : -9)),
-                  ),
-            price: Money.empty.copyWith(amount: rand.nextDouble() * 100000),
-            media: {
-              'https://picsum.photos/seed/${lipsum.createWord()}/1280/720',
-            },
-            tags: {
-              if (rand.nextBool()) 'צמחוני',
-              if (rand.nextBool()) 'טבעוני',
-              if (rand.nextBool()) 'ללא גלוטן',
-            })
+          id: rand.nextInt(999999999).toString(),
+          title: lipsum.createWord(numWords: 1 + rand.nextInt(6)),
+          description:
+              lipsum.createSentence(numSentences: 1 + rand.nextInt(20)),
+          latLng: LatLng(
+            latitude: latLng.latitude +
+                ((rand.nextDouble() - rand.nextDouble()) *
+                    (rand.nextBool() ? 1 : -1)),
+            longitude: latLng.longitude +
+                ((rand.nextDouble() - rand.nextDouble()) *
+                    (rand.nextBool() ? 1 : -1)),
+          ),
+          price: Money.empty.copyWith(amount: 10 + (rand.nextDouble() * 200)),
+          media: {
+            'https://picsum.photos/seed/${0 + rand.nextInt(50)}/1280/720',
+            'https://picsum.photos/seed/${0 + rand.nextInt(50)}/1280/720',
+            'https://picsum.photos/seed/${0 + rand.nextInt(50)}/1280/720',
+          },
+          tags: Point.defaultTags.where((_) => rand.nextBool()).toSet(),
+        )
     ];
 
     yield list;
@@ -61,8 +57,15 @@ class FakePointsRepository extends PointsRepository {
 
   @override
   Stream<List<Point>> byCookerId(String cookerId) async* {
-    yield await near(latLng: LatLng.empty)
-        .single
-        .then((value) => value.take(5).toList());
+    final rand = Random();
+
+    yield await near(latLng: LatLng.empty).single.then((list) => list
+        .take(0 + rand.nextInt(5))
+        .map((point) => rand.nextBool()
+            ? point
+            : point.copyWith(
+                latLng: LatLng.empty,
+              ))
+        .toList());
   }
 }

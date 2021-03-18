@@ -43,11 +43,11 @@ class _PhoneNumberForm extends StatelessWidget {
         children: [
           const AppLogo(),
           _PhoneNumberInput(),
+          _SendOTPButton(),
           Text(
             'מספרך משמש אך ורק למניעת ספאם ולא יוצג למשתמשים אחרים ללא אישורך.',
             textAlign: TextAlign.center,
           ),
-          _SendOTPButton(),
         ],
       ),
     );
@@ -63,29 +63,27 @@ class _PhoneNumberInput extends StatelessWidget {
       builder: (context, state) {
         final initialValue =
             state.phoneNumberInput.pure ? '05' : state.phoneNumberInput.value;
-        return TextFormField(
-          initialValue: initialValue,
-          key: const Key('PhoneNumberForm__PhoneNumberInput_TextField'),
-          keyboardType: TextInputType.phone,
-          textAlign: TextAlign.end,
-          autofocus: true,
-          maxLength: 10,
-          maxLengthEnforcement: MaxLengthEnforcement.enforced,
-          onChanged: (phoneNumber) =>
-              context.read<LoginCubit>().phoneNumberChanged(phoneNumber),
-          onEditingComplete: state.status.isValidated
-              ? () => context.read<LoginCubit>().sendOTP()
-              : null,
-          decoration: InputDecoration(
-            border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(4.0),
-              borderSide:
-                  const BorderSide(width: 1.0, style: BorderStyle.solid),
-            ),
-            labelText: 'מספר הטלפון שלך',
-            errorText: state.phoneNumberInput.invalid
-                ? 'ספרות בלבד, ללא מקפים או רווחים'
+        return Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16.0),
+          child: TextFormField(
+            initialValue: initialValue,
+            key: const Key('PhoneNumberForm__PhoneNumberInput_TextField'),
+            keyboardType: TextInputType.phone,
+            textAlign: TextAlign.end,
+            autofocus: true,
+            maxLength: 10,
+            maxLengthEnforcement: MaxLengthEnforcement.enforced,
+            onChanged: (phoneNumber) =>
+                context.read<LoginCubit>().phoneNumberChanged(phoneNumber),
+            onEditingComplete: state.status.isValidated
+                ? () => context.read<LoginCubit>().sendOTP()
                 : null,
+            decoration: InputDecoration(
+              labelText: 'מספר טלפון',
+              errorText: state.phoneNumberInput.invalid
+                  ? 'ספרות בלבד, ללא מקפים או רווחים'
+                  : null,
+            ),
           ),
         );
       },
@@ -105,12 +103,21 @@ class _SendOTPButton extends StatelessWidget {
       builder: (context, state) {
         return state.status.isSubmissionInProgress
             ? const CircularProgressIndicator()
-            : ElevatedButton(
-                key: const Key('_SendOTPButton'),
-                child: Text('המשך'),
-                onPressed: state.status.isValidated
-                    ? () => context.read<LoginCubit>().sendOTP()
-                    : null,
+            : Row(
+                children: [
+                  Expanded(
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 32.0),
+                      child: ElevatedButton(
+                        key: const Key('_SendOTPButton'),
+                        child: Text('המשך'),
+                        onPressed: state.status.isValidated
+                            ? () => context.read<LoginCubit>().sendOTP()
+                            : null,
+                      ),
+                    ),
+                  ),
+                ],
               );
       },
     );
@@ -166,27 +173,25 @@ class _OTPInput extends StatelessWidget {
     return BlocBuilder<LoginCubit, LoginState>(
       buildWhen: (previous, current) => previous.otpInput != current.otpInput,
       builder: (context, state) {
-        return TextFormField(
-          initialValue: state.otpInput.value,
-          key: const Key('LoginForm__LoginInput_TextField'),
-          keyboardType: TextInputType.number,
-          autofocus: true,
-          onChanged: (otp) => context.read<LoginCubit>().otpChanged(otp),
-          decoration: InputDecoration(
-            border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(4.0),
-              borderSide:
-                  const BorderSide(width: 1.0, style: BorderStyle.solid),
+        return Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16.0),
+          child: TextFormField(
+            initialValue: state.otpInput.value,
+            key: const Key('LoginForm__LoginInput_TextField'),
+            keyboardType: TextInputType.number,
+            autofocus: true,
+            onChanged: (otp) => context.read<LoginCubit>().otpChanged(otp),
+            decoration: InputDecoration(
+              labelText: 'קוד אימות',
+              errorText: state.otpInput.invalid ? 'קוד אימות לא תקין' : null,
             ),
-            labelText: 'קוד האימות',
-            errorText: state.otpInput.invalid ? 'קוד אימות לא תקין' : null,
+            textAlign: TextAlign.end,
+            maxLength: 6,
+            maxLengthEnforcement: MaxLengthEnforcement.enforced,
+            onEditingComplete: state.status.isValidated
+                ? () => context.read<LoginCubit>().confirmPhoneNumber()
+                : null,
           ),
-          textAlign: TextAlign.end,
-          maxLength: 6,
-          maxLengthEnforcement: MaxLengthEnforcement.enforced,
-          onEditingComplete: state.status.isValidated
-              ? () => context.read<LoginCubit>().confirmPhoneNumber()
-              : null,
         );
       },
     );
@@ -201,12 +206,23 @@ class _ConfirmPhoneNumberButton extends StatelessWidget {
       builder: (context, state) {
         return state.status.isSubmissionInProgress
             ? const CircularProgressIndicator()
-            : ElevatedButton(
-                key: const Key('LoginForm__ContinueButton_ElevatedButton'),
-                child: const Text('המשך'),
-                onPressed: state.status.isValidated
-                    ? () => context.read<LoginCubit>().confirmPhoneNumber()
-                    : null,
+            : Row(
+                children: [
+                  Expanded(
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 32.0),
+                      child: ElevatedButton(
+                        key: const Key(
+                            'LoginForm__ContinueButton_ElevatedButton'),
+                        child: const Text('המשך'),
+                        onPressed: state.status.isValidated
+                            ? () =>
+                                context.read<LoginCubit>().confirmPhoneNumber()
+                            : null,
+                      ),
+                    ),
+                  ),
+                ],
               );
       },
     );

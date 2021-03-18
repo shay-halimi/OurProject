@@ -8,7 +8,7 @@ import 'models/models.dart';
 class FakeCookersRepository implements CookersRepository {
   @override
   Stream<Cooker> cooker(String id) async* {
-    await Future<void>.delayed(const Duration(seconds: 1));
+    await Future<void>.delayed(const Duration(seconds: 2));
 
     final rand = Random();
 
@@ -20,7 +20,7 @@ class FakeCookersRepository implements CookersRepository {
           latitude: 0.0,
           longitude: 0.0),
       phoneNumber: '+97255' + (1000000 + rand.nextInt(9999999)).toString(),
-      photoURL: 'https://i.pravatar.cc/300',
+      photoURL: 'https://i.pravatar.cc/300#${rand.nextInt(9999999)}',
     );
   }
 

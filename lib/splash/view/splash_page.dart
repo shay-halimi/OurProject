@@ -1,3 +1,4 @@
+import 'package:cookpoint/theme/theme.dart';
 import 'package:flutter/material.dart';
 
 class SplashPage extends StatelessWidget {
@@ -9,9 +10,27 @@ class SplashPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(
-      body: Center(
-        child: CircularProgressIndicator(),
+    return Scaffold(
+      body: Container(
+        color: theme.colorScheme.primary,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                AppLogo(),
+              ],
+            ),
+            ConstrainedBox(constraints: BoxConstraints(minHeight: 32)),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                CircularProgressIndicator(),
+              ],
+            ),
+          ],
+        ),
       ),
     );
   }

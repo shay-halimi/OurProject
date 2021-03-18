@@ -19,6 +19,7 @@ class CookerWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
+      key: Key('CookerWidgetForCooker$cookerId'),
       create: (_) => CookerWidgetCubit(
         cookersRepository: context.read<CookersRepository>(),
       )..load(cookerId),
@@ -49,6 +50,7 @@ class CookerWidgetView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListTile(
+      visualDensity: VisualDensity.compact,
       leading: CircleAvatar(
         backgroundImage: CachedNetworkImageProvider(cooker.photoURL),
       ),

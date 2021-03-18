@@ -23,8 +23,7 @@ class _Launcher {
         await web('mailto:$emailAddress');
       }
     } else if (Platform.isIOS) {
-      // todo tests
-      await web('message://$emailAddress');
+      await web('mailto:$emailAddress');
     }
   }
 
@@ -41,7 +40,6 @@ class _Launcher {
         await web('tel:$phoneNumber');
       }
     } else if (Platform.isIOS) {
-      // todo tests
       await web('tel:$phoneNumber');
     }
   }

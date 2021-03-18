@@ -5,8 +5,12 @@ export 'widgets/widgets.dart';
 /// @see https://material.io/develop/web/guides/typography
 const baseFontSize = 16.0;
 
+const primaryColor = Color(0xFF33B0FF);
+const accentColor = Color(0xFFDD5534);
+
 final theme = ThemeData(
-  primarySwatch: Colors.blue,
+  primaryColor: primaryColor,
+  accentColor: accentColor,
   appBarTheme: appBarTheme,
   textTheme: const TextTheme(
     headline1: TextStyle(
@@ -60,6 +64,29 @@ final theme = ThemeData(
     overline: TextStyle(
       fontSize: 0.75 * baseFontSize,
       fontWeight: FontWeight.w500,
+    ),
+  ),
+  inputDecorationTheme: InputDecorationTheme(
+    border: OutlineInputBorder(
+      borderRadius: BorderRadius.circular(33.0),
+      borderSide: const BorderSide(
+        width: 10.0,
+        style: BorderStyle.solid,
+      ),
+    ),
+  ),
+  buttonTheme: ButtonThemeData(
+    shape: RoundedRectangleBorder(
+      borderRadius: BorderRadius.circular(33.0),
+    ),
+  ),
+  elevatedButtonTheme: ElevatedButtonThemeData(
+    style: ButtonStyle(
+      shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+        RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(33.0),
+        ),
+      ),
     ),
   ),
 );

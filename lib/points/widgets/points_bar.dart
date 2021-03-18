@@ -17,58 +17,70 @@ class PointsBar extends StatefulWidget {
 }
 
 class _PointsBarState extends State<PointsBar> {
-  final CarouselController _controller = CarouselController();
+  List<Point> get points => widget.points;
 
   @override
   Widget build(BuildContext context) {
+    final height = MediaQuery.of(context).size.height * 0.4;
+    final CarouselController _controller = CarouselController();
+
     return BlocConsumer<SelectedPointCubit, SelectedPointState>(
       listenWhen: (previous, current) => previous != current,
       listener: (_, state) async {
-        if (_controller.ready && widget.points.contains(state.point)) {
-          _controller.animateToPage(widget.points.indexOf(state.point));
+        if (points.contains(state.point)) {
+          if (_controller.ready) {
+            try {
+              await _controller.animateToPage(points.indexOf(state.point));
+            } on Error {
+              print('bug in carousel_slider?');
+            }
+          }
         }
       },
       buildWhen: (previous, current) => previous != current,
       builder: (_, state) {
-        if (state.point.isEmpty) {
-          return Container();
-        }
-
         return WillPopScope(
           onWillPop: () async {
-            context.read<SelectedPointCubit>().selectPoint(Point.empty);
-            return false;
+            if (state.point.isNotEmpty) {
+              context.read<SelectedPointCubit>().selectPoint(Point.empty);
+              return false;
+            }
+            return true;
           },
-          child: CarouselSlider(
-            items: widget.points.map((point) {
-              return Builder(
-                key: Key('CarouselSliderBuilder${point.hashCode}'),
-                builder: (context) {
-                  return PointWidget(
-                    point: point,
-                    onTap: () => Navigator.of(context).push<void>(
-                      PointPage.route(point: point),
-                    ),
-                  );
+          child: Visibility(
+            visible: state.point.isNotEmpty,
+            child: CarouselSlider(
+              carouselController: _controller,
+              items: points.map((point) {
+                return Builder(
+                  key: Key('${point.hashCode}_points_bar_point_widget_builder'),
+                  builder: (context) {
+                    return PointWidget(
+                      point: point,
+                      onTap: () => Navigator.of(context).push<void>(
+                        PointPage.route(point: point),
+                      ),
+                      height: height,
+                    );
+                  },
+                );
+              }).toList(),
+              options: CarouselOptions(
+                enableInfiniteScroll: false,
+                initialPage: widget.points.contains(state.point)
+                    ? widget.points.indexOf(state.point)
+                    : 0,
+                onPageChanged: (index, reason) {
+                  if (reason == CarouselPageChangedReason.manual) {
+                    context
+                        .read<SelectedPointCubit>()
+                        .selectPoint(points.elementAt(index));
+                  }
                 },
-              );
-            }).toList(),
-            options: CarouselOptions(
-              enableInfiniteScroll: false,
-              initialPage: widget.points.contains(state.point)
-                  ? widget.points.indexOf(state.point)
-                  : 0,
-              onPageChanged: (index, reason) {
-                if (reason == CarouselPageChangedReason.manual) {
-                  context
-                      .read<SelectedPointCubit>()
-                      .selectPoint(widget.points.elementAt(index));
-                }
-              },
-              viewportFraction: 0.9,
-              height: MediaQuery.of(context).size.height / 3,
+                viewportFraction: 0.94,
+                height: height,
+              ),
             ),
-            carouselController: _controller,
           ),
         );
       },
