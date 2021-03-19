@@ -1,5 +1,5 @@
 import 'package:cookpoint/location/location.dart';
-import 'package:cookpoint/points/search/search.dart';
+import 'package:cookpoint/search/search.dart';
 import 'package:dough/dough.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';

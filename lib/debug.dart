@@ -16,7 +16,7 @@ void main() async {
   EquatableConfig.stringify = kDebugMode;
   Bloc.observer = SimpleBlocObserver();
   runApp(App(
-    authenticationRepository: AuthenticationRepository(),
+    authenticationRepository: FakeAuthenticationRepository(),
     pointsRepository: FakePointsRepository(),
     locationServices: GeoLocatorLocationServices(),
     cookersRepository: FakeCookersRepository(),

@@ -10,9 +10,9 @@ class LoginForm extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<LoginCubit, LoginState>(
       buildWhen: (previous, current) =>
-          previous.verificationId != current.verificationId,
+          previous.verification != current.verification,
       builder: (context, state) {
-        if (state.verificationId.isEmpty) {
+        if (state.verification.isEmpty) {
           return _PhoneNumberForm();
         }
 
@@ -161,7 +161,7 @@ class _ClearVerificationIdButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return TextButton(
-      onPressed: () => context.read<LoginCubit>().verificationIdChanged(''),
+      onPressed: () => context.read<LoginCubit>().clearVerification(),
       child: Text('אם לא קיבלת SMS מאיתנו, לחץ.י כאן.'),
     );
   }

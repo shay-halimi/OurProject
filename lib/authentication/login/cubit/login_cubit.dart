@@ -30,9 +30,9 @@ class LoginCubit extends Cubit<LoginState> {
     ));
   }
 
-  void verificationIdChanged(String value) {
+  void clearVerification() {
     emit(state.copyWith(
-      verificationId: value,
+      verification: Verification.empty,
       status: FormzStatus.submissionSuccess,
     ));
   }
@@ -43,14 +43,14 @@ class LoginCubit extends Cubit<LoginState> {
     emit(state.copyWith(status: FormzStatus.submissionInProgress));
 
     try {
-      final verificationId = await _authenticationRepository.sendOTP(
+      final verification = await _authenticationRepository.sendOTP(
         phoneNumber: state.phoneNumberInput.e164,
       );
 
       await Future.delayed(Duration(seconds: 1));
 
       emit(state.copyWith(
-        verificationId: verificationId,
+        verification: verification,
         status: FormzStatus.submissionSuccess,
       ));
     } catch (e) {
@@ -64,9 +64,9 @@ class LoginCubit extends Cubit<LoginState> {
     emit(state.copyWith(status: FormzStatus.submissionInProgress));
 
     try {
-      await _authenticationRepository.signInWithCredential(
+      await _authenticationRepository.signIn(
         otp: state.otpInput.value,
-        verificationId: state.verificationId,
+        verification: state.verification,
       );
       emit(state.copyWith(status: FormzStatus.submissionSuccess));
     } on Exception {

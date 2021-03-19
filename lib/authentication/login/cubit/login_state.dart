@@ -4,29 +4,28 @@ class LoginState extends Equatable {
   const LoginState({
     this.phoneNumberInput = const PhoneNumberInput.pure(),
     this.otpInput = const OTPInput.pure(),
-    this.verificationId = '',
+    this.verification = Verification.empty,
     this.status = FormzStatus.pure,
   });
 
   final PhoneNumberInput phoneNumberInput;
   final OTPInput otpInput;
-  final String verificationId;
+  final Verification verification;
   final FormzStatus status;
 
   @override
-  List<Object> get props =>
-      [phoneNumberInput, otpInput, verificationId, status];
+  List<Object> get props => [phoneNumberInput, otpInput, verification, status];
 
   LoginState copyWith({
     PhoneNumberInput phoneNumberInput,
     OTPInput otpInput,
-    String verificationId,
+    Verification verification,
     FormzStatus status,
   }) {
     return LoginState(
       phoneNumberInput: phoneNumberInput ?? this.phoneNumberInput,
       otpInput: otpInput ?? this.otpInput,
-      verificationId: verificationId ?? this.verificationId,
+      verification: verification ?? this.verification,
       status: status ?? this.status,
     );
   }

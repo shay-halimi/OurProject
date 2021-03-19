@@ -91,7 +91,7 @@ class PointsBloc extends Bloc<PointsEvent, PointsState> {
   Stream<PointsState> _mapPointCreatedEventToState(
     PointCreatedEvent event,
   ) async* {
-    await _pointsRepository.add(event.point);
+    await _pointsRepository.create(event.point);
   }
 
   Stream<PointsState> _mapPointUpdatedEventToState(

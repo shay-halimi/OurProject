@@ -5,11 +5,9 @@ import 'models/models.dart';
 abstract class PointsRepository {
   Stream<List<Point>> near({LatLng latLng, num radiusInKM = 3.14});
 
-  Future<void> add(Point point);
+  Future<void> create(Point point);
 
   Future<void> update(Point point);
-
-  Stream<List<Point>> points();
 
   Future<void> delete(Point point);
 

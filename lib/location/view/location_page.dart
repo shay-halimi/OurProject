@@ -1,4 +1,5 @@
 import 'package:cookpoint/location/location.dart';
+import 'package:cookpoint/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -10,13 +11,37 @@ class LocationPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('שירותי מיקום'),
-      ),
-      body: Center(
-        child: ElevatedButton(
-          child: const Text('הפעל שירותי מיקום'),
-          onPressed: context.read<LocationCubit>().locate,
+      body: Container(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                AppLogo(),
+              ],
+            ),
+            Row(
+              children: [
+                Expanded(
+                  child: Text(
+                    'בכדי להמשיך יש להפעיל את שירותי המיקום במכשירך.',
+                    style: theme.textTheme.headline6,
+                    textAlign: TextAlign.center,
+                  ),
+                ),
+              ],
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                ElevatedButton(
+                  child: const Text('נסה שוב'),
+                  onPressed: context.read<LocationCubit>().locate,
+                ),
+              ],
+            ),
+          ],
         ),
       ),
     );

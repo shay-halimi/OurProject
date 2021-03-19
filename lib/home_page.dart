@@ -1,7 +1,7 @@
 import 'package:cookpoint/location/location.dart';
 import 'package:cookpoint/points/bloc/bloc.dart';
 import 'package:cookpoint/points/points.dart';
-import 'package:cookpoint/points/search/search.dart';
+import 'package:cookpoint/search/search.dart';
 import 'package:cookpoint/splash/splash.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';

@@ -1,7 +1,7 @@
 import 'dart:async';
 
 import 'package:bloc/bloc.dart';
-import 'package:cookpoint/points/search/search.dart';
+import 'package:cookpoint/search/search.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:points_repository/points_repository.dart';
@@ -9,28 +9,37 @@ import 'package:points_repository/points_repository.dart';
 part 'selected_point_state.dart';
 
 class SelectedPointCubit extends Cubit<SelectedPointState> {
-  SelectedPointCubit({@required SearchBloc searchBloc})
-      : assert(searchBloc != null),
+  SelectedPointCubit({
+    @required SearchBloc searchBloc,
+  })  : assert(searchBloc != null),
         _searchBloc = searchBloc,
         super(const SelectedPointState()) {
-    _streamSubscription = _searchBloc.listen((state) {
+    _searchBlocSubscription = _searchBloc.listen((state) {
       if (state.results.isNotEmpty &&
           (state.term.isNotEmpty || state.tags.isNotEmpty)) {
-        selectPoint(state.results.first);
+        select(state.results.first);
+      } else {
+        clear();
       }
     });
   }
 
   final SearchBloc _searchBloc;
-  StreamSubscription _streamSubscription;
+  StreamSubscription _searchBlocSubscription;
 
-  void selectPoint(Point point) {
-    emit(state.copyWith(point: point));
+  void select(Point point) {
+    emit(SelectedPointState(
+      point: point,
+    ));
+  }
+
+  void clear() {
+    select(Point.empty);
   }
 
   @override
   Future<void> close() {
-    _streamSubscription?.cancel();
+    _searchBlocSubscription?.cancel();
     return super.close();
   }
 }

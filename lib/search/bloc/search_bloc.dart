@@ -57,6 +57,8 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
           state.tags,
         ),
       );
+    } else if (event is SearchTermCleared) {
+      yield* mapEventToState(SearchTermUpdated(''));
     } else if (event is SearchTagSelected) {
       var tags = {...state.tags};
 

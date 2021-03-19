@@ -1,23 +1,16 @@
 import 'dart:async';
-import 'dart:math';
 
-import 'package:cookpoint/points/points.dart';
+import 'package:cookpoint/location/location.dart';
+import 'package:cookpoint/search/search.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart' as google_maps;
-import 'package:location_services/location_services.dart';
-import 'package:points_repository/points_repository.dart';
 import 'package:provider/provider.dart';
 
 class MapWidget extends StatefulWidget {
   const MapWidget({
     Key key,
-    @required this.location,
-    @required this.points,
   }) : super(key: key);
-
-  final Location location;
-  final List<Point> points;
 
   @override
   _MapWidgetState createState() => _MapWidgetState();
@@ -26,7 +19,7 @@ class MapWidget extends StatefulWidget {
 class _MapWidgetState extends State<MapWidget> {
   final Completer<google_maps.GoogleMapController> _controller = Completer();
 
-  double _zoom = 7.5;
+  double _zoom = 11.5;
   double _heading = 0;
 
   google_maps.BitmapDescriptor _pointMarker =
@@ -54,6 +47,10 @@ class _MapWidgetState extends State<MapWidget> {
 
   @override
   Widget build(BuildContext context) {
+    final points = context.select((SearchBloc bloc) => bloc.state.results);
+    final location =
+        context.select((LocationCubit cubit) => cubit.state.current);
+
     return BlocConsumer<SelectedPointCubit, SelectedPointState>(
       listenWhen: (previous, current) => previous != current,
       listener: (_, state) async {
@@ -80,14 +77,15 @@ class _MapWidgetState extends State<MapWidget> {
           onMapCreated: _controller.complete,
           initialCameraPosition: google_maps.CameraPosition(
             target: google_maps.LatLng(
-              widget.location.latitude,
-              widget.location.longitude,
+              location.latitude,
+              location.longitude,
             ),
             bearing: _heading,
             zoom: _zoom,
           ),
-          markers: widget.points.map((point) {
-            final isSelectedPoint = point.latLng == state.point.latLng;
+          markers: points.map((point) {
+            final isSelectedPoint =
+                point.latLng.distanceInKM(state.point.latLng) == 0;
 
             return google_maps.Marker(
               markerId: google_maps.MarkerId(point.id),
@@ -97,7 +95,7 @@ class _MapWidgetState extends State<MapWidget> {
               ),
               onTap: () {
                 _hideKeyboard(context);
-                context.read<SelectedPointCubit>().selectPoint(point);
+                context.read<SelectedPointCubit>().select(point);
               },
               icon: isSelectedPoint ? _selectedPointMarker : _pointMarker,
               zIndex: isSelectedPoint ? 1.0 : 0.0,
@@ -109,7 +107,7 @@ class _MapWidgetState extends State<MapWidget> {
           myLocationButtonEnabled: false,
           onTap: (lanLat) {
             _hideKeyboard(context);
-            context.read<SelectedPointCubit>().selectPoint(Point.empty);
+            context.read<SelectedPointCubit>().clear();
           },
           onCameraMove: (position) {
             _zoom = position.zoom;

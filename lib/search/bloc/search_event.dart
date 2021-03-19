@@ -13,6 +13,13 @@ class SearchTermUpdated extends SearchEvent {
   List<Object> get props => [term];
 }
 
+class SearchTermCleared extends SearchEvent {
+  const SearchTermCleared();
+
+  @override
+  List<Object> get props => [];
+}
+
 class SearchTagSelected extends SearchEvent {
   const SearchTagSelected(this.tag);
 

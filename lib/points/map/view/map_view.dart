@@ -1,8 +1,6 @@
 import 'package:cookpoint/cooker_points/cooker_points.dart';
-import 'package:cookpoint/location/location.dart';
 import 'package:cookpoint/points/points.dart';
-import 'package:cookpoint/points/search/search.dart';
-import 'package:cookpoint/points/widgets/points_bar.dart';
+import 'package:cookpoint/search/search.dart';
 import 'package:cookpoint/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -31,9 +29,7 @@ class MapView extends StatelessWidget {
                       ? IconButton(
                           icon: Icon(Icons.close),
                           onPressed: () {
-                            context
-                                .read<SearchBloc>()
-                                .add(SearchTermUpdated(''));
+                            context.read<SearchBloc>().add(SearchTermCleared());
                             _controller.clear();
                             _hideKeyboard(context);
                           },
@@ -55,30 +51,20 @@ class MapView extends StatelessWidget {
       ),
       body: Stack(
         children: [
-          MapWidget(
-            points: context.select((SearchBloc bloc) => bloc.state.results),
-            location:
-                context.select((LocationCubit cubit) => cubit.state.current),
-          ),
+          MapWidget(),
           Column(
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
-              PointsBar(
-                points: context.select((SearchBloc bloc) => bloc.state.results),
-              ),
+              PointsBar(),
             ],
           ),
         ],
       ),
       endDrawer: AppDrawer(),
-      floatingActionButton: BlocBuilder<SelectedPointCubit, SelectedPointState>(
-        buildWhen: (previous, current) => previous != current,
-        builder: (_, state) {
-          return Visibility(
-            visible: state.point.isEmpty,
-            child: const CreatePointButton(),
-          );
-        },
+      floatingActionButton: Visibility(
+        visible: context
+            .select((SelectedPointCubit cubit) => cubit.state.point.isEmpty),
+        child: const CreatePointButton(),
       ),
     );
   }

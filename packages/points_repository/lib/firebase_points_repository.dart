@@ -12,22 +12,13 @@ class FirebasePointsRepository extends PointsRepository {
   final _geo = Geoflutterfire();
 
   @override
-  Future<void> add(Point point) {
+  Future<void> create(Point point) {
     return _collection.add(point.toEntity().toDocument());
   }
 
   @override
   Future<void> update(Point point) {
     return _collection.doc(point.id).update(point.toEntity().toDocument());
-  }
-
-  @override
-  Stream<List<Point>> points() {
-    return _collection.snapshots().map((snapshot) {
-      return snapshot.docs
-          .map((doc) => Point.fromEntity(PointEntity.fromSnapshot(doc)))
-          .toList();
-    });
   }
 
   @override
