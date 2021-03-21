@@ -17,9 +17,9 @@ class AppDrawer extends StatelessWidget {
           shrinkWrap: true,
           padding: EdgeInsets.zero,
           children: <Widget>[
-            Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: const AppLogo(),
+            const Padding(
+              padding: EdgeInsets.all(16.0),
+              child: AppLogo(),
             ),
             const Divider(),
             ListTile(

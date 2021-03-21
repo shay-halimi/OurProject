@@ -90,7 +90,7 @@ class DescriptionInput
 
   @override
   DescriptionInputValidationError validator(String value) {
-    return value.length > 0 && value.length < 1000
+    return value.isNotEmpty && value.length < 1000
         ? null
         : DescriptionInputValidationError.invalid;
   }

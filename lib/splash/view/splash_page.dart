@@ -19,14 +19,14 @@ class SplashPage extends StatelessWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                AppLogo(),
+                const AppLogo(),
               ],
             ),
-            ConstrainedBox(constraints: BoxConstraints(minHeight: 32)),
+            ConstrainedBox(constraints: const BoxConstraints(minHeight: 32)),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                CircularProgressIndicator(),
+                const CircularProgressIndicator(),
               ],
             ),
           ],

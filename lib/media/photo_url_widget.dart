@@ -66,9 +66,10 @@ class _PhotoURLDialogView extends StatelessWidget {
                         radius: radius,
                         backgroundImage: CachedNetworkImageProvider(photoURL))
                     : CircleAvatar(
-                        radius: radius, child: Text('בחר.י תמונת פרופיל'));
+                        radius: radius,
+                        child: const Text('בחר.י תמונת פרופיל'));
               } else if (state is MediaDialogError) {
-                CircleAvatar(radius: radius, child: Text('שגיאה'));
+                CircleAvatar(radius: radius, child: const Text('שגיאה'));
               } else if (state is MediaDialogLoading) {
                 return CircleAvatar(
                   radius: radius,
@@ -89,25 +90,25 @@ class _PhotoURLDialogView extends StatelessWidget {
                 builder: (context, state) {
               if (state is MediaDialogInitial) {
                 return _CircleButton(
-                  onPressed: () async => await _pickFile(context),
+                  onPressed: () => _pickFile(context),
                   child: photoURL.isEmpty
-                      ? Icon(Icons.camera_alt)
-                      : Icon(Icons.edit),
+                      ? const Icon(Icons.camera_alt)
+                      : const Icon(Icons.edit),
                 );
               } else if (state is MediaDialogError) {
                 return _CircleButton(
-                  onPressed: () async => await _pickFile(context),
+                  onPressed: () => _pickFile(context),
                   fillColor: Colors.red.withOpacity(0.9),
-                  child: Icon(Icons.error),
+                  child: const Icon(Icons.error),
                 );
               } else if (state is MediaDialogLoaded) {
                 return _CircleButton(
-                  onPressed: () async => await _pickFile(context),
-                  child: Icon(Icons.edit),
+                  onPressed: () => _pickFile(context),
+                  child: const Icon(Icons.edit),
                 );
               }
 
-              return _CircleButton(
+              return const _CircleButton(
                 child: CircularProgressIndicator(),
               );
             }),
@@ -117,8 +118,8 @@ class _PhotoURLDialogView extends StatelessWidget {
     );
   }
 
-  _pickFile(BuildContext context) async {
-    _showMediaDialog(context).then((value) async {
+  void _pickFile(BuildContext context) async {
+    await _showMediaDialog(context).then((value) async {
       if (value != null) {
         final pickedFile = await _picker.getImage(
           source: value,
@@ -183,8 +184,8 @@ class _CircleButton extends StatelessWidget {
       elevation: 2.0,
       fillColor: fillColor ?? Colors.white.withOpacity(0.9),
       child: child,
-      padding: EdgeInsets.all(8.0),
-      shape: CircleBorder(),
+      padding: const EdgeInsets.all(8.0),
+      shape: const CircleBorder(),
     );
   }
 }

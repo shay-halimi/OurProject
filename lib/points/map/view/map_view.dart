@@ -27,9 +27,11 @@ class MapView extends StatelessWidget {
                   suffixIcon: context.select(
                           (SearchBloc bloc) => bloc.state.term.isNotEmpty)
                       ? IconButton(
-                          icon: Icon(Icons.close),
+                          icon: const Icon(Icons.close),
                           onPressed: () {
-                            context.read<SearchBloc>().add(SearchTermCleared());
+                            context
+                                .read<SearchBloc>()
+                                .add(const SearchTermCleared());
                             _controller.clear();
                             _hideKeyboard(context);
                           },
@@ -42,7 +44,7 @@ class MapView extends StatelessWidget {
             if (context.select(
                 (PointsBloc bloc) => bloc.state.status == PointStatus.loading))
               Container(
-                child: CircularProgressIndicator(),
+                child: const CircularProgressIndicator(),
                 width: 16,
                 height: 16,
               ),
@@ -51,7 +53,7 @@ class MapView extends StatelessWidget {
       ),
       body: Stack(
         children: [
-          MapWidget(),
+          const MapWidget(),
           Column(
             mainAxisAlignment: MainAxisAlignment.end,
             children: [

@@ -58,7 +58,7 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
         ),
       );
     } else if (event is SearchTermCleared) {
-      yield* mapEventToState(SearchTermUpdated(''));
+      yield* mapEventToState(const SearchTermUpdated(''));
     } else if (event is SearchTagSelected) {
       var tags = {...state.tags};
 

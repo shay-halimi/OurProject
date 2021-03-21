@@ -25,6 +25,7 @@ class CreateUpdateCookerPage extends StatelessWidget {
     );
   }
 
+  @override
   Widget build(BuildContext context) {
     return MultiBlocProvider(
       providers: [
@@ -93,12 +94,18 @@ class CookerForm extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Center(child: const _PhotoURLInput()),
-                ConstrainedBox(constraints: BoxConstraints(minHeight: 16)),
+                const Center(child: _PhotoURLInput()),
+                ConstrainedBox(
+                  constraints: const BoxConstraints(minHeight: 16),
+                ),
                 const _DisplayNameInput(),
-                ConstrainedBox(constraints: BoxConstraints(minHeight: 16)),
+                ConstrainedBox(
+                  constraints: const BoxConstraints(minHeight: 16),
+                ),
                 const _AddressInput(),
-                ConstrainedBox(constraints: BoxConstraints(minHeight: 16)),
+                ConstrainedBox(
+                  constraints: const BoxConstraints(minHeight: 16),
+                ),
                 Center(
                   child: _SubmitButton(
                     cooker: cooker,
@@ -221,7 +228,7 @@ class _SubmitButton extends StatelessWidget {
       buildWhen: (previous, current) => previous.status != current.status,
       builder: (context, state) {
         if (state.status.isSubmissionInProgress) {
-          return CircularProgressIndicator();
+          return const CircularProgressIndicator();
         } else {
           return ElevatedButton(
             key: Key('CreateUpdatePointPage_SubmitButton_${cooker.isNotEmpty}'),

@@ -40,12 +40,12 @@ class CreatePointPage extends StatelessWidget {
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Padding(
-                          padding: const EdgeInsets.all(16.0),
-                          child: const AppLogo(),
+                        const Padding(
+                          padding: EdgeInsets.all(16.0),
+                          child: AppLogo(),
                         ),
-                        Padding(
-                          padding: const EdgeInsets.all(8.0),
+                        const Padding(
+                          padding: EdgeInsets.all(8.0),
                           child: Text(
                             'אין אפשרות להוסיף יותר משלושה מאכלים כרגע',
                           ),
@@ -56,7 +56,7 @@ class CreatePointPage extends StatelessWidget {
                             onPressed: () {
                               Navigator.of(context).pop();
                             },
-                            child: Text('סגור'),
+                            child: const Text('סגור'),
                           ),
                         ),
                       ],
@@ -66,10 +66,10 @@ class CreatePointPage extends StatelessWidget {
               );
             }
 
-            return CreateUpdatePointPage(point: Point.empty);
+            return const CreateUpdatePointPage(point: Point.empty);
           }
 
-          return SplashPage();
+          return const SplashPage();
         },
       ),
     );

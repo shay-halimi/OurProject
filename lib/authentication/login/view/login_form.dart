@@ -43,8 +43,8 @@ class _PhoneNumberForm extends StatelessWidget {
         children: [
           const AppLogo(),
           _PhoneNumberInput(),
-          _SendOTPButton(),
-          Text(
+          const _SendOTPButton(),
+          const Text(
             'מספרך משמש אך ורק למניעת ספאם ולא יוצג למשתמשים אחרים ללא אישורך.',
             textAlign: TextAlign.center,
           ),
@@ -110,7 +110,7 @@ class _SendOTPButton extends StatelessWidget {
                       padding: const EdgeInsets.symmetric(horizontal: 32.0),
                       child: ElevatedButton(
                         key: const Key('_SendOTPButton'),
-                        child: Text('המשך'),
+                        child: const Text('המשך'),
                         onPressed: state.status.isValidated
                             ? () => context.read<LoginCubit>().sendOTP()
                             : null,
@@ -162,7 +162,7 @@ class _ClearVerificationIdButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return TextButton(
       onPressed: () => context.read<LoginCubit>().clearVerification(),
-      child: Text('אם לא קיבלת SMS מאיתנו, לחץ.י כאן.'),
+      child: const Text('אם לא קיבלת SMS מאיתנו, לחץ.י כאן.'),
     );
   }
 }

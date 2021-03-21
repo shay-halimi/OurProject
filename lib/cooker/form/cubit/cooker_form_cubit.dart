@@ -69,7 +69,7 @@ class CookerFormCubit extends Cubit<CookerFormState> {
             : CookerUpdatedEvent(cooker),
       );
 
-      _pointsBloc.state.points.forEach((point) {
+      for (var point in _pointsBloc.state.points) {
         if (point.latLng.isNotEmpty) {
           _pointsBloc.add(
             PointUpdatedEvent(
@@ -82,7 +82,8 @@ class CookerFormCubit extends Cubit<CookerFormState> {
             ),
           );
         }
-      });
+      }
+
       emit(state.copyWith(status: FormzStatus.submissionSuccess));
     } on Exception {
       emit(state.copyWith(status: FormzStatus.submissionFailure));

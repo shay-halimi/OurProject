@@ -78,14 +78,13 @@ class CookerPointsPageViewBody extends StatelessWidget {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
+                  const Padding(
+                    padding: EdgeInsets.all(8.0),
                     child: AppLogo(),
                   ),
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child:
-                        const Text('נראה שעדיין לא הוספת מאכלים לתפריט שלך.'),
+                  const Padding(
+                    padding: EdgeInsets.all(8.0),
+                    child: Text('נראה שעדיין לא הוספת מאכלים לתפריט שלך.'),
                   ),
                 ],
               ),
@@ -141,7 +140,7 @@ class _PointsWidget extends StatelessWidget {
                       maxLines: 2,
                       overflow: TextOverflow.fade,
                     ),
-                    trailing: Icon(Icons.edit),
+                    trailing: const Icon(Icons.edit),
                   ),
                 ],
               ),
@@ -151,7 +150,7 @@ class _PointsWidget extends StatelessWidget {
             ),
           ),
         ],
-        ConstrainedBox(constraints: BoxConstraints(minHeight: 64)),
+        ConstrainedBox(constraints: const BoxConstraints(minHeight: 64)),
       ],
     );
   }

@@ -19,7 +19,6 @@ class CookerWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      key: Key('CookerWidgetForCooker$cookerId'),
       create: (_) => CookerWidgetCubit(
         cookersRepository: context.read<CookersRepository>(),
       )..load(cookerId),
@@ -28,11 +27,12 @@ class CookerWidget extends StatelessWidget {
         builder: (context, state) {
           if (state is CookerWidgetLoaded) {
             return CookerWidgetView(
+              key: ValueKey<Cooker>(state.cooker),
               cooker: state.cooker,
             );
           }
 
-          return LinearProgressIndicator();
+          return const LinearProgressIndicator();
         },
       ),
     );
@@ -70,7 +70,8 @@ class CookerWidgetView extends StatelessWidget {
           IconButton(
             icon: const Icon(Icons.directions),
             onPressed: () async => await launcher.web(
-                'geo:${cooker.address.latitude},${cooker.address.longitude}?q=${cooker.address.name}'),
+                'geo:${cooker.address.latitude},${cooker.address.longitude}'
+                '&q=${cooker.address.name}'),
           ),
         ],
       ),

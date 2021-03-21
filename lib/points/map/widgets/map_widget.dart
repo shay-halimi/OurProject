@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:io';
 
 import 'package:cookpoint/location/location.dart';
 import 'package:cookpoint/search/search.dart';
@@ -31,15 +32,20 @@ class _MapWidgetState extends State<MapWidget> {
   @override
   void initState() {
     super.initState();
+
     google_maps.BitmapDescriptor.fromAssetImage(
-      const ImageConfiguration(),
-      'assets/images/logo_128px_128px.png',
+      const ImageConfiguration(size: Size(128, 128)),
+      Platform.isIOS
+          ? 'assets/images/logo_128px_128px@0.5x.png'
+          : 'assets/images/logo_128px_128px.png',
     ).then((onValue) {
       _pointMarker = onValue;
     });
     google_maps.BitmapDescriptor.fromAssetImage(
-      const ImageConfiguration(),
-      'assets/images/logo_bold_192px_192px.png',
+      const ImageConfiguration(size: Size(192, 192)),
+      Platform.isIOS
+          ? 'assets/images/logo_bold_192px_192px@0.5x.png'
+          : 'assets/images/logo_bold_192px_192px.png',
     ).then((onValue) {
       _selectedPointMarker = onValue;
     });

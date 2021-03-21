@@ -18,31 +18,44 @@ class PointWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      height: height,
-      child: InkWell(
-        onTap: onTap,
-        child: Stack(
-          alignment: AlignmentDirectional.bottomCenter,
-          children: [
-            Card(child: _PhotoWidget(photo: point.media.first)),
-            Container(
-              color: Colors.white,
-              child: Opacity(
-                opacity: 0.9,
-                child: Padding(
-                  padding: const EdgeInsets.all(8.0),
+    final priceTextStyle =
+        theme.textTheme.headline6.copyWith(fontWeight: FontWeight.w300);
+
+    return Card(
+      child: Container(
+        height: height,
+        child: InkWell(
+          onTap: onTap,
+          child: Stack(
+            alignment: AlignmentDirectional.bottomCenter,
+            children: [
+              _PhotoWidget(photo: point.media.first),
+              Container(
+                color: Colors.white,
+                padding: const EdgeInsets.all(8.0),
+                child: Opacity(
+                  opacity: 0.9,
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      TagsWidget(tags: point.tags),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          TagsWidget(tags: point.tags),
+                          Text(
+                            '${point.price.amount.toStringAsFixed(2)} ₪',
+                            style: priceTextStyle,
+                          ),
+                        ],
+                      ),
                       _TitleWidget(point: point),
                     ],
                   ),
                 ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
@@ -85,9 +98,6 @@ class _TitleWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final priceTextStyle =
-        theme.textTheme.headline6.copyWith(fontWeight: FontWeight.w300);
-
     return Row(
       children: [
         Expanded(
@@ -97,10 +107,6 @@ class _TitleWidget extends StatelessWidget {
             maxLines: 1,
             overflow: TextOverflow.ellipsis,
           ),
-        ),
-        Text(
-          '${point.price.amount.toStringAsFixed(2)} ₪',
-          style: priceTextStyle,
         ),
       ],
     );

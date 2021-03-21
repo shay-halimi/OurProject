@@ -72,7 +72,7 @@ class PointForm extends StatelessWidget {
             ScaffoldMessenger.of(context)
               ..hideCurrentSnackBar()
               ..showSnackBar(
-                SnackBar(
+                const SnackBar(
                   content: Text('שגיאה, אמת.י המידע שהזנת ונסה.י שנית.'),
                 ),
               );
@@ -117,13 +117,13 @@ class _SubmitButton extends StatelessWidget {
       children: [
         if (point.isNotEmpty)
           TextButton(
-            key: Key('CreateUpdatePointPage_SubmitButton_${point.isNotEmpty}'),
-            child: Text('מחק'),
+            key: ValueKey<Point>(point),
+            child: const Text('מחק'),
             onPressed: () => showDialog<bool>(
                 context: context,
                 builder: (context) {
                   return AlertDialog(
-                    title: Text('האם אתה בטוח?'),
+                    title: const Text('האם אתה בטוח?'),
                     content: Text(
                         'האם אתה בטוח שברצונך למחוק את המאכל ${point.title} ?'),
                     actions: [
@@ -152,7 +152,7 @@ class _SubmitButton extends StatelessWidget {
           buildWhen: (previous, current) => previous.status != current.status,
           builder: (context, state) {
             if (state.status.isSubmissionInProgress) {
-              return CircularProgressIndicator();
+              return const CircularProgressIndicator();
             } else {
               return ElevatedButton(
                 child: Text(point.isNotEmpty ? 'שמור' : 'פרסם!'),
@@ -183,8 +183,8 @@ class _AvailableInput extends StatelessWidget {
           title: state.availableInput.value
               ? const Text('זמין')
               : const Text('לא זמין'),
-          subtitle: const Text(
-              'מאכלים זמינים מופיעים על המפה עם שמכם, כתובתכם ומספר הטלפון איתו נרשמתם.'),
+          subtitle: const Text('מאכלים זמינים מופיעים על המפה עם שמכם,'
+              ' כתובתכם ומספר הטלפון איתו נרשמתם.'),
           value: state.availableInput.value,
           onChanged: (bool value) {
             context.read<PointFormCubit>().changeAvailable(value);

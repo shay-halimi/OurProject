@@ -80,7 +80,7 @@ class AddressInput extends FormzInput<Address, AddressInputValidationError> {
       : super.dirty(value);
 
   @override
-  AddressInputValidationError validator(Address address) {
-    return address.isNotEmpty ? null : AddressInputValidationError.invalid;
+  AddressInputValidationError validator(Address value) {
+    return value.isNotEmpty ? null : AddressInputValidationError.invalid;
   }
 }

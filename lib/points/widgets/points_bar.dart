@@ -11,7 +11,7 @@ class PointsBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final height = MediaQuery.of(context).size.height * 0.4;
+    final height = MediaQuery.of(context).size.height * 0.36;
 
     return BlocBuilder<SelectedPointCubit, SelectedPointState>(
       buildWhen: (previous, current) => previous.point != current.point,
@@ -57,36 +57,43 @@ class _PointsBarViewState extends State<PointsBarView> {
         listener: (_, state) {
           _controller.jumpToPage(points.indexOf(state.point));
         },
-        child: CarouselSlider(
-          key: Key('points_${points.hashCode}'),
-          carouselController: _controller,
-          items: points.map((point) {
-            return Builder(
-              key: Key('point_${point.hashCode}'),
-              builder: (context) {
-                return PointWidget(
-                  point: point,
-                  onTap: () => Navigator.of(context).push<void>(
-                    PointPage.route(point: point),
-                  ),
+        child: SafeArea(
+          child: Column(
+            children: [
+              CarouselSlider(
+                key: ValueKey(points),
+                carouselController: _controller,
+                items: points.map((point) {
+                  return Builder(
+                    key: ValueKey(point),
+                    builder: (context) {
+                      return PointWidget(
+                        point: point,
+                        onTap: () => Navigator.of(context).push<void>(
+                          PointPage.route(point: point),
+                        ),
+                        height: widget.height,
+                      );
+                    },
+                  );
+                }).toList(),
+                options: CarouselOptions(
+                  enableInfiniteScroll: true,
+                  initialPage: points
+                      .indexOf(context.read<SelectedPointCubit>().state.point),
+                  onPageChanged: (index, reason) {
+                    if (reason == CarouselPageChangedReason.manual) {
+                      context
+                          .read<SelectedPointCubit>()
+                          .select(points.elementAt(index));
+                    }
+                  },
+                  viewportFraction: 0.94,
                   height: widget.height,
-                );
-              },
-            );
-          }).toList(),
-          options: CarouselOptions(
-            enableInfiniteScroll: true,
-            initialPage:
-                points.indexOf(context.read<SelectedPointCubit>().state.point),
-            onPageChanged: (index, reason) {
-              if (reason == CarouselPageChangedReason.manual) {
-                context
-                    .read<SelectedPointCubit>()
-                    .select(points.elementAt(index));
-              }
-            },
-            viewportFraction: 0.94,
-            height: widget.height,
+                ),
+              ),
+              ConstrainedBox(constraints: const BoxConstraints(minHeight: 24)),
+            ],
           ),
         ),
       ),

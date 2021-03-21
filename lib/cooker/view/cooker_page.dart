@@ -35,7 +35,7 @@ class CookerPage extends StatelessWidget {
           );
         }
 
-        return SplashPage();
+        return const SplashPage();
       },
     );
   }
@@ -53,7 +53,7 @@ class CookerView extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('המטבח שלי'),
+        title: const Text('המטבח שלי'),
       ),
       body: SingleChildScrollView(
         child: Padding(
@@ -61,35 +61,35 @@ class CookerView extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Center(child: _PhotoURLInput()),
-              ConstrainedBox(constraints: BoxConstraints(minHeight: 8)),
+              const Center(child: _PhotoURLInput()),
+              ConstrainedBox(constraints: const BoxConstraints(minHeight: 8)),
               ListTile(
                 title: Text(cooker.displayName),
-                subtitle: Text('שם לתצוגה'),
+                subtitle: const Text('שם לתצוגה'),
                 onTap: () => Navigator.of(context).push<void>(
                   CreateUpdateCookerPage.route(
                     cooker: cooker,
                   ),
                 ),
-                trailing: Icon(Icons.edit),
+                trailing: const Icon(Icons.edit),
               ),
-              ConstrainedBox(constraints: BoxConstraints(minHeight: 8)),
+              ConstrainedBox(constraints: const BoxConstraints(minHeight: 8)),
               ListTile(
                 title: Text(cooker.address.name),
-                subtitle: Text('כתובת'),
+                subtitle: const Text('כתובת'),
                 onTap: () => Navigator.of(context).push<void>(
                   CreateUpdateCookerPage.route(
                     cooker: cooker,
                   ),
                 ),
-                trailing: Icon(Icons.edit),
+                trailing: const Icon(Icons.edit),
               ),
-              ConstrainedBox(constraints: BoxConstraints(minHeight: 8)),
+              ConstrainedBox(constraints: const BoxConstraints(minHeight: 8)),
               ListTile(
                 title: Text(cooker.phoneNumber.toDisplay()),
-                subtitle: Text('מספר טלפון'),
+                subtitle: const Text('מספר טלפון'),
               ),
-              ConstrainedBox(constraints: BoxConstraints(minHeight: 8)),
+              ConstrainedBox(constraints: const BoxConstraints(minHeight: 8)),
             ],
           ),
         ),
@@ -126,6 +126,6 @@ class _PhotoURLInput extends StatelessWidget {
 
 extension _XPhoneNumber on String {
   String toDisplay() {
-    return "0" + substring(4, 6) + "-" + substring(6, 9) + "-" + substring(9);
+    return '0${substring(4, 6)}-${substring(6, 9)}-${substring(9)}';
   }
 }
