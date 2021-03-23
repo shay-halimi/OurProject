@@ -76,7 +76,7 @@ class CookerView extends StatelessWidget {
               ConstrainedBox(constraints: const BoxConstraints(minHeight: 8)),
               ListTile(
                 title: Text(cooker.address.name),
-                subtitle: const Text('כתובת'),
+                subtitle: const Text('אזור פעילות'),
                 onTap: () => Navigator.of(context).push<void>(
                   CreateUpdateCookerPage.route(
                     cooker: cooker,

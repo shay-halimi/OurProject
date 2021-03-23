@@ -74,7 +74,7 @@ class TitleInput extends FormzInput<String, TitleValidationError> {
 
   @override
   TitleValidationError validator(String value) {
-    return value.length > 3 && value.length < 60 && !value.contains('\n')
+    return value.length > 1 && value.length < 60 && !value.contains('\n')
         ? null
         : TitleValidationError.invalid;
   }
@@ -90,7 +90,7 @@ class DescriptionInput
 
   @override
   DescriptionInputValidationError validator(String value) {
-    return value.isNotEmpty && value.length < 1000
+    return value.length > 1 && value.length < 1000
         ? null
         : DescriptionInputValidationError.invalid;
   }
@@ -105,7 +105,9 @@ class PriceInput extends FormzInput<Money, PriceInputValidationError> {
 
   @override
   PriceInputValidationError validator(Money value) {
-    return value.amount > 0 ? null : PriceInputValidationError.invalid;
+    return value.amount.floorToDouble() > 0
+        ? null
+        : PriceInputValidationError.invalid;
   }
 }
 

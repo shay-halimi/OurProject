@@ -36,32 +36,33 @@ class CreatePointPage extends StatelessWidget {
             if (state.points.length >= 3) {
               return Scaffold(
                 body: Container(
-                  child: Center(
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        const Padding(
-                          padding: EdgeInsets.all(16.0),
-                          child: AppLogo(),
-                        ),
-                        const Padding(
-                          padding: EdgeInsets.all(8.0),
-                          child: Text(
-                            'אין אפשרות להוסיף יותר משלושה מאכלים כרגע',
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          const AppLogo(),
+                        ],
+                      ),
+                      Row(
+                        children: [
+                          Expanded(
+                            child: Text(
+                              'אין אפשרות להוסיף יותר משלושה מאכלים כרגע',
+                              style: theme.textTheme.headline6,
+                              textAlign: TextAlign.center,
+                            ),
                           ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: ElevatedButton(
-                            onPressed: () {
-                              Navigator.of(context).pop();
-                            },
-                            child: const Text('סגור'),
-                          ),
-                        ),
-                      ],
-                    ),
+                        ],
+                      ),
+                    ],
                   ),
+                ),
+                floatingActionButton: FloatingActionButton.extended(
+                  icon: const Icon(Icons.close),
+                  label: const Text('סגור'),
+                  onPressed: () => Navigator.of(context).pop(),
                 ),
               );
             }

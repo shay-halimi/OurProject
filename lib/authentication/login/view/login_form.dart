@@ -101,24 +101,14 @@ class _SendOTPButton extends StatelessWidget {
     return BlocBuilder<LoginCubit, LoginState>(
       buildWhen: (previous, current) => previous.status != current.status,
       builder: (context, state) {
-        return state.status.isSubmissionInProgress
-            ? const CircularProgressIndicator()
-            : Row(
-                children: [
-                  Expanded(
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 32.0),
-                      child: ElevatedButton(
-                        key: const Key('_SendOTPButton'),
-                        child: const Text('המשך'),
-                        onPressed: state.status.isValidated
-                            ? () => context.read<LoginCubit>().sendOTP()
-                            : null,
-                      ),
-                    ),
-                  ),
-                ],
-              );
+        return AppButton(
+          key: ValueKey(state.status),
+          isInProgress: state.status.isSubmissionInProgress,
+          child: const Text('המשך'),
+          onPressed: state.status.isValidated
+              ? () => context.read<LoginCubit>().sendOTP()
+              : null,
+        );
       },
     );
   }
@@ -204,26 +194,14 @@ class _ConfirmPhoneNumberButton extends StatelessWidget {
     return BlocBuilder<LoginCubit, LoginState>(
       buildWhen: (previous, current) => previous.status != current.status,
       builder: (context, state) {
-        return state.status.isSubmissionInProgress
-            ? const CircularProgressIndicator()
-            : Row(
-                children: [
-                  Expanded(
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 32.0),
-                      child: ElevatedButton(
-                        key: const Key(
-                            'LoginForm__ContinueButton_ElevatedButton'),
-                        child: const Text('המשך'),
-                        onPressed: state.status.isValidated
-                            ? () =>
-                                context.read<LoginCubit>().confirmPhoneNumber()
-                            : null,
-                      ),
-                    ),
-                  ),
-                ],
-              );
+        return AppButton(
+          key: ValueKey(state.status),
+          isInProgress: state.status.isSubmissionInProgress,
+          child: const Text('המשך'),
+          onPressed: state.status.isValidated
+              ? () => context.read<LoginCubit>().confirmPhoneNumber()
+              : null,
+        );
       },
     );
   }

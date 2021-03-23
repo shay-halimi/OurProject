@@ -55,6 +55,7 @@ class CookerWidgetView extends StatelessWidget {
         backgroundImage: CachedNetworkImageProvider(cooker.photoURL),
       ),
       title: Text(cooker.displayName),
+      subtitle: Text(cooker.address.name),
       trailing: Row(
         mainAxisSize: MainAxisSize.min,
         children: [

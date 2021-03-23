@@ -2,6 +2,7 @@ import 'package:cookers_repository/cookers_repository.dart';
 import 'package:cookpoint/cooker/cooker.dart';
 import 'package:cookpoint/media/media.dart';
 import 'package:cookpoint/points/bloc/bloc.dart';
+import 'package:cookpoint/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:formz/formz.dart';
@@ -140,9 +141,9 @@ class _AddressInput extends StatelessWidget {
             onChanged: (value) =>
                 context.read<CookerFormCubit>().changeAddressName(value),
             decoration: InputDecoration(
-              labelText: 'כתובת',
-              errorText: state.addressInput.invalid ? 'לא תקין' : null,
-            ),
+                labelText: 'אזור פעילות',
+                errorText: state.addressInput.invalid ? 'לא תקין' : null,
+                helperText: 'לדוגמא: נחלאות / פלורנטין / הדר הכרמל'),
             initialValue: state.addressInput.value.name,
           );
         },
@@ -217,17 +218,14 @@ class _SubmitButton extends StatelessWidget {
     return BlocBuilder<CookerFormCubit, CookerFormState>(
       buildWhen: (previous, current) => previous.status != current.status,
       builder: (context, state) {
-        if (state.status.isSubmissionInProgress) {
-          return const CircularProgressIndicator();
-        } else {
-          return ElevatedButton(
-            key: Key('CreateUpdatePointPage_SubmitButton_${cooker.isNotEmpty}'),
-            child: Text(cooker.isNotEmpty ? 'שמור' : 'המשך'),
-            onPressed: state.status.isValidated
-                ? () => context.read<CookerFormCubit>().save()
-                : null,
-          );
-        }
+        return AppButton(
+          key: ValueKey(state.status),
+          isInProgress: state.status.isSubmissionInProgress,
+          child: Text(cooker.isNotEmpty ? 'שמור' : 'המשך'),
+          onPressed: state.status.isValidated
+              ? () => context.read<CookerFormCubit>().save()
+              : null,
+        );
       },
     );
   }

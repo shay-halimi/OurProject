@@ -46,7 +46,7 @@ class DisplayNameInput extends FormzInput<String, DisplayNameValidationError> {
 
   @override
   DisplayNameValidationError validator(String value) {
-    return (value.length > 3 && value.length < 60 && !value.contains('\n'))
+    return (value.length > 1 && value.length < 50 && !value.contains('\n'))
         ? null
         : DisplayNameValidationError.invalid;
   }

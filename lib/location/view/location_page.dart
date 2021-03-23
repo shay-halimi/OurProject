@@ -13,7 +13,7 @@ class LocationPage extends StatelessWidget {
     return Scaffold(
       body: Container(
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -32,17 +32,13 @@ class LocationPage extends StatelessWidget {
                 ),
               ],
             ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                ElevatedButton(
-                  child: const Text('נסה שוב'),
-                  onPressed: context.read<LocationCubit>().locate,
-                ),
-              ],
-            ),
           ],
         ),
+      ),
+      floatingActionButton: FloatingActionButton.extended(
+        onPressed: context.read<LocationCubit>().locate,
+        label: const Text('נסה שוב'),
+        icon: const Icon(Icons.explore),
       ),
     );
   }

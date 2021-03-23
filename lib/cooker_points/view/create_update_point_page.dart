@@ -2,6 +2,7 @@ import 'package:cookpoint/cooker/cooker.dart';
 import 'package:cookpoint/cooker_points/cooker_points.dart';
 import 'package:cookpoint/media/media_dialog.dart';
 import 'package:cookpoint/points/bloc/bloc.dart';
+import 'package:cookpoint/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -59,45 +60,127 @@ class PointForm extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isPure =
+        context.select((PointFormCubit cubit) => cubit.state.status.isPure);
+
     return Scaffold(
       resizeToAvoidBottomInset: true,
       appBar: AppBar(
         title: Text(
           point.isNotEmpty ? 'עדכון ${point.title}' : 'הוספת מאכל',
         ),
+        actions: [
+          if (point.isNotEmpty)
+            _DeleteButton(
+              point: point,
+            ),
+        ],
       ),
-      body: BlocListener<PointFormCubit, PointFormState>(
-        listener: (context, state) {
-          if (state.status.isSubmissionFailure) {
-            ScaffoldMessenger.of(context)
-              ..hideCurrentSnackBar()
-              ..showSnackBar(
-                const SnackBar(
-                  content: Text('שגיאה, אמת.י המידע שהזנת ונסה.י שנית.'),
-                ),
-              );
-          }
+      body: WillPopScope(
+        onWillPop: () async {
+          if (isPure) return true;
 
-          if (state.status.isSubmissionSuccess) {
-            Navigator.of(context).pop();
-          }
+          return showDialog<bool>(
+              context: context,
+              builder: (context) {
+                return AlertDialog(
+                  title: const Text('האם לצאת?'),
+                  content: const Text('האם לצאת בלי לשמור את השינויים?'),
+                  actions: [
+                    TextButton(
+                      child: const Text('כן, צא בלי לשמור'),
+                      onPressed: () {
+                        Navigator.of(context).pop(true);
+                      },
+                    ),
+                    ElevatedButton(
+                      child: const Text('לא'),
+                      onPressed: () {
+                        Navigator.of(context).pop(false);
+                      },
+                    ),
+                  ],
+                );
+              });
         },
-        child: SingleChildScrollView(
-          child: Column(
-            children: [
-              const _MediaInput(),
-              const _TitleInput(),
-              const _DescriptionInput(),
-              const _PriceInput(),
-              const _TagsInput(),
-              const _AvailableInput(),
-              _SubmitButton(
-                point: point,
-              ),
-            ],
+        child: BlocListener<PointFormCubit, PointFormState>(
+          listener: (context, state) {
+            if (state.status.isSubmissionFailure) {
+              ScaffoldMessenger.of(context)
+                ..hideCurrentSnackBar()
+                ..showSnackBar(
+                  const SnackBar(
+                    content: Text('שגיאה, אמת.י המידע שהזנת ונסה.י שנית.'),
+                  ),
+                );
+            }
+
+            if (state.status.isSubmissionSuccess) {
+              Navigator.of(context).pop();
+            }
+          },
+          child: SingleChildScrollView(
+            child: Column(
+              children: [
+                const _MediaInput(),
+                const _TitleInput(),
+                const _DescriptionInput(),
+                const _PriceInput(),
+                const _TagsInput(),
+                const _AvailableInput(),
+                _SubmitButton(
+                  point: point,
+                ),
+              ],
+            ),
           ),
         ),
       ),
+    );
+  }
+}
+
+class _DeleteButton extends StatelessWidget {
+  const _DeleteButton({
+    Key key,
+    @required this.point,
+  }) : super(key: key);
+
+  final Point point;
+
+  @override
+  Widget build(BuildContext context) {
+    return IconButton(
+      icon: const Icon(Icons.delete),
+      tooltip: 'מחק',
+      onPressed: () => showDialog<bool>(
+          context: context,
+          builder: (context) {
+            return AlertDialog(
+              title: const Text('האם אתה בטוח?'),
+              content:
+                  Text('האם אתה בטוח שברצונך למחוק את המאכל ${point.title} ?'),
+              actions: [
+                TextButton(
+                  child: const Text('כן, מחק לצמיתות'),
+                  onPressed: () {
+                    Navigator.of(context).pop(true);
+                  },
+                ),
+                ElevatedButton(
+                  child: const Text('לא'),
+                  onPressed: () {
+                    Navigator.of(context).pop(false);
+                  },
+                ),
+              ],
+            );
+          }).then((value) {
+        if (value != null && value) {
+          context.read<PointsBloc>().add(PointDeletedEvent(point));
+          Navigator.of(context).pop();
+        }
+      }),
     );
   }
 }
@@ -112,58 +195,18 @@ class _SubmitButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-      children: [
-        if (point.isNotEmpty)
-          TextButton(
-            key: ValueKey(point.id),
-            child: const Text('מחק'),
-            onPressed: () => showDialog<bool>(
-                context: context,
-                builder: (context) {
-                  return AlertDialog(
-                    title: const Text('האם אתה בטוח?'),
-                    content: Text(
-                        'האם אתה בטוח שברצונך למחוק את המאכל ${point.title} ?'),
-                    actions: [
-                      TextButton(
-                        child: const Text('כן, מחק לצמיתות'),
-                        onPressed: () {
-                          Navigator.of(context).pop(true);
-                        },
-                      ),
-                      ElevatedButton(
-                        child: const Text('לא'),
-                        onPressed: () {
-                          Navigator.of(context).pop(false);
-                        },
-                      ),
-                    ],
-                  );
-                }).then((value) {
-              if (value != null && value) {
-                context.read<PointsBloc>().add(PointDeletedEvent(point));
-                Navigator.of(context).pop();
-              }
-            }),
-          ),
-        BlocBuilder<PointFormCubit, PointFormState>(
-          buildWhen: (previous, current) => previous.status != current.status,
-          builder: (context, state) {
-            if (state.status.isSubmissionInProgress) {
-              return const CircularProgressIndicator();
-            } else {
-              return ElevatedButton(
-                child: Text(point.isNotEmpty ? 'שמור' : 'פרסם!'),
-                onPressed: state.status.isValidated
-                    ? () => context.read<PointFormCubit>().save()
-                    : null,
-              );
-            }
-          },
-        ),
-      ],
+    return BlocBuilder<PointFormCubit, PointFormState>(
+      buildWhen: (previous, current) => previous.status != current.status,
+      builder: (context, state) {
+        return AppButton(
+          key: ValueKey(state.status),
+          isInProgress: state.status.isSubmissionInProgress,
+          child: Text(point.isNotEmpty ? 'שמור' : 'פרסם!'),
+          onPressed: state.status.isValidated
+              ? () => context.read<PointFormCubit>().save()
+              : null,
+        );
+      },
     );
   }
 }
@@ -175,22 +218,25 @@ class _AvailableInput extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<PointFormCubit, PointFormState>(
-      buildWhen: (previous, current) =>
-          previous.availableInput != current.availableInput,
-      builder: (_, state) {
-        return SwitchListTile(
-          title: state.availableInput.value
-              ? const Text('זמין')
-              : const Text('לא זמין'),
-          subtitle: const Text('מאכלים זמינים מופיעים על המפה עם שמכם,'
-              ' כתובתכם ומספר הטלפון איתו נרשמתם.'),
-          value: state.availableInput.value,
-          onChanged: (bool value) {
-            context.read<PointFormCubit>().changeAvailable(value);
-          },
-        );
-      },
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: BlocBuilder<PointFormCubit, PointFormState>(
+        buildWhen: (previous, current) =>
+            previous.availableInput != current.availableInput,
+        builder: (_, state) {
+          return SwitchListTile(
+            title: state.availableInput.value
+                ? const Text('זמין')
+                : const Text('לא זמין'),
+            subtitle: const Text('מאכלים זמינים מופיעים על המפה עם'
+                ' מספר הטלפון איתו נרשמתם.'),
+            value: state.availableInput.value,
+            onChanged: (bool value) {
+              context.read<PointFormCubit>().changeAvailable(value);
+            },
+          );
+        },
+      ),
     );
   }
 }
@@ -311,6 +357,8 @@ class _TitleInput extends StatelessWidget {
             key: const Key('_TitleInput'),
             keyboardType: TextInputType.text,
             maxLines: 1,
+            maxLength: 60,
+            maxLengthEnforcement: MaxLengthEnforcement.enforced,
             onChanged: (value) =>
                 context.read<PointFormCubit>().changeTitle(value),
             decoration: InputDecoration(
@@ -332,21 +380,25 @@ class _MediaInput extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      margin: const EdgeInsets.all(8.0),
-      decoration: BoxDecoration(
-          border: Border.all(), borderRadius: BorderRadius.circular(4.0)),
-      child: BlocBuilder<PointFormCubit, PointFormState>(
-        buildWhen: (previous, current) =>
-            previous.mediaInput != current.mediaInput,
-        builder: (_, state) {
-          return MediaDialog(
+    return BlocBuilder<PointFormCubit, PointFormState>(
+      buildWhen: (previous, current) =>
+          previous.mediaInput != current.mediaInput,
+      builder: (_, state) {
+        return Container(
+          margin: const EdgeInsets.all(8.0),
+          decoration: BoxDecoration(
+              border: Border.all(
+                  color: state.mediaInput.pure
+                      ? theme.colorScheme.primary
+                      : theme.colorScheme.surface),
+              borderRadius: BorderRadius.circular(33.0)),
+          child: MediaDialog(
             media: state.mediaInput.value,
             onMediaChanged: (value) =>
                 context.read<PointFormCubit>().changeMedia(value),
-          );
-        },
-      ),
+          ),
+        );
+      },
     );
   }
 }
