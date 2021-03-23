@@ -61,11 +61,10 @@ class _PointsBarViewState extends State<PointsBarView> {
           child: Column(
             children: [
               CarouselSlider(
-                key: ValueKey(points),
                 carouselController: _controller,
                 items: points.map((point) {
                   return Builder(
-                    key: ValueKey(point),
+                    key: ValueKey(point.id),
                     builder: (context) {
                       return PointWidget(
                         point: point,

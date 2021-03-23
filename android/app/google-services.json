@@ -40,10 +40,10 @@
               "client_type": 3
             },
             {
-              "client_id": "999901209458-chmni99hpl59ll2ogp67thj08sosgv7s.apps.googleusercontent.com",
+              "client_id": "999901209458-25kukhqno9kclosjd8e4106nc80ojiin.apps.googleusercontent.com",
               "client_type": 2,
               "ios_info": {
-                "bundle_id": "app.cookpoint.ios.dev"
+                "bundle_id": "app.cookpoint.cookpoint"
               }
             }
           ]

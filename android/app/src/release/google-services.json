@@ -1,42 +1,33 @@
 {
   "project_info": {
-    "project_number": "293008117137",
-    "firebase_url": "https://production-6a3db-default-rtdb.firebaseio.com",
-    "project_id": "production-6a3db",
-    "storage_bucket": "production-6a3db.appspot.com"
+    "project_number": "740733847047",
+    "project_id": "cookpoint-e16ce",
+    "storage_bucket": "cookpoint-e16ce.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:293008117137:android:6c5e0d4cb9d5fb0f815e30",
+        "mobilesdk_app_id": "1:740733847047:android:9eea141aebf9e161630ca2",
         "android_client_info": {
           "package_name": "app.cookpoint.cookpoint"
         }
       },
       "oauth_client": [
         {
-          "client_id": "293008117137-tc9tuqui7ajc5e2cfoagb1qdqdv0pn2f.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "app.cookpoint.cookpoint",
-            "certificate_hash": "4560b6aad1a7a63908f015e66db415745441b4ba"
-          }
-        },
-        {
-          "client_id": "293008117137-vosknpd4t08bdoa739q37k6tnv532a55.apps.googleusercontent.com",
+          "client_id": "740733847047-jvujbcmhph0crtrnmi37u1icqq8fod4v.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyBb3RgbffQ-zISQ-7gcb9eTCff3WVTC-nA"
+          "current_key": "AIzaSyAPwjaRinvA4eQ1ljzH0UPeSyJlOWFVV1k"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "293008117137-vosknpd4t08bdoa739q37k6tnv532a55.apps.googleusercontent.com",
+              "client_id": "740733847047-jvujbcmhph0crtrnmi37u1icqq8fod4v.apps.googleusercontent.com",
               "client_type": 3
             }
           ]

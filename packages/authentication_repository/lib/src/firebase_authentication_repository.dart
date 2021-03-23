@@ -21,17 +21,16 @@ class FirebaseAuthenticationRepository extends AuthenticationRepository {
       timeout: const Duration(
         seconds: 60,
       ),
-      verificationCompleted: (firebase_auth.PhoneAuthCredential pac) async {
-        await _firebaseAuth.signInWithCredential(pac);
-        completer.complete(Verification.empty);
+      verificationCompleted: (phoneAuthCredential) async {
+        await _firebaseAuth.signInWithCredential(phoneAuthCredential);
       },
-      verificationFailed: (e) {
-        completer.completeError(e);
-      },
-      codeSent: (String verificationId, [int forceResendingToken]) {
+      codeSent: (verificationId, forceResendingToken) {
         completer.complete(Verification(id: verificationId));
       },
-      codeAutoRetrievalTimeout: (String verificationId) {},
+      verificationFailed: (error) {
+        completer.completeError(error);
+      },
+      codeAutoRetrievalTimeout: (_) {},
     );
 
     return completer.future;

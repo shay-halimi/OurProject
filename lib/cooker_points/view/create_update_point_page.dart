@@ -117,7 +117,7 @@ class _SubmitButton extends StatelessWidget {
       children: [
         if (point.isNotEmpty)
           TextButton(
-            key: ValueKey<Point>(point),
+            key: ValueKey(point.id),
             child: const Text('מחק'),
             onPressed: () => showDialog<bool>(
                 context: context,
@@ -244,11 +244,6 @@ class _PriceInput extends StatelessWidget {
             onChanged: (value) =>
                 context.read<PointFormCubit>().changePrice(value),
             decoration: InputDecoration(
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(4.0),
-                borderSide:
-                    const BorderSide(width: 1.0, style: BorderStyle.solid),
-              ),
               labelText: 'מחיר',
               errorText: state.priceInput.invalid ? 'מחיר לא תקין' : null,
               suffix: const Text('₪'),
@@ -287,11 +282,6 @@ class _DescriptionInput extends StatelessWidget {
             onChanged: (value) =>
                 context.read<PointFormCubit>().changeDescription(value),
             decoration: InputDecoration(
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(4.0),
-                borderSide:
-                    const BorderSide(width: 1.0, style: BorderStyle.solid),
-              ),
               labelText: 'תיאור',
               errorText:
                   state.descriptionInput.invalid ? 'תיאור לא תקין' : null,
@@ -324,11 +314,6 @@ class _TitleInput extends StatelessWidget {
             onChanged: (value) =>
                 context.read<PointFormCubit>().changeTitle(value),
             decoration: InputDecoration(
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(4.0),
-                borderSide:
-                    const BorderSide(width: 1.0, style: BorderStyle.solid),
-              ),
               labelText: 'שם המאכל',
               errorText: state.titleInput.invalid ? 'שם המאכל לא תקין' : null,
             ),

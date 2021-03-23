@@ -40,15 +40,15 @@ class FakeCookersRepository implements CookersRepository {
 
   @override
   Future<void> create(Cooker cooker) async {
-    update(cooker);
+    return update(cooker);
   }
 
   @override
   Future<void> update(Cooker cooker) async {
     if (!_streamControllers.containsKey(cooker.id)) return;
 
-    _streamControllers[cooker.id].forEach((streamController) {
+    for (var streamController in _streamControllers[cooker.id]) {
       streamController.add(cooker);
-    });
+    }
   }
 }

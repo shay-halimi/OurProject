@@ -140,11 +140,6 @@ class _AddressInput extends StatelessWidget {
             onChanged: (value) =>
                 context.read<CookerFormCubit>().changeAddressName(value),
             decoration: InputDecoration(
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(4.0),
-                borderSide:
-                    const BorderSide(width: 1.0, style: BorderStyle.solid),
-              ),
               labelText: 'כתובת',
               errorText: state.addressInput.invalid ? 'לא תקין' : null,
             ),
@@ -176,11 +171,6 @@ class _DisplayNameInput extends StatelessWidget {
             onChanged: (value) =>
                 context.read<CookerFormCubit>().changeDisplayName(value),
             decoration: InputDecoration(
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(4.0),
-                borderSide:
-                    const BorderSide(width: 1.0, style: BorderStyle.solid),
-              ),
               labelText: 'שם לתצוגה',
               errorText: state.displayNameInput.invalid ? 'לא תקין' : null,
             ),

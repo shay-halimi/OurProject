@@ -9,8 +9,8 @@ dependencies:
   flutter:
     sdk: flutter
 
-  cloud_firestore: ^0.14.0+2
+  firebase_core: ^0.7.0
+  cloud_firestore: ^0.16.0+1
   equatable: ^1.2.6
-  firebase_core: ^0.5.1
   meta: ^1.2.4
   lipsum: ^1.0.1
