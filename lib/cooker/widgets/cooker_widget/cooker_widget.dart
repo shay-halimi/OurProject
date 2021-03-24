@@ -27,7 +27,6 @@ class CookerWidget extends StatelessWidget {
         builder: (context, state) {
           if (state is CookerWidgetLoaded) {
             return CookerWidgetView(
-              key: ValueKey<Cooker>(state.cooker),
               cooker: state.cooker,
             );
           }
@@ -61,22 +60,18 @@ class CookerWidgetView extends StatelessWidget {
         children: [
           IconButton(
             icon: const Icon(FontAwesomeIcons.whatsapp),
-            onPressed: () async =>
-                await launcher.web('https://wa.me/${cooker.phoneNumber}'),
+            onPressed: () async => await launcher.whatsapp(cooker.phoneNumber),
           ),
           IconButton(
             icon: const Icon(Icons.call),
-            onPressed: () async => await launcher.dial(cooker.phoneNumber),
+            onPressed: () async => await launcher.call(cooker.phoneNumber),
           ),
           IconButton(
             icon: const Icon(Icons.directions),
-            onPressed: () async => await launcher.web(
-                'geo:${cooker.address.latitude},${cooker.address.longitude}'
-                '&q=${cooker.address.name}'),
+            onPressed: () async => await launcher.directions(cooker.address),
           ),
         ],
       ),
-      onTap: () async => await launcher.dial(cooker.phoneNumber),
     );
   }
 }

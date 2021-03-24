@@ -83,7 +83,7 @@ class CookerForm extends StatelessWidget {
               ScaffoldMessenger.of(context)
                 ..hideCurrentSnackBar()
                 ..showSnackBar(
-                    const SnackBar(content: Text('חשבונך עודכן בהצלחה')));
+                    const SnackBar(content: Text('המטבח עודכן בהצלחה')));
 
               Navigator.of(context).pop();
             }
@@ -136,14 +136,15 @@ class _AddressInput extends StatelessWidget {
         builder: (context, state) {
           return TextFormField(
             key: const Key('_AddressInput'),
-            keyboardType: TextInputType.text,
+            keyboardType: TextInputType.streetAddress,
             maxLines: 1,
             onChanged: (value) =>
                 context.read<CookerFormCubit>().changeAddressName(value),
             decoration: InputDecoration(
-                labelText: 'אזור פעילות',
-                errorText: state.addressInput.invalid ? 'לא תקין' : null,
-                helperText: 'לדוגמא: נחלאות / פלורנטין / הדר הכרמל'),
+              labelText: 'כתובת',
+              errorText: state.addressInput.invalid ? 'לא תקין' : null,
+              helperText: 'שם יישוב, שם רחוב ומספר בית.',
+            ),
             initialValue: state.addressInput.value.name,
           );
         },

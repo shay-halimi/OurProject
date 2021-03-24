@@ -29,7 +29,10 @@ class PointWidget extends StatelessWidget {
           child: Stack(
             alignment: AlignmentDirectional.bottomCenter,
             children: [
-              _PhotoWidget(photo: point.media.first),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: _PhotoWidget(photo: point.media.first),
+              ),
               Container(
                 color: Colors.white,
                 padding: const EdgeInsets.all(8.0),

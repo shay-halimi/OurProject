@@ -11,7 +11,10 @@ import 'package:provider/provider.dart';
 class MapWidget extends StatefulWidget {
   const MapWidget({
     Key key,
+    @required this.pixelRatio,
   }) : super(key: key);
+
+  final double pixelRatio;
 
   @override
   _MapWidgetState createState() => _MapWidgetState();
@@ -20,7 +23,7 @@ class MapWidget extends StatefulWidget {
 class _MapWidgetState extends State<MapWidget> {
   final Completer<google_maps.GoogleMapController> _controller = Completer();
 
-  double _zoom = 11.5;
+  double _zoom = 12.0;
   double _heading = 0;
 
   google_maps.BitmapDescriptor _pointMarker =
@@ -29,26 +32,34 @@ class _MapWidgetState extends State<MapWidget> {
   google_maps.BitmapDescriptor _selectedPointMarker =
       google_maps.BitmapDescriptor.defaultMarker;
 
+  double get _pixelRatio => widget.pixelRatio;
+
   @override
   void initState() {
     super.initState();
 
+    var _size = 64;
+
+    if (!Platform.isIOS) {
+      if (_pixelRatio >= 1.5) {
+        _size = _size * 2;
+      } else if (_pixelRatio >= 2.5) {
+        _size = _size * 3;
+      } else if (_pixelRatio >= 3.5) {
+        _size = _size * 4;
+      }
+    }
+
+    final configuration =
+        ImageConfiguration(size: Size(_size.toDouble(), _size.toDouble()));
+
     google_maps.BitmapDescriptor.fromAssetImage(
-      const ImageConfiguration(size: Size(128, 128)),
-      Platform.isIOS
-          ? 'assets/images/logo_128px_128px@0.5x.png'
-          : 'assets/images/logo_128px_128px.png',
-    ).then((onValue) {
-      _pointMarker = onValue;
-    });
+            configuration, 'assets/images/mini_marker@$_size.png')
+        .then((value) => setState(() => _pointMarker = value));
+
     google_maps.BitmapDescriptor.fromAssetImage(
-      const ImageConfiguration(size: Size(192, 192)),
-      Platform.isIOS
-          ? 'assets/images/logo_bold_192px_192px@0.5x.png'
-          : 'assets/images/logo_bold_192px_192px.png',
-    ).then((onValue) {
-      _selectedPointMarker = onValue;
-    });
+            configuration, 'assets/images/marker@$_size.png')
+        .then((value) => setState(() => _selectedPointMarker = value));
   }
 
   @override

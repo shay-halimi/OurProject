@@ -34,10 +34,16 @@ class _PointPageView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        title: Text(
+          point.title,
+          maxLines: 1,
+          overflow: TextOverflow.ellipsis,
+        ),
+      ),
       body: SingleChildScrollView(
         child: Column(
           children: [
-            AppBar(),
             _PhotoWidget(point: point),
             Padding(
               padding: const EdgeInsets.all(8.0),
@@ -54,18 +60,6 @@ class _PointPageView extends StatelessWidget {
                             .copyWith(fontWeight: FontWeight.w300),
                         maxLines: 1,
                         overflow: TextOverflow.fade,
-                      ),
-                    ],
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Expanded(
-                        child: Text(
-                          point.title,
-                          style: theme.textTheme.headline5,
-                        ),
                       ),
                     ],
                   ),

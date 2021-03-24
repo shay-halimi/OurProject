@@ -55,7 +55,9 @@ class DisplayNameInput extends FormzInput<String, DisplayNameValidationError> {
 enum PhotoURLInputValidationError { invalid }
 
 class PhotoURLInput extends FormzInput<String, PhotoURLInputValidationError> {
-  const PhotoURLInput.pure() : super.pure('');
+  const PhotoURLInput.pure()
+      : super.pure(
+            'https://firebasestorage.googleapis.com/v0/b/cookpoint-e16ce.appspot.com/o/logo.png?alt=media&token=7566ed32-d1d1-47ec-ae2c-3d805f38f935');
 
   const PhotoURLInput.dirty([String value = '']) : super.dirty(value);
 

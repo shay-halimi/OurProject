@@ -47,8 +47,6 @@ class LoginCubit extends Cubit<LoginState> {
         phoneNumber: state.phoneNumberInput.e164,
       );
 
-      await Future<void>.delayed(const Duration(seconds: 1));
-
       emit(state.copyWith(
         verification: verification,
         status: FormzStatus.submissionSuccess,

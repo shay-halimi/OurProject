@@ -46,8 +46,6 @@ class FakePointsRepository extends PointsRepository {
 
   @override
   Stream<List<Point>> near({LatLng latLng, num radiusInKM = 3.14}) async* {
-    await Future<void>.delayed(const Duration(seconds: 1));
-
     final list = [
       for (var i = 0; i <= 500; i++)
         Point.empty.copyWith(

@@ -6,8 +6,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class MapView extends StatelessWidget {
-  final _controller = TextEditingController();
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -17,29 +15,7 @@ class MapView extends StatelessWidget {
         title: Row(
           children: [
             Expanded(
-              child: TextField(
-                keyboardType: TextInputType.text,
-                onChanged: (value) =>
-                    context.read<SearchBloc>().add(SearchTermUpdated(value)),
-                decoration: InputDecoration(
-                  border: InputBorder.none,
-                  hintText: 'מה בא לך לאכול?',
-                  suffixIcon: context.select(
-                          (SearchBloc bloc) => bloc.state.term.isNotEmpty)
-                      ? IconButton(
-                          icon: const Icon(Icons.close),
-                          onPressed: () {
-                            context
-                                .read<SearchBloc>()
-                                .add(const SearchTermCleared());
-                            _controller.clear();
-                            _hideKeyboard(context);
-                          },
-                        )
-                      : null,
-                ),
-                controller: _controller,
-              ),
+              child: _SearchField(),
             ),
             if (context.select(
                 (PointsBloc bloc) => bloc.state.status == PointStatus.loading))
@@ -50,10 +26,23 @@ class MapView extends StatelessWidget {
               ),
           ],
         ),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.menu),
+            onPressed: () => showDialog<bool>(
+                context: context,
+                builder: (context) {
+                  return Dialog(child: AppDrawer());
+                }),
+            tooltip: MaterialLocalizations.of(context).openAppDrawerTooltip,
+          ),
+        ],
       ),
       body: Stack(
         children: [
-          const MapWidget(),
+          MapWidget(
+            pixelRatio: MediaQuery.of(context).devicePixelRatio,
+          ),
           Column(
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
@@ -62,11 +51,54 @@ class MapView extends StatelessWidget {
           ),
         ],
       ),
-      endDrawer: AppDrawer(),
       floatingActionButton: Visibility(
         visible: context
             .select((SelectedPointCubit cubit) => cubit.state.point.isEmpty),
         child: const CreatePointButton(),
+      ),
+    );
+  }
+}
+
+class _SearchField extends StatefulWidget {
+  _SearchField({
+    Key key,
+  }) : super(key: key);
+
+  @override
+  _SearchFieldState createState() => _SearchFieldState();
+}
+
+class _SearchFieldState extends State<_SearchField> {
+  final TextEditingController _controller = TextEditingController();
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return TextField(
+      controller: _controller,
+      keyboardType: TextInputType.text,
+      onChanged: (value) =>
+          context.read<SearchBloc>().add(SearchTermUpdated(value)),
+      decoration: InputDecoration(
+        border: InputBorder.none,
+        hintText: 'מה בא לך לאכול?',
+        suffixIcon:
+            context.select((SearchBloc bloc) => bloc.state.term).isNotEmpty
+                ? IconButton(
+                    icon: const Icon(Icons.close),
+                    onPressed: () {
+                      context.read<SearchBloc>().add(const SearchTermCleared());
+                      _controller.clear();
+                      _hideKeyboard(context);
+                    },
+                  )
+                : null,
       ),
     );
   }
