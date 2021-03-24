@@ -63,62 +63,64 @@ class PointForm extends StatelessWidget {
             ),
         ],
       ),
-      body: WillPopScope(
-        onWillPop: () async {
-          if (isPure) return true;
+      body: SafeArea(
+        child: WillPopScope(
+          onWillPop: () async {
+            if (isPure) return true;
 
-          return showDialog<bool>(
-              context: context,
-              builder: (context) {
-                return AlertDialog(
-                  title: const Text('האם לצאת?'),
-                  content: const Text('האם לצאת בלי לשמור את השינויים?'),
-                  actions: [
-                    TextButton(
-                      child: const Text('כן, צא בלי לשמור'),
-                      onPressed: () {
-                        Navigator.of(context).pop(true);
-                      },
-                    ),
-                    ElevatedButton(
-                      child: const Text('לא'),
-                      onPressed: () {
-                        Navigator.of(context).pop(false);
-                      },
-                    ),
-                  ],
-                );
-              });
-        },
-        child: BlocListener<PointFormCubit, PointFormState>(
-          listener: (context, state) {
-            if (state.status.isSubmissionFailure) {
-              ScaffoldMessenger.of(context)
-                ..hideCurrentSnackBar()
-                ..showSnackBar(
-                  const SnackBar(
-                    content: Text('שגיאה, אמת.י המידע שהזנת ונסה.י שנית.'),
-                  ),
-                );
-            }
-
-            if (state.status.isSubmissionSuccess) {
-              Navigator.of(context).pop();
-            }
+            return showDialog<bool>(
+                context: context,
+                builder: (context) {
+                  return AlertDialog(
+                    title: const Text('האם לצאת?'),
+                    content: const Text('האם לצאת בלי לשמור את השינויים?'),
+                    actions: [
+                      TextButton(
+                        child: const Text('כן, צא בלי לשמור'),
+                        onPressed: () {
+                          Navigator.of(context).pop(true);
+                        },
+                      ),
+                      ElevatedButton(
+                        child: const Text('לא'),
+                        onPressed: () {
+                          Navigator.of(context).pop(false);
+                        },
+                      ),
+                    ],
+                  );
+                });
           },
-          child: SingleChildScrollView(
-            child: Column(
-              children: [
-                const _MediaInput(),
-                const _TitleInput(),
-                const _DescriptionInput(),
-                const _PriceInput(),
-                const _TagsInput(),
-                const _AvailableInput(),
-                _SubmitButton(
-                  point: point,
-                ),
-              ],
+          child: BlocListener<PointFormCubit, PointFormState>(
+            listener: (context, state) {
+              if (state.status.isSubmissionFailure) {
+                ScaffoldMessenger.of(context)
+                  ..hideCurrentSnackBar()
+                  ..showSnackBar(
+                    const SnackBar(
+                      content: Text('שגיאה, אמת/י המידע שהזנת ונסה/י שנית.'),
+                    ),
+                  );
+              }
+
+              if (state.status.isSubmissionSuccess) {
+                Navigator.of(context).pop();
+              }
+            },
+            child: SingleChildScrollView(
+              child: Column(
+                children: [
+                  const _MediaInput(),
+                  const _TitleInput(),
+                  const _DescriptionInput(),
+                  const _PriceInput(),
+                  const _TagsInput(),
+                  const _AvailableInput(),
+                  _SubmitButton(
+                    point: point,
+                  ),
+                ],
+              ),
             ),
           ),
         ),
@@ -144,9 +146,9 @@ class _DeleteButton extends StatelessWidget {
           context: context,
           builder: (context) {
             return AlertDialog(
-              title: const Text('האם אתה בטוח?'),
+              title: const Text('האם את/ה בטוח/ה?'),
               content:
-                  Text('האם אתה בטוח שברצונך למחוק את המאכל ${point.title} ?'),
+                  Text('האם את/ה בטוח/ה שברצונך למחוק את המאכל ${point.title} ?'),
               actions: [
                 TextButton(
                   child: const Text('כן, מחק לצמיתות'),

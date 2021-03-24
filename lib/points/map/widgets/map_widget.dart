@@ -57,15 +57,12 @@ class _MapWidgetState extends State<MapWidget> {
       }
     }
 
-    final configuration =
-        ImageConfiguration(size: Size(_size.toDouble(), _size.toDouble()));
-
     google_maps.BitmapDescriptor.fromAssetImage(
-            configuration, 'assets/images/mini_marker@$_size.png')
+        const ImageConfiguration(), 'assets/images/mini_marker_$_size.png')
         .then((value) => setState(() => _pointMarker = value));
 
     google_maps.BitmapDescriptor.fromAssetImage(
-            configuration, 'assets/images/marker@$_size.png')
+        const ImageConfiguration(), 'assets/images/marker_$_size.png')
         .then((value) => setState(() => _selectedPointMarker = value));
   }
 

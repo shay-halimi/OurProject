@@ -81,8 +81,10 @@ class _PointPageView extends StatelessWidget {
           ],
         ),
       ),
-      bottomNavigationBar: CookerWidget(
-        cookerId: point.cookerId,
+      bottomNavigationBar: SafeArea(
+        child: CookerWidget(
+          cookerId: point.cookerId,
+        ),
       ),
     );
   }

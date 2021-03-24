@@ -37,7 +37,7 @@ class LocationPage extends StatelessWidget {
       ),
       floatingActionButton: FloatingActionButton.extended(
         onPressed: context.read<LocationCubit>().locate,
-        label: const Text('נסה שוב'),
+        label: const Text('נסה/י שוב'),
         icon: const Icon(Icons.explore),
       ),
     );

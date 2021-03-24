@@ -3,7 +3,7 @@ description: CookPoint
 
 publish_to: 'none'
 
-version: 1.0.0+29
+version: 1.0.0+30
 
 environment:
   sdk: ">=2.7.0 <3.0.0"
@@ -56,11 +56,11 @@ flutter:
 
   assets:
     - assets/images/logo.png
-    - assets/images/mini_marker@64.png
-    - assets/images/mini_marker@128.png
-    - assets/images/mini_marker@192.png
-    - assets/images/mini_marker@256.png
-    - assets/images/marker@64.png
-    - assets/images/marker@128.png
-    - assets/images/marker@192.png
-    - assets/images/marker@256.png
+    - assets/images/mini_marker_64.png
+    - assets/images/mini_marker_128.png
+    - assets/images/mini_marker_192.png
+    - assets/images/mini_marker_256.png
+    - assets/images/marker_64.png
+    - assets/images/marker_128.png
+    - assets/images/marker_192.png
+    - assets/images/marker_256.png

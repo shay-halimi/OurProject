@@ -50,7 +50,7 @@ class CookerForm extends StatelessWidget {
             ScaffoldMessenger.of(context)
               ..hideCurrentSnackBar()
               ..showSnackBar(const SnackBar(
-                  content: Text('שגיאה, אמת.י המידע שהזנת ונסה.י שנית.')));
+                  content: Text('שגיאה, אמת/י המידע שהזנת ונסה/י שנית.')));
           }
 
           if (state.status.isSubmissionSuccess) {

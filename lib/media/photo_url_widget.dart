@@ -67,7 +67,7 @@ class _PhotoURLDialogView extends StatelessWidget {
                         backgroundImage: CachedNetworkImageProvider(photoURL))
                     : CircleAvatar(
                         radius: radius,
-                        child: const Text('בחר.י תמונת פרופיל'));
+                        child: const Text('בחר/י תמונת פרופיל'));
               } else if (state is MediaDialogError) {
                 CircleAvatar(radius: radius, child: const Text('שגיאה'));
               } else if (state is MediaDialogLoading) {
@@ -139,16 +139,16 @@ class _PhotoURLDialogView extends StatelessWidget {
         context: context,
         builder: (context) {
           return AlertDialog(
-            title: const Text('בחר מקור תמונה'),
+            title: const Text('בחר/י מקור תמונה'),
             actions: <Widget>[
               TextButton(
-                child: const Text('בחירה מהגלריה'),
+                child: const Text('בחר/י מהגלריה'),
                 onPressed: () {
                   Navigator.of(context).pop(ImageSource.gallery);
                 },
               ),
               TextButton(
-                child: const Text('צלם תמונה חדשה'),
+                child: const Text('צלמ/י תמונה חדשה'),
                 onPressed: () {
                   Navigator.of(context).pop(ImageSource.camera);
                 },

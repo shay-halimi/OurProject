@@ -51,7 +51,7 @@ class _Body extends StatelessWidget {
                   const AppLogo(),
                   ConstrainedBox(
                       constraints: const BoxConstraints(minHeight: 16.0)),
-                  const Text('נראה שעדיין לא הוספת מאכלים לתפריט שלך.'),
+                  const Text('נראה שעדיין לא פרסמת מאכלים.'),
                 ],
               ),
             );

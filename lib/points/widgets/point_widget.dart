@@ -24,15 +24,13 @@ class PointWidget extends StatelessWidget {
     return Card(
       child: Container(
         height: height,
+        padding: const EdgeInsets.all(8.0),
         child: InkWell(
           onTap: onTap,
           child: Stack(
             alignment: AlignmentDirectional.bottomCenter,
             children: [
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: _PhotoWidget(photo: point.media.first),
-              ),
+              _PhotoWidget(photo: point.media.first),
               Container(
                 color: Colors.white,
                 padding: const EdgeInsets.all(8.0),

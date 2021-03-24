@@ -125,7 +125,7 @@ class _OTPForm extends StatelessWidget {
             ..hideCurrentSnackBar()
             ..showSnackBar(
               const SnackBar(
-                content: Text('שגיאה, אמת.י המידע שהזנת ונסה.י שנית.'),
+                content: Text('שגיאה, אמת/י המידע שהזנת ונסה/י שנית.'),
               ),
             );
         }
@@ -152,7 +152,7 @@ class _ClearVerificationIdButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return TextButton(
       onPressed: () => context.read<LoginCubit>().clearVerification(),
-      child: const Text('אם לא קיבלת SMS מאיתנו, לחץ.י כאן.'),
+      child: const Text('אם לא קיבלת SMS מאיתנו, לחצ/י כאן.'),
     );
   }
 }

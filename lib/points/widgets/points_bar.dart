@@ -77,7 +77,7 @@ class _PointsBarViewState extends State<PointsBarView> {
                   );
                 }).toList(),
                 options: CarouselOptions(
-                  enableInfiniteScroll: true,
+                  enableInfiniteScroll: false,
                   initialPage: points
                       .indexOf(context.read<SelectedPointCubit>().state.point),
                   onPageChanged: (index, reason) {
@@ -91,7 +91,6 @@ class _PointsBarViewState extends State<PointsBarView> {
                   height: widget.height,
                 ),
               ),
-              ConstrainedBox(constraints: const BoxConstraints(minHeight: 24)),
             ],
           ),
         ),
