@@ -32,7 +32,14 @@ class _Launcher {
   }
 
   Future<void> directions(Address address) {
-    return launch(Platform.isIOS
+    bool isIOS;
+    try {
+      isIOS = Platform.isIOS;
+    } catch (e) {
+      isIOS = false;
+    }
+
+    return launch(isIOS
         ? 'https://maps.apple.com/?center=${address.latitude},${address.longitude}&q=${address.name}'
         : 'https://maps.google.com/?center=${address.latitude},${address.longitude}&q=${address.name}');
   }

@@ -12,55 +12,25 @@ import 'package:provider/provider.dart';
 
 class CookerPointsPage extends StatelessWidget {
   static Route route() {
-    return MaterialPageRoute<void>(builder: (_) => CookerPointsPage());
+    return MaterialPageRoute<void>(
+        builder: (_) => CookerMiddleware(child: CookerPointsPage()));
   }
 
   @override
   Widget build(BuildContext context) {
     final cooker = context.select((CookerBloc bloc) => bloc.state.cooker);
 
-    if (cooker.isEmpty) {
-      return CookerPage();
-    }
-
-    return MultiBlocProvider(
-      providers: [
-        BlocProvider(
-          create: (context) =>
-              PointsBloc(pointsRepository: context.read<PointsRepository>())
-                ..add(
-                  PointsOfCookerRequestedEvent(
-                    cooker.id,
-                  ),
-                ),
-        ),
-      ],
-      child: CookerPointsPageView(cooker: cooker),
-    );
-  }
-}
-
-class CookerPointsPageView extends StatelessWidget {
-  const CookerPointsPageView({
-    Key key,
-    @required this.cooker,
-  }) : super(key: key);
-
-  final Cooker cooker;
-
-  @override
-  Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomInset: true,
       appBar: AppBar(title: const Text('התפריט שלי')),
-      body: CookerPointsPageViewBody(cooker: cooker),
+      body: _Body(cooker: cooker),
       floatingActionButton: const CreatePointButton(),
     );
   }
 }
 
-class CookerPointsPageViewBody extends StatelessWidget {
-  const CookerPointsPageViewBody({
+class _Body extends StatelessWidget {
+  const _Body({
     Key key,
     @required this.cooker,
   }) : super(key: key);
@@ -78,14 +48,10 @@ class CookerPointsPageViewBody extends StatelessWidget {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  const Padding(
-                    padding: EdgeInsets.all(8.0),
-                    child: AppLogo(),
-                  ),
-                  const Padding(
-                    padding: EdgeInsets.all(8.0),
-                    child: Text('נראה שעדיין לא הוספת מאכלים לתפריט שלך.'),
-                  ),
+                  const AppLogo(),
+                  ConstrainedBox(
+                      constraints: const BoxConstraints(minHeight: 16.0)),
+                  const Text('נראה שעדיין לא הוספת מאכלים לתפריט שלך.'),
                 ],
               ),
             );

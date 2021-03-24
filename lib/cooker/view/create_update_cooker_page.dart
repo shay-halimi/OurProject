@@ -1,5 +1,6 @@
 import 'package:cookers_repository/cookers_repository.dart';
 import 'package:cookpoint/cooker/cooker.dart';
+import 'package:cookpoint/cooker_points/cooker_points.dart';
 import 'package:cookpoint/media/media.dart';
 import 'package:cookpoint/points/bloc/bloc.dart';
 import 'package:cookpoint/theme/theme.dart';
@@ -7,49 +8,24 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:formz/formz.dart';
 import 'package:location_services/location_services.dart';
-import 'package:points_repository/points_repository.dart';
 import 'package:provider/provider.dart';
 
 class CreateUpdateCookerPage extends StatelessWidget {
-  const CreateUpdateCookerPage({
-    Key key,
-    @required this.cooker,
-  }) : super(key: key);
-
-  final Cooker cooker;
-
-  static Route route({@required Cooker cooker}) {
+  static Route route() {
     return MaterialPageRoute<void>(
-      builder: (_) => CreateUpdateCookerPage(
-        cooker: cooker,
-      ),
+      builder: (_) => CookerMiddleware(child: CreateUpdateCookerPage()),
     );
   }
 
   @override
   Widget build(BuildContext context) {
-    return MultiBlocProvider(
-      providers: [
-        BlocProvider(
-          create: (context) =>
-              PointsBloc(pointsRepository: context.read<PointsRepository>())
-                ..add(
-                  PointsOfCookerRequestedEvent(
-                    cooker.id,
-                  ),
-                ),
-        ),
-        BlocProvider(
-          create: (context) => CookerFormCubit(
-            pointsBloc: context.read<PointsBloc>(),
-            cookerBloc: context.read<CookerBloc>(),
-            locationServices: context.read<LocationServices>(),
-          ),
-        ),
-      ],
-      child: CookerForm(
-        cooker: cooker,
+    return BlocProvider(
+      create: (context) => CookerFormCubit(
+        pointsBloc: context.read<PointsBloc>(),
+        cookerBloc: context.read<CookerBloc>(),
+        locationServices: context.read<LocationServices>(),
       ),
+      child: const CookerForm(),
     );
   }
 }
@@ -57,13 +33,12 @@ class CreateUpdateCookerPage extends StatelessWidget {
 class CookerForm extends StatelessWidget {
   const CookerForm({
     Key key,
-    @required this.cooker,
   }) : super(key: key);
-
-  final Cooker cooker;
 
   @override
   Widget build(BuildContext context) {
+    final cooker = context.select((CookerBloc bloc) => bloc.state.cooker);
+
     return Scaffold(
       resizeToAvoidBottomInset: true,
       appBar: AppBar(

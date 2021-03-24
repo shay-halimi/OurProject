@@ -26,25 +26,12 @@ class CreateUpdatePointPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MultiBlocProvider(
-      providers: [
-        BlocProvider(
-          create: (_) =>
-              PointsBloc(pointsRepository: context.read<PointsRepository>())
-                ..add(
-                  PointsOfCookerRequestedEvent(
-                    point.cookerId,
-                  ),
-                ),
-        ),
-        BlocProvider(
-          create: (context) => PointFormCubit(
-            point: point,
-            cookerBloc: context.read<CookerBloc>(),
-            pointsBloc: context.read<PointsBloc>(),
-          ),
-        )
-      ],
+    return BlocProvider(
+      create: (context) => PointFormCubit(
+        point: point,
+        cookerBloc: context.read<CookerBloc>(),
+        pointsBloc: context.read<PointsBloc>(),
+      ),
       child: PointForm(point: point),
     );
   }
@@ -176,7 +163,7 @@ class _DeleteButton extends StatelessWidget {
               ],
             );
           }).then((value) {
-        if (value != null && value) {
+        if (value) {
           context.read<PointsBloc>().add(PointDeletedEvent(point));
           Navigator.of(context).pop();
         }
@@ -196,12 +183,13 @@ class _SubmitButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<PointFormCubit, PointFormState>(
-      buildWhen: (previous, current) => previous.status != current.status,
+      buildWhen: (previous, current) => previous != current,
       builder: (context, state) {
+        final isSave = point.isNotEmpty || state.availableInput.value == false;
+
         return AppButton(
-          key: ValueKey(state.status),
           isInProgress: state.status.isSubmissionInProgress,
-          child: Text(point.isNotEmpty ? 'שמור' : 'פרסם!'),
+          child: Text(isSave ? 'שמור' : 'פרסם'),
           onPressed: state.status.isValidated
               ? () => context.read<PointFormCubit>().save()
               : null,
@@ -291,7 +279,7 @@ class _PriceInput extends StatelessWidget {
                 context.read<PointFormCubit>().changePrice(value),
             decoration: InputDecoration(
               labelText: 'מחיר',
-              errorText: state.priceInput.invalid ? 'מחיר לא תקין' : null,
+              errorText: state.priceInput.invalid ? 'לא תקין' : null,
               suffix: const Text('₪'),
             ),
             textAlign: TextAlign.end,
@@ -321,16 +309,14 @@ class _DescriptionInput extends StatelessWidget {
           child: TextFormField(
             key: const Key('_DescriptionInput'),
             keyboardType: TextInputType.multiline,
-            minLines: 3,
-            maxLines: 6,
+            maxLines: null,
             maxLength: 1000,
             maxLengthEnforcement: MaxLengthEnforcement.enforced,
             onChanged: (value) =>
                 context.read<PointFormCubit>().changeDescription(value),
             decoration: InputDecoration(
               labelText: 'תיאור',
-              errorText:
-                  state.descriptionInput.invalid ? 'תיאור לא תקין' : null,
+              errorText: state.descriptionInput.invalid ? 'לא תקין' : null,
             ),
             initialValue: state.descriptionInput.value,
           ),
@@ -363,7 +349,7 @@ class _TitleInput extends StatelessWidget {
                 context.read<PointFormCubit>().changeTitle(value),
             decoration: InputDecoration(
               labelText: 'שם המאכל',
-              errorText: state.titleInput.invalid ? 'שם המאכל לא תקין' : null,
+              errorText: state.titleInput.invalid ? 'לא תקין' : null,
             ),
             initialValue: state.titleInput.value,
           );

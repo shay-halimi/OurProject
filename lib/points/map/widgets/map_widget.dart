@@ -40,7 +40,14 @@ class _MapWidgetState extends State<MapWidget> {
 
     var _size = 64;
 
-    if (!Platform.isIOS) {
+    bool isIOS;
+    try {
+      isIOS = Platform.isIOS;
+    } catch (e) {
+      isIOS = false;
+    }
+
+    if (!isIOS) {
       if (_pixelRatio >= 1.5) {
         _size = _size * 2;
       } else if (_pixelRatio >= 2.5) {

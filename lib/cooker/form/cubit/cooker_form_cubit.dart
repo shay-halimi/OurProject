@@ -69,6 +69,7 @@ class CookerFormCubit extends Cubit<CookerFormState> {
             : CookerUpdatedEvent(cooker),
       );
 
+      /// todo find a better place for this.
       for (var point in _pointsBloc.state.points) {
         if (point.latLng.isNotEmpty) {
           _pointsBloc.add(

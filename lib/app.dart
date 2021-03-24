@@ -4,6 +4,7 @@ import 'package:cookpoint/authentication/authentication.dart';
 import 'package:cookpoint/cooker/cooker.dart';
 import 'package:cookpoint/home_page.dart';
 import 'package:cookpoint/location/location.dart';
+import 'package:cookpoint/points/points.dart';
 import 'package:cookpoint/splash/splash.dart';
 import 'package:cookpoint/theme/theme.dart';
 import 'package:flutter/material.dart';
@@ -66,6 +67,11 @@ class App extends StatelessWidget {
               authenticationBloc: _context.read<AuthenticationBloc>(),
             ),
             lazy: false,
+          ),
+          BlocProvider(
+            create: (_) => PointsBloc(
+              pointsRepository: pointsRepository,
+            ),
           ),
         ],
         child: AppView(),

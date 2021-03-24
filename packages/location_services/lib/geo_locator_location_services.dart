@@ -13,12 +13,17 @@ class GeoLocatorLocationServices extends LocationServices {
 
   @override
   Future<void> locate() async {
-    bool serviceEnabled;
     geolocator.LocationPermission permission;
 
-    serviceEnabled = await geolocator.Geolocator.isLocationServiceEnabled();
-    if (!serviceEnabled) {
-      return _locationController.add(Location.empty);
+    try {
+      bool serviceEnabled;
+      serviceEnabled = await geolocator.Geolocator.isLocationServiceEnabled();
+
+      if (!serviceEnabled) {
+        return _locationController.add(Location.empty);
+      }
+    } on UnimplementedError {
+      print('web?');
     }
 
     permission = await geolocator.Geolocator.checkPermission();

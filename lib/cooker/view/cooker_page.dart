@@ -1,56 +1,22 @@
-import 'package:cookers_repository/cookers_repository.dart';
-import 'package:cookpoint/authentication/authentication.dart';
 import 'package:cookpoint/cooker/cooker.dart';
+import 'package:cookpoint/cooker_points/cooker_points.dart';
 import 'package:cookpoint/media/media.dart';
-import 'package:cookpoint/splash/splash.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:provider/provider.dart';
 
 class CookerPage extends StatelessWidget {
   static Route route() {
-    return MaterialPageRoute<void>(builder: (_) => CookerPage());
+    return MaterialPageRoute<void>(
+        builder: (_) => CookerMiddleware(child: CookerPage()));
   }
 
   @override
   Widget build(BuildContext context) {
-    final user = context.select((AuthenticationBloc bloc) => bloc.state.user);
+    final cooker = context.select((CookerBloc bloc) => bloc.state.cooker);
 
-    if (user.isEmpty) {
-      return AuthenticationPage();
-    }
+    final box = ConstrainedBox(constraints: const BoxConstraints(minHeight: 8));
 
-    return BlocBuilder<CookerBloc, CookerState>(
-      buildWhen: (previous, current) => previous != current,
-      builder: (_, state) {
-        if (state.status == CookerStatus.loaded) {
-          if (state.cooker.isEmpty) {
-            return CreateUpdateCookerPage(
-              cooker: state.cooker,
-            );
-          }
-
-          return CookerView(
-            cooker: state.cooker,
-          );
-        }
-
-        return const SplashPage();
-      },
-    );
-  }
-}
-
-class CookerView extends StatelessWidget {
-  const CookerView({
-    Key key,
-    @required this.cooker,
-  }) : super(key: key);
-
-  final Cooker cooker;
-
-  @override
-  Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: const Text('המטבח שלי'),
@@ -62,34 +28,27 @@ class CookerView extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               const Center(child: _PhotoURLInput()),
-              ConstrainedBox(constraints: const BoxConstraints(minHeight: 8)),
+              box,
               ListTile(
                 title: Text(cooker.displayName),
                 subtitle: const Text('שם לתצוגה'),
-                onTap: () => Navigator.of(context).push<void>(
-                  CreateUpdateCookerPage.route(
-                    cooker: cooker,
-                  ),
-                ),
+                onTap: () => Navigator.of(context)
+                    .push<void>(CreateUpdateCookerPage.route()),
                 trailing: const Icon(Icons.edit),
               ),
-              ConstrainedBox(constraints: const BoxConstraints(minHeight: 8)),
+              box,
               ListTile(
                 title: Text(cooker.address.name),
                 subtitle: const Text('כתובת'),
-                onTap: () => Navigator.of(context).push<void>(
-                  CreateUpdateCookerPage.route(
-                    cooker: cooker,
-                  ),
-                ),
+                onTap: () => Navigator.of(context)
+                    .push<void>(CreateUpdateCookerPage.route()),
                 trailing: const Icon(Icons.edit),
               ),
-              ConstrainedBox(constraints: const BoxConstraints(minHeight: 8)),
+              box,
               ListTile(
                 title: Text(cooker.phoneNumber.toDisplay()),
                 subtitle: const Text('מספר טלפון'),
               ),
-              ConstrainedBox(constraints: const BoxConstraints(minHeight: 8)),
             ],
           ),
         ),
