@@ -93,7 +93,7 @@ class _PointsWidget extends StatelessWidget {
               child: Column(
                 children: [
                   AspectRatio(
-                    aspectRatio: 3 / 1,
+                    aspectRatio: 16 / 9,
                     child: MediaWidget(
                       media: point.media.first,
                     ),
@@ -107,12 +107,15 @@ class _PointsWidget extends StatelessWidget {
                       overflow: TextOverflow.fade,
                     ),
                     trailing: const Icon(Icons.edit),
+                    onTap: () => Navigator.of(context).push<void>(
+                      CreateUpdatePointPage.route(point: point),
+                    ),
                   ),
                 ],
               ),
             ),
             onTap: () => Navigator.of(context).push<void>(
-              CreateUpdatePointPage.route(point: point),
+              PointPage.route(point: point),
             ),
           ),
         ],

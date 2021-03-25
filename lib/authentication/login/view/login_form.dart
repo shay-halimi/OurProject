@@ -33,7 +33,7 @@ class _PhoneNumberForm extends StatelessWidget {
             ..showSnackBar(
               const SnackBar(
                   content: Text(
-                'שגיאה, אמת.י המידע שהזנת ונסה.י שנית.',
+                'שגיאה, אמת/י המידע שהזנת ונסה/י שנית.',
               )),
             );
         }

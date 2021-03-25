@@ -1,0 +1,9 @@
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="app.cookpoint.cookpoint">
+
+    <application>
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="AIzaSyAPwjaRinvA4eQ1ljzH0UPeSyJlOWFVV1k" />
+    </application>
+</manifest>

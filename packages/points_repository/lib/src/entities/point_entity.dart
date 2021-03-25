@@ -72,8 +72,7 @@ class PointEntity extends Equatable {
   Map<String, Object> toDocument() {
     return {
       'cookerId': cookerId,
-      'latLng': GeoFirePoint(latLng.latitude, latLng.longitude).data
-          as Map<String, Object>,
+      'latLng': GeoFirePoint(latLng.latitude, latLng.longitude).data,
       'title': title,
       'description': description,
       'price': price.toJson(),

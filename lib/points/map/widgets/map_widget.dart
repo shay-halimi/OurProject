@@ -3,9 +3,10 @@ import 'dart:io';
 
 import 'package:cookpoint/location/location.dart';
 import 'package:cookpoint/search/search.dart';
+import 'package:cookpoint/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart' as google_maps;
+import 'package:google_maps_flutter/google_maps_flutter.dart' as g_maps;
 import 'package:provider/provider.dart';
 
 class MapWidget extends StatefulWidget {
@@ -21,18 +22,19 @@ class MapWidget extends StatefulWidget {
 }
 
 class _MapWidgetState extends State<MapWidget> {
-  final Completer<google_maps.GoogleMapController> _controller = Completer();
+  final Completer<g_maps.GoogleMapController> _controller = Completer();
 
-  double _zoom = 12.0;
+  double _zoom = 6.0;
   double _heading = 0;
 
-  google_maps.BitmapDescriptor _pointMarker =
-      google_maps.BitmapDescriptor.defaultMarker;
+  g_maps.BitmapDescriptor _pointMarker = g_maps.BitmapDescriptor.defaultMarker;
 
-  google_maps.BitmapDescriptor _selectedPointMarker =
-      google_maps.BitmapDescriptor.defaultMarker;
+  g_maps.BitmapDescriptor _selectedPointMarker =
+      g_maps.BitmapDescriptor.defaultMarker;
 
   double get _pixelRatio => widget.pixelRatio;
+
+  bool _ready = false;
 
   @override
   void initState() {
@@ -57,12 +59,12 @@ class _MapWidgetState extends State<MapWidget> {
       }
     }
 
-    google_maps.BitmapDescriptor.fromAssetImage(
-        const ImageConfiguration(), 'assets/images/mini_marker_$_size.png')
+    g_maps.BitmapDescriptor.fromAssetImage(
+            const ImageConfiguration(), 'assets/images/mini_marker_$_size.png')
         .then((value) => setState(() => _pointMarker = value));
 
-    google_maps.BitmapDescriptor.fromAssetImage(
-        const ImageConfiguration(), 'assets/images/marker_$_size.png')
+    g_maps.BitmapDescriptor.fromAssetImage(
+            const ImageConfiguration(), 'assets/images/marker_$_size.png')
         .then((value) => setState(() => _selectedPointMarker = value));
   }
 
@@ -72,70 +74,94 @@ class _MapWidgetState extends State<MapWidget> {
     final location =
         context.select((LocationCubit cubit) => cubit.state.current);
 
-    return BlocConsumer<SelectedPointCubit, SelectedPointState>(
-      listenWhen: (previous, current) => previous != current,
-      listener: (_, state) async {
-        if (state.point.isEmpty || _controller.future == null) return;
+    return Container(
+      color: theme.colorScheme.primary,
+      child: Opacity(
+        opacity: _ready ? 1 : 0,
+        child: BlocConsumer<SelectedPointCubit, SelectedPointState>(
+          listenWhen: (previous, current) => previous != current,
+          listener: (_, state) async {
+            if (state.point.isEmpty || _controller.future == null) return;
 
-        final controller = await _controller.future;
+            final controller = await _controller.future;
 
-        await controller.animateCamera(
-          google_maps.CameraUpdate.newCameraPosition(
-            google_maps.CameraPosition(
-              target: google_maps.LatLng(
-                state.point.latLng.latitude,
-                state.point.latLng.longitude,
+            await controller.animateCamera(
+              g_maps.CameraUpdate.newCameraPosition(
+                g_maps.CameraPosition(
+                  target: g_maps.LatLng(
+                    state.point.latLng.latitude,
+                    state.point.latLng.longitude,
+                  ),
+                  bearing: _heading,
+                  zoom: _zoom,
+                ),
               ),
-              bearing: _heading,
-              zoom: _zoom,
-            ),
-          ),
-        );
-      },
-      buildWhen: (previous, current) => previous != current,
-      builder: (_, state) {
-        return google_maps.GoogleMap(
-          onMapCreated: _controller.complete,
-          initialCameraPosition: google_maps.CameraPosition(
-            target: google_maps.LatLng(
-              location.latitude,
-              location.longitude,
-            ),
-            bearing: _heading,
-            zoom: _zoom,
-          ),
-          markers: points.map((point) {
-            final isSelectedPoint =
-                point.latLng.distanceInKM(state.point.latLng) == 0;
-
-            return google_maps.Marker(
-              markerId: google_maps.MarkerId(point.id),
-              position: google_maps.LatLng(
-                point.latLng.latitude,
-                point.latLng.longitude,
-              ),
-              onTap: () {
-                _hideKeyboard(context);
-                context.read<SelectedPointCubit>().select(point);
-              },
-              icon: isSelectedPoint ? _selectedPointMarker : _pointMarker,
-              zIndex: isSelectedPoint ? 1.0 : 0.0,
             );
-          }).toSet(),
-          compassEnabled: false,
-          mapToolbarEnabled: false,
-          zoomControlsEnabled: false,
-          myLocationButtonEnabled: false,
-          onTap: (lanLat) {
-            _hideKeyboard(context);
-            context.read<SelectedPointCubit>().clear();
           },
-          onCameraMove: (position) {
-            _zoom = position.zoom;
-            _heading = position.bearing;
+          buildWhen: (previous, current) => previous != current,
+          builder: (_, state) {
+            return g_maps.GoogleMap(
+              onMapCreated: (controller) async {
+                _controller.complete(controller);
+
+                await Future<void>.delayed(const Duration(seconds: 1)).then(
+                  (_) => setState(() => _ready = true),
+                );
+
+                await controller.animateCamera(
+                  g_maps.CameraUpdate.newCameraPosition(
+                    g_maps.CameraPosition(
+                      target: g_maps.LatLng(
+                        location.latitude,
+                        location.longitude,
+                      ),
+                      zoom: _zoom * 2,
+                    ),
+                  ),
+                );
+              },
+              initialCameraPosition: g_maps.CameraPosition(
+                target: g_maps.LatLng(
+                  location.latitude,
+                  location.longitude,
+                ),
+                bearing: _heading,
+                zoom: _zoom,
+              ),
+              markers: points.map((point) {
+                final isSelectedPoint =
+                    point.latLng.distanceInKM(state.point.latLng) == 0;
+
+                return g_maps.Marker(
+                  markerId: g_maps.MarkerId(point.id),
+                  position: g_maps.LatLng(
+                    point.latLng.latitude,
+                    point.latLng.longitude,
+                  ),
+                  onTap: () {
+                    _hideKeyboard(context);
+                    context.read<SelectedPointCubit>().select(point);
+                  },
+                  icon: isSelectedPoint ? _selectedPointMarker : _pointMarker,
+                  zIndex: isSelectedPoint ? 1.0 : 0.0,
+                );
+              }).toSet(),
+              compassEnabled: false,
+              mapToolbarEnabled: false,
+              zoomControlsEnabled: false,
+              myLocationButtonEnabled: false,
+              onTap: (lanLat) {
+                _hideKeyboard(context);
+                context.read<SelectedPointCubit>().clear();
+              },
+              onCameraMove: (position) {
+                _zoom = position.zoom;
+                _heading = position.bearing;
+              },
+            );
           },
-        );
-      },
+        ),
+      ),
     );
   }
 

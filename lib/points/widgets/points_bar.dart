@@ -11,7 +11,7 @@ class PointsBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final height = MediaQuery.of(context).size.height * 0.36;
+    final height = MediaQuery.of(context).size.height * 0.38;
 
     return BlocBuilder<SelectedPointCubit, SelectedPointState>(
       buildWhen: (previous, current) => previous.point != current.point,
@@ -87,7 +87,7 @@ class _PointsBarViewState extends State<PointsBarView> {
                           .select(points.elementAt(index));
                     }
                   },
-                  viewportFraction: 0.94,
+                  viewportFraction: 0.90,
                   height: widget.height,
                 ),
               ),

@@ -13,7 +13,7 @@ class Util {
 
   Map<String, int> base32CodesDic = {};
 
-  var encodeAuto = 'auto';
+  final encodeAuto = 'auto';
 
   ///
   /// Significant Figure Hash Length
@@ -26,7 +26,7 @@ class Util {
   /// the geohash.
   /// @type Array
   // Desired sig figs:    0  1  2  3   4   5   6   7   8   9  10
-  var sigfigHashLength = [0, 5, 7, 8, 11, 12, 13, 15, 16, 17, 18];
+  final sigfigHashLength = [0, 5, 7, 8, 11, 12, 13, 15, 16, 17, 18];
 
   ///
   /// Encode
@@ -37,9 +37,9 @@ class Util {
       if (latitude.runtimeType == double || longitude.runtimeType == double) {
         throw Exception('string notation required for auto precision.');
       }
-      var decSigFigsLat = (latitude as String).split('.')[1].length;
-      var decSigFigsLon = (longitude as String).split('.')[1].length;
-      var numberOfSigFigs = max(decSigFigsLat, decSigFigsLon);
+      final decSigFigsLat = (latitude as String).split('.')[1].length;
+      final decSigFigsLon = (longitude as String).split('.')[1].length;
+      final numberOfSigFigs = max(decSigFigsLat, decSigFigsLon);
       numberOfChars = sigfigHashLength[numberOfSigFigs];
     } else
       numberOfChars ??= 9;
@@ -137,23 +137,25 @@ class Util {
   /// Neighbor
   ///
   /// Find neighbor of a geohash string in certain direction.
-  /// Direction is a two-element array, i.e. [1,0] means north, [-1,-1] means southwest.
+  /// Direction is a two-element array, i.e. [1,0] means north,
+  /// [-1,-1] means southwest.
   ///
   /// direction [lat, lon], i.e.
   /// [1,0] - north
   /// [1,1] - northeast
   String neighbor(String hashString, List<int> direction) {
-    var lonLat = decode(hashString);
-    var neighborLat =
+    final lonLat = decode(hashString);
+    final neighborLat =
         lonLat['latitude'] + direction[0] * lonLat['latitudeError'] * 2;
-    var neighborLon =
+    final neighborLon =
         lonLat['longitude'] + direction[1] * lonLat['longitudeError'] * 2;
     return encode(neighborLat, neighborLon, hashString.length);
   }
 
   ///
   /// Neighbors
-  /// Returns all neighbors' hashstrings clockwise from north around to northwest
+  /// Returns all neighbors' hashstrings clockwise
+  /// from north around to northwest
   /// 7 0 1
   /// 6 X 2
   /// 5 4 3
@@ -221,18 +223,23 @@ class Util {
       return 1;
   }
 
+  // ignore: constant_identifier_names
   static const double MAX_SUPPORTED_RADIUS = 8587;
 
   // Length of a degree latitude at the equator
+  // ignore: constant_identifier_names
   static const double METERS_PER_DEGREE_LATITUDE = 110574;
 
   // The equatorial circumference of the earth in meters
+  // ignore: constant_identifier_names
   static const double EARTH_MERIDIONAL_CIRCUMFERENCE = 40007860;
 
   // The equatorial radius of the earth in meters
+  // ignore: constant_identifier_names
   static const double EARTH_EQ_RADIUS = 6378137;
 
   // The meridional radius of the earth in meters
+  // ignore: constant_identifier_names
   static const double EARTH_POLAR_RADIUS = 6357852.3;
 
   /* The following value assumes a polar radius of
@@ -242,9 +249,11 @@ class Util {
      * The value is calculated as e2 == (r_e^2 - r_p^2)/(r_e^2)
      * Use exact value to avoid rounding errors
      */
+  // ignore: constant_identifier_names
   static const double EARTH_E2 = 0.00669447819799;
 
   // Cutoff for floating point calculations
+  // ignore: constant_identifier_names
   static const double EPSILON = 1e-12;
 
   static double distance(Coordinates location1, Coordinates location2) {
@@ -255,16 +264,16 @@ class Util {
   static double calcDistance(
       double lat1, double long1, double lat2, double long2) {
     // Earth's mean radius in meters
-    final double radius = (EARTH_EQ_RADIUS + EARTH_POLAR_RADIUS) / 2;
-    double latDelta = _toRadians(lat1 - lat2);
-    double lonDelta = _toRadians(long1 - long2);
+    final radius = (EARTH_EQ_RADIUS + EARTH_POLAR_RADIUS) / 2;
+    final latDelta = _toRadians(lat1 - lat2);
+    final lonDelta = _toRadians(long1 - long2);
 
-    double a = (sin(latDelta / 2) * sin(latDelta / 2)) +
+    final a = (sin(latDelta / 2) * sin(latDelta / 2)) +
         (cos(_toRadians(lat1)) *
             cos(_toRadians(lat2)) *
             sin(lonDelta / 2) *
             sin(lonDelta / 2));
-    double distance = radius * 2 * atan2(sqrt(a), sqrt(1 - a)) / 1000;
+    final distance = radius * 2 * atan2(sqrt(a), sqrt(1 - a)) / 1000;
     return double.parse(distance.toStringAsFixed(3));
   }
 

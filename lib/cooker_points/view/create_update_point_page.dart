@@ -147,8 +147,8 @@ class _DeleteButton extends StatelessWidget {
           builder: (context) {
             return AlertDialog(
               title: const Text('האם את/ה בטוח/ה?'),
-              content:
-                  Text('האם את/ה בטוח/ה שברצונך למחוק את המאכל ${point.title} ?'),
+              content: Text(
+                  'האם את/ה בטוח/ה שברצונך למחוק את המאכל ${point.title} ?'),
               actions: [
                 TextButton(
                   child: const Text('כן, מחק לצמיתות'),
@@ -372,19 +372,10 @@ class _MediaInput extends StatelessWidget {
       buildWhen: (previous, current) =>
           previous.mediaInput != current.mediaInput,
       builder: (_, state) {
-        return Container(
-          margin: const EdgeInsets.all(8.0),
-          decoration: BoxDecoration(
-              border: Border.all(
-                  color: state.mediaInput.pure
-                      ? theme.colorScheme.primary
-                      : theme.colorScheme.surface),
-              borderRadius: BorderRadius.circular(33.0)),
-          child: MediaDialog(
-            media: state.mediaInput.value,
-            onMediaChanged: (value) =>
-                context.read<PointFormCubit>().changeMedia(value),
-          ),
+        return MediaDialog(
+          media: state.mediaInput.value,
+          onMediaChanged: (value) =>
+              context.read<PointFormCubit>().changeMedia(value),
         );
       },
     );

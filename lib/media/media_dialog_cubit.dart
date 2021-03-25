@@ -12,8 +12,10 @@ class MediaDialogCubit extends Cubit<MediaDialogState> {
   MediaDialogCubit() : super(MediaDialogInitial());
 
   Future<void> fileChanged(File file) async {
-    var reference =
-        FirebaseStorage.instance.ref().child('gallery/').child(Uuid().v1());
+    var reference = FirebaseStorage.instance
+        .ref()
+        .child('gallery/')
+        .child(const Uuid().v1());
 
     UploadTask task;
 

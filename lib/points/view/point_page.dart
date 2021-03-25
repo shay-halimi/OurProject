@@ -1,9 +1,11 @@
 import 'package:cookpoint/cooker/cooker.dart';
+import 'package:cookpoint/cooker_points/cooker_points.dart';
 import 'package:cookpoint/media/media_widget.dart';
 import 'package:cookpoint/points/points.dart';
 import 'package:cookpoint/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:points_repository/points_repository.dart';
+import 'package:provider/provider.dart';
 
 class PointPage extends StatelessWidget {
   const PointPage({
@@ -33,6 +35,8 @@ class _PointPageView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final cooker = context.select((CookerBloc bloc) => bloc.state.cooker);
+
     return Scaffold(
       appBar: AppBar(
         title: Text(
@@ -40,6 +44,16 @@ class _PointPageView extends StatelessWidget {
           maxLines: 1,
           overflow: TextOverflow.ellipsis,
         ),
+        actions: [
+          if (point.cookerId == cooker.id)
+            IconButton(
+              icon: const Icon(Icons.edit),
+              tooltip: 'עריכה',
+              onPressed: () => Navigator.of(context).push<void>(
+                CreateUpdatePointPage.route(point: point),
+              ),
+            )
+        ],
       ),
       body: SingleChildScrollView(
         child: Column(

@@ -5,6 +5,7 @@ import 'package:cookpoint/media/media_widget.dart';
 import 'package:cookpoint/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 
@@ -82,28 +83,55 @@ class MediaDialogView extends StatelessWidget {
               if (value != null) {
                 final pickedFile = await _picker.getImage(
                   source: value,
-                  maxWidth: 1280,
-                  maxHeight: 720,
                 );
+
+                if (pickedFile == null) return;
+
+                final croppedFile = await ImageCropper.cropImage(
+                  sourcePath: pickedFile.path,
+                  aspectRatioPresets: [
+                    CropAspectRatioPreset.ratio16x9,
+                  ],
+                  androidUiSettings: const AndroidUiSettings(
+                    toolbarTitle: '',
+                    initAspectRatio: CropAspectRatioPreset.original,
+                    lockAspectRatio: true,
+                  ),
+                  iosUiSettings: const IOSUiSettings(
+                    title: '',
+                    doneButtonTitle: 'המשך',
+                    cancelButtonTitle: 'ביטול',
+                    aspectRatioLockEnabled: true,
+                  ),
+                );
+
+                if (croppedFile == null) return;
 
                 await context
                     .read<MediaDialogCubit>()
-                    .fileChanged(File(pickedFile.path));
+                    .fileChanged(File(croppedFile.path));
               }
             }),
             child: BlocBuilder<MediaDialogCubit, MediaDialogState>(
               buildWhen: (previous, current) => previous != current,
               builder: (context, state) {
-                final aspectRatio = 1280 / 720;
+                final aspectRatio = 16 / 9;
 
                 if (state is MediaDialogInitial) {
                   return AspectRatio(
                     aspectRatio: aspectRatio,
                     child: media.isEmpty
-                        ? Center(
-                            child: Text(
-                              'בחר תמונה',
-                              style: theme.textTheme.bodyText1,
+                        ? Container(
+                            margin: const EdgeInsets.all(8.0),
+                            decoration: BoxDecoration(
+                              border: Border.all(),
+                              borderRadius: BorderRadius.circular(33.0),
+                            ),
+                            child: Center(
+                              child: Text(
+                                'בחר/י תמונה',
+                                style: theme.textTheme.bodyText1,
+                              ),
                             ),
                           )
                         : Image(
@@ -114,8 +142,19 @@ class MediaDialogView extends StatelessWidget {
                 } else if (state is MediaDialogError) {
                   return AspectRatio(
                     aspectRatio: aspectRatio,
-                    child: const Center(
-                        child: Text('שגיאה, אמת.י המידע שהזנת ונסה.י שנית.')),
+                    child: Container(
+                      margin: const EdgeInsets.all(8.0),
+                      decoration: BoxDecoration(
+                        border: Border.all(),
+                        borderRadius: BorderRadius.circular(33.0),
+                      ),
+                      child: Center(
+                        child: Text(
+                          'שגיאה, אמת/י המידע שהזנת ונסה/י שנית.',
+                          style: theme.textTheme.bodyText1,
+                        ),
+                      ),
+                    ),
                   );
                 } else if (state is MediaDialogLoading) {
                   return Stack(

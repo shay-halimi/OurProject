@@ -55,9 +55,9 @@ class PointFormState extends Equatable {
 enum AvailableInputValidationError { invalid }
 
 class AvailableInput extends FormzInput<bool, AvailableInputValidationError> {
-  const AvailableInput.pure() : super.pure(false);
+  const AvailableInput.pure() : super.pure(true);
 
-  const AvailableInput.dirty([bool value = false]) : super.dirty(value);
+  const AvailableInput.dirty([bool value = true]) : super.dirty(value);
 
   @override
   AvailableInputValidationError validator(bool value) {
@@ -74,7 +74,7 @@ class TitleInput extends FormzInput<String, TitleValidationError> {
 
   @override
   TitleValidationError validator(String value) {
-    return value.length > 1 && value.length < 60 && !value.contains('\n')
+    return value.isNotEmpty && value.length < 60 && !value.contains('\n')
         ? null
         : TitleValidationError.invalid;
   }
@@ -90,9 +90,7 @@ class DescriptionInput
 
   @override
   DescriptionInputValidationError validator(String value) {
-    return value.length > 1 && value.length < 1000
-        ? null
-        : DescriptionInputValidationError.invalid;
+    return value.length < 1000 ? null : DescriptionInputValidationError.invalid;
   }
 }
 
@@ -105,9 +103,7 @@ class PriceInput extends FormzInput<Money, PriceInputValidationError> {
 
   @override
   PriceInputValidationError validator(Money value) {
-    return value.amount.floorToDouble() > 0
-        ? null
-        : PriceInputValidationError.invalid;
+    return value.amount.floor() > 0 ? null : PriceInputValidationError.invalid;
   }
 }
 

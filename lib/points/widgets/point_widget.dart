@@ -24,7 +24,7 @@ class PointWidget extends StatelessWidget {
     return Card(
       child: Container(
         height: height,
-        padding: const EdgeInsets.all(8.0),
+        padding: const EdgeInsets.all(4.0),
         child: InkWell(
           onTap: onTap,
           child: Stack(
@@ -33,7 +33,7 @@ class PointWidget extends StatelessWidget {
               _PhotoWidget(photo: point.media.first),
               Container(
                 color: Colors.white,
-                padding: const EdgeInsets.all(8.0),
+                padding: const EdgeInsets.symmetric(vertical: 4.0),
                 child: Opacity(
                   opacity: 0.9,
                   child: Column(
