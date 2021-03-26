@@ -42,7 +42,7 @@ packages:
       path: "packages/authentication_repository"
       relative: true
     source: path
-    version: "1.0.0+2"
+    version: "1.0.0+3"
   bloc:
     dependency: "direct main"
     description:
@@ -699,7 +699,7 @@ packages:
       path: "packages/points_repository"
       relative: true
     source: path
-    version: "1.0.0+3"
+    version: "1.0.0+4"
   pool:
     dependency: transitive
     description:

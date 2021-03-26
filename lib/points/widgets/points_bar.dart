@@ -3,6 +3,7 @@ import 'package:cookpoint/points/points.dart';
 import 'package:cookpoint/search/search.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:points_repository/points_repository.dart';
 
 class PointsBar extends StatelessWidget {
   PointsBar({
@@ -42,6 +43,7 @@ class PointsBarView extends StatefulWidget {
 
 class _PointsBarViewState extends State<PointsBarView> {
   final CarouselController _controller = CarouselController();
+  Point _selectedPoint = Point.empty;
 
   @override
   Widget build(BuildContext context) {
@@ -55,43 +57,41 @@ class _PointsBarViewState extends State<PointsBarView> {
       child: BlocListener<SelectedPointCubit, SelectedPointState>(
         listenWhen: (previous, current) => previous.point != current.point,
         listener: (_, state) {
-          _controller.jumpToPage(points.indexOf(state.point));
+          if (_selectedPoint.isNotEmpty && _selectedPoint != state.point) {
+            _selectedPoint = state.point;
+            _controller.jumpToPage(points.indexOf(_selectedPoint));
+          }
         },
         child: SafeArea(
-          child: Column(
-            children: [
-              CarouselSlider(
-                carouselController: _controller,
-                items: points.map((point) {
-                  return Builder(
-                    key: ValueKey(point.id),
-                    builder: (context) {
-                      return PointWidget(
-                        point: point,
-                        onTap: () => Navigator.of(context).push<void>(
-                          PointPage.route(point: point),
-                        ),
-                        height: widget.height,
-                      );
-                    },
+          child: CarouselSlider(
+            carouselController: _controller,
+            items: points.map((point) {
+              return Builder(
+                key: ValueKey(point.id),
+                builder: (context) {
+                  return PointWidget(
+                    point: point,
+                    onTap: () => Navigator.of(context).push<void>(
+                      PointPage.route(point: point),
+                    ),
+                    height: widget.height,
                   );
-                }).toList(),
-                options: CarouselOptions(
-                  enableInfiniteScroll: false,
-                  initialPage: points
-                      .indexOf(context.read<SelectedPointCubit>().state.point),
-                  onPageChanged: (index, reason) {
-                    if (reason == CarouselPageChangedReason.manual) {
-                      context
-                          .read<SelectedPointCubit>()
-                          .select(points.elementAt(index));
-                    }
-                  },
-                  viewportFraction: 0.90,
-                  height: widget.height,
-                ),
-              ),
-            ],
+                },
+              );
+            }).toList(),
+            options: CarouselOptions(
+              enableInfiniteScroll: false,
+              initialPage: points
+                  .indexOf(context.read<SelectedPointCubit>().state.point),
+              onPageChanged: (index, reason) {
+                _selectedPoint = points.elementAt(index);
+                if (reason == CarouselPageChangedReason.manual) {
+                  context.read<SelectedPointCubit>().select(_selectedPoint);
+                }
+              },
+              viewportFraction: 0.90,
+              height: widget.height,
+            ),
           ),
         ),
       ),

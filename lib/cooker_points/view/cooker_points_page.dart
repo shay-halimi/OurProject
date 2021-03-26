@@ -48,7 +48,7 @@ class _Body extends StatelessWidget {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  const AppLogo(),
+                  const AppCover(),
                   ConstrainedBox(
                       constraints: const BoxConstraints(minHeight: 16.0)),
                   const Text('נראה שעדיין לא פרסמת מאכלים.'),

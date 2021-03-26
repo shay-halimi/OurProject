@@ -54,7 +54,7 @@ class PointForm extends StatelessWidget {
       resizeToAvoidBottomInset: true,
       appBar: AppBar(
         title: Text(
-          point.isNotEmpty ? 'עדכון ${point.title}' : 'הוספת מאכל',
+          point.isNotEmpty ? 'עדכון ${point.title}' : 'פרסום מאכל',
         ),
         actions: [
           if (point.isNotEmpty)
@@ -63,64 +63,62 @@ class PointForm extends StatelessWidget {
             ),
         ],
       ),
-      body: SafeArea(
-        child: WillPopScope(
-          onWillPop: () async {
-            if (isPure) return true;
+      body: WillPopScope(
+        onWillPop: () async {
+          if (isPure) return true;
 
-            return showDialog<bool>(
-                context: context,
-                builder: (context) {
-                  return AlertDialog(
-                    title: const Text('האם לצאת?'),
-                    content: const Text('האם לצאת בלי לשמור את השינויים?'),
-                    actions: [
-                      TextButton(
-                        child: const Text('כן, צא בלי לשמור'),
-                        onPressed: () {
-                          Navigator.of(context).pop(true);
-                        },
-                      ),
-                      ElevatedButton(
-                        child: const Text('לא'),
-                        onPressed: () {
-                          Navigator.of(context).pop(false);
-                        },
-                      ),
-                    ],
-                  );
-                });
-          },
-          child: BlocListener<PointFormCubit, PointFormState>(
-            listener: (context, state) {
-              if (state.status.isSubmissionFailure) {
-                ScaffoldMessenger.of(context)
-                  ..hideCurrentSnackBar()
-                  ..showSnackBar(
-                    const SnackBar(
-                      content: Text('שגיאה, אמת/י המידע שהזנת ונסה/י שנית.'),
+          return showDialog<bool>(
+              context: context,
+              builder: (context) {
+                return AlertDialog(
+                  title: const Text('האם לצאת?'),
+                  content: const Text('האם לצאת בלי לשמור את השינויים?'),
+                  actions: [
+                    TextButton(
+                      child: const Text('כן, צא בלי לשמור'),
+                      onPressed: () {
+                        Navigator.of(context).pop(true);
+                      },
                     ),
-                  );
-              }
-
-              if (state.status.isSubmissionSuccess) {
-                Navigator.of(context).pop();
-              }
-            },
-            child: SingleChildScrollView(
-              child: Column(
-                children: [
-                  const _MediaInput(),
-                  const _TitleInput(),
-                  const _DescriptionInput(),
-                  const _PriceInput(),
-                  const _TagsInput(),
-                  const _AvailableInput(),
-                  _SubmitButton(
-                    point: point,
+                    ElevatedButton(
+                      child: const Text('לא'),
+                      onPressed: () {
+                        Navigator.of(context).pop(false);
+                      },
+                    ),
+                  ],
+                );
+              });
+        },
+        child: BlocListener<PointFormCubit, PointFormState>(
+          listener: (context, state) {
+            if (state.status.isSubmissionFailure) {
+              ScaffoldMessenger.of(context)
+                ..hideCurrentSnackBar()
+                ..showSnackBar(
+                  const SnackBar(
+                    content: Text('שגיאה, אמת/י המידע שהזנת ונסה/י שנית.'),
                   ),
-                ],
-              ),
+                );
+            }
+
+            if (state.status.isSubmissionSuccess) {
+              Navigator.of(context).pop();
+            }
+          },
+          child: SafeArea(
+            child: ListView(
+              children: [
+                const _MediaInput(),
+                ConstrainedBox(
+                    constraints: const BoxConstraints(minHeight: 8.0)),
+                const _TitleInput(),
+                const _DescriptionInput(),
+                const _PriceInput(),
+                const _TagsInput(),
+                const _AvailableInput(),
+                _SubmitButton(point: point),
+              ],
             ),
           ),
         ),
@@ -208,25 +206,22 @@ class _AvailableInput extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: BlocBuilder<PointFormCubit, PointFormState>(
-        buildWhen: (previous, current) =>
-            previous.availableInput != current.availableInput,
-        builder: (_, state) {
-          return SwitchListTile(
-            title: state.availableInput.value
-                ? const Text('זמין')
-                : const Text('לא זמין'),
-            subtitle: const Text('מאכלים זמינים מופיעים על המפה עם'
-                ' מספר הטלפון איתו נרשמתם.'),
-            value: state.availableInput.value,
-            onChanged: (bool value) {
-              context.read<PointFormCubit>().changeAvailable(value);
-            },
-          );
-        },
-      ),
+    return BlocBuilder<PointFormCubit, PointFormState>(
+      buildWhen: (previous, current) =>
+          previous.availableInput != current.availableInput,
+      builder: (_, state) {
+        return SwitchListTile(
+          title: state.availableInput.value
+              ? const Text('זמין')
+              : const Text('לא זמין'),
+          subtitle: const Text('מאכלים זמינים מופיעים על המפה עם'
+              ' מספר הטלפון איתו נרשמתם.'),
+          value: state.availableInput.value,
+          onChanged: (bool value) {
+            context.read<PointFormCubit>().changeAvailable(value);
+          },
+        );
+      },
     );
   }
 }
@@ -239,7 +234,7 @@ class _TagsInput extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.all(8.0),
+      padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
       child: BlocBuilder<PointFormCubit, PointFormState>(
         buildWhen: (previous, current) => previous != current,
         builder: (context, state) {
@@ -268,7 +263,7 @@ class _PriceInput extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.all(8.0),
+      padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
       child: BlocBuilder<PointFormCubit, PointFormState>(
         buildWhen: (previous, current) =>
             previous.priceInput != current.priceInput,
@@ -307,7 +302,7 @@ class _DescriptionInput extends StatelessWidget {
           previous.descriptionInput != current.descriptionInput,
       builder: (context, state) {
         return Padding(
-          padding: const EdgeInsets.all(8.0),
+          padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
           child: TextFormField(
             key: const Key('_DescriptionInput'),
             keyboardType: TextInputType.multiline,
@@ -336,7 +331,7 @@ class _TitleInput extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.all(8.0),
+      padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
       child: BlocBuilder<PointFormCubit, PointFormState>(
         buildWhen: (previous, current) =>
             previous.titleInput != current.titleInput,

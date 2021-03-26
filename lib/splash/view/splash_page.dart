@@ -19,7 +19,7 @@ class SplashPage extends StatelessWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                const AppLogo(),
+                const AppCover(),
               ],
             ),
             ConstrainedBox(constraints: const BoxConstraints(minHeight: 32)),

@@ -17,7 +17,7 @@ class AppDrawer extends StatelessWidget {
       children: <Widget>[
         const Padding(
           padding: EdgeInsets.all(32.0),
-          child: AppLogo(),
+          child: AppCover(),
         ),
         const Divider(),
         ListTile(

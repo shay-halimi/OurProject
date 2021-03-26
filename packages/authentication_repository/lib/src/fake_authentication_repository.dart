@@ -1,11 +1,19 @@
 import 'dart:async';
+import 'dart:math';
+
+import 'package:meta/meta.dart';
 
 import 'authentication_repository.dart';
 import 'models/models.dart';
 
 class FakeAuthenticationRepository extends AuthenticationRepository {
   FakeAuthenticationRepository() {
-    logOut();
+    final id = 1000000 + Random().nextInt(8999999);
+
+    signIn(
+      otp: '$id',
+      verification: Verification(id: '+97221$id'),
+    );
   }
 
   final StreamController<User> _streamController = StreamController();
@@ -16,17 +24,17 @@ class FakeAuthenticationRepository extends AuthenticationRepository {
   }
 
   @override
-  Future<Verification> sendOTP({String phoneNumber}) async {
+  Future<Verification> sendOTP({@required String phoneNumber}) async {
     return Verification(id: phoneNumber);
   }
 
   @override
   Future<void> signIn({
-    String otp,
-    Verification verification,
+    @required String otp,
+    @required Verification verification,
   }) async {
     _streamController.add(User(
-      id: verification.id,
+      id: otp,
       phoneNumber: verification.id,
     ));
   }

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-class AppLogo extends StatelessWidget {
-  const AppLogo({
+class AppCover extends StatelessWidget {
+  const AppCover({
     Key key,
     this.width = 128,
     this.height = 128,
@@ -13,9 +13,9 @@ class AppLogo extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Hero(
-      tag: 'AppLogo',
+      tag: 'AppCover',
       child: Image.asset(
-        'assets/images/logo.png',
+        'assets/images/cover.png',
         width: width,
         height: height,
       ),

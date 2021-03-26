@@ -41,7 +41,7 @@ class _PhoneNumberForm extends StatelessWidget {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
-          const AppLogo(),
+          const AppCover(),
           _PhoneNumberInput(),
           const _SendOTPButton(),
           const Text(
@@ -133,7 +133,7 @@ class _OTPForm extends StatelessWidget {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
-          const AppLogo(),
+          const AppCover(),
           _OTPInput(),
           _ConfirmPhoneNumberButton(),
           const _ClearVerificationIdButton(),

@@ -18,7 +18,7 @@ class LocationPage extends StatelessWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                const AppLogo(),
+                const AppCover(),
               ],
             ),
             Row(
