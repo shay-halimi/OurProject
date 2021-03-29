@@ -3,23 +3,21 @@
 <plist version="1.0">
 <dict>
 	<key>CLIENT_ID</key>
-	<string>999901209458-25kukhqno9kclosjd8e4106nc80ojiin.apps.googleusercontent.com</string>
+	<string>740733847047-grkepkja4j5bnvn8efpvi8pe728irbt5.apps.googleusercontent.com</string>
 	<key>REVERSED_CLIENT_ID</key>
-	<string>com.googleusercontent.apps.999901209458-25kukhqno9kclosjd8e4106nc80ojiin</string>
-	<key>ANDROID_CLIENT_ID</key>
-	<string>999901209458-44lqmftbj2kpt4f4j8f4pcrv44r4sk4p.apps.googleusercontent.com</string>
+	<string>com.googleusercontent.apps.740733847047-grkepkja4j5bnvn8efpvi8pe728irbt5</string>
 	<key>API_KEY</key>
-	<string>AIzaSyAU2f_IHncdwreMxEpAWq_35TL9WHkbTxY</string>
+	<string>AIzaSyCoYKtXYQumrk-z30YDxIvrFWLHKMedARM</string>
 	<key>GCM_SENDER_ID</key>
-	<string>999901209458</string>
+	<string>740733847047</string>
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
 	<string>app.cookpoint.cookpoint</string>
 	<key>PROJECT_ID</key>
-	<string>flutterapp-8f8db</string>
+	<string>cookpoint-e16ce</string>
 	<key>STORAGE_BUCKET</key>
-	<string>flutterapp-8f8db.appspot.com</string>
+	<string>cookpoint-e16ce.appspot.com</string>
 	<key>IS_ADS_ENABLED</key>
 	<false></false>
 	<key>IS_ANALYTICS_ENABLED</key>
@@ -31,8 +29,6 @@
 	<key>IS_SIGNIN_ENABLED</key>
 	<true></true>
 	<key>GOOGLE_APP_ID</key>
-	<string>1:999901209458:ios:ca92548073829a2226f3eb</string>
-	<key>DATABASE_URL</key>
-	<string>https://flutterapp-8f8db-default-rtdb.firebaseio.com</string>
+	<string>1:740733847047:ios:b3c528ab73f4200b630ca2</string>
 </dict>
 </plist>

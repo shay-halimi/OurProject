@@ -26,6 +26,7 @@
 			<key>CFBundleURLSchemes</key>
 			<array>
 				<string>com.googleusercontent.apps.999901209458-25kukhqno9kclosjd8e4106nc80ojiin</string>
+				<string>com.googleusercontent.apps.740733847047-grkepkja4j5bnvn8efpvi8pe728irbt5</string>
 			</array>
 		</dict>
 	</array>
@@ -58,5 +59,7 @@
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>
+	<key>NSLocationAlwaysUsageDescription</key>
+	<string>Need to access your location to find nearby food</string>
 </dict>
 </plist>
