@@ -1,13 +1,16 @@
 import 'package:cookpoint/location/location.dart';
+import 'package:cookpoint/points/points.dart';
 import 'package:cookpoint/search/search.dart';
+import 'package:cookpoint/theme/theme.dart';
 import 'package:dough/dough.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_typeahead/flutter_typeahead.dart';
 import 'package:points_repository/points_repository.dart';
 import 'package:provider/provider.dart';
 
 class SearchAppBar extends StatelessWidget implements PreferredSizeWidget {
-  SearchAppBar({Key key, Widget title, List<Widget> actions})
+  SearchAppBar({Key key})
       : _appBar = AppBar(
           primary: false,
           shape: const RoundedRectangleBorder(
@@ -15,8 +18,7 @@ class SearchAppBar extends StatelessWidget implements PreferredSizeWidget {
               Radius.circular(8.0),
             ),
           ),
-          title: title,
-          actions: actions,
+          title: SearchAppBarTitle(),
         ),
         super(key: key);
 
@@ -76,13 +78,115 @@ class _TagsFilter extends StatelessWidget {
           BlocBuilder<SearchBloc, SearchState>(
             buildWhen: (previous, current) => previous != current,
             builder: (context, state) {
-              return InputChip(
-                label: Text(tag),
-                onSelected: (selected) =>
-                    context.read<SearchBloc>().add(SearchTagSelected(tag)),
-                selected: state.tags.contains(tag),
+              return Padding(
+                padding: const EdgeInsets.only(right: 2.0),
+                child: InputChip(
+                  label: Text(
+                    tag,
+                    style: theme.textTheme.bodyText2,
+                  ),
+                  onSelected: (selected) =>
+                      context.read<SearchBloc>().add(SearchTagSelected(tag)),
+                  selected: state.tags.contains(tag),
+                  visualDensity: VisualDensity.compact,
+                ),
               );
             },
+          ),
+      ],
+    );
+  }
+}
+
+class SearchAppBarTitle extends StatefulWidget {
+  SearchAppBarTitle({
+    Key key,
+  }) : super(key: key);
+
+  @override
+  _SearchAppBarTitleState createState() => _SearchAppBarTitleState();
+}
+
+class _SearchAppBarTitleState extends State<SearchAppBarTitle> {
+  TextEditingController _controller;
+  FocusNode _focusNode;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = TextEditingController();
+    _focusNode = FocusNode();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    _controller.dispose();
+    _focusNode.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final suggestions = context
+        .select((PointsBloc bloc) => bloc.state.nearbyPoints)
+        .map((e) => e.title)
+        .toList();
+
+    return Row(
+      children: [
+        Expanded(
+          child: TypeAheadField<String>(
+            getImmediateSuggestions: true,
+            textFieldConfiguration: TextFieldConfiguration(
+              controller: _controller,
+              focusNode: _focusNode,
+              decoration: InputDecoration(
+                border: InputBorder.none,
+                hintText: 'מה בא לך לאכול?',
+                suffixIcon: context
+                        .select((SearchBloc bloc) => bloc.state.term)
+                        .isNotEmpty
+                    ? IconButton(
+                        icon: const Icon(Icons.close),
+                        onPressed: () {
+                          context
+                              .read<SearchBloc>()
+                              .add(const SearchTermCleared());
+                          _controller.clear();
+                        },
+                      )
+                    : null,
+              ),
+            ),
+            suggestionsBoxDecoration: SuggestionsBoxDecoration(
+              borderRadius: BorderRadius.circular(8.0),
+              elevation: 0.0,
+            ),
+            suggestionsCallback: (pattern) {
+              return suggestions.where((e) => e.contains(pattern)).toSet();
+            },
+            itemBuilder: (context, suggestion) {
+              return ListTile(
+                title: Text(suggestion),
+              );
+            },
+            noItemsFoundBuilder: (context) {
+              return const ListTile(
+                title: Text('לא נמצאו תוצאות'),
+              );
+            },
+            onSuggestionSelected: (suggestion) {
+              _controller.text = suggestion;
+              context.read<SearchBloc>().add(SearchTermUpdated(suggestion));
+            },
+          ),
+        ),
+        if (context.select(
+            (PointsBloc bloc) => bloc.state.status == PointsStatus.loading))
+          Container(
+            child: const CircularProgressIndicator(),
+            width: 16,
+            height: 16,
           ),
       ],
     );

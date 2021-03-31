@@ -56,12 +56,6 @@ class PointForm extends StatelessWidget {
         title: Text(
           point.isNotEmpty ? 'עדכון ${point.title}' : 'פרסום מאכל',
         ),
-        actions: [
-          if (point.isNotEmpty)
-            _DeleteButton(
-              point: point,
-            ),
-        ],
       ),
       body: WillPopScope(
         onWillPop: () async {
@@ -122,51 +116,6 @@ class PointForm extends StatelessWidget {
           ),
         ),
       ),
-    );
-  }
-}
-
-class _DeleteButton extends StatelessWidget {
-  const _DeleteButton({
-    Key key,
-    @required this.point,
-  }) : super(key: key);
-
-  final Point point;
-
-  @override
-  Widget build(BuildContext context) {
-    return IconButton(
-      icon: const Icon(Icons.delete),
-      tooltip: 'מחק',
-      onPressed: () => showDialog<bool>(
-          context: context,
-          builder: (context) {
-            return AlertDialog(
-              title: const Text('האם את/ה בטוח/ה?'),
-              content: Text(
-                  'האם את/ה בטוח/ה שברצונך למחוק את המאכל ${point.title} ?'),
-              actions: [
-                TextButton(
-                  child: const Text('כן, מחק לצמיתות'),
-                  onPressed: () {
-                    Navigator.of(context).pop(true);
-                  },
-                ),
-                ElevatedButton(
-                  child: const Text('לא'),
-                  onPressed: () {
-                    Navigator.of(context).pop(false);
-                  },
-                ),
-              ],
-            );
-          }).then((value) {
-        if (value) {
-          context.read<PointsBloc>().add(PointDeletedEvent(point));
-          Navigator.of(context).pop();
-        }
-      }),
     );
   }
 }

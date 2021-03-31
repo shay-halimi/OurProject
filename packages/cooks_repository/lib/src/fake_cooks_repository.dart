@@ -1,8 +1,6 @@
 import 'dart:async';
 import 'dart:math';
 
-import 'package:lipsum/lipsum.dart' as lipsum;
-
 import 'cooks_repository.dart';
 import 'models/models.dart';
 
@@ -13,11 +11,12 @@ class FakeCooksRepository implements CooksRepository {
   @override
   Stream<Cook> cook(String id) async* {
     if (!cooks.containsKey(id)) {
+      final hebrew = rand.nextBool();
       cooks[id] = Cook(
         id: id,
-        displayName: lipsum.createWord(numWords: 1 + rand.nextInt(3)),
+        displayName: hebrew ? 'Noa Cohen' : 'נעה כהן',
         address: Address(
-          name: lipsum.createWord(numWords: 1 + rand.nextInt(3)),
+          name: hebrew ? 'Israel' : 'ישראל',
           latitude: 35,
           longitude: 17,
         ),

@@ -138,7 +138,6 @@ class _MapWidgetState extends State<MapWidget> {
                   point.latLng.longitude,
                 ),
                 onTap: () {
-                  _hideKeyboard(context);
                   context.read<SelectedPointCubit>().select(point);
                 },
                 icon: isSelectedPoint ? _selectedPointMarker : _pointMarker,
@@ -150,33 +149,15 @@ class _MapWidgetState extends State<MapWidget> {
             zoomControlsEnabled: false,
             myLocationButtonEnabled: false,
             onTap: (lanLat) {
-              _hideKeyboard(context);
               context.read<SelectedPointCubit>().clear();
             },
             onCameraMove: (position) {
               _zoom = position.zoom;
               _heading = position.bearing;
             },
-            onLongPress: (_) async {
-              if (state.point.isEmpty || _controller.future == null) return;
-
-              final controller = await _controller.future;
-
-              await controller.animateCamera(
-                g_maps.CameraUpdate.newCameraPosition(
-                  g_maps.CameraPosition(
-                    target: center,
-                    bearing: _heading,
-                    zoom: _zoom,
-                  ),
-                ),
-              );
-            },
           );
         },
       ),
     );
   }
-
-  void _hideKeyboard(BuildContext context) => FocusScope.of(context).unfocus();
 }

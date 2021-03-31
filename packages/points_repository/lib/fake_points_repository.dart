@@ -101,7 +101,8 @@ class FakePointsRepository extends PointsRepository {
       ),
       Point.empty.copyWith(
         title: "ג'חנון אסלי",
-        description: '',
+        description: 'קר בחוץ ואין לכם כוח לצאת? התקשרו אלינו עכשיו '
+            'ואנחנו נגיע עד אליכם עם גחנון אסלי, חם וטעים בטירוף',
         media: {
           'https://firebasestorage.googleapis.com/v0/b/flutterapp-8f8db.appspot.com/o/gallery%2F66b17410-921b-11eb-b9a6-6bc3d7477c4a?alt=media&token=1ea07f6e-6b6c-4c2a-8ba7-14d1cf2b564c'
         },
@@ -120,7 +121,7 @@ class FakePointsRepository extends PointsRepository {
       id: rand.nextInt(999999999).toString(),
       cookId: rand.nextInt(999999999).toString(),
       price: Money(
-        amount: (1000 * rand.nextDouble()).floorToDouble(),
+        amount: 10 + (30 * rand.nextDouble()).floorToDouble(),
         currency: const Currency.nis(),
       ),
       tags: Point.defaultTags.where((_) => rand.nextBool()).toSet(),

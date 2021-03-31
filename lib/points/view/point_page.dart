@@ -1,4 +1,3 @@
-import 'package:cookpoint/cook/cook.dart';
 import 'package:cookpoint/media/media_widget.dart';
 import 'package:cookpoint/points/points.dart';
 import 'package:cookpoint/theme/theme.dart';
@@ -31,18 +30,22 @@ class _PointPageState extends State<PointPage> {
       return CreateUpdatePointPage(point: widget.point);
     }
 
-    final canEdit = context.select(
+    final canPerformActions = context.select(
         (PointsBloc bloc) => bloc.state.cookPoints.contains(widget.point));
 
     return _PointPageView(
       point: widget.point,
       actions: [
-        if (canEdit)
+        if (canPerformActions) ...[
+          _DeleteButton(
+            point: widget.point,
+          ),
           IconButton(
             icon: const Icon(Icons.edit),
             tooltip: 'עריכה',
             onPressed: () => setState(() => isEditing = true),
-          )
+          ),
+        ]
       ],
     );
   }
@@ -109,11 +112,6 @@ class _PointPageView extends StatelessWidget {
           ],
         ),
       ),
-      bottomNavigationBar: SafeArea(
-        child: CookWidget(
-          cookId: point.cookId,
-        ),
-      ),
     );
   }
 }
@@ -134,6 +132,51 @@ class _PhotoWidget extends StatelessWidget {
         tag: point.media.first,
         child: MediaWidget(media: point.media.first),
       ),
+    );
+  }
+}
+
+class _DeleteButton extends StatelessWidget {
+  const _DeleteButton({
+    Key key,
+    @required this.point,
+  }) : super(key: key);
+
+  final Point point;
+
+  @override
+  Widget build(BuildContext context) {
+    return IconButton(
+      icon: const Icon(Icons.delete),
+      tooltip: 'מחק',
+      onPressed: () => showDialog<bool>(
+          context: context,
+          builder: (context) {
+            return AlertDialog(
+              title: const Text('האם את/ה בטוח/ה?'),
+              content: Text(
+                  'האם את/ה בטוח/ה שברצונך למחוק את המאכל ${point.title} ?'),
+              actions: [
+                TextButton(
+                  child: const Text('כן, מחק לצמיתות'),
+                  onPressed: () {
+                    Navigator.of(context).pop(true);
+                  },
+                ),
+                ElevatedButton(
+                  child: const Text('לא'),
+                  onPressed: () {
+                    Navigator.of(context).pop(false);
+                  },
+                ),
+              ],
+            );
+          }).then((value) {
+        if (value) {
+          context.read<PointsBloc>().add(PointDeletedEvent(point));
+          Navigator.of(context).pop();
+        }
+      }),
     );
   }
 }

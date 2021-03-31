@@ -3,7 +3,7 @@ import 'package:cookpoint/points/points.dart';
 import 'package:cookpoint/search/search.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:points_repository/points_repository.dart';
+import 'package:sliding_up_panel/sliding_up_panel.dart';
 
 class PointsBar extends StatelessWidget {
   PointsBar({
@@ -12,7 +12,7 @@ class PointsBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final height = MediaQuery.of(context).size.height * 0.38;
+    final height = MediaQuery.of(context).size.height;
 
     return BlocBuilder<SelectedPointCubit, SelectedPointState>(
       buildWhen: (previous, current) => previous.point != current.point,
@@ -42,8 +42,8 @@ class PointsBarView extends StatefulWidget {
 }
 
 class _PointsBarViewState extends State<PointsBarView> {
-  final CarouselController _controller = CarouselController();
-  Point _selectedPoint = Point.empty;
+  final CarouselController _carouselController = CarouselController();
+  final PanelController _panelController = PanelController();
 
   @override
   Widget build(BuildContext context) {
@@ -57,40 +57,49 @@ class _PointsBarViewState extends State<PointsBarView> {
       child: BlocListener<SelectedPointCubit, SelectedPointState>(
         listenWhen: (previous, current) => previous.point != current.point,
         listener: (_, state) {
-          if (_selectedPoint.isNotEmpty && _selectedPoint != state.point) {
-            _selectedPoint = state.point;
-            _controller.jumpToPage(points.indexOf(_selectedPoint));
+          if (state.point.isNotEmpty) {
+            _carouselController.jumpToPage(points.indexOf(state.point));
           }
         },
         child: SafeArea(
-          child: CarouselSlider(
-            carouselController: _controller,
-            items: points.map((point) {
-              return Builder(
-                key: ValueKey(point.hashCode),
-                builder: (context) {
-                  return PointWidget(
-                    point: point,
-                    onTap: () => Navigator.of(context).push<void>(
-                      PointPage.route(point: point),
-                    ),
-                    height: widget.height,
-                  );
+          child: SlidingUpPanel(
+            controller: _panelController,
+            padding: EdgeInsets.zero,
+            margin: EdgeInsets.zero,
+            borderRadius: BorderRadius.zero,
+            minHeight: widget.height * 0.42,
+            maxHeight: widget.height * 0.78,
+            boxShadow: [],
+            color: Colors.transparent,
+            panel: CarouselSlider(
+              carouselController: _carouselController,
+              items: points.map((point) {
+                return InkWell(
+                  onTap: () async => _panelController.isPanelOpen
+                      ? await _panelController.close()
+                      : await _panelController.open(),
+                  child: Builder(
+                    key: ValueKey(point.hashCode),
+                    builder: (context) {
+                      return PointWidget(point: point);
+                    },
+                  ),
+                );
+              }).toList(),
+              options: CarouselOptions(
+                enableInfiniteScroll: false,
+                initialPage: points
+                    .indexOf(context.read<SelectedPointCubit>().state.point),
+                onPageChanged: (index, reason) {
+                  if (reason == CarouselPageChangedReason.manual) {
+                    context
+                        .read<SelectedPointCubit>()
+                        .select(points.elementAt(index));
+                  }
                 },
-              );
-            }).toList(),
-            options: CarouselOptions(
-              enableInfiniteScroll: false,
-              initialPage: points
-                  .indexOf(context.read<SelectedPointCubit>().state.point),
-              onPageChanged: (index, reason) {
-                _selectedPoint = points.elementAt(index);
-                if (reason == CarouselPageChangedReason.manual) {
-                  context.read<SelectedPointCubit>().select(_selectedPoint);
-                }
-              },
-              viewportFraction: 0.90,
-              height: widget.height,
+                viewportFraction: 0.90,
+                height: widget.height,
+              ),
             ),
           ),
         ),
