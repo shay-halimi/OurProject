@@ -55,9 +55,15 @@ class PointWidget extends StatelessWidget {
             child: SingleChildScrollView(
               child: Padding(
                 padding: const EdgeInsets.all(8.0),
-                child: Text(
-                  point.description,
-                  style: theme.textTheme.bodyText2,
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: Text(
+                        point.description,
+                        style: theme.textTheme.bodyText2,
+                      ),
+                    ),
+                  ],
                 ),
               ),
             ),
