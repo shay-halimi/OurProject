@@ -2,6 +2,10 @@ import 'dart:async';
 import 'dart:math';
 
 import 'package:bloc/bloc.dart';
+import 'package:cookpoint/cook/bloc/bloc.dart';
+import 'package:cookpoint/cook/cook.dart';
+import 'package:cookpoint/location/location.dart';
+import 'package:cooks_repository/cooks_repository.dart';
 import 'package:equatable/equatable.dart';
 import 'package:meta/meta.dart';
 import 'package:points_repository/points_repository.dart';
@@ -12,16 +16,48 @@ part 'points_state.dart';
 class PointsBloc extends Bloc<PointsEvent, PointsState> {
   PointsBloc({
     @required PointsRepository pointsRepository,
+    @required CookBloc cookBloc,
+    @required LocationCubit locationCubit,
   })  : assert(pointsRepository != null),
+        assert(cookBloc != null),
+        assert(locationCubit != null),
         _pointsRepository = pointsRepository,
-        super(const PointsState.unknown());
+        _cookBloc = cookBloc,
+        _locationCubit = locationCubit,
+        super(const PointsState()) {
+    _cookSubscription = _cookBloc.listen((state) {
+      if (state.status == CookStatus.loaded && state.cook.isNotEmpty) {
+        add(PointsOfCookRequestedEvent(state.cook));
+      } else {
+        add(PointsOfCookLoadedEvent(const []));
+      }
+    });
+
+    _locationSubscription = _locationCubit.listen((state) {
+      if (state.status == LocationStatus.loaded) {
+        add(PointsNearbyRequestedEvent(state.toLatLng()));
+      } else {
+        add(PointsNearbyLoadedEvent(const []));
+      }
+    });
+  }
 
   final PointsRepository _pointsRepository;
-  StreamSubscription<List<Point>> _pointsSubscription;
+  final LocationCubit _locationCubit;
+  final CookBloc _cookBloc;
+
+  StreamSubscription<List<Point>> _nearbyPointsSubscription;
+  StreamSubscription<List<Point>> _cookPointsSubscription;
+
+  StreamSubscription<LocationState> _locationSubscription;
+  StreamSubscription<CookState> _cookSubscription;
 
   @override
   Future<void> close() {
-    _pointsSubscription?.cancel();
+    _nearbyPointsSubscription?.cancel();
+    _cookPointsSubscription?.cancel();
+    _locationSubscription?.cancel();
+    _cookSubscription?.cancel();
     return super.close();
   }
 
@@ -29,12 +65,14 @@ class PointsBloc extends Bloc<PointsEvent, PointsState> {
   Stream<PointsState> mapEventToState(
     PointsEvent event,
   ) async* {
-    if (event is PointsRequestedEvent) {
-      yield* _mapPointsRequestedEventToState(event);
-    } else if (event is PointsOfCookerRequestedEvent) {
-      yield* _mapPointsOfCookerRequestedEventToState(event);
-    } else if (event is PointsLoadedEvent) {
-      yield* _mapPointsLoadedEventToState(event);
+    if (event is PointsNearbyRequestedEvent) {
+      yield* _mapPointsNearbyRequestedEventToState(event);
+    } else if (event is PointsNearbyLoadedEvent) {
+      yield* _mapPointsNearbyLoadedEventToState(event);
+    } else if (event is PointsOfCookRequestedEvent) {
+      yield* _mapPointsOfCookRequestedEventToState(event);
+    } else if (event is PointsOfCookLoadedEvent) {
+      yield* _mapPointsOfCookLoadedEventToState(event);
     } else if (event is PointCreatedEvent) {
       yield* _mapPointCreatedEventToState(event);
     } else if (event is PointUpdatedEvent) {
@@ -44,54 +82,83 @@ class PointsBloc extends Bloc<PointsEvent, PointsState> {
     }
   }
 
-  Stream<PointsState> _mapPointsRequestedEventToState(
-    PointsRequestedEvent event,
+  Stream<PointsState> _mapPointsNearbyRequestedEventToState(
+    PointsNearbyRequestedEvent event,
   ) async* {
     if (event.latLng.isEmpty) return;
 
-    yield const PointsState.loading();
+    yield state.copyWith(status: PointsStatus.loading);
 
-    await _pointsSubscription?.cancel();
+    await _nearbyPointsSubscription?.cancel();
 
-    _pointsSubscription = _pointsRepository
+    _nearbyPointsSubscription = _pointsRepository
         .near(latLng: event.latLng, radiusInKM: 100)
         .listen((points) {
-      add(PointsLoadedEvent(points
-        ..sort((point1, point2) {
-          final distance1 = point1.latLng.distanceInKM(event.latLng);
-          final distance2 = point2.latLng.distanceInKM(event.latLng);
+      add(PointsNearbyLoadedEvent(
+        points
+          ..sort((point1, point2) {
+            final distance1 = point1.latLng.distanceInKM(event.latLng);
+            final distance2 = point2.latLng.distanceInKM(event.latLng);
 
-          if (distance1 == distance2) {
-            return 0;
-          }
+            if (distance1 == distance2) {
+              return 0;
+            }
 
-          return distance1 < distance2 ? -1 : 1;
-        })));
+            return distance1 < distance2 ? -1 : 1;
+          }),
+      ));
     });
   }
 
-  Stream<PointsState> _mapPointsOfCookerRequestedEventToState(
-      PointsOfCookerRequestedEvent event) async* {
-    yield const PointsState.loading();
+  Stream<PointsState> _mapPointsOfCookRequestedEventToState(
+      PointsOfCookRequestedEvent event) async* {
+    yield state.copyWith(status: PointsStatus.loading);
 
-    await _pointsSubscription?.cancel();
+    await _cookPointsSubscription?.cancel();
 
-    _pointsSubscription =
-        _pointsRepository.byCookerId(event.cookerId).listen((points) {
-      add(PointsLoadedEvent(points));
+    _cookPointsSubscription =
+        _pointsRepository.byCookId(event.cook.id).listen((points) {
+      final cookLatLng = event.cook.address.toLatLng();
+
+      final dirty =
+          points.where((point) => point.latLng.distanceInKM(cookLatLng) != 0);
+
+      for (var point in dirty) {
+        add(PointUpdatedEvent(point.copyWith(latLng: cookLatLng)));
+      }
+
+      add(PointsOfCookLoadedEvent(points));
     });
   }
 
-  Stream<PointsState> _mapPointsLoadedEventToState(
-    PointsLoadedEvent event,
+  Stream<PointsState> _mapPointsNearbyLoadedEventToState(
+    PointsNearbyLoadedEvent event,
   ) async* {
-    yield PointsState.loaded(event.points);
+    yield state.copyWith(
+      status: PointsStatus.loaded,
+      nearbyPoints: event.points,
+    );
+  }
+
+  Stream<PointsState> _mapPointsOfCookLoadedEventToState(
+    PointsOfCookLoadedEvent event,
+  ) async* {
+    yield state.copyWith(
+      status: PointsStatus.loaded,
+      cookPoints: event.points,
+    );
   }
 
   Stream<PointsState> _mapPointCreatedEventToState(
     PointCreatedEvent event,
   ) async* {
-    await _pointsRepository.create(event.point);
+    final cook = _cookBloc.state.cook;
+
+    assert(cook.isNotEmpty);
+
+    await _pointsRepository.create(event.point.copyWith(
+      cookId: cook.id,
+    ));
   }
 
   Stream<PointsState> _mapPointUpdatedEventToState(
@@ -104,5 +171,23 @@ class PointsBloc extends Bloc<PointsEvent, PointsState> {
     PointDeletedEvent event,
   ) async* {
     await _pointsRepository.delete(event.point);
+  }
+}
+
+extension _XAddress on Address {
+  LatLng toLatLng() {
+    return LatLng(
+      latitude: latitude,
+      longitude: longitude,
+    );
+  }
+}
+
+extension _XLocationState on LocationState {
+  LatLng toLatLng() {
+    return LatLng(
+      latitude: latitude,
+      longitude: longitude,
+    );
   }
 }

@@ -44,10 +44,6 @@ class _PhoneNumberForm extends StatelessWidget {
           const AppCover(),
           _PhoneNumberInput(),
           const _SendOTPButton(),
-          const Text(
-            'מספרך משמש אך ורק למניעת ספאם ולא יוצג למשתמשים אחרים ללא אישורך.',
-            textAlign: TextAlign.center,
-          ),
         ],
       ),
     );

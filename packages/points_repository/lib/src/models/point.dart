@@ -7,7 +7,7 @@ import 'models.dart';
 class Point {
   const Point({
     @required this.id,
-    @required this.cookerId,
+    @required this.cookId,
     @required this.latLng,
     @required this.title,
     @required this.description,
@@ -15,7 +15,7 @@ class Point {
     @required this.media,
     @required this.tags,
   })  : assert(id != null),
-        assert(cookerId != null),
+        assert(cookId != null),
         assert(latLng != null),
         assert(title != null),
         assert(description != null),
@@ -26,7 +26,7 @@ class Point {
   factory Point.fromEntity(PointEntity entity) {
     return Point(
       id: entity.id,
-      cookerId: entity.cookerId,
+      cookId: entity.cookId,
       latLng: entity.latLng,
       title: entity.title,
       description: entity.description,
@@ -37,7 +37,7 @@ class Point {
   }
 
   final String id;
-  final String cookerId;
+  final String cookId;
   final LatLng latLng;
   final String title;
   final String description;
@@ -47,7 +47,7 @@ class Point {
 
   static const empty = Point(
     id: '',
-    cookerId: '',
+    cookId: '',
     latLng: LatLng.empty,
     title: '',
     description: '',
@@ -64,7 +64,7 @@ class Point {
 
   Point copyWith({
     String id,
-    String cookerId,
+    String cookId,
     LatLng latLng,
     String title,
     String description,
@@ -74,7 +74,7 @@ class Point {
   }) {
     return Point(
       id: id ?? this.id,
-      cookerId: cookerId ?? this.cookerId,
+      cookId: cookId ?? this.cookId,
       latLng: latLng ?? this.latLng,
       title: title ?? this.title,
       description: description ?? this.description,
@@ -87,7 +87,7 @@ class Point {
   Map<String, Object> toJson() {
     return {
       'id': id,
-      'cookerId': cookerId,
+      'cookId': cookId,
       'latLng': latLng.toJson(),
       'title': title,
       'description': description,
@@ -100,7 +100,7 @@ class Point {
   PointEntity toEntity() {
     return PointEntity(
       id: id,
-      cookerId: cookerId,
+      cookId: cookId,
       latLng: latLng,
       title: title,
       description: description,
@@ -112,7 +112,7 @@ class Point {
 
   @override
   String toString() {
-    return 'Point{id: $id, cookerId: $cookerId, latLng: $latLng,'
+    return 'Point{id: $id, cookId: $cookId, latLng: $latLng,'
         ' title: $title, description: $description,'
         ' price: $price, media: $media, tags: $tags}';
   }
@@ -123,7 +123,7 @@ class Point {
       other is Point &&
           runtimeType == other.runtimeType &&
           id == other.id &&
-          cookerId == other.cookerId &&
+          cookId == other.cookId &&
           latLng == other.latLng &&
           title == other.title &&
           description == other.description &&
@@ -134,7 +134,7 @@ class Point {
   @override
   int get hashCode =>
       id.hashCode ^
-      cookerId.hashCode ^
+      cookId.hashCode ^
       latLng.hashCode ^
       title.hashCode ^
       description.hashCode ^

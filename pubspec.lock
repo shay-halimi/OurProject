@@ -169,10 +169,10 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "3.0.0"
-  cookers_repository:
+  cooks_repository:
     dependency: "direct main"
     description:
-      path: "packages/cookers_repository"
+      path: "packages/cooks_repository"
       relative: true
     source: path
     version: "1.0.0+3"

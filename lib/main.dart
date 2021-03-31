@@ -1,8 +1,8 @@
 import 'package:authentication_repository/authentication_repository.dart';
 import 'package:bloc/bloc.dart';
-import 'package:cookers_repository/cookers_repository.dart';
 import 'package:cookpoint/app.dart';
 import 'package:cookpoint/simple_bloc_observer.dart';
+import 'package:cooks_repository/cooks_repository.dart';
 import 'package:equatable/equatable.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/foundation.dart';
@@ -19,6 +19,6 @@ void main() async {
     authenticationRepository: FirebaseAuthenticationRepository(),
     pointsRepository: FirebasePointsRepository(),
     locationServices: GeoLocatorLocationServices(),
-    cookersRepository: FirebaseCookersRepository(),
+    cooksRepository: FirebaseCooksRepository(),
   ));
 }

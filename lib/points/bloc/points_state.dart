@@ -1,25 +1,33 @@
 part of 'points_bloc.dart';
 
-enum PointStatus { loading, loaded, error, unknown }
+enum PointsStatus { loading, loaded, unknown, error }
 
 class PointsState extends Equatable {
-  const PointsState._({
-    this.points = const [],
-    this.status = PointStatus.unknown,
-  }) : assert(points != null);
+  const PointsState({
+    this.nearbyPoints = const [],
+    this.cookPoints = const [],
+    this.status = PointsStatus.unknown,
+  })  : assert(nearbyPoints != null),
+        assert(cookPoints != null);
 
-  const PointsState.loading() : this._(status: PointStatus.loading);
+  final List<Point> nearbyPoints;
 
-  const PointsState.loaded([List<Point> points = const []])
-      : this._(points: points, status: PointStatus.loaded);
+  final List<Point> cookPoints;
 
-  const PointsState.unknown() : this._(status: PointStatus.unknown);
-
-  const PointsState.error() : this._(status: PointStatus.error);
-
-  final PointStatus status;
-  final List<Point> points;
+  final PointsStatus status;
 
   @override
-  List<Object> get props => [status, points];
+  List<Object> get props => [nearbyPoints, cookPoints, status];
+
+  PointsState copyWith({
+    List<Point> nearbyPoints,
+    List<Point> cookPoints,
+    PointsStatus status,
+  }) {
+    return PointsState(
+      nearbyPoints: nearbyPoints ?? this.nearbyPoints,
+      cookPoints: cookPoints ?? this.cookPoints,
+      status: status ?? this.status,
+    );
+  }
 }

@@ -46,9 +46,9 @@ class FirebasePointsRepository extends PointsRepository {
   }
 
   @override
-  Stream<List<Point>> byCookerId(String cookerId) {
+  Stream<List<Point>> byCookId(String cookId) {
     return _collection
-        .where('cookerId', isEqualTo: cookerId)
+        .where('cookId', isEqualTo: cookId)
         .snapshots()
         .map((snapshot) {
       return snapshot.docs

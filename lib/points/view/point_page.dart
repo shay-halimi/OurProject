@@ -1,5 +1,4 @@
-import 'package:cookpoint/cooker/cooker.dart';
-import 'package:cookpoint/cooker_points/cooker_points.dart';
+import 'package:cookpoint/cook/cook.dart';
 import 'package:cookpoint/media/media_widget.dart';
 import 'package:cookpoint/points/points.dart';
 import 'package:cookpoint/theme/theme.dart';
@@ -7,7 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:points_repository/points_repository.dart';
 import 'package:provider/provider.dart';
 
-class PointPage extends StatelessWidget {
+class PointPage extends StatefulWidget {
   const PointPage({
     Key key,
     @required this.point,
@@ -20,8 +19,32 @@ class PointPage extends StatelessWidget {
   }
 
   @override
+  _PointPageState createState() => _PointPageState();
+}
+
+class _PointPageState extends State<PointPage> {
+  bool isEditing = false;
+
+  @override
   Widget build(BuildContext context) {
-    return _PointPageView(point: point);
+    if (isEditing) {
+      return CreateUpdatePointPage(point: widget.point);
+    }
+
+    final canEdit = context.select(
+        (PointsBloc bloc) => bloc.state.cookPoints.contains(widget.point));
+
+    return _PointPageView(
+      point: widget.point,
+      actions: [
+        if (canEdit)
+          IconButton(
+            icon: const Icon(Icons.edit),
+            tooltip: 'עריכה',
+            onPressed: () => setState(() => isEditing = true),
+          )
+      ],
+    );
   }
 }
 
@@ -29,14 +52,14 @@ class _PointPageView extends StatelessWidget {
   const _PointPageView({
     Key key,
     @required this.point,
+    this.actions,
   }) : super(key: key);
 
   final Point point;
+  final List<Widget> actions;
 
   @override
   Widget build(BuildContext context) {
-    final cooker = context.select((CookerBloc bloc) => bloc.state.cooker);
-
     return Scaffold(
       appBar: AppBar(
         title: Text(
@@ -44,16 +67,7 @@ class _PointPageView extends StatelessWidget {
           maxLines: 1,
           overflow: TextOverflow.ellipsis,
         ),
-        actions: [
-          if (point.cookerId == cooker.id)
-            IconButton(
-              icon: const Icon(Icons.edit),
-              tooltip: 'עריכה',
-              onPressed: () => Navigator.of(context).push<void>(
-                CreateUpdatePointPage.route(point: point),
-              ),
-            )
-        ],
+        actions: actions,
       ),
       body: SingleChildScrollView(
         child: Column(
@@ -96,8 +110,8 @@ class _PointPageView extends StatelessWidget {
         ),
       ),
       bottomNavigationBar: SafeArea(
-        child: CookerWidget(
-          cookerId: point.cookerId,
+        child: CookWidget(
+          cookId: point.cookId,
         ),
       ),
     );

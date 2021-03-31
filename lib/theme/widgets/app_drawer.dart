@@ -1,7 +1,7 @@
 import 'package:cookpoint/authentication/authentication.dart';
-import 'package:cookpoint/cooker/cooker.dart';
-import 'package:cookpoint/cooker_points/cooker_points.dart';
+import 'package:cookpoint/cook/cook.dart';
 import 'package:cookpoint/launcher.dart';
+import 'package:cookpoint/points/points.dart';
 import 'package:cookpoint/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -21,11 +21,11 @@ class AppDrawer extends StatelessWidget {
         ),
         const Divider(),
         ListTile(
-          key: const Key('AppDrawer_CookerPage_ListTile'),
+          key: const Key('AppDrawer_CookPage_ListTile'),
           leading: const Icon(Icons.account_circle),
           title: const Text('המטבח שלי'),
           onTap: () => Navigator.of(context).push<void>(
-            CookerPage.route(),
+            CookPage.route(),
           ),
           onLongPress: () => context
               .read<AuthenticationBloc>()
@@ -33,11 +33,11 @@ class AppDrawer extends StatelessWidget {
         ),
         if (user.isNotEmpty) ...[
           ListTile(
-            key: const Key('AppDrawer_CookerPointsPage_ListTile'),
+            key: const Key('AppDrawer_CookPointsPage_ListTile'),
             leading: const Icon(Icons.restaurant),
             title: const Text('התפריט שלי'),
             onTap: () => Navigator.of(context).push<void>(
-              CookerPointsPage.route(),
+              PointsPage.route(),
             ),
           ),
         ],

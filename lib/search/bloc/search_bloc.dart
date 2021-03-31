@@ -16,8 +16,8 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
         _pointsBloc = pointsBloc,
         super(const SearchState()) {
     _pointsSubscription = pointsBloc.listen((state) {
-      if (state.status == PointStatus.loaded) {
-        add(SearchPointsUpdated(state.points));
+      if (state.status == PointsStatus.loaded) {
+        add(SearchPointsUpdated(state.nearbyPoints));
       }
     });
   }
@@ -52,7 +52,7 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
         status: SearchStatus.loaded,
         term: event.term,
         results: _filter(
-          _pointsBloc.state.points,
+          _nearByPoints,
           event.term,
           state.tags,
         ),
@@ -72,7 +72,7 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
         status: SearchStatus.loaded,
         tags: tags,
         results: _filter(
-          _pointsBloc.state.points,
+          _nearByPoints,
           state.term,
           tags,
         ),
@@ -88,4 +88,6 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
       );
     }
   }
+
+  List<Point> get _nearByPoints => _pointsBloc.state.nearbyPoints;
 }

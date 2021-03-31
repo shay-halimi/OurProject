@@ -8,13 +8,13 @@ import 'models/models.dart';
 
 class FakeAuthenticationRepository extends AuthenticationRepository {
   FakeAuthenticationRepository() {
-    final id = 1000000 + Random().nextInt(8999999);
-
     signIn(
-      otp: '$id',
-      verification: Verification(id: '+97221$id'),
+      otp: '',
+      verification: Verification(id: '+972211${100000 + rand.nextInt(899999)}'),
     );
   }
+
+  final rand = Random();
 
   final StreamController<User> _streamController = StreamController();
 
@@ -34,7 +34,7 @@ class FakeAuthenticationRepository extends AuthenticationRepository {
     @required Verification verification,
   }) async {
     _streamController.add(User(
-      id: otp,
+      id: verification.id,
       phoneNumber: verification.id,
     ));
   }

@@ -3,7 +3,7 @@ description: CookPoint
 
 publish_to: 'none'
 
-version: 1.0.0+36
+version: 1.0.0+37
 
 environment:
   sdk: ">=2.7.0 <3.0.0"
@@ -40,8 +40,8 @@ dependencies:
     path: packages/location_services
   points_repository:
     path: packages/points_repository
-  cookers_repository:
-    path: packages/cookers_repository
+  cooks_repository:
+    path: packages/cooks_repository
 
 dependency_overrides:
   intl: '>=0.17.0-nullsafety.2 <= 0.17.0-nullsafety.2'

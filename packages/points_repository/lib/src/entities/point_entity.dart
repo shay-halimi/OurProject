@@ -8,7 +8,7 @@ import '../models/models.dart';
 class PointEntity extends Equatable {
   const PointEntity({
     @required this.id,
-    @required this.cookerId,
+    @required this.cookId,
     @required this.latLng,
     @required this.title,
     @required this.description,
@@ -22,7 +22,7 @@ class PointEntity extends Equatable {
 
     return PointEntity(
       id: snap.id,
-      cookerId: snap.data()['cookerId'] as String,
+      cookId: snap.data()['cookId'] as String,
       latLng: LatLng(
         latitude: geoPoint.latitude,
         longitude: geoPoint.longitude,
@@ -36,7 +36,7 @@ class PointEntity extends Equatable {
   }
 
   final String id;
-  final String cookerId;
+  final String cookId;
   final LatLng latLng;
   final String title;
   final String description;
@@ -47,7 +47,7 @@ class PointEntity extends Equatable {
   @override
   List<Object> get props => [
         id,
-        cookerId,
+        cookId,
         latLng,
         title,
         description,
@@ -59,7 +59,7 @@ class PointEntity extends Equatable {
   Map<String, Object> toJson() {
     return {
       'id': id,
-      'cookerId': cookerId,
+      'cookId': cookId,
       'latLng': latLng.toJson(),
       'title': title,
       'description': description,
@@ -71,7 +71,7 @@ class PointEntity extends Equatable {
 
   Map<String, Object> toDocument() {
     return {
-      'cookerId': cookerId,
+      'cookId': cookId,
       'latLng': GeoFirePoint(latLng.latitude, latLng.longitude).data,
       'title': title,
       'description': description,

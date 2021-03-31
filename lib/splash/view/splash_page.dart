@@ -11,27 +11,40 @@ class SplashPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Container(
-        color: theme.colorScheme.primary,
-        child: Column(
+        body: Container(
+      color: theme.colorScheme.primary,
+      child: const SplashBody(),
+    ));
+  }
+}
+
+class SplashBody extends StatelessWidget {
+  const SplashBody({
+    Key key,
+    this.child = const CircularProgressIndicator(),
+  }) : super(key: key);
+
+  final Widget child;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                const AppCover(),
-              ],
-            ),
-            ConstrainedBox(constraints: const BoxConstraints(minHeight: 32)),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                const CircularProgressIndicator(),
-              ],
-            ),
+            const AppCover(),
           ],
         ),
-      ),
+        ConstrainedBox(constraints: const BoxConstraints(minHeight: 32)),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            child,
+          ],
+        ),
+      ],
     );
   }
 }

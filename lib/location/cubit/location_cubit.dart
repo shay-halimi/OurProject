@@ -18,7 +18,7 @@ class LocationCubit extends Cubit<LocationState> {
       if (current == Location.empty) {
         emit(const LocationState.error());
       } else {
-        emit(LocationState.located(current));
+        emit(LocationState.loaded(current));
       }
     });
   }
@@ -33,7 +33,7 @@ class LocationCubit extends Cubit<LocationState> {
   }
 
   Future<void> locate() async {
-    emit(const LocationState.locating());
+    emit(const LocationState.loading());
 
     await _locationServices.locate();
   }

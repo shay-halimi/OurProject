@@ -7,8 +7,8 @@ abstract class PointsEvent extends Equatable {
   List<Object> get props => [];
 }
 
-class PointsRequestedEvent extends PointsEvent {
-  const PointsRequestedEvent(this.latLng);
+class PointsNearbyRequestedEvent extends PointsEvent {
+  const PointsNearbyRequestedEvent(this.latLng);
 
   final LatLng latLng;
 
@@ -16,17 +16,26 @@ class PointsRequestedEvent extends PointsEvent {
   List<Object> get props => [latLng];
 }
 
-class PointsOfCookerRequestedEvent extends PointsEvent {
-  const PointsOfCookerRequestedEvent(this.cookerId);
+class PointsNearbyLoadedEvent extends PointsEvent {
+  PointsNearbyLoadedEvent(this.points);
 
-  final String cookerId;
+  final List<Point> points;
 
   @override
-  List<Object> get props => [cookerId];
+  List<Object> get props => [points];
 }
 
-class PointsLoadedEvent extends PointsEvent {
-  const PointsLoadedEvent(this.points);
+class PointsOfCookRequestedEvent extends PointsEvent {
+  const PointsOfCookRequestedEvent(this.cook);
+
+  final Cook cook;
+
+  @override
+  List<Object> get props => [cook];
+}
+
+class PointsOfCookLoadedEvent extends PointsEvent {
+  PointsOfCookLoadedEvent(this.points);
 
   final List<Point> points;
 

@@ -67,7 +67,7 @@ class _PointsBarViewState extends State<PointsBarView> {
             carouselController: _controller,
             items: points.map((point) {
               return Builder(
-                key: ValueKey(point.id),
+                key: ValueKey(point.hashCode),
                 builder: (context) {
                   return PointWidget(
                     point: point,

@@ -25,7 +25,7 @@ class FirebaseAuthenticationRepository extends AuthenticationRepository {
         await _firebaseAuth.signInWithCredential(phoneAuthCredential);
       },
       codeSent: (verificationId, forceResendingToken) {
-        completer.completed(Verification(id: verificationId));
+        completer.complete(Verification(id: verificationId));
       },
       verificationFailed: (error) {
         completer.completeError(error);

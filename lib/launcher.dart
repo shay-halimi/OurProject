@@ -1,6 +1,6 @@
 import 'dart:io';
 
-import 'package:cookers_repository/cookers_repository.dart';
+import 'package:cooks_repository/cooks_repository.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:url_launcher/url_launcher.dart' as url_launcher;
 

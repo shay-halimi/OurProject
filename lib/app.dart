@@ -1,12 +1,12 @@
 import 'package:authentication_repository/authentication_repository.dart';
-import 'package:cookers_repository/cookers_repository.dart';
 import 'package:cookpoint/authentication/authentication.dart';
-import 'package:cookpoint/cooker/cooker.dart';
+import 'package:cookpoint/cook/cook.dart';
 import 'package:cookpoint/home_page.dart';
 import 'package:cookpoint/location/location.dart';
 import 'package:cookpoint/points/points.dart';
 import 'package:cookpoint/splash/splash.dart';
 import 'package:cookpoint/theme/theme.dart';
+import 'package:cooks_repository/cooks_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
@@ -19,17 +19,17 @@ class App extends StatelessWidget {
     @required this.authenticationRepository,
     @required this.pointsRepository,
     @required this.locationServices,
-    @required this.cookersRepository,
+    @required this.cooksRepository,
   })  : assert(authenticationRepository != null),
         assert(pointsRepository != null),
         assert(locationServices != null),
-        assert(cookersRepository != null),
+        assert(cooksRepository != null),
         super(key: key);
 
   final AuthenticationRepository authenticationRepository;
   final PointsRepository pointsRepository;
   final LocationServices locationServices;
-  final CookersRepository cookersRepository;
+  final CooksRepository cooksRepository;
 
   @override
   Widget build(BuildContext context) {
@@ -45,7 +45,7 @@ class App extends StatelessWidget {
           value: locationServices,
         ),
         RepositoryProvider.value(
-          value: cookersRepository,
+          value: cooksRepository,
         ),
       ],
       child: MultiBlocProvider(
@@ -62,15 +62,17 @@ class App extends StatelessWidget {
             )..locate(),
           ),
           BlocProvider(
-            create: (_context) => CookerBloc(
-              cookersRepository: cookersRepository,
+            create: (_context) => CookBloc(
+              cooksRepository: cooksRepository,
               authenticationBloc: _context.read<AuthenticationBloc>(),
             ),
             lazy: false,
           ),
           BlocProvider(
-            create: (_) => PointsBloc(
+            create: (_context) => PointsBloc(
               pointsRepository: pointsRepository,
+              cookBloc: _context.read<CookBloc>(),
+              locationCubit: _context.read<LocationCubit>(),
             ),
           ),
         ],
