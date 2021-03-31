@@ -120,8 +120,9 @@ class PointsBloc extends Bloc<PointsEvent, PointsState> {
         _pointsRepository.byCookId(event.cook.id).listen((points) {
       final cookLatLng = event.cook.address.toLatLng();
 
-      final dirty =
-          points.where((point) => point.latLng.distanceInKM(cookLatLng) != 0);
+      final dirty = points.where((point) {
+        return point.latLng.distanceInKM(cookLatLng) != 0;
+      });
 
       for (var point in dirty) {
         add(PointUpdatedEvent(point.copyWith(latLng: cookLatLng)));
