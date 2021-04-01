@@ -8,12 +8,17 @@ abstract class PointsEvent extends Equatable {
 }
 
 class PointsNearbyRequestedEvent extends PointsEvent {
-  const PointsNearbyRequestedEvent(this.latLng);
+  const PointsNearbyRequestedEvent(
+    this.latLng, [
+    this.radiusInKM = 3.14,
+  ]);
 
   final LatLng latLng;
 
+  final double radiusInKM;
+
   @override
-  List<Object> get props => [latLng];
+  List<Object> get props => [latLng, radiusInKM];
 }
 
 class PointsNearbyLoadedEvent extends PointsEvent {

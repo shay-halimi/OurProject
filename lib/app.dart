@@ -1,4 +1,3 @@
-import 'package:authentication_repository/authentication_repository.dart';
 import 'package:cookpoint/authentication/authentication.dart';
 import 'package:cookpoint/cook/cook.dart';
 import 'package:cookpoint/home_page.dart';
@@ -6,12 +5,9 @@ import 'package:cookpoint/location/location.dart';
 import 'package:cookpoint/points/points.dart';
 import 'package:cookpoint/splash/splash.dart';
 import 'package:cookpoint/theme/theme.dart';
-import 'package:cooks_repository/cooks_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:location_services/location_services.dart';
-import 'package:points_repository/points_repository.dart';
 
 class App extends StatelessWidget {
   const App({
@@ -72,7 +68,6 @@ class App extends StatelessWidget {
             create: (_context) => PointsBloc(
               pointsRepository: pointsRepository,
               cookBloc: _context.read<CookBloc>(),
-              locationCubit: _context.read<LocationCubit>(),
             ),
           ),
         ],

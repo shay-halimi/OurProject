@@ -12,8 +12,6 @@ class PointsBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final height = MediaQuery.of(context).size.height;
-
     return BlocBuilder<SelectedPointCubit, SelectedPointState>(
       buildWhen: (previous, current) => previous.point != current.point,
       builder: (_, state) {
@@ -21,9 +19,7 @@ class PointsBar extends StatelessWidget {
           return Container();
         }
 
-        return PointsBarView(
-          height: height,
-        );
+        return const PointsBarView();
       },
     );
   }
@@ -32,10 +28,7 @@ class PointsBar extends StatelessWidget {
 class PointsBarView extends StatefulWidget {
   const PointsBarView({
     Key key,
-    @required this.height,
   }) : super(key: key);
-
-  final double height;
 
   @override
   _PointsBarViewState createState() => _PointsBarViewState();
@@ -49,61 +42,63 @@ class _PointsBarViewState extends State<PointsBarView> {
   Widget build(BuildContext context) {
     final points = context.select((SearchBloc bloc) => bloc.state.results);
 
-    return WillPopScope(
-      onWillPop: () async {
-        context.read<SelectedPointCubit>().clear();
-        return false;
-      },
-      child: BlocListener<SelectedPointCubit, SelectedPointState>(
-        listenWhen: (previous, current) => previous.point != current.point,
-        listener: (_, state) {
-          if (state.point.isNotEmpty) {
-            _carouselController.jumpToPage(points.indexOf(state.point));
-          }
-        },
-        child: SafeArea(
-          child: SlidingUpPanel(
-            controller: _panelController,
-            padding: EdgeInsets.zero,
-            margin: EdgeInsets.zero,
-            borderRadius: BorderRadius.zero,
-            minHeight: widget.height * 0.38,
-            maxHeight: widget.height * 0.82,
-            boxShadow: [],
-            color: Colors.transparent,
-            panel: CarouselSlider(
-              carouselController: _carouselController,
-              items: points.map((point) {
-                return InkWell(
-                  onTap: () async => _panelController.isPanelOpen
-                      ? await _panelController.close()
-                      : await _panelController.open(),
-                  child: Builder(
-                    key: ValueKey(point.hashCode),
-                    builder: (context) {
-                      return PointWidget(point: point);
+    return LayoutBuilder(
+      builder: (_, constraints) {
+        return WillPopScope(
+          onWillPop: () async {
+            context.read<SelectedPointCubit>().clear();
+            return false;
+          },
+          child: BlocListener<SelectedPointCubit, SelectedPointState>(
+            listenWhen: (previous, current) => previous.point != current.point,
+            listener: (_, state) {
+              if (state.point.isNotEmpty) {
+                _carouselController.jumpToPage(points.indexOf(state.point));
+              }
+            },
+            child: GestureDetector(
+              onTap: () async => _panelController.isPanelOpen
+                  ? await _panelController.close()
+                  : await _panelController.open(),
+              child: SlidingUpPanel(
+                controller: _panelController,
+                padding: EdgeInsets.zero,
+                margin: EdgeInsets.zero,
+                borderRadius: BorderRadius.zero,
+                minHeight: constraints.maxHeight * 0.54,
+                maxHeight: constraints.maxHeight,
+                boxShadow: [],
+                color: Colors.transparent,
+                panel: CarouselSlider(
+                  carouselController: _carouselController,
+                  items: points.map((point) {
+                    return Builder(
+                      key: ValueKey(point.hashCode),
+                      builder: (context) {
+                        return PointWidget(point: point);
+                      },
+                    );
+                  }).toList(),
+                  options: CarouselOptions(
+                    enableInfiniteScroll: false,
+                    initialPage: points.indexOf(
+                        context.read<SelectedPointCubit>().state.point),
+                    onPageChanged: (index, reason) {
+                      if (reason == CarouselPageChangedReason.manual) {
+                        context
+                            .read<SelectedPointCubit>()
+                            .select(points.elementAt(index));
+                      }
                     },
+                    viewportFraction: 0.92,
+                    height: constraints.maxHeight,
                   ),
-                );
-              }).toList(),
-              options: CarouselOptions(
-                enableInfiniteScroll: false,
-                initialPage: points
-                    .indexOf(context.read<SelectedPointCubit>().state.point),
-                onPageChanged: (index, reason) {
-                  if (reason == CarouselPageChangedReason.manual) {
-                    context
-                        .read<SelectedPointCubit>()
-                        .select(points.elementAt(index));
-                  }
-                },
-                viewportFraction: 0.90,
-                height: widget.height,
+                ),
               ),
             ),
           ),
-        ),
-      ),
+        );
+      },
     );
   }
 }

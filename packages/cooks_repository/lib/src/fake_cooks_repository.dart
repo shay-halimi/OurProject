@@ -10,6 +10,8 @@ class FakeCooksRepository implements CooksRepository {
 
   @override
   Stream<Cook> cook(String id) async* {
+    await Future<void>.delayed(const Duration(seconds: 1));
+
     if (!cooks.containsKey(id)) {
       final hebrew = rand.nextBool();
       cooks[id] = Cook(
@@ -26,18 +28,22 @@ class FakeCooksRepository implements CooksRepository {
     }
 
     yield* Stream<Cook>.periodic(
-      const Duration(seconds: 1),
+      const Duration(seconds: 5),
       (_) => cooks[id],
     );
   }
 
   @override
   Future<void> create(Cook cook) async {
+    await Future<void>.delayed(const Duration(seconds: 1));
+
     cooks.putIfAbsent(cook.id, () => cook);
   }
 
   @override
   Future<void> update(Cook cook) async {
+    await Future<void>.delayed(const Duration(seconds: 1));
+
     cooks[cook.id] = cook;
   }
 }

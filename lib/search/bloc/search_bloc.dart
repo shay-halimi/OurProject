@@ -4,7 +4,6 @@ import 'package:bloc/bloc.dart';
 import 'package:cookpoint/points/points.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:points_repository/points_repository.dart';
 
 part 'search_event.dart';
 part 'search_state.dart';
@@ -32,27 +31,36 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
   }
 
   List<Point> _filter(List<Point> points, String term, Set<String> tags) {
-    return points.where((point) {
-      if (point.tags.containsAll(tags)) {
-        if (term.isNotEmpty) {
-          return point.title.contains(term) || point.description.contains(term);
-        }
+    return points
+        .where((point) {
+          if (point.tags.containsAll(tags)) {
+            if (term.isNotEmpty) {
+              return point.title == term ||
+                  point.title.contains(term) ||
+                  point.description.contains(term);
+            }
 
-        return true;
-      }
+            return true;
+          }
 
-      return false;
-    }).toList();
+          return false;
+        })
+        .take(100)
+        .toList();
   }
 
   @override
   Stream<SearchState> mapEventToState(SearchEvent event) async* {
+    yield state.copyWith(
+      status: SearchStatus.loading,
+    );
+
     if (event is SearchTermUpdated) {
       yield state.copyWith(
         status: SearchStatus.loaded,
         term: event.term,
         results: _filter(
-          _nearByPoints,
+          _pointsBloc.state.nearbyPoints,
           event.term,
           state.tags,
         ),
@@ -72,7 +80,7 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
         status: SearchStatus.loaded,
         tags: tags,
         results: _filter(
-          _nearByPoints,
+          _pointsBloc.state.nearbyPoints,
           state.term,
           tags,
         ),
@@ -88,6 +96,4 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
       );
     }
   }
-
-  List<Point> get _nearByPoints => _pointsBloc.state.nearbyPoints;
 }

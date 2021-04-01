@@ -2,10 +2,7 @@ import 'dart:async';
 import 'dart:math';
 
 import 'package:bloc/bloc.dart';
-import 'package:cookpoint/cook/bloc/bloc.dart';
 import 'package:cookpoint/cook/cook.dart';
-import 'package:cookpoint/location/location.dart';
-import 'package:cooks_repository/cooks_repository.dart';
 import 'package:equatable/equatable.dart';
 import 'package:meta/meta.dart';
 import 'package:points_repository/points_repository.dart';
@@ -17,13 +14,10 @@ class PointsBloc extends Bloc<PointsEvent, PointsState> {
   PointsBloc({
     @required PointsRepository pointsRepository,
     @required CookBloc cookBloc,
-    @required LocationCubit locationCubit,
   })  : assert(pointsRepository != null),
         assert(cookBloc != null),
-        assert(locationCubit != null),
         _pointsRepository = pointsRepository,
         _cookBloc = cookBloc,
-        _locationCubit = locationCubit,
         super(const PointsState()) {
     _cookSubscription = _cookBloc.listen((state) {
       if (state.status == CookStatus.loaded && state.cook.isNotEmpty) {
@@ -32,31 +26,20 @@ class PointsBloc extends Bloc<PointsEvent, PointsState> {
         add(PointsOfCookLoadedEvent(const []));
       }
     });
-
-    _locationSubscription = _locationCubit.listen((state) {
-      if (state.status == LocationStatus.loaded) {
-        add(PointsNearbyRequestedEvent(state.toLatLng()));
-      } else {
-        add(PointsNearbyLoadedEvent(const []));
-      }
-    });
   }
 
   final PointsRepository _pointsRepository;
-  final LocationCubit _locationCubit;
   final CookBloc _cookBloc;
 
   StreamSubscription<List<Point>> _nearbyPointsSubscription;
   StreamSubscription<List<Point>> _cookPointsSubscription;
 
-  StreamSubscription<LocationState> _locationSubscription;
   StreamSubscription<CookState> _cookSubscription;
 
   @override
   Future<void> close() {
     _nearbyPointsSubscription?.cancel();
     _cookPointsSubscription?.cancel();
-    _locationSubscription?.cancel();
     _cookSubscription?.cancel();
     return super.close();
   }
@@ -92,7 +75,7 @@ class PointsBloc extends Bloc<PointsEvent, PointsState> {
     await _nearbyPointsSubscription?.cancel();
 
     _nearbyPointsSubscription = _pointsRepository
-        .near(latLng: event.latLng, radiusInKM: 100)
+        .near(latLng: event.latLng, radiusInKM: event.radiusInKM)
         .listen((points) {
       add(PointsNearbyLoadedEvent(
         points
@@ -176,15 +159,6 @@ class PointsBloc extends Bloc<PointsEvent, PointsState> {
 }
 
 extension _XAddress on Address {
-  LatLng toLatLng() {
-    return LatLng(
-      latitude: latitude,
-      longitude: longitude,
-    );
-  }
-}
-
-extension _XLocationState on LocationState {
   LatLng toLatLng() {
     return LatLng(
       latitude: latitude,

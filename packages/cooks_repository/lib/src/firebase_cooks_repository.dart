@@ -7,7 +7,7 @@ import 'models/models.dart';
 class FirebaseCooksRepository implements CooksRepository {
   FirebaseCooksRepository();
 
-  final _collection = FirebaseFirestore.instance.collection('cookers');
+  final _collection = FirebaseFirestore.instance.collection('cooks');
 
   @override
   Stream<Cook> cook(String id) {

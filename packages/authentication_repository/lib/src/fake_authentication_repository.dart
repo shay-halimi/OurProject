@@ -20,11 +20,15 @@ class FakeAuthenticationRepository extends AuthenticationRepository {
 
   @override
   Future<void> logOut() async {
+    await Future<void>.delayed(const Duration(seconds: 1));
+
     _streamController.add(User.empty);
   }
 
   @override
   Future<Verification> sendOTP({@required String phoneNumber}) async {
+    await Future<void>.delayed(const Duration(seconds: 1));
+
     return Verification(id: phoneNumber);
   }
 
@@ -33,6 +37,8 @@ class FakeAuthenticationRepository extends AuthenticationRepository {
     @required String otp,
     @required Verification verification,
   }) async {
+    await Future<void>.delayed(const Duration(seconds: 1));
+
     _streamController.add(User(
       id: verification.id,
       phoneNumber: verification.id,

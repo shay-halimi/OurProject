@@ -1,7 +1,6 @@
-import 'dart:io';
-
-import 'package:cooks_repository/cooks_repository.dart';
+import 'package:cookpoint/cook/cook.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:map_launcher/map_launcher.dart';
 import 'package:url_launcher/url_launcher.dart' as url_launcher;
 
 final launcher = _Launcher();
@@ -31,16 +30,20 @@ class _Launcher {
     }
   }
 
-  Future<void> directions(Address address) {
-    bool isIOS;
-    try {
-      isIOS = Platform.isIOS;
-    } catch (e) {
-      isIOS = false;
-    }
+  Future<void> directions(Address address) async {
+    final availableMaps = await MapLauncher.installedMaps;
 
-    return launch(isIOS
-        ? 'https://maps.apple.com/?center=${address.latitude},${address.longitude}&q=${address.name}'
-        : 'https://maps.google.com/?center=${address.latitude},${address.longitude}&q=${address.name}');
+    if (availableMaps.isEmpty) {
+      await Fluttertoast.showToast(
+        msg: 'המכשיר שלך לא תומך בפעולה זאת',
+        toastLength: Toast.LENGTH_LONG,
+        gravity: ToastGravity.CENTER,
+      );
+    } else {
+      await availableMaps.first.showMarker(
+        coords: Coords(address.latitude, address.latitude),
+        title: address.name,
+      );
+    }
   }
 }

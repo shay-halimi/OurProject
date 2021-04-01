@@ -36,7 +36,9 @@ class FakePointsRepository extends PointsRepository {
 
   @override
   Stream<List<Point>> near({LatLng latLng, num radiusInKM = 3.14}) async* {
-    for (var i = 0; i <= 20; i++) {
+    await Future<void>.delayed(const Duration(seconds: 1));
+
+    for (var i = 0; i <= 30; i++) {
       await create(_randPoint.copyWith(
         latLng: LatLng(
           latitude: latLng.latitude + _randKm,
@@ -50,6 +52,8 @@ class FakePointsRepository extends PointsRepository {
 
   @override
   Stream<List<Point>> byCookId(String cookId) async* {
+    await Future<void>.delayed(const Duration(seconds: 1));
+
     if (_points.where((point) => point.cookId == cookId).isEmpty) {
       for (var i = 0; i <= 3; i++) {
         await create(_randPoint.copyWith(

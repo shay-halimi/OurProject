@@ -6,7 +6,6 @@ import 'package:dough/dough.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_typeahead/flutter_typeahead.dart';
-import 'package:points_repository/points_repository.dart';
 import 'package:provider/provider.dart';
 
 class SearchAppBar extends StatelessWidget implements PreferredSizeWidget {
@@ -18,13 +17,13 @@ class SearchAppBar extends StatelessWidget implements PreferredSizeWidget {
               Radius.circular(8.0),
             ),
           ),
-          title: SearchAppBarTitle(),
+          title: SearchField(),
         ),
         super(key: key);
 
   final double _padding = 8.0;
 
-  final double _searchFiltersHeight = 72.00;
+  final double _searchFiltersHeight = 64.00;
 
   final AppBar _appBar;
 
@@ -98,16 +97,16 @@ class _TagsFilter extends StatelessWidget {
   }
 }
 
-class SearchAppBarTitle extends StatefulWidget {
-  SearchAppBarTitle({
+class SearchField extends StatefulWidget {
+  SearchField({
     Key key,
   }) : super(key: key);
 
   @override
-  _SearchAppBarTitleState createState() => _SearchAppBarTitleState();
+  _SearchFieldState createState() => _SearchFieldState();
 }
 
-class _SearchAppBarTitleState extends State<SearchAppBarTitle> {
+class _SearchFieldState extends State<SearchField> {
   TextEditingController _controller;
   FocusNode _focusNode;
 
@@ -127,15 +126,16 @@ class _SearchAppBarTitleState extends State<SearchAppBarTitle> {
 
   @override
   Widget build(BuildContext context) {
-    final suggestions = context
-        .select((PointsBloc bloc) => bloc.state.nearbyPoints)
-        .map((e) => e.title)
-        .toList();
+    final suggestions =
+        context.select((PointsBloc bloc) => bloc.state.nearbyPoints);
+
+    final center =
+        context.select((LocationCubit cubit) => cubit.state).toLatLng();
 
     return Row(
       children: [
         Expanded(
-          child: TypeAheadField<String>(
+          child: TypeAheadField<Point>(
             getImmediateSuggestions: true,
             textFieldConfiguration: TextFieldConfiguration(
               controller: _controller,
@@ -163,11 +163,16 @@ class _SearchAppBarTitleState extends State<SearchAppBarTitle> {
               elevation: 0.0,
             ),
             suggestionsCallback: (pattern) {
-              return suggestions.where((e) => e.contains(pattern)).toSet();
+              return suggestions
+                  .where((point) => point.title.contains(pattern))
+                  .toSet();
             },
             itemBuilder: (context, suggestion) {
+              final km =
+                  suggestion.latLng.distanceInKM(center).toStringAsFixed(1);
               return ListTile(
-                title: Text(suggestion),
+                title: Text(suggestion.title),
+                trailing: Text('$km ק"מ'),
               );
             },
             noItemsFoundBuilder: (context) {
@@ -176,8 +181,10 @@ class _SearchAppBarTitleState extends State<SearchAppBarTitle> {
               );
             },
             onSuggestionSelected: (suggestion) {
-              _controller.text = suggestion;
-              context.read<SearchBloc>().add(SearchTermUpdated(suggestion));
+              _controller.text = suggestion.title;
+              context
+                  .read<SearchBloc>()
+                  .add(SearchTermUpdated(suggestion.title));
             },
           ),
         ),
@@ -189,6 +196,15 @@ class _SearchAppBarTitleState extends State<SearchAppBarTitle> {
             height: 16,
           ),
       ],
+    );
+  }
+}
+
+extension _XLocationState on LocationState {
+  LatLng toLatLng() {
+    return LatLng(
+      latitude: latitude,
+      longitude: longitude,
     );
   }
 }
