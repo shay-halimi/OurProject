@@ -2,11 +2,10 @@ import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:cookpoint/cook/cook.dart';
-import 'package:cooks_repository/cooks_repository.dart';
+import 'package:cookpoint/location/location.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:formz/formz.dart';
-import 'package:location_services/location_services.dart';
 
 part 'cook_form_state.dart';
 

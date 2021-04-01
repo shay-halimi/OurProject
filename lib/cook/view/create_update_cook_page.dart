@@ -1,11 +1,10 @@
 import 'package:cookpoint/cook/cook.dart';
+import 'package:cookpoint/location/location.dart';
 import 'package:cookpoint/media/media.dart';
 import 'package:cookpoint/theme/theme.dart';
-import 'package:cooks_repository/cooks_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:formz/formz.dart';
-import 'package:location_services/location_services.dart';
 import 'package:provider/provider.dart';
 
 class CreateUpdateCookPage extends StatelessWidget {
@@ -39,7 +38,7 @@ class CookForm extends StatelessWidget {
     return Scaffold(
       resizeToAvoidBottomInset: true,
       appBar: AppBar(
-        title: Text(cook.isNotEmpty ? 'עדכון מטבח' : 'יצירת מטבח'),
+        title: Text(cook.isEmpty ? 'יצירת מטבח' : 'עדכון מטבח'),
       ),
       body: BlocListener<CookFormCubit, CookFormState>(
         listener: (context, state) {
@@ -194,7 +193,7 @@ class _SubmitButton extends StatelessWidget {
         return AppButton(
           key: ValueKey(state.status),
           isInProgress: state.status.isSubmissionInProgress,
-          child: Text(cook.isNotEmpty ? 'שמור' : 'המשך'),
+          child: Text(cook.isEmpty ? 'המשך' : 'שמור'),
           onPressed: state.status.isValidated
               ? () => context.read<CookFormCubit>().save()
               : null,

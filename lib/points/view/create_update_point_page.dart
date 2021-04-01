@@ -1,12 +1,10 @@
-import 'package:cookpoint/media/media_dialog.dart';
-import 'package:cookpoint/points/bloc/bloc.dart';
+import 'package:cookpoint/media/media.dart';
 import 'package:cookpoint/points/points.dart';
 import 'package:cookpoint/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:formz/formz.dart';
-import 'package:points_repository/points_repository.dart';
 import 'package:provider/provider.dart';
 
 class CreateUpdatePointPage extends StatelessWidget {
@@ -54,7 +52,7 @@ class PointForm extends StatelessWidget {
       resizeToAvoidBottomInset: true,
       appBar: AppBar(
         title: Text(
-          point.isNotEmpty ? 'עדכון ${point.title}' : 'פרסום מאכל',
+          point.isEmpty ? 'פרסום מאכל' : 'עדכון ${point.title}',
         ),
       ),
       body: WillPopScope(
@@ -135,7 +133,7 @@ class _SubmitButton extends StatelessWidget {
       builder: (context, state) {
         return AppButton(
           isInProgress: state.status.isSubmissionInProgress,
-          child: Text(point.isNotEmpty ? 'עדכן' : 'פרסם'),
+          child: Text(point.isEmpty ? 'פרסם' : 'עדכן'),
           onPressed: state.status.isValidated
               ? () => context.read<PointFormCubit>().save()
               : null,

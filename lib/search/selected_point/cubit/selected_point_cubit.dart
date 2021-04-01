@@ -1,10 +1,10 @@
 import 'dart:async';
 
 import 'package:bloc/bloc.dart';
+import 'package:cookpoint/points/points.dart';
 import 'package:cookpoint/search/search.dart';
 import 'package:equatable/equatable.dart';
 import 'package:meta/meta.dart';
-import 'package:points_repository/points_repository.dart';
 
 part 'selected_point_state.dart';
 

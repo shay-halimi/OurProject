@@ -1,11 +1,10 @@
 import 'dart:async';
 
 import 'package:bloc/bloc.dart';
-import 'package:cookpoint/points/bloc/bloc.dart';
+import 'package:cookpoint/points/points.dart';
 import 'package:equatable/equatable.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:formz/formz.dart';
-import 'package:points_repository/points_repository.dart';
+import 'package:meta/meta.dart';
 
 part 'point_form_state.dart';
 

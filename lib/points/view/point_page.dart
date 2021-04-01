@@ -1,8 +1,7 @@
-import 'package:cookpoint/media/media_widget.dart';
+import 'package:cookpoint/media/media.dart';
 import 'package:cookpoint/points/points.dart';
 import 'package:cookpoint/theme/theme.dart';
 import 'package:flutter/material.dart';
-import 'package:points_repository/points_repository.dart';
 import 'package:provider/provider.dart';
 
 class PointPage extends StatefulWidget {

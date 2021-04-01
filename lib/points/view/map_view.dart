@@ -46,11 +46,8 @@ class _MapViewBody extends StatelessWidget {
                   MapWidget(
                     pixelRatio: MediaQuery.of(context).devicePixelRatio,
                   ),
-                  Column(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: [
-                      PointsBar(),
-                    ],
+                  SafeArea(
+                    child: PointsBar(),
                   ),
                 ],
               );

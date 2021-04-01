@@ -1,3 +1,5 @@
+export 'package:points_repository/points_repository.dart';
+
 export 'bloc/bloc.dart';
 export 'form/form.dart';
 export 'view/view.dart';

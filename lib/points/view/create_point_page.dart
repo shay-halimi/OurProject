@@ -3,7 +3,6 @@ import 'package:cookpoint/points/points.dart';
 import 'package:cookpoint/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:points_repository/points_repository.dart';
 
 class CreatePointPage extends StatelessWidget {
   static Route route() {

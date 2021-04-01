@@ -1,9 +1,8 @@
 import 'package:cookpoint/cook/cook.dart';
-import 'package:cookpoint/media/media_widget.dart';
+import 'package:cookpoint/media/media.dart';
 import 'package:cookpoint/points/points.dart';
 import 'package:cookpoint/theme/theme.dart';
 import 'package:flutter/material.dart';
-import 'package:points_repository/points_repository.dart';
 
 class PointWidget extends StatelessWidget {
   const PointWidget({
@@ -23,7 +22,7 @@ class PointWidget extends StatelessWidget {
             child: _PhotoWidget(point: point),
           ),
           Padding(
-            padding: const EdgeInsets.all(4.0),
+            padding: const EdgeInsets.all(8.0),
             child: Column(
               children: [
                 Row(

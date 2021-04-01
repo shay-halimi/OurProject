@@ -1,5 +1,5 @@
 import 'package:cookpoint/cook/cook.dart';
-import 'package:cookpoint/media/media_widget.dart';
+import 'package:cookpoint/media/media.dart';
 import 'package:cookpoint/points/points.dart';
 import 'package:cookpoint/splash/splash.dart';
 import 'package:flutter/material.dart';
