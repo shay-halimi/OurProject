@@ -67,8 +67,8 @@ class _PointsBarViewState extends State<PointsBarView> {
             padding: EdgeInsets.zero,
             margin: EdgeInsets.zero,
             borderRadius: BorderRadius.zero,
-            minHeight: widget.height * 0.42,
-            maxHeight: widget.height * 0.78,
+            minHeight: widget.height * 0.38,
+            maxHeight: widget.height * 0.82,
             boxShadow: [],
             color: Colors.transparent,
             panel: CarouselSlider(
