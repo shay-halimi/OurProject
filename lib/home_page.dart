@@ -19,9 +19,7 @@ class HomePage extends StatelessWidget {
           ),
         ),
         BlocProvider(
-          create: (_context) => SelectedPointCubit(
-            searchBloc: _context.read<SearchBloc>(),
-          ),
+          create: (_) => SelectedPointCubit(),
         ),
       ],
       child: MapView(),

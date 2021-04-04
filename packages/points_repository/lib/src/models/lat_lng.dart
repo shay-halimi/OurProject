@@ -74,4 +74,8 @@ class LatLng {
                   2));
     }
   }
+
+  String toDistance(LatLng other) {
+    return distanceInKM(other).toStringAsFixed(1);
+  }
 }

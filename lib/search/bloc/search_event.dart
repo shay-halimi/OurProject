@@ -37,3 +37,10 @@ class SearchPointsUpdated extends SearchEvent {
   @override
   List<Object> get props => [points];
 }
+
+class SearchPointsRequested extends SearchEvent {
+  const SearchPointsRequested();
+
+  @override
+  List<Object> get props => [];
+}

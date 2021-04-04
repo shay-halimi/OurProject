@@ -26,6 +26,11 @@ class LocationState extends Equatable {
 
   double get heading => _location.heading;
 
+  LatLng get latLng => LatLng(
+        latitude: latitude,
+        longitude: longitude,
+      );
+
   final LocationStatus status;
 
   @override

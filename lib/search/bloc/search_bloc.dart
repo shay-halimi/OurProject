@@ -17,6 +17,8 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
     _pointsSubscription = pointsBloc.listen((state) {
       if (state.status == PointsStatus.loaded) {
         add(SearchPointsUpdated(state.nearbyPoints));
+      } else {
+        add(const SearchPointsRequested());
       }
     });
   }
@@ -51,16 +53,16 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
 
   @override
   Stream<SearchState> mapEventToState(SearchEvent event) async* {
-    yield state.copyWith(
-      status: SearchStatus.loading,
-    );
-
-    if (event is SearchTermUpdated) {
+    if (event is SearchPointsRequested) {
+      yield state.copyWith(
+        status: SearchStatus.loading,
+      );
+    } else if (event is SearchTermUpdated) {
       yield state.copyWith(
         status: SearchStatus.loaded,
         term: event.term,
         results: _filter(
-          _pointsBloc.state.nearbyPoints,
+          _nearbyPoints,
           event.term,
           state.tags,
         ),
@@ -80,7 +82,7 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
         status: SearchStatus.loaded,
         tags: tags,
         results: _filter(
-          _pointsBloc.state.nearbyPoints,
+          _nearbyPoints,
           state.term,
           tags,
         ),
@@ -95,5 +97,15 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
         ),
       );
     }
+  }
+
+  List<Point> get _nearbyPoints => _pointsBloc.state.nearbyPoints;
+
+  Future<List<Point>> get suggestions async {
+    do {
+      await Future<void>.delayed(const Duration(seconds: 1));
+    } while (state.status != SearchStatus.loaded);
+
+    return state.results;
   }
 }

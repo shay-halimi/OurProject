@@ -54,6 +54,9 @@ class PointForm extends StatelessWidget {
         title: Text(
           point.isEmpty ? 'פרסום מאכל' : 'עדכון ${point.title}',
         ),
+        actions: [
+          _DeleteButton(point: point),
+        ],
       ),
       body: WillPopScope(
         onWillPop: () async {
@@ -118,6 +121,65 @@ class PointForm extends StatelessWidget {
   }
 }
 
+class _DeleteButton extends StatelessWidget {
+  const _DeleteButton({
+    Key key,
+    @required this.point,
+  }) : super(key: key);
+
+  final Point point;
+
+  @override
+  Widget build(BuildContext context) {
+    return IconButton(
+      icon: const Icon(Icons.delete),
+      tooltip: 'מחק',
+      onPressed: () => showDialog<bool>(
+          context: context,
+          builder: (context) {
+            final style = theme.textTheme.headline6;
+            return AlertDialog(
+              title: const Text('האם את/ה בטוח/ה?'),
+              content: RichText(
+                  text: TextSpan(children: [
+                TextSpan(
+                  text: 'האם את/ה בטוח/ה שברצונך למחוק את ',
+                  style: style,
+                ),
+                TextSpan(
+                  text: point.title,
+                  style: style.copyWith(fontWeight: FontWeight.w700),
+                ),
+                TextSpan(
+                  text: ' ?',
+                  style: style,
+                ),
+              ])),
+              actions: [
+                TextButton(
+                  child: const Text('כן, מחק לצמיתות'),
+                  onPressed: () {
+                    Navigator.of(context).pop(true);
+                  },
+                ),
+                ElevatedButton(
+                  child: const Text('לא'),
+                  onPressed: () {
+                    Navigator.of(context).pop(false);
+                  },
+                ),
+              ],
+            );
+          }).then((value) {
+        if (value) {
+          context.read<PointsBloc>().add(PointDeletedEvent(point));
+          Navigator.of(context).pop();
+        }
+      }),
+    );
+  }
+}
+
 class _SubmitButton extends StatelessWidget {
   const _SubmitButton({
     Key key,
@@ -133,7 +195,7 @@ class _SubmitButton extends StatelessWidget {
       builder: (context, state) {
         return AppButton(
           isInProgress: state.status.isSubmissionInProgress,
-          child: Text(point.isEmpty ? 'פרסם' : 'עדכן'),
+          child: Text(point.isEmpty ? 'פרסם' : 'שמור'),
           onPressed: state.status.isValidated
               ? () => context.read<PointFormCubit>().save()
               : null,

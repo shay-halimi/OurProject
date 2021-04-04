@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:cookpoint/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_cropper/image_cropper.dart';
@@ -93,26 +94,26 @@ class _PhotoURLDialogView extends StatelessWidget {
             BlocBuilder<MediaDialogCubit, MediaDialogState>(
                 builder: (context, state) {
               if (state is MediaDialogInitial) {
-                return _CircleButton(
+                return CircleButton(
                   onPressed: () => _pickFile(context),
                   child: photoURL.isEmpty
                       ? const Icon(Icons.camera_alt)
                       : const Icon(Icons.edit),
                 );
               } else if (state is MediaDialogError) {
-                return _CircleButton(
+                return CircleButton(
                   onPressed: () => _pickFile(context),
                   fillColor: Colors.red.withOpacity(0.9),
                   child: const Icon(Icons.error),
                 );
               } else if (state is MediaDialogLoaded) {
-                return _CircleButton(
+                return CircleButton(
                   onPressed: () => _pickFile(context),
                   child: const Icon(Icons.edit),
                 );
               }
 
-              return const _CircleButton(
+              return const CircleButton(
                 child: CircularProgressIndicator(),
               );
             }),
@@ -151,6 +152,8 @@ class _PhotoURLDialogView extends StatelessWidget {
 
         if (croppedFile == null) return;
 
+        onPhotoURLChanged(photoURL);
+
         await context
             .read<MediaDialogCubit>()
             .fileChanged(File(croppedFile.path));
@@ -186,30 +189,5 @@ class _PhotoURLDialogView extends StatelessWidget {
             ],
           );
         });
-  }
-}
-
-class _CircleButton extends StatelessWidget {
-  const _CircleButton({
-    Key key,
-    this.onPressed,
-    this.child,
-    this.fillColor,
-  }) : super(key: key);
-
-  final VoidCallback onPressed;
-  final Widget child;
-  final Color fillColor;
-
-  @override
-  Widget build(BuildContext context) {
-    return RawMaterialButton(
-      onPressed: onPressed,
-      elevation: 2.0,
-      fillColor: fillColor ?? Colors.white.withOpacity(0.9),
-      child: child,
-      padding: const EdgeInsets.all(8.0),
-      shape: const CircleBorder(),
-    );
   }
 }

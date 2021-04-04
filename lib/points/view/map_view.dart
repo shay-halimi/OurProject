@@ -14,8 +14,20 @@ class MapView extends StatelessWidget {
     return Scaffold(
       extendBodyBehindAppBar: true,
       resizeToAvoidBottomInset: false,
-      appBar: SearchAppBar(),
-      body: const _MapViewBody(),
+      body: Stack(
+        children: [
+          const _MapViewBody(),
+          SafeArea(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                SearchAppBar(),
+                PointsBar(),
+              ],
+            ),
+          )
+        ],
+      ),
       endDrawer: AppDrawer(),
       floatingActionButton: Visibility(
         visible: context
@@ -41,15 +53,8 @@ class _MapViewBody extends StatelessWidget {
           switch (state.status) {
             case LocationStatus.unknown:
             case LocationStatus.loaded:
-              return Stack(
-                children: [
-                  MapWidget(
-                    pixelRatio: MediaQuery.of(context).devicePixelRatio,
-                  ),
-                  SafeArea(
-                    child: PointsBar(),
-                  ),
-                ],
+              return MapWidget(
+                pixelRatio: MediaQuery.of(context).devicePixelRatio,
               );
             case LocationStatus.error:
               return SplashBody(

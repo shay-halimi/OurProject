@@ -107,6 +107,8 @@ class MediaDialogView extends StatelessWidget {
 
                 if (croppedFile == null) return;
 
+                onMediaChanged(media);
+
                 await context
                     .read<MediaDialogCubit>()
                     .fileChanged(File(croppedFile.path));

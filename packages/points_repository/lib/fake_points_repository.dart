@@ -91,6 +91,19 @@ class FakePointsRepository extends PointsRepository {
         },
       ),
       Point.empty.copyWith(
+        title: 'פיצה ביתית מושלמת!🍕',
+        description: '''פיצה טריה עשויה בעבודת יד יום יום מרכיבים טריים
+
+משולש 20 ש''ח 
+מגש 6 משולשים - 80 ש''ח 
+
+הזמנות עד יום חמישי ב18:00
+ניתן לפנות בוואצאפ או בטלפון ''',
+        media: {
+          'https://firebasestorage.googleapis.com/v0/b/flutterapp-8f8db.appspot.com/o/gallery%2F273316f0-8dec-11eb-9240-0fec2dd2b58d?alt=media&token=b9213ba2-ffa8-41c4-9911-97f5069edf26'
+        },
+      ),
+      Point.empty.copyWith(
         title: 'ג׳חנון',
         description: '''עכשיו זה הזמן !!!
 🔷ג’חנון קפוא לאפיה ביתית 🔷
@@ -106,14 +119,6 @@ class FakePointsRepository extends PointsRepository {
 לפרטים נוספים והזמנות התקשרו ☎️
 תמר 👍🏼🙏
  ''',
-        media: {
-          'https://firebasestorage.googleapis.com/v0/b/flutterapp-8f8db.appspot.com/o/gallery%2F273316f0-8dec-11eb-9240-0fec2dd2b58d?alt=media&token=b9213ba2-ffa8-41c4-9911-97f5069edf26'
-        },
-      ),
-      Point.empty.copyWith(
-        title: "ג'חנון אסלי",
-        description: 'קר בחוץ ואין לכם כוח לצאת? התקשרו אלינו עכשיו '
-            'ואנחנו נגיע עד אליכם עם גחנון אסלי, חם וטעים בטירוף',
         media: {
           'https://firebasestorage.googleapis.com/v0/b/flutterapp-8f8db.appspot.com/o/gallery%2F66b17410-921b-11eb-b9a6-6bc3d7477c4a?alt=media&token=1ea07f6e-6b6c-4c2a-8ba7-14d1cf2b564c'
         },

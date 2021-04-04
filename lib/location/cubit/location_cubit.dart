@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:bloc/bloc.dart';
+import 'package:cookpoint/points/points.dart';
 import 'package:equatable/equatable.dart';
 import 'package:location_services/location_services.dart';
 import 'package:meta/meta.dart';
