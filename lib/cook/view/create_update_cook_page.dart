@@ -41,6 +41,7 @@ class CookForm extends StatelessWidget {
         title: Text(cook.isEmpty ? 'יצירת מטבח' : 'עדכון מטבח'),
       ),
       body: BlocListener<CookFormCubit, CookFormState>(
+        listenWhen: (previous, current) => previous != current,
         listener: (context, state) {
           if (state.status.isSubmissionFailure) {
             ScaffoldMessenger.of(context)
@@ -60,32 +61,32 @@ class CookForm extends StatelessWidget {
             }
           }
         },
-        child: SingleChildScrollView(
-          child: Padding(
-            padding: const EdgeInsets.all(32.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const Center(child: _PhotoURLInput()),
-                ConstrainedBox(
-                  constraints: const BoxConstraints(minHeight: 16),
-                ),
-                const _DisplayNameInput(),
-                ConstrainedBox(
-                  constraints: const BoxConstraints(minHeight: 16),
-                ),
-                const _AddressInput(),
-                ConstrainedBox(
-                  constraints: const BoxConstraints(minHeight: 16),
-                ),
-                Center(
-                  child: _SubmitButton(
-                    cook: cook,
-                  ),
-                ),
-              ],
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: [
+            const Padding(
+              padding: EdgeInsets.all(32.0),
+              child: Center(child: _PhotoURLInput()),
             ),
-          ),
+            Expanded(
+              child: ListView(
+                padding: const EdgeInsets.all(32.0),
+                children: [
+                  const ListTile(
+                    title: _DisplayNameInput(),
+                  ),
+                  const ListTile(
+                    title: _AddressInput(),
+                  ),
+                  Center(
+                    child: _SubmitButton(
+                      cook: cook,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
         ),
       ),
     );

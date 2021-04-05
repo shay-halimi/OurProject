@@ -16,7 +16,7 @@ class CreatePointPage extends StatelessWidget {
         context.select((PointsBloc bloc) => bloc.state.cookPoints.length < 3);
 
     if (canCreatePoint) {
-      return const CreateUpdatePointPage(point: Point.empty);
+      return const PointPage(point: Point.empty);
     }
 
     return const _TooManyPointsPage();

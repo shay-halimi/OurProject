@@ -100,12 +100,4 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
   }
 
   List<Point> get _nearbyPoints => _pointsBloc.state.nearbyPoints;
-
-  Future<List<Point>> get suggestions async {
-    do {
-      await Future<void>.delayed(const Duration(seconds: 1));
-    } while (state.status != SearchStatus.loaded);
-
-    return state.results;
-  }
 }

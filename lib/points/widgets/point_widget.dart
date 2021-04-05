@@ -21,24 +21,14 @@ class PointWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     final center = context.select((LocationCubit cubit) => cubit.state.latLng);
 
-    final isExpanded = height > (MediaQuery.of(context).size.height / 2);
-
     return Card(
       child: Padding(
         padding: const EdgeInsets.all(4.0),
         child: Column(
           children: [
-            Container(
-              constraints: BoxConstraints(maxHeight: height / 2),
-              child: Row(
-                children: [
-                  Expanded(
-                    child: _PhotoWidget(
-                      point: point,
-                    ),
-                  ),
-                ],
-              ),
+            MediaWidget(
+              media: point.media.first,
+              maxHeight: height / 2,
             ),
             Expanded(
               child: Column(
@@ -87,35 +77,12 @@ class PointWidget extends StatelessWidget {
                       ],
                     ),
                   ),
-                  Visibility(
-                    visible: isExpanded,
-                    child: CookWidget(cookId: point.cookId),
-                  ),
+                  CookWidget(cookId: point.cookId),
                 ],
               ),
             ),
           ],
         ),
-      ),
-    );
-  }
-}
-
-class _PhotoWidget extends StatelessWidget {
-  const _PhotoWidget({
-    Key key,
-    @required this.point,
-  }) : super(key: key);
-
-  final Point point;
-
-  @override
-  Widget build(BuildContext context) {
-    return AspectRatio(
-      aspectRatio: 16 / 9,
-      child: Hero(
-        tag: point.media.first,
-        child: MediaWidget(media: point.media.first),
       ),
     );
   }

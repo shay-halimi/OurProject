@@ -3,7 +3,7 @@ import 'package:cookpoint/cook/cook.dart';
 import 'package:cookpoint/launcher.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:line_awesome_flutter/line_awesome_flutter.dart';
 
 export 'cubit/cubit.dart';
 
@@ -58,15 +58,15 @@ class CookWidgetView extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         children: [
           IconButton(
-            icon: const Icon(FontAwesomeIcons.whatsapp),
+            icon: const Icon(LineAwesomeIcons.what_s_app),
             onPressed: () async => await launcher.whatsapp(cook.phoneNumber),
           ),
           IconButton(
-            icon: const Icon(Icons.call),
+            icon: const Icon(LineAwesomeIcons.phone),
             onPressed: () async => await launcher.call(cook.phoneNumber),
           ),
           IconButton(
-            icon: const Icon(Icons.directions),
+            icon: const Icon(LineAwesomeIcons.directions),
             onPressed: () async => await launcher.directions(cook.address),
           ),
         ],

@@ -33,11 +33,9 @@ class PointsPage extends StatelessWidget {
                   child: Card(
                     child: Column(
                       children: [
-                        AspectRatio(
-                          aspectRatio: 16 / 9,
-                          child: MediaWidget(
-                            media: point.media.first,
-                          ),
+                        MediaWidget(
+                          media: point.media.first,
+                          maxHeight: MediaQuery.of(context).size.height / 3,
                         ),
                         ListTile(
                           isThreeLine: true,

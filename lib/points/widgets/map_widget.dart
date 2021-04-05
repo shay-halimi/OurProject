@@ -5,6 +5,7 @@ import 'package:cookpoint/location/location.dart';
 import 'package:cookpoint/points/points.dart';
 import 'package:cookpoint/search/search.dart';
 import 'package:cookpoint/theme/theme.dart';
+import 'package:dough/dough.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart' as g_maps;
@@ -70,7 +71,7 @@ class _MapWidgetState extends State<MapWidget> {
             listener: (_, state) async {
               if (state.point.isEmpty) return;
 
-              await _focus(state.point.latLng, _zoom);
+              await _focus(state.point.latLng, defaultZoom);
             },
             buildWhen: (previous, current) => previous != current,
             builder: (_, state) {
@@ -140,10 +141,17 @@ class _MapWidgetState extends State<MapWidget> {
           ),
           Padding(
             padding: const EdgeInsets.all(16.0),
-            child: CircleButton(
-              onPressed: () => _focus(location, defaultZoom),
-              child: const Icon(Icons.my_location),
-            ),
+            child: PressableDough(
+              child: CircleButton(
+                onPressed: () => _focus(location, defaultZoom),
+                child: const Icon(Icons.my_location),
+              ),
+              onReleased: (details) {
+                if (details.delta.distance >= 200) {
+                  return context.read<LocationCubit>().locate();
+                }
+              },
+            )
           ),
         ],
       ),

@@ -127,7 +127,7 @@ class MediaDialogView extends StatelessWidget {
                             margin: const EdgeInsets.all(8.0),
                             decoration: BoxDecoration(
                               border: Border.all(),
-                              borderRadius: BorderRadius.circular(33.0),
+                              borderRadius: borderRadius,
                             ),
                             child: Center(
                               child: Text(
@@ -148,7 +148,7 @@ class MediaDialogView extends StatelessWidget {
                       margin: const EdgeInsets.all(8.0),
                       decoration: BoxDecoration(
                         border: Border.all(),
-                        borderRadius: BorderRadius.circular(33.0),
+                        borderRadius: borderRadius,
                       ),
                       child: Center(
                         child: Text(
@@ -172,9 +172,9 @@ class MediaDialogView extends StatelessWidget {
                         const CircularProgressIndicator(),
                       ]);
                 } else if (state is MediaDialogLoaded) {
-                  return AspectRatio(
+                  return MediaWidget(
+                    media: state.photoURL,
                     aspectRatio: aspectRatio,
-                    child: MediaWidget(media: state.photoURL),
                   );
                 }
 

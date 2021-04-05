@@ -4,6 +4,7 @@ export 'widgets/widgets.dart';
 
 /// @see https://material.io/develop/web/guides/typography
 const baseFontSize = 16.0;
+const borderRadius = BorderRadius.all(Radius.circular(33.0));
 
 const primaryColor = Color(0xFF33B0FF);
 const accentColor = Color(0xFFDD5534);
@@ -66,25 +67,25 @@ final theme = ThemeData(
       fontWeight: FontWeight.w500,
     ),
   ),
-  inputDecorationTheme: InputDecorationTheme(
+  inputDecorationTheme: const InputDecorationTheme(
     border: OutlineInputBorder(
-      borderRadius: BorderRadius.circular(33.0),
-      borderSide: const BorderSide(
+      borderRadius: borderRadius,
+      borderSide: BorderSide(
         width: 10.0,
         style: BorderStyle.solid,
       ),
     ),
   ),
-  buttonTheme: ButtonThemeData(
+  buttonTheme: const ButtonThemeData(
     shape: RoundedRectangleBorder(
-      borderRadius: BorderRadius.circular(33.0),
+      borderRadius: borderRadius,
     ),
   ),
   elevatedButtonTheme: ElevatedButtonThemeData(
     style: ButtonStyle(
       shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-        RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(33.0),
+        const RoundedRectangleBorder(
+          borderRadius: borderRadius,
         ),
       ),
     ),

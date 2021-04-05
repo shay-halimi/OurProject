@@ -60,7 +60,7 @@ class Point {
 
   bool get isNotEmpty => !isEmpty;
 
-  static const Set<String> defaultTags = {'טבעוני', 'צמחוני', 'ללא גלוטן'};
+  static const Set<String> defaultTags = {'צמחוני', 'טבעוני', 'ללא גלוטן'};
 
   Point copyWith({
     String id,

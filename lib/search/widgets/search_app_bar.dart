@@ -1,8 +1,6 @@
 import 'package:cookpoint/location/location.dart';
 import 'package:cookpoint/points/points.dart';
 import 'package:cookpoint/search/search.dart';
-import 'package:cookpoint/theme/theme.dart';
-import 'package:dough/dough.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_typeahead/flutter_typeahead.dart';
@@ -16,7 +14,20 @@ class SearchAppBar extends StatelessWidget {
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          SearchField(),
+          Material(
+            borderRadius: BorderRadius.circular(8.0),
+            elevation: 2.0,
+            color: Colors.white,
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 8.0),
+              child: Row(
+                children: [
+                  const Expanded(child: SearchField()),
+                  const _DrawerButton(),
+                ],
+              ),
+            ),
+          ),
           const _TagsFilter(),
         ],
       ),
@@ -31,7 +42,7 @@ class _TagsFilter extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final tags = context.select((SearchBloc bloc) => bloc.state.tags);
+    final tags = context.select((SearchBloc search) => search.state.tags);
 
     return Row(
       children: [
@@ -39,10 +50,7 @@ class _TagsFilter extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.only(left: 2.0),
             child: InputChip(
-              label: Text(
-                tag,
-                style: theme.textTheme.bodyText2,
-              ),
+              label: Text(tag),
               onSelected: (selected) =>
                   context.read<SearchBloc>().add(SearchTagSelected(tag)),
               selected: tags.contains(tag),
@@ -55,7 +63,7 @@ class _TagsFilter extends StatelessWidget {
 }
 
 class SearchField extends StatefulWidget {
-  SearchField({
+  const SearchField({
     Key key,
   }) : super(key: key);
 
@@ -65,90 +73,99 @@ class SearchField extends StatefulWidget {
 
 class _SearchFieldState extends State<SearchField> {
   TextEditingController _controller;
+  FocusNode _focusNode;
 
   @override
   void initState() {
     super.initState();
     _controller = TextEditingController();
+    _focusNode = FocusNode();
   }
 
   @override
   void dispose() {
     super.dispose();
     _controller.dispose();
+    _focusNode.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    final center = context.select((LocationCubit cubit) => cubit.state);
+    final center =
+        context.select((LocationCubit location) => location.state.latLng);
 
-    return Material(
-      borderRadius: BorderRadius.circular(8.0),
-      elevation: 2.0,
-      color: Colors.white,
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 8.0),
-        child: Row(
-          children: [
-            Expanded(
-              child: TypeAheadField<Point>(
-                getImmediateSuggestions: true,
-                textFieldConfiguration: TextFieldConfiguration(
-                  controller: _controller,
-                  decoration: InputDecoration(
-                    hintText: 'מה בא לך לאכול?',
-                    suffixIcon: _controller.value.text.isNotEmpty
-                        ? IconButton(
-                            icon: const Icon(Icons.close),
-                            onPressed: () {
-                              context
-                                  .read<SearchBloc>()
-                                  .add(const SearchTermCleared());
-                              context.read<SelectedPointCubit>().clear();
-                              _controller.clear();
-                            },
-                          )
-                        : null,
-                    border: InputBorder.none,
-                  ),
+    return BlocBuilder<SearchBloc, SearchState>(
+      buildWhen: (previous, current) => previous != current,
+      builder: (_, state) {
+        if (state.status == SearchStatus.loaded) {
+          return BlocListener<SelectedPointCubit, SelectedPointState>(
+            listenWhen: (previous, current) => previous.point != current.point,
+            listener: (_, state) {
+              if (state.point.isEmpty && _focusNode.hasFocus) {
+                _focusNode.unfocus();
+              }
+            },
+            child: TypeAheadField<Point>(
+              getImmediateSuggestions: false,
+              suggestionsBoxVerticalOffset: 1.0,
+              textFieldConfiguration: TextFieldConfiguration(
+                controller: _controller,
+                focusNode: _focusNode,
+                decoration: InputDecoration(
+                  hintText: 'מה בא לך לאכול?',
+                  suffixIcon: _controller.value.text.isNotEmpty
+                      ? IconButton(
+                          icon: const Icon(Icons.close),
+                          onPressed: () {
+                            context
+                                .read<SearchBloc>()
+                                .add(const SearchTermCleared());
+                            _controller.clear();
+                            setState(() {});
+                          },
+                        )
+                      : null,
+                  border: InputBorder.none,
                 ),
-                suggestionsBoxDecoration: SuggestionsBoxDecoration(
-                  borderRadius: BorderRadius.circular(8.0),
-                  elevation: 0.0,
-                ),
-                suggestionsCallback: (pattern) async {
-                  context.read<SearchBloc>().add(SearchTermUpdated(pattern));
-                  return context.read<SearchBloc>().suggestions;
-                },
-                itemBuilder: (context, suggestion) {
-                  return ListTile(
-                    key: ValueKey(suggestion.hashCode),
-                    title: Text(suggestion.title),
-                    trailing: Text(
-                      '${suggestion.latLng.toDistance(center.latLng)} ק"מ',
-                    ),
-                  );
-                },
-                noItemsFoundBuilder: (context) {
-                  return const ListTile(
-                    title: Text('לא נמצאו תוצאות'),
-                  );
-                },
-                onSuggestionSelected: (suggestion) {
-                  _controller.text = suggestion.title;
-                  context.read<SelectedPointCubit>().select(suggestion);
+                onChanged: (value) {
+                  context.read<SearchBloc>().add(SearchTermUpdated(value));
+                  setState(() {});
                 },
               ),
+              suggestionsBoxDecoration: SuggestionsBoxDecoration(
+                borderRadius: BorderRadius.circular(8.0),
+                elevation: 0.0,
+              ),
+              suggestionsCallback: (pattern) async {
+                return context.read<SearchBloc>().state.results;
+              },
+              itemBuilder: (context, suggestion) {
+                return ListTile(
+                  key: ValueKey(suggestion.hashCode),
+                  title: Text(suggestion.title),
+                  trailing: Text(
+                    '${suggestion.latLng.toDistance(center)} ק"מ',
+                  ),
+                );
+              },
+              noItemsFoundBuilder: (context) {
+                return const ListTile(
+                  title: Text('אין תוצאות קרובות'),
+                );
+              },
+              onSuggestionSelected: (suggestion) {
+                context.read<SelectedPointCubit>().select(suggestion);
+                _controller.text = suggestion.title;
+                setState(() {});
+              },
             ),
-            _DrawerButton(
-              child: context.select((SearchBloc bloc) =>
-                      bloc.state.status == SearchStatus.loading)
-                  ? const CircularProgressIndicator(strokeWidth: 8.0)
-                  : const Icon(Icons.menu),
-            ),
-          ],
-        ),
-      ),
+          );
+        }
+
+        return const Center(
+          child: LinearProgressIndicator(),
+        );
+      },
     );
   }
 }
@@ -156,26 +173,16 @@ class _SearchFieldState extends State<SearchField> {
 class _DrawerButton extends StatelessWidget {
   const _DrawerButton({
     Key key,
-    @required this.child,
   }) : super(key: key);
-
-  final Widget child;
 
   @override
   Widget build(BuildContext context) {
     return Tooltip(
       message: MaterialLocalizations.of(context).openAppDrawerTooltip,
-      child: PressableDough(
-        child: IconButton(
-          icon: const Icon(Icons.menu),
-          onPressed: () => Scaffold.of(context).openEndDrawer(),
-          tooltip: MaterialLocalizations.of(context).openAppDrawerTooltip,
-        ),
-        onReleased: (details) {
-          if (details.delta.distance >= 200) {
-            return context.read<LocationCubit>().locate();
-          }
-        },
+      child: IconButton(
+        icon: const Icon(Icons.menu),
+        onPressed: () => Scaffold.of(context).openEndDrawer(),
+        tooltip: MaterialLocalizations.of(context).openAppDrawerTooltip,
       ),
     );
   }
