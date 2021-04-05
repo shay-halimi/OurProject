@@ -4,6 +4,7 @@ import 'package:bloc/bloc.dart';
 import 'package:cookpoint/points/points.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:fuzzy/fuzzy.dart';
 
 part 'search_event.dart';
 part 'search_state.dart';
@@ -14,8 +15,8 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
   })  : assert(pointsBloc != null),
         _pointsBloc = pointsBloc,
         super(const SearchState()) {
-    _pointsSubscription = pointsBloc.listen((state) {
-      if (state.status == PointsStatus.loaded) {
+    _pointsSubscription = pointsBloc.stream.listen((state) {
+      if (state.nearbyPoints.isNotEmpty) {
         add(SearchPointsUpdated(state.nearbyPoints));
       } else {
         add(const SearchPointsRequested());
@@ -33,22 +34,26 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
   }
 
   List<Point> _filter(List<Point> points, String term, Set<String> tags) {
-    return points
-        .where((point) {
-          if (point.tags.containsAll(tags)) {
-            if (term.isNotEmpty) {
-              return point.title == term ||
-                  point.title.contains(term) ||
-                  point.description.contains(term);
-            }
-
-            return true;
-          }
-
-          return false;
-        })
-        .take(100)
-        .toList();
+    return Fuzzy<Point>(
+      points.where((point) => point.tags.containsAll(tags)).toList(),
+      options: FuzzyOptions(
+        findAllMatches: true,
+        tokenize: true,
+        threshold: 0.5,
+        keys: [
+          WeightedKey<Point>(
+            name: 'title',
+            getter: (point) => point.title,
+            weight: 0.5,
+          ),
+          WeightedKey<Point>(
+            name: 'description',
+            getter: (point) => point.description,
+            weight: 0.5,
+          ),
+        ],
+      ),
+    ).search(term).map((result) => result.item).take(100).toList();
   }
 
   @override

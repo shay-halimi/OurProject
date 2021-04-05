@@ -22,67 +22,74 @@ class PointWidget extends StatelessWidget {
     final center = context.select((LocationCubit cubit) => cubit.state.latLng);
 
     return Card(
-      child: Padding(
-        padding: const EdgeInsets.all(4.0),
-        child: Column(
-          children: [
-            MediaWidget(
+      child: Column(
+        children: [
+          Padding(
+            padding: const EdgeInsets.all(4.0),
+            child: MediaWidget(
               media: point.media.first,
-              maxHeight: height / 2,
+              maxHeight: (height * 1 / 3),
             ),
-            Expanded(
-              child: Column(
-                children: [
-                  Expanded(
-                    child: ListView(
-                      padding: const EdgeInsets.all(8.0),
-                      children: [
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            TagsWidget(tags: {
-                              '${point.latLng.toDistance(center)} ק"מ',
-                              ...point.tags
-                            }),
-                            Text(
-                              '${point.price.amount.toStringAsFixed(2)} ₪',
-                              style: theme.textTheme.headline6
-                                  .copyWith(fontWeight: FontWeight.w300),
+          ),
+          Expanded(
+            child: Column(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Column(
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          TagsWidget(tags: {
+                            '${point.latLng.toDistance(center)} ק"מ',
+                            ...point.tags
+                          }),
+                          Text(
+                            '${point.price.amount.toStringAsFixed(2)} ₪',
+                            style: theme.textTheme.headline6
+                                .copyWith(fontWeight: FontWeight.w300),
+                          ),
+                        ],
+                      ),
+                      Row(
+                        children: [
+                          Expanded(
+                            child: Text(
+                              point.title,
+                              style: theme.textTheme.headline6,
+                              maxLines: 2,
+                              overflow: TextOverflow.ellipsis,
                             ),
-                          ],
-                        ),
-                        Row(
-                          children: [
-                            Expanded(
-                              child: Text(
-                                point.title,
-                                style: theme.textTheme.headline6,
-                                maxLines: 2,
-                                overflow: TextOverflow.ellipsis,
-                              ),
-                            ),
-                          ],
-                        ),
-                        Row(
-                          children: [
-                            Expanded(
-                              child: Text(
-                                point.description,
-                                style: theme.textTheme.bodyText2,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
+                          ),
+                        ],
+                      ),
+                    ],
                   ),
-                  CookWidget(cookId: point.cookId),
-                ],
-              ),
+                ),
+                Expanded(
+                  child: ListView(
+                    padding: const EdgeInsets.all(8.0),
+                    children: [
+                      Row(
+                        children: [
+                          Expanded(
+                            child: Text(
+                              point.description,
+                              style: theme.textTheme.bodyText2,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
+                CookWidget(cookId: point.cookId),
+              ],
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }

@@ -122,36 +122,28 @@ class _MapWidgetState extends State<MapWidget> {
                   });
                 },
                 onCameraIdle: () {
-                  final radiusInKM = 100.0;
-
-                  final refresh = points
-                      .map((point) => point.latLng)
-                      .where(
-                          (latLng) => latLng.distanceInKM(_center) < radiusInKM)
-                      .isEmpty;
-
-                  if (refresh) {
-                    context
-                        .read<PointsBloc>()
-                        .add(PointsNearbyRequestedEvent(_center, radiusInKM));
-                  }
+                  context
+                      .read<PointsBloc>()
+                      .add(PointsNearbyRequestedEvent(_center));
                 },
               );
             },
           ),
-          Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: PressableDough(
-              child: CircleButton(
-                onPressed: () => _focus(location, defaultZoom),
-                child: const Icon(Icons.my_location),
+          SafeArea(
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: PressableDough(
+                child: CircleButton(
+                  onPressed: () => _focus(location, defaultZoom),
+                  child: const Icon(Icons.my_location),
+                ),
+                onReleased: (details) {
+                  if (details.delta.distance >= 200) {
+                    return context.read<LocationCubit>().locate();
+                  }
+                },
               ),
-              onReleased: (details) {
-                if (details.delta.distance >= 200) {
-                  return context.read<LocationCubit>().locate();
-                }
-              },
-            )
+            ),
           ),
         ],
       ),

@@ -19,7 +19,7 @@ class PointsBloc extends Bloc<PointsEvent, PointsState> {
         _pointsRepository = pointsRepository,
         _cookBloc = cookBloc,
         super(const PointsState()) {
-    _cookSubscription = _cookBloc.listen((state) {
+    _cookSubscription = _cookBloc.stream.listen((state) {
       if (state.status == CookStatus.loaded && state.cook.isNotEmpty) {
         add(PointsOfCookRequestedEvent(state.cook));
       } else {
@@ -69,6 +69,15 @@ class PointsBloc extends Bloc<PointsEvent, PointsState> {
     PointsNearbyRequestedEvent event,
   ) async* {
     if (event.latLng.isEmpty) return;
+
+    final refresh = state.nearbyPoints
+        .map((point) => point.latLng)
+        .where((latLng) => latLng.distanceInKM(event.latLng) < event.radiusInKM)
+        .isEmpty;
+
+    if (!refresh) {
+      return;
+    }
 
     yield state.copyWith(status: PointsStatus.loading);
 

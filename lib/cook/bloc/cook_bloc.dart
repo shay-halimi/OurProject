@@ -18,7 +18,7 @@ class CookBloc extends Bloc<CookEvent, CookState> {
         _cooksRepository = cooksRepository,
         _authenticationBloc = authenticationBloc,
         super(const CookState.unknown()) {
-    _authSubscription = _authenticationBloc.listen((state) {
+    _authSubscription = _authenticationBloc.stream.listen((state) {
       _cookSubscription?.cancel();
 
       if (state.status == AuthenticationStatus.authenticated) {

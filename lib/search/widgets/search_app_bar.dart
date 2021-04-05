@@ -99,11 +99,10 @@ class _SearchFieldState extends State<SearchField> {
       builder: (_, state) {
         if (state.status == SearchStatus.loaded) {
           return BlocListener<SelectedPointCubit, SelectedPointState>(
-            listenWhen: (previous, current) => previous.point != current.point,
+            listenWhen: (previous, current) =>
+                current.point.isEmpty && _focusNode.hasFocus,
             listener: (_, state) {
-              if (state.point.isEmpty && _focusNode.hasFocus) {
-                _focusNode.unfocus();
-              }
+              _focusNode.unfocus();
             },
             child: TypeAheadField<Point>(
               getImmediateSuggestions: false,
@@ -117,19 +116,21 @@ class _SearchFieldState extends State<SearchField> {
                       ? IconButton(
                           icon: const Icon(Icons.close),
                           onPressed: () {
+                            setState(() {
+                              _controller.clear();
+                              _focusNode.unfocus();
+                            });
                             context
                                 .read<SearchBloc>()
                                 .add(const SearchTermCleared());
-                            _controller.clear();
-                            setState(() {});
                           },
                         )
                       : null,
                   border: InputBorder.none,
                 ),
                 onChanged: (value) {
-                  context.read<SearchBloc>().add(SearchTermUpdated(value));
                   setState(() {});
+                  context.read<SearchBloc>().add(SearchTermUpdated(value));
                 },
               ),
               suggestionsBoxDecoration: SuggestionsBoxDecoration(
@@ -137,7 +138,12 @@ class _SearchFieldState extends State<SearchField> {
                 elevation: 0.0,
               ),
               suggestionsCallback: (pattern) async {
-                return context.read<SearchBloc>().state.results;
+                final points = context.read<SearchBloc>().state.results;
+
+                final cookIds = points.map((point) => point.cookId).toSet();
+
+                return points
+                  ..retainWhere((point) => cookIds.remove(point.cookId));
               },
               itemBuilder: (context, suggestion) {
                 return ListTile(
@@ -154,9 +160,13 @@ class _SearchFieldState extends State<SearchField> {
                 );
               },
               onSuggestionSelected: (suggestion) {
+                setState(() {
+                  _controller.text = suggestion.title;
+                });
+                context
+                    .read<SearchBloc>()
+                    .add(SearchTermUpdated(suggestion.title));
                 context.read<SelectedPointCubit>().select(suggestion);
-                _controller.text = suggestion.title;
-                setState(() {});
               },
             ),
           );
