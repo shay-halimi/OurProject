@@ -124,7 +124,7 @@ class _MapWidgetState extends State<MapWidget> {
                 onCameraIdle: () {
                   context
                       .read<PointsBloc>()
-                      .add(PointsNearbyRequestedEvent(_center));
+                      .add(PointsNearbyRequestedEvent(_center, 100));
                 },
               );
             },

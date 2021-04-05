@@ -138,12 +138,7 @@ class _SearchFieldState extends State<SearchField> {
                 elevation: 0.0,
               ),
               suggestionsCallback: (pattern) async {
-                final points = context.read<SearchBloc>().state.results;
-
-                final cookIds = points.map((point) => point.cookId).toSet();
-
-                return points
-                  ..retainWhere((point) => cookIds.remove(point.cookId));
+                return context.read<SearchBloc>().state.results;
               },
               itemBuilder: (context, suggestion) {
                 return ListTile(
