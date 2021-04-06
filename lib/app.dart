@@ -53,11 +53,6 @@ class App extends StatelessWidget {
             lazy: false,
           ),
           BlocProvider(
-            create: (_) => LocationCubit(
-              locationServices: locationServices,
-            )..locate(),
-          ),
-          BlocProvider(
             create: (_context) => CookBloc(
               cooksRepository: cooksRepository,
               authenticationBloc: _context.read<AuthenticationBloc>(),
@@ -69,6 +64,12 @@ class App extends StatelessWidget {
               pointsRepository: pointsRepository,
               cookBloc: _context.read<CookBloc>(),
             ),
+          ),
+          BlocProvider(
+            create: (_context) => LocationCubit(
+              locationServices: locationServices,
+              cookBloc: _context.read<CookBloc>(),
+            )..locate(),
           ),
         ],
         child: AppView(),

@@ -53,7 +53,7 @@ class LatLng {
     };
   }
 
-  static const empty = LatLng(latitude: 0, longitude: 0);
+  static const empty = LatLng(latitude: 0.0, longitude: 0.0);
 
   bool get isEmpty => this == empty;
 
@@ -61,7 +61,7 @@ class LatLng {
 
   /// https://stackoverflow.com/questions/54138750/total-distance-calculation-from-latlng-list
   double distanceInKM(LatLng other) {
-    if ((latitude == other.latitude) && (longitude == other.longitude)) {
+    if (this == other) {
       return 0;
     } else {
       final p = 0.017453292519943295;

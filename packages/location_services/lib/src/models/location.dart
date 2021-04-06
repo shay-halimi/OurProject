@@ -2,11 +2,11 @@ import 'package:meta/meta.dart';
 
 @immutable
 class Location {
-  const Location({
-    @required double latitude,
-    @required double longitude,
-    this.heading = 0,
-  })  : assert(latitude != null),
+  const Location(
+    double latitude,
+    double longitude, [
+    this.heading = 0.0,
+  ])  : assert(latitude != null),
         assert(longitude != null),
         assert(heading != null),
         latitude =
@@ -15,9 +15,9 @@ class Location {
 
   factory Location.fromJson(Map<String, Object> map) {
     return Location(
-      latitude: (map['latitude'] as num).toDouble(),
-      longitude: (map['longitude'] as num).toDouble(),
-      heading: (map['heading'] as num).toDouble(),
+      (map['latitude'] as num).toDouble(),
+      (map['longitude'] as num).toDouble(),
+      (map['heading'] as num).toDouble(),
     );
   }
 
@@ -25,11 +25,7 @@ class Location {
   final double longitude;
   final double heading;
 
-  static const empty = Location(
-    latitude: 0.0,
-    longitude: 0.0,
-    heading: 0.0,
-  );
+  static const empty = Location(0.0, 0.0);
 
   Location copyWith({
     double latitude,
@@ -37,9 +33,9 @@ class Location {
     double heading,
   }) {
     return Location(
-      latitude: latitude ?? this.latitude,
-      longitude: longitude ?? this.longitude,
-      heading: heading ?? this.heading,
+      latitude ?? this.latitude,
+      longitude ?? this.longitude,
+      heading ?? this.heading,
     );
   }
 

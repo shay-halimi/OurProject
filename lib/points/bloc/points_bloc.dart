@@ -85,9 +85,9 @@ class PointsBloc extends Bloc<PointsEvent, PointsState> {
 
     _nearbyPointsSubscription = _pointsRepository
         .near(latLng: event.latLng, radiusInKM: event.radiusInKM)
-        .listen((points) {
+        .listen((nearbyPoints) {
       add(PointsNearbyLoadedEvent(
-        points
+        nearbyPoints
           ..sort((point1, point2) {
             final distance1 = point1.latLng.distanceInKM(event.latLng);
             final distance2 = point2.latLng.distanceInKM(event.latLng);
@@ -109,18 +109,18 @@ class PointsBloc extends Bloc<PointsEvent, PointsState> {
     await _cookPointsSubscription?.cancel();
 
     _cookPointsSubscription =
-        _pointsRepository.byCookId(event.cook.id).listen((points) {
+        _pointsRepository.byCookId(event.cook.id).listen((cookPoints) {
       final cookLatLng = event.cook.address.toLatLng();
 
-      final dirty = points.where((point) {
-        return point.latLng.distanceInKM(cookLatLng) != 0;
+      final dirty = cookPoints.where((cookPoint) {
+        return cookPoint.latLng != cookLatLng;
       });
 
-      for (var point in dirty) {
-        add(PointUpdatedEvent(point.copyWith(latLng: cookLatLng)));
+      for (var cookPoint in dirty) {
+        add(PointUpdatedEvent(cookPoint.copyWith(latLng: cookLatLng)));
       }
 
-      add(PointsOfCookLoadedEvent(points));
+      add(PointsOfCookLoadedEvent(cookPoints));
     });
   }
 

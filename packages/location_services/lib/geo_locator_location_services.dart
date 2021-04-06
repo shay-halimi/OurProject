@@ -1,7 +1,7 @@
 import 'dart:async';
 
-import 'package:geocoding/geocoding.dart' as geocoding;
-import 'package:geolocator/geolocator.dart' as geolocator;
+import 'package:geocoding/geocoding.dart' as geo_coding;
+import 'package:geolocator/geolocator.dart' as geo_locator;
 
 import 'location_services.dart';
 
@@ -13,11 +13,11 @@ class GeoLocatorLocationServices extends LocationServices {
 
   @override
   Future<void> locate() async {
-    geolocator.LocationPermission permission;
+    geo_locator.LocationPermission permission;
 
     try {
       bool serviceEnabled;
-      serviceEnabled = await geolocator.Geolocator.isLocationServiceEnabled();
+      serviceEnabled = await geo_locator.Geolocator.isLocationServiceEnabled();
 
       if (!serviceEnabled) {
         return _locationController.add(Location.empty);
@@ -26,25 +26,25 @@ class GeoLocatorLocationServices extends LocationServices {
       print('web?');
     }
 
-    permission = await geolocator.Geolocator.checkPermission();
-    if (permission == geolocator.LocationPermission.denied) {
-      permission = await geolocator.Geolocator.requestPermission();
-      if (permission == geolocator.LocationPermission.deniedForever) {
+    permission = await geo_locator.Geolocator.checkPermission();
+    if (permission == geo_locator.LocationPermission.denied) {
+      permission = await geo_locator.Geolocator.requestPermission();
+      if (permission == geo_locator.LocationPermission.deniedForever) {
         return _locationController.add(Location.empty);
       }
 
-      if (permission == geolocator.LocationPermission.denied) {
+      if (permission == geo_locator.LocationPermission.denied) {
         return _locationController.add(Location.empty);
       }
     }
 
     try {
-      final data = await geolocator.Geolocator.getCurrentPosition();
+      final data = await geo_locator.Geolocator.getCurrentPosition();
 
       return _locationController.add(Location(
-        latitude: data.latitude,
-        longitude: data.longitude,
-        heading: data.heading,
+        data.latitude,
+        data.longitude,
+        data.heading,
       ));
     } on Exception {
       return _locationController.add(Location.empty);
@@ -54,7 +54,7 @@ class GeoLocatorLocationServices extends LocationServices {
   @override
   Future<Location> fromAddress(String address) async {
     try {
-      final value = await geocoding.locationFromAddress(
+      final value = await geo_coding.locationFromAddress(
         address,
         localeIdentifier: 'he_IL',
       );
@@ -64,8 +64,8 @@ class GeoLocatorLocationServices extends LocationServices {
       }
 
       return Location(
-        latitude: value.first.latitude,
-        longitude: value.first.longitude,
+        value.first.latitude,
+        value.first.longitude,
       );
     } on Exception {
       return Location.empty;

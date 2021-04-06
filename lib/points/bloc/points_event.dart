@@ -10,7 +10,7 @@ abstract class PointsEvent extends Equatable {
 class PointsNearbyRequestedEvent extends PointsEvent {
   const PointsNearbyRequestedEvent(
     this.latLng, [
-    this.radiusInKM = 3.14,
+    this.radiusInKM = 100,
   ]);
 
   final LatLng latLng;
