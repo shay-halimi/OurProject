@@ -41,7 +41,7 @@ class _Launcher {
       );
     } else {
       await availableMaps.first.showMarker(
-        coords: Coords(address.latitude, address.latitude),
+        coords: Coords(address.latitude, address.longitude),
         title: address.name,
       );
     }

@@ -99,10 +99,12 @@ class _SearchFieldState extends State<SearchField> {
       builder: (_, state) {
         if (state.status == SearchStatus.loaded) {
           return BlocListener<SelectedPointCubit, SelectedPointState>(
-            listenWhen: (previous, current) =>
-                current.point.isEmpty && _focusNode.hasFocus,
-            listener: (_, state) {
-              _focusNode.unfocus();
+            listenWhen: (_, state) =>
+                state.point.isEmpty && _focusNode.hasFocus,
+            listener: (_, __) {
+              setState(() {
+                _focusNode.unfocus();
+              });
             },
             child: TypeAheadField<Point>(
               getImmediateSuggestions: false,
