@@ -28,13 +28,11 @@ class _MapWidgetState extends State<MapWidget> {
 
   final Completer<g_maps.GoogleMapController> _controller = Completer();
 
-  bool _ready = false;
-
   double _zoom = defaultZoom;
 
   double _heading = 0;
 
-  LatLng _center = LatLng.empty;
+  LatLng _center;
 
   g_maps.BitmapDescriptor _pointMarker = g_maps.BitmapDescriptor.defaultMarker;
 
@@ -62,7 +60,7 @@ class _MapWidgetState extends State<MapWidget> {
         context.select((LocationCubit cubit) => cubit.state).toLatLng();
 
     return Opacity(
-      opacity: _ready ? 1 : 0,
+      opacity: _controller.future == null ? 0 : 1,
       child: Stack(
         alignment: AlignmentDirectional.bottomStart,
         children: [
@@ -77,13 +75,11 @@ class _MapWidgetState extends State<MapWidget> {
             builder: (_, state) {
               return g_maps.GoogleMap(
                 onMapCreated: (controller) async {
-                  _controller.complete(controller);
+                  setState(() {
+                    _controller.complete(controller);
+                  });
 
-                  final target =
-                      points.isEmpty ? location : points.first.latLng;
-
-                  await _focus(target, _zoom)
-                      .then((_) => setState(() => _ready = true));
+                  await _focus(location, _zoom);
                 },
                 initialCameraPosition: g_maps.CameraPosition(
                   target: location.toGMapsLatLng(),
@@ -91,8 +87,7 @@ class _MapWidgetState extends State<MapWidget> {
                   zoom: _zoom / 2,
                 ),
                 markers: points.map((point) {
-                  final isSelectedPoint =
-                      point.latLng.distanceInKM(state.point.latLng) == 0;
+                  final isSelectedPoint = (point.latLng == state.point.latLng);
 
                   return g_maps.Marker(
                     markerId: g_maps.MarkerId(point.id),
@@ -111,21 +106,15 @@ class _MapWidgetState extends State<MapWidget> {
                 mapToolbarEnabled: false,
                 zoomControlsEnabled: false,
                 myLocationButtonEnabled: false,
-                onTap: (lanLat) {
-                  context.read<SelectedPointCubit>().clear();
-                },
-                onCameraMove: (position) {
-                  setState(() {
-                    _zoom = position.zoom;
-                    _heading = position.bearing;
-                    _center = position.toLatLng();
-                  });
-                },
-                onCameraIdle: () {
-                  context
-                      .read<PointsBloc>()
-                      .add(PointsNearbyRequestedEvent(_center, 100));
-                },
+                onTap: (_) => context.read<SelectedPointCubit>().clear(),
+                onCameraMove: (position) => setState(() {
+                  _zoom = position.zoom;
+                  _heading = position.bearing;
+                  _center = position.toLatLng();
+                }),
+                onCameraIdle: () => context
+                    .read<PointsBloc>()
+                    .add(PointsNearbyRequestedEvent(_center ?? location)),
               );
             },
           ),
@@ -133,9 +122,27 @@ class _MapWidgetState extends State<MapWidget> {
             child: Padding(
               padding: const EdgeInsets.all(8.0),
               child: PressableDough(
-                child: CircleButton(
-                  onPressed: () => _focus(location, defaultZoom),
-                  child: const Icon(Icons.my_location),
+                child: BlocBuilder<LocationCubit, LocationState>(
+                  buildWhen: (previous, current) =>
+                      previous.status != current.status,
+                  builder: (_, state) {
+                    final isError = state.status == LocationStatus.error;
+
+                    return CircleButton(
+                      child: isError
+                          ? const Icon(
+                              Icons.location_disabled,
+                              color: Colors.red,
+                            )
+                          : const Icon(Icons.my_location),
+                      onPressed: () {
+                        if (isError) {
+                          context.read<LocationCubit>().locate();
+                        }
+                        return _focus(state.toLatLng(), defaultZoom);
+                      },
+                    );
+                  },
                 ),
                 onReleased: (details) {
                   if (details.delta.distance >= 200) {
@@ -192,15 +199,6 @@ class _MapWidgetState extends State<MapWidget> {
     }
 
     return _size;
-  }
-}
-
-extension _XLocationState on LocationState {
-  LatLng toLatLng() {
-    return LatLng(
-      latitude: latitude,
-      longitude: longitude,
-    );
   }
 }
 

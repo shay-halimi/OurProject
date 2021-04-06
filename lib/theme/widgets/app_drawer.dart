@@ -9,7 +9,8 @@ import 'package:provider/provider.dart';
 class AppDrawer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final user = context.select((AuthenticationBloc bloc) => bloc.state.user);
+    final authenticated = context.select((AuthenticationBloc bloc) =>
+        bloc.state.status == AuthenticationStatus.authenticated);
 
     return Drawer(
       child: Center(
@@ -32,7 +33,7 @@ class AppDrawer extends StatelessWidget {
                   .read<AuthenticationBloc>()
                   .add(AuthenticationLogoutRequested()),
             ),
-            if (user.isNotEmpty) ...[
+            if (authenticated) ...[
               ListTile(
                 key: const Key('AppDrawer_CookPointsPage_ListTile'),
                 leading: const Icon(Icons.restaurant),

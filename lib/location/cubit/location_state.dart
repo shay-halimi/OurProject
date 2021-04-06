@@ -4,10 +4,9 @@ enum LocationStatus { loading, loaded, unknown, error }
 
 class LocationState extends Equatable {
   const LocationState._({
-    Location location = Location.empty,
+    this.location = Location.empty,
     this.status = LocationStatus.unknown,
-  })  : assert(location != null),
-        _location = location;
+  }) : assert(location != null);
 
   const LocationState.loading() : this._(status: LocationStatus.loading);
 
@@ -16,23 +15,20 @@ class LocationState extends Equatable {
 
   const LocationState.unknown() : this._(status: LocationStatus.unknown);
 
-  const LocationState.error() : this._(status: LocationStatus.error);
+  const LocationState.error([Location location = Location.empty])
+      : this._(status: LocationStatus.error, location: location);
 
-  final Location _location;
-
-  double get latitude => _location.latitude;
-
-  double get longitude => _location.longitude;
-
-  double get heading => _location.heading;
-
-  LatLng get latLng => LatLng(
-        latitude: latitude,
-        longitude: longitude,
-      );
+  final Location location;
 
   final LocationStatus status;
 
   @override
-  List<Object> get props => [_location, status];
+  List<Object> get props => [location, status];
+
+  LatLng toLatLng() {
+    return LatLng(
+      latitude: location.latitude,
+      longitude: location.longitude,
+    );
+  }
 }

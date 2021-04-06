@@ -11,6 +11,8 @@ import 'package:provider/provider.dart';
 class MapView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    final point =
+        context.select((SelectedPointCubit cubit) => cubit.state.point);
     return Scaffold(
       extendBodyBehindAppBar: true,
       resizeToAvoidBottomInset: false,
@@ -22,7 +24,10 @@ class MapView extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 SearchAppBar(),
-                PointsBar(),
+                Visibility(
+                  visible: point.isNotEmpty,
+                  child: const PointsBar(),
+                )
               ],
             ),
           )
@@ -30,8 +35,7 @@ class MapView extends StatelessWidget {
       ),
       endDrawer: AppDrawer(),
       floatingActionButton: Visibility(
-        visible: context
-            .select((SelectedPointCubit cubit) => cubit.state.point.isEmpty),
+        visible: point.isEmpty,
         child: const CreatePointButton(),
       ),
     );
@@ -52,41 +56,12 @@ class _MapViewBody extends StatelessWidget {
         builder: (_, state) {
           switch (state.status) {
             case LocationStatus.unknown:
-            case LocationStatus.loaded:
+            case LocationStatus.loading:
+              return const SplashBody();
+            default:
               return MapWidget(
                 pixelRatio: MediaQuery.of(context).devicePixelRatio,
               );
-            case LocationStatus.error:
-              return SplashBody(
-                child: Expanded(
-                  child: Container(
-                    margin: const EdgeInsets.all(32.0),
-                    child: Card(
-                      child: Column(
-                        children: [
-                          Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Text(
-                              'בכדי להמשיך יש להפעיל את שירותי המיקום במכשירך.',
-                              style: theme.textTheme.headline6,
-                              textAlign: TextAlign.center,
-                            ),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: AppButton(
-                              child: const Text('נסה/י שוב'),
-                              onPressed: context.read<LocationCubit>().locate,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                ),
-              );
-            default:
-              return const SplashBody();
           }
         },
       ),

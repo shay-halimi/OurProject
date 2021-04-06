@@ -15,9 +15,10 @@ class CookMiddleware extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final user = context.select((AuthenticationBloc bloc) => bloc.state.user);
+    final unauthenticated = context.select((AuthenticationBloc bloc) =>
+        bloc.state.status == AuthenticationStatus.unauthenticated);
 
-    if (user.isEmpty) {
+    if (unauthenticated) {
       return AuthenticationPage();
     }
 

@@ -19,7 +19,8 @@ class PointWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final center = context.select((LocationCubit cubit) => cubit.state.latLng);
+    final center =
+        context.select((LocationCubit cubit) => cubit.state.toLatLng());
 
     return Card(
       child: Column(

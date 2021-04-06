@@ -6,22 +6,13 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 
 class PointsBar extends StatelessWidget {
-  PointsBar({
+  const PointsBar({
     Key key,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<SelectedPointCubit, SelectedPointState>(
-      buildWhen: (previous, current) => previous.point != current.point,
-      builder: (_, state) {
-        if (state.point.isEmpty) {
-          return Container();
-        }
-
-        return const PointsBarView();
-      },
-    );
+    return const PointsBarView();
   }
 }
 

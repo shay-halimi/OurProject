@@ -92,7 +92,7 @@ class _SearchFieldState extends State<SearchField> {
   @override
   Widget build(BuildContext context) {
     final center =
-        context.select((LocationCubit location) => location.state.latLng);
+        context.select((LocationCubit location) => location.state.toLatLng());
 
     return BlocBuilder<SearchBloc, SearchState>(
       buildWhen: (previous, current) => previous != current,
