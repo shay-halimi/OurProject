@@ -23,7 +23,7 @@ class CookWidget extends StatelessWidget {
       )..load(cookId),
       child: BlocBuilder<CookWidgetCubit, CookWidgetState>(
         buildWhen: (previous, current) => previous != current,
-        builder: (context, state) {
+        builder: (_, state) {
           if (state is CookWidgetLoaded) {
             return CookWidgetView(
               cook: state.cook,

@@ -17,7 +17,7 @@ class CreateUpdateCookPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => CookFormCubit(
+      create: (_) => CookFormCubit(
         cookBloc: context.read<CookBloc>(),
         locationServices: context.read<LocationServices>(),
       ),
@@ -42,7 +42,7 @@ class CookForm extends StatelessWidget {
       ),
       body: BlocListener<CookFormCubit, CookFormState>(
         listenWhen: (previous, current) => previous != current,
-        listener: (context, state) {
+        listener: (_, state) {
           if (state.status.isSubmissionFailure) {
             ScaffoldMessenger.of(context)
               ..hideCurrentSnackBar()
@@ -61,29 +61,22 @@ class CookForm extends StatelessWidget {
             }
           }
         },
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        child: ListView(
+          padding: const EdgeInsets.all(32.0),
           children: [
             const Padding(
               padding: EdgeInsets.all(32.0),
               child: Center(child: _PhotoURLInput()),
             ),
-            Expanded(
-              child: ListView(
-                padding: const EdgeInsets.all(32.0),
-                children: [
-                  const ListTile(
-                    title: _DisplayNameInput(),
-                  ),
-                  const ListTile(
-                    title: _AddressInput(),
-                  ),
-                  Center(
-                    child: _SubmitButton(
-                      cook: cook,
-                    ),
-                  ),
-                ],
+            const ListTile(
+              title: _DisplayNameInput(),
+            ),
+            const ListTile(
+              title: _AddressInput(),
+            ),
+            Center(
+              child: _SubmitButton(
+                cook: cook,
               ),
             ),
           ],
@@ -105,7 +98,7 @@ class _AddressInput extends StatelessWidget {
       child: BlocBuilder<CookFormCubit, CookFormState>(
         buildWhen: (previous, current) =>
             previous.addressInput != current.addressInput,
-        builder: (context, state) {
+        builder: (_, state) {
           return TextFormField(
             key: const Key('_AddressInput'),
             keyboardType: TextInputType.streetAddress,
@@ -137,7 +130,7 @@ class _DisplayNameInput extends StatelessWidget {
       child: BlocBuilder<CookFormCubit, CookFormState>(
         buildWhen: (previous, current) =>
             previous.displayNameInput != current.displayNameInput,
-        builder: (context, state) {
+        builder: (_, state) {
           return TextFormField(
             key: const Key('_DisplayNameInput'),
             keyboardType: TextInputType.text,
@@ -190,7 +183,7 @@ class _SubmitButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<CookFormCubit, CookFormState>(
       buildWhen: (previous, current) => previous.status != current.status,
-      builder: (context, state) {
+      builder: (_, state) {
         return AppButton(
           key: ValueKey(state.status),
           isInProgress: state.status.isSubmissionInProgress,

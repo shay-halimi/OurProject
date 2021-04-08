@@ -50,18 +50,18 @@ class _PhotoURLDialogView extends StatelessWidget {
 
     return BlocConsumer<MediaDialogCubit, MediaDialogState>(
       listenWhen: (previous, current) => previous != current,
-      listener: (context, state) {
+      listener: (_, state) {
         if (state is MediaDialogLoaded) {
-          onPhotoURLChanged(state.photoURL);
+          onPhotoURLChanged(state.url);
         }
       },
       buildWhen: (previous, current) => previous != current,
-      builder: (context, state) {
+      builder: (_, state) {
         return Stack(
           alignment: AlignmentDirectional.bottomEnd,
           children: [
             BlocBuilder<MediaDialogCubit, MediaDialogState>(
-                builder: (context, state) {
+                builder: (_, state) {
               if (state is MediaDialogInitial) {
                 return photoURL.isNotEmpty
                     ? CircleAvatar(
@@ -83,7 +83,7 @@ class _PhotoURLDialogView extends StatelessWidget {
               } else if (state is MediaDialogLoaded) {
                 return CircleAvatar(
                   radius: radius,
-                  backgroundImage: CachedNetworkImageProvider(state.photoURL),
+                  backgroundImage: CachedNetworkImageProvider(state.url),
                 );
               }
 
@@ -92,7 +92,7 @@ class _PhotoURLDialogView extends StatelessWidget {
               );
             }),
             BlocBuilder<MediaDialogCubit, MediaDialogState>(
-                builder: (context, state) {
+                builder: (_, state) {
               if (state is MediaDialogInitial) {
                 return CircleButton(
                   onPressed: () => _pickFile(context),
@@ -163,31 +163,32 @@ class _PhotoURLDialogView extends StatelessWidget {
 
   Future<ImageSource> _showMediaDialog(BuildContext context) {
     return showDialog<ImageSource>(
-        context: context,
-        builder: (context) {
-          return AlertDialog(
-            title: const Text('בחר/י מקור תמונה'),
-            actions: <Widget>[
-              TextButton(
-                child: const Text('בחר/י מהגלריה'),
-                onPressed: () {
-                  Navigator.of(context).pop(ImageSource.gallery);
-                },
-              ),
-              TextButton(
-                child: const Text('צלמ/י תמונה חדשה'),
-                onPressed: () {
-                  Navigator.of(context).pop(ImageSource.camera);
-                },
-              ),
-              TextButton(
-                child: const Text('ביטול'),
-                onPressed: () {
-                  Navigator.of(context).pop();
-                },
-              ),
-            ],
-          );
-        });
+      context: context,
+      builder: (_) {
+        return AlertDialog(
+          title: const Text('בחר/י מקור תמונה'),
+          actions: <Widget>[
+            TextButton(
+              child: const Text('בחר/י מהגלריה'),
+              onPressed: () {
+                Navigator.of(context).pop(ImageSource.gallery);
+              },
+            ),
+            TextButton(
+              child: const Text('צלמ/י תמונה חדשה'),
+              onPressed: () {
+                Navigator.of(context).pop(ImageSource.camera);
+              },
+            ),
+            TextButton(
+              child: const Text('ביטול'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
   }
 }

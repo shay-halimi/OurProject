@@ -13,12 +13,14 @@ class PointsPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final height = MediaQuery.of(context).size.height * 1 / 3;
+
     return Scaffold(
       appBar: AppBar(title: const Text('התפריט שלי')),
       body: BlocBuilder<PointsBloc, PointsState>(
         buildWhen: (previous, current) =>
             previous.cookPoints != current.cookPoints,
-        builder: (context, state) {
+        builder: (_, state) {
           if (state.cookPoints.isEmpty) {
             return const SplashBody(
               child: Text('נראה שעדיין לא פרסמת מאכלים.'),
@@ -34,8 +36,8 @@ class PointsPage extends StatelessWidget {
                     child: Column(
                       children: [
                         MediaWidget(
-                          media: point.media.first,
-                          maxHeight: MediaQuery.of(context).size.height / 3,
+                          url: point.media.first,
+                          maxHeight: height,
                         ),
                         ListTile(
                           isThreeLine: true,

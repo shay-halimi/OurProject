@@ -86,7 +86,7 @@ class _PointsBarViewState extends State<PointsBarView> {
                         items: points.map((point) {
                           return Builder(
                             key: ValueKey(point.hashCode),
-                            builder: (context) {
+                            builder: (_) {
                               return PointWidget(
                                 point: point,
                                 height: _height ?? minHeight,

@@ -11,7 +11,7 @@ class LoginForm extends StatelessWidget {
     return BlocBuilder<LoginCubit, LoginState>(
       buildWhen: (previous, current) =>
           previous.verification != current.verification,
-      builder: (context, state) {
+      builder: (_, state) {
         if (state.verification.isEmpty) {
           return _PhoneNumberForm();
         }
@@ -27,7 +27,7 @@ class _PhoneNumberForm extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocListener<LoginCubit, LoginState>(
       listenWhen: (previous, current) => previous != current,
-      listener: (context, state) {
+      listener: (_, state) {
         if (state.status.isSubmissionFailure) {
           ScaffoldMessenger.of(context)
             ..hideCurrentSnackBar()
@@ -57,7 +57,7 @@ class _PhoneNumberInput extends StatelessWidget {
     return BlocBuilder<LoginCubit, LoginState>(
       buildWhen: (previous, current) =>
           previous.phoneNumberInput != current.phoneNumberInput,
-      builder: (context, state) {
+      builder: (_, state) {
         final initialValue =
             state.phoneNumberInput.pure ? '05' : state.phoneNumberInput.value;
         return Padding(
@@ -97,7 +97,7 @@ class _SendOTPButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<LoginCubit, LoginState>(
       buildWhen: (previous, current) => previous.status != current.status,
-      builder: (context, state) {
+      builder: (_, state) {
         return AppButton(
           key: ValueKey(state.status),
           isInProgress: state.status.isSubmissionInProgress,
@@ -116,7 +116,7 @@ class _OTPForm extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocListener<LoginCubit, LoginState>(
       listenWhen: (previous, current) => previous != current,
-      listener: (context, state) {
+      listener: (_, state) {
         if (state.status.isSubmissionFailure) {
           ScaffoldMessenger.of(context)
             ..hideCurrentSnackBar()
@@ -159,7 +159,7 @@ class _OTPInput extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<LoginCubit, LoginState>(
       buildWhen: (previous, current) => previous.otpInput != current.otpInput,
-      builder: (context, state) {
+      builder: (_, state) {
         return Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16.0),
           child: TextFormField(
@@ -190,7 +190,7 @@ class _ConfirmPhoneNumberButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<LoginCubit, LoginState>(
       buildWhen: (previous, current) => previous.status != current.status,
-      builder: (context, state) {
+      builder: (_, state) {
         return AppButton(
           key: ValueKey(state.status),
           isInProgress: state.status.isSubmissionInProgress,

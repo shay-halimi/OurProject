@@ -1,6 +1,5 @@
 import 'dart:io';
 
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cookpoint/media/media.dart';
 import 'package:cookpoint/theme/theme.dart';
 import 'package:flutter/material.dart';
@@ -45,9 +44,9 @@ class MediaDialogView extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocListener<MediaDialogCubit, MediaDialogState>(
       listenWhen: (previous, current) => previous != current,
-      listener: (context, state) {
+      listener: (_, state) {
         if (state is MediaDialogLoaded) {
-          onMediaChanged({state.photoURL});
+          onMediaChanged({state.url});
         }
       },
       child: Column(
@@ -55,7 +54,7 @@ class MediaDialogView extends StatelessWidget {
           InkWell(
             onTap: () => showDialog<ImageSource>(
                 context: context,
-                builder: (context) {
+                builder: (_) {
                   return AlertDialog(
                     title: const Text('בחר/י מקור תמונה'),
                     actions: <Widget>[
@@ -116,8 +115,9 @@ class MediaDialogView extends StatelessWidget {
             }),
             child: BlocBuilder<MediaDialogCubit, MediaDialogState>(
               buildWhen: (previous, current) => previous != current,
-              builder: (context, state) {
+              builder: (_, state) {
                 final aspectRatio = 16 / 9;
+                final maxHeight = MediaQuery.of(context).size.height / 3;
 
                 if (state is MediaDialogInitial) {
                   return AspectRatio(
@@ -136,15 +136,17 @@ class MediaDialogView extends StatelessWidget {
                               ),
                             ),
                           )
-                        : Image(
-                            image: CachedNetworkImageProvider(media.first),
-                            fit: BoxFit.cover,
+                        : MediaWidget(
+                            url: media.first,
+                            aspectRatio: aspectRatio,
+                            maxHeight: maxHeight,
                           ),
                   );
                 } else if (state is MediaDialogError) {
                   return AspectRatio(
                     aspectRatio: aspectRatio,
                     child: Container(
+                      constraints: BoxConstraints(maxHeight: maxHeight),
                       margin: const EdgeInsets.all(8.0),
                       decoration: BoxDecoration(
                         border: Border.all(),
@@ -162,19 +164,18 @@ class MediaDialogView extends StatelessWidget {
                   return Stack(
                       alignment: AlignmentDirectional.center,
                       children: [
-                        AspectRatio(
+                        MediaWidget(
+                          image: FileImage(state.file),
                           aspectRatio: aspectRatio,
-                          child: Image.file(
-                            state.file,
-                            fit: BoxFit.cover,
-                          ),
+                          maxHeight: maxHeight,
                         ),
                         const CircularProgressIndicator(),
                       ]);
                 } else if (state is MediaDialogLoaded) {
                   return MediaWidget(
-                    media: state.photoURL,
+                    url: state.url,
                     aspectRatio: aspectRatio,
+                    maxHeight: maxHeight,
                   );
                 }
 

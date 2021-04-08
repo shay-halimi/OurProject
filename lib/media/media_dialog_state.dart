@@ -6,9 +6,9 @@ abstract class MediaDialogState {}
 class MediaDialogInitial extends MediaDialogState {}
 
 class MediaDialogLoaded extends MediaDialogState {
-  MediaDialogLoaded(this.photoURL);
+  MediaDialogLoaded(this.url);
 
-  final String photoURL;
+  final String url;
 }
 
 class MediaDialogLoading extends MediaDialogState {

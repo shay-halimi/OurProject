@@ -4,12 +4,15 @@ import 'package:flutter/material.dart';
 class MediaWidget extends StatelessWidget {
   const MediaWidget({
     Key key,
-    @required this.media,
+    this.url,
+    this.image,
     this.aspectRatio = 16 / 9,
     this.maxHeight = double.infinity,
-  }) : super(key: key);
+  })  : assert(url == null || image == null),
+        super(key: key);
 
-  final String media;
+  final String url;
+  final ImageProvider image;
   final double aspectRatio;
   final double maxHeight;
 
@@ -22,16 +25,13 @@ class MediaWidget extends StatelessWidget {
           Expanded(
             child: AspectRatio(
               aspectRatio: aspectRatio,
-              child: Hero(
-                tag: media,
-                child: Image(
-                  image: CachedNetworkImageProvider(media),
-                  fit: BoxFit.cover,
-                  loadingBuilder: (context, child, loadingProgress) {
-                    if (loadingProgress == null) return child;
-                    return const Center(child: CircularProgressIndicator());
-                  },
-                ),
+              child: Image(
+                image: image ?? CachedNetworkImageProvider(url),
+                fit: BoxFit.cover,
+                loadingBuilder: (_, child, loadingProgress) {
+                  if (loadingProgress == null) return child;
+                  return const Center(child: CircularProgressIndicator());
+                },
               ),
             ),
           ),

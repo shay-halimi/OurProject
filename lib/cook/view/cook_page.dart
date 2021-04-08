@@ -25,31 +25,24 @@ class CookPage extends StatelessWidget {
           )
         ],
       ),
-      body: Column(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      body: ListView(
+        padding: const EdgeInsets.all(32.0),
         children: [
           const Padding(
             padding: EdgeInsets.all(32.0),
             child: Center(child: _PhotoURLInput()),
           ),
-          Expanded(
-            child: ListView(
-              padding: const EdgeInsets.all(32.0),
-              children: [
-                ListTile(
-                  title: Text(cook.displayName),
-                  subtitle: const Text('שם לתצוגה'),
-                ),
-                ListTile(
-                  title: Text(cook.address.name),
-                  subtitle: const Text('כתובת'),
-                ),
-                ListTile(
-                  title: Text(cook.phoneNumber.toDisplay()),
-                  subtitle: const Text('מספר טלפון'),
-                ),
-              ],
-            ),
+          ListTile(
+            title: Text(cook.displayName),
+            subtitle: const Text('שם לתצוגה'),
+          ),
+          ListTile(
+            title: Text(cook.address.name),
+            subtitle: const Text('כתובת'),
+          ),
+          ListTile(
+            title: Text(cook.phoneNumber.toDisplay()),
+            subtitle: const Text('מספר טלפון'),
           ),
         ],
       ),

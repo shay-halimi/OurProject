@@ -24,7 +24,7 @@ class PointPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => PointFormCubit(
+      create: (_) => PointFormCubit(
         point: point,
         pointsBloc: context.read<PointsBloc>(),
       ),
@@ -64,7 +64,7 @@ class PointForm extends StatelessWidget {
 
           return showDialog<bool>(
               context: context,
-              builder: (context) {
+              builder: (_) {
                 return AlertDialog(
                   title: const Text('האם לצאת?'),
                   content: const Text('האם לצאת בלי לשמור את השינויים?'),
@@ -87,7 +87,7 @@ class PointForm extends StatelessWidget {
         },
         child: BlocListener<PointFormCubit, PointFormState>(
           listenWhen: (previous, current) => previous != current,
-          listener: (context, state) {
+          listener: (_, state) {
             if (state.status.isSubmissionFailure) {
               ScaffoldMessenger.of(context)
                 ..hideCurrentSnackBar()
@@ -137,7 +137,7 @@ class _DeleteButton extends StatelessWidget {
       tooltip: 'מחק',
       onPressed: () => showDialog<bool>(
           context: context,
-          builder: (context) {
+          builder: (_) {
             final style = theme.textTheme.headline6;
             return AlertDialog(
               title: const Text('האם את/ה בטוח/ה?'),
@@ -193,7 +193,7 @@ class _SubmitButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<PointFormCubit, PointFormState>(
       buildWhen: (previous, current) => previous != current,
-      builder: (context, state) {
+      builder: (_, state) {
         return AppButton(
           isInProgress: state.status.isSubmissionInProgress,
           child: Text(point.isEmpty ? 'פרסם' : 'שמור'),
@@ -217,7 +217,7 @@ class _TagsInput extends StatelessWidget {
       padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
       child: BlocBuilder<PointFormCubit, PointFormState>(
         buildWhen: (previous, current) => previous != current,
-        builder: (context, state) {
+        builder: (_, state) {
           return Row(
             children: [
               for (var tag in Point.defaultTags)
@@ -247,7 +247,7 @@ class _PriceInput extends StatelessWidget {
       child: BlocBuilder<PointFormCubit, PointFormState>(
         buildWhen: (previous, current) =>
             previous.priceInput != current.priceInput,
-        builder: (context, state) {
+        builder: (_, state) {
           return TextFormField(
             key: const Key('_PriceInput'),
             keyboardType: TextInputType.number,
@@ -280,7 +280,7 @@ class _DescriptionInput extends StatelessWidget {
     return BlocBuilder<PointFormCubit, PointFormState>(
       buildWhen: (previous, current) =>
           previous.descriptionInput != current.descriptionInput,
-      builder: (context, state) {
+      builder: (_, state) {
         return Padding(
           padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
           child: TextFormField(
@@ -315,7 +315,7 @@ class _TitleInput extends StatelessWidget {
       child: BlocBuilder<PointFormCubit, PointFormState>(
         buildWhen: (previous, current) =>
             previous.titleInput != current.titleInput,
-        builder: (context, state) {
+        builder: (_, state) {
           return TextFormField(
             key: const Key('_TitleInput'),
             keyboardType: TextInputType.text,

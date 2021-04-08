@@ -28,7 +28,7 @@ class PointWidget extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.all(4.0),
             child: MediaWidget(
-              media: point.media.first,
+              url: point.media.first,
               maxHeight: (height * 1 / 3),
             ),
           ),

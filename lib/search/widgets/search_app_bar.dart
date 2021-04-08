@@ -142,7 +142,7 @@ class _SearchFieldState extends State<SearchField> {
               suggestionsCallback: (pattern) async {
                 return context.read<SearchBloc>().state.results;
               },
-              itemBuilder: (context, suggestion) {
+              itemBuilder: (_, suggestion) {
                 return ListTile(
                   key: ValueKey(suggestion.hashCode),
                   title: Text(suggestion.title),
@@ -151,7 +151,7 @@ class _SearchFieldState extends State<SearchField> {
                   ),
                 );
               },
-              noItemsFoundBuilder: (context) {
+              noItemsFoundBuilder: (_) {
                 return const ListTile(
                   title: Text('אין תוצאות קרובות'),
                 );
