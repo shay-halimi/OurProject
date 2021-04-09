@@ -67,7 +67,8 @@ class CookWidgetView extends StatelessWidget {
           ),
           IconButton(
             icon: const Icon(LineAwesomeIcons.directions),
-            onPressed: () async => await launcher.directions(cook.address),
+            onPressed: () async =>
+                await launcher.directions(context, cook.address),
           ),
         ],
       ),

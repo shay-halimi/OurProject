@@ -22,11 +22,6 @@ class Money {
     double amount,
     Currency currency,
   }) {
-    if ((amount == null || identical(amount, this.amount)) &&
-        (currency == null || identical(currency, this.currency))) {
-      return this;
-    }
-
     return Money(
       amount: amount ?? this.amount,
       currency: currency ?? this.currency,
@@ -75,6 +70,16 @@ class Currency {
   const Currency.fromString(String value) : this._(value: value);
 
   final String value;
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is Currency &&
+          runtimeType == other.runtimeType &&
+          value == other.value;
+
+  @override
+  int get hashCode => value.hashCode;
 
   @override
   String toString() {

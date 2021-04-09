@@ -53,8 +53,8 @@ class LocationCubit extends Cubit<LocationState> {
       /// todo detect user country \ state ..
       /// todo check in preferences.
 
-      /// Tel Avivo
-      return const Location(32.1093, 34.8554);
+      /// Be'er Shevao
+      return const Location(31.2431906939, 34.7931751606);
     }
 
     return location;
