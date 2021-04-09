@@ -10,11 +10,9 @@ class SplashPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        body: Container(
-      color: theme.colorScheme.primary,
-      child: const SplashBody(),
-    ));
+    return const Scaffold(
+      body: SplashBody(),
+    );
   }
 }
 

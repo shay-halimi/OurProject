@@ -49,22 +49,19 @@ class _MapViewBody extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      color: theme.colorScheme.primary,
-      child: BlocBuilder<LocationCubit, LocationState>(
-        buildWhen: (previous, current) => previous.status != current.status,
-        builder: (_, state) {
-          switch (state.status) {
-            case LocationStatus.unknown:
-            case LocationStatus.loading:
-              return const SplashBody();
-            default:
-              return MapWidget(
-                pixelRatio: MediaQuery.of(context).devicePixelRatio,
-              );
-          }
-        },
-      ),
+    return BlocBuilder<LocationCubit, LocationState>(
+      buildWhen: (previous, current) => previous.status != current.status,
+      builder: (_, state) {
+        switch (state.status) {
+          case LocationStatus.unknown:
+          case LocationStatus.loading:
+            return const SplashBody();
+          default:
+            return MapWidget(
+              pixelRatio: MediaQuery.of(context).devicePixelRatio,
+            );
+        }
+      },
     );
   }
 }

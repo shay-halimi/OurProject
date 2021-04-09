@@ -10,28 +10,37 @@ class FirebaseAuthenticationRepository extends AuthenticationRepository {
     firebase_auth.FirebaseAuth firebaseAuth,
   }) : _firebaseAuth = firebaseAuth ?? firebase_auth.FirebaseAuth.instance;
 
+  /// @todo(matan)
+  /// apple app store shit,
+  /// delete this for production.
+  static const duckApple = '+972555555555';
+
   final firebase_auth.FirebaseAuth _firebaseAuth;
 
   @override
   Future<Verification> sendOTP({String phoneNumber}) async {
     final completer = Completer<Verification>();
 
-    await _firebaseAuth.verifyPhoneNumber(
-      phoneNumber: phoneNumber,
-      timeout: const Duration(
-        seconds: 60,
-      ),
-      verificationCompleted: (phoneAuthCredential) async {
-        await _firebaseAuth.signInWithCredential(phoneAuthCredential);
-      },
-      codeSent: (verificationId, forceResendingToken) {
-        completer.complete(Verification(id: verificationId));
-      },
-      verificationFailed: (error) {
-        completer.completeError(error);
-      },
-      codeAutoRetrievalTimeout: (_) {},
-    );
+    if (phoneNumber == duckApple) {
+      await _firebaseAuth.signInAnonymously();
+    } else {
+      await _firebaseAuth.verifyPhoneNumber(
+        phoneNumber: phoneNumber,
+        timeout: const Duration(
+          seconds: 60,
+        ),
+        verificationCompleted: (phoneAuthCredential) async {
+          await _firebaseAuth.signInWithCredential(phoneAuthCredential);
+        },
+        codeSent: (verificationId, forceResendingToken) {
+          completer.complete(Verification(id: verificationId));
+        },
+        verificationFailed: (error) {
+          completer.completeError(error);
+        },
+        codeAutoRetrievalTimeout: (_) {},
+      );
+    }
 
     return completer.future;
   }
@@ -76,7 +85,9 @@ extension on firebase_auth.User {
   User get toUser {
     return User(
       id: uid,
-      phoneNumber: phoneNumber,
+      phoneNumber: phoneNumber.isEmpty
+          ? FirebaseAuthenticationRepository.duckApple
+          : phoneNumber,
     );
   }
 }
