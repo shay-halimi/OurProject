@@ -1,6 +1,7 @@
 import 'package:cookpoint/location/location.dart';
 import 'package:cookpoint/points/points.dart';
 import 'package:cookpoint/search/search.dart';
+import 'package:cookpoint/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_typeahead/flutter_typeahead.dart';
@@ -9,6 +10,9 @@ import 'package:provider/provider.dart';
 class SearchAppBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    final isLoading = context.select(
+        (SearchBloc search) => search.state.status != SearchStatus.loaded);
+
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: Column(
@@ -23,6 +27,15 @@ class SearchAppBar extends StatelessWidget {
               child: Row(
                 children: [
                   const Expanded(child: SearchField()),
+                  if (isLoading)
+                    const Padding(
+                      padding: EdgeInsets.all(4.0),
+                      child: SizedBox(
+                        child: CircularProgressIndicator(),
+                        width: 16,
+                        height: 16,
+                      ),
+                    ),
                   const _DrawerButton(),
                 ],
               ),
@@ -42,22 +55,35 @@ class _TagsFilter extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final tags = context.select((SearchBloc search) => search.state.tags);
+    return BlocBuilder<SearchBloc, SearchState>(
+      buildWhen: (previous, current) => previous != current,
+      builder: (_, state) {
+        if (state.status == SearchStatus.loaded) {
+          return Row(
+            children: [
+              for (var tag in Point.defaultTags)
+                Padding(
+                  padding: const EdgeInsets.only(left: 2.0),
+                  child: InputChip(
+                    elevation: 2.0,
+                    selectedColor: Colors.white,
+                    backgroundColor: Colors.white,
+                    label: Text(
+                      tag,
+                      style: theme.textTheme.bodyText2,
+                    ),
+                    onSelected: (selected) =>
+                        context.read<SearchBloc>().add(SearchTagSelected(tag)),
+                    selected: state.tags.contains(tag),
+                    visualDensity: VisualDensity.compact,
+                  ),
+                ),
+            ],
+          );
+        }
 
-    return Row(
-      children: [
-        for (var tag in Point.defaultTags)
-          Padding(
-            padding: const EdgeInsets.only(left: 2.0),
-            child: InputChip(
-              label: Text(tag),
-              onSelected: (selected) =>
-                  context.read<SearchBloc>().add(SearchTagSelected(tag)),
-              selected: tags.contains(tag),
-              visualDensity: VisualDensity.compact,
-            ),
-          ),
-      ],
+        return Container();
+      },
     );
   }
 }
@@ -94,85 +120,68 @@ class _SearchFieldState extends State<SearchField> {
     final center =
         context.select((LocationCubit location) => location.state.toLatLng());
 
-    return BlocBuilder<SearchBloc, SearchState>(
-      buildWhen: (previous, current) => previous != current,
-      builder: (_, state) {
-        if (state.status == SearchStatus.loaded) {
-          return BlocListener<SelectedPointCubit, SelectedPointState>(
-            listenWhen: (_, state) =>
-                state.point.isEmpty && _focusNode.hasFocus,
-            listener: (_, __) {
-              setState(() {
-                _focusNode.unfocus();
-              });
-            },
-            child: TypeAheadField<Point>(
-              getImmediateSuggestions: false,
-              suggestionsBoxVerticalOffset: 1.0,
-              textFieldConfiguration: TextFieldConfiguration(
-                controller: _controller,
-                focusNode: _focusNode,
-                decoration: InputDecoration(
-                  hintText: 'מה בא לך לאכול?',
-                  suffixIcon: _controller.value.text.isNotEmpty
-                      ? IconButton(
-                          icon: const Icon(Icons.close),
-                          onPressed: () {
-                            setState(() {
-                              _controller.clear();
-                              _focusNode.unfocus();
-                            });
-                            context
-                                .read<SearchBloc>()
-                                .add(const SearchTermCleared());
-                          },
-                        )
-                      : null,
-                  border: InputBorder.none,
-                ),
-                onChanged: (value) {
-                  setState(() {});
-                  context.read<SearchBloc>().add(SearchTermUpdated(value));
-                },
-              ),
-              suggestionsBoxDecoration: SuggestionsBoxDecoration(
-                borderRadius: BorderRadius.circular(8.0),
-                elevation: 0.0,
-              ),
-              suggestionsCallback: (pattern) async {
-                return context.read<SearchBloc>().state.results;
-              },
-              itemBuilder: (_, suggestion) {
-                return ListTile(
-                  key: ValueKey(suggestion.hashCode),
-                  title: Text(suggestion.title),
-                  trailing: Text(
-                    '${suggestion.latLng.toDistance(center)} ק"מ',
-                  ),
-                );
-              },
-              noItemsFoundBuilder: (_) {
-                return const ListTile(
-                  title: Text('אין תוצאות קרובות'),
-                );
-              },
-              onSuggestionSelected: (suggestion) {
-                setState(() {
-                  _controller.text = suggestion.title;
-                });
-                context
-                    .read<SearchBloc>()
-                    .add(SearchTermUpdated(suggestion.title));
-                context.read<SelectedPointCubit>().select(suggestion);
-              },
+    return BlocListener<SelectedPointCubit, SelectedPointState>(
+      listenWhen: (previous, current) => previous.point != current.point,
+      listener: (_, state) {
+        if (state.point.isEmpty && _focusNode.hasFocus) {
+          setState(() {
+            _focusNode.unfocus();
+          });
+        }
+      },
+      child: TypeAheadField<Point>(
+        getImmediateSuggestions: false,
+        suggestionsBoxVerticalOffset: 1.0,
+        textFieldConfiguration: TextFieldConfiguration(
+          controller: _controller,
+          focusNode: _focusNode,
+          decoration: InputDecoration(
+            hintText: 'מה בא לך לאכול?',
+            suffixIcon: _controller.value.text.isNotEmpty
+                ? IconButton(
+                    icon: const Icon(Icons.close),
+                    onPressed: () {
+                      setState(() {
+                        _controller.clear();
+                        _focusNode.unfocus();
+                      });
+                      context.read<SearchBloc>().add(const SearchTermCleared());
+                    },
+                  )
+                : null,
+            border: InputBorder.none,
+          ),
+          onChanged: (value) {
+            setState(() {});
+            context.read<SearchBloc>().add(SearchTermUpdated(value));
+          },
+        ),
+        suggestionsBoxDecoration: SuggestionsBoxDecoration(
+          borderRadius: BorderRadius.circular(8.0),
+          elevation: 0.0,
+        ),
+        suggestionsCallback: (_) async {
+          return context.read<SearchBloc>().state.results;
+        },
+        itemBuilder: (_, point) {
+          return ListTile(
+            key: ValueKey(point.hashCode),
+            title: Text(point.title),
+            trailing: Text(
+              '${point.latLng.toHumanString(center)} ק"מ',
             ),
           );
-        }
-
-        return const Center(
-          child: LinearProgressIndicator(),
-        );
-      },
+        },
+        noItemsFoundBuilder: (_) {
+          return const ListTile(
+            title: Text('אין תוצאות קרובות'),
+          );
+        },
+        onSuggestionSelected: (point) {
+          setState(() {});
+          context.read<SelectedPointCubit>().select(point);
+        },
+      ),
     );
   }
 }

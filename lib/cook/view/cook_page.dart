@@ -41,7 +41,7 @@ class CookPage extends StatelessWidget {
             subtitle: const Text('כתובת'),
           ),
           ListTile(
-            title: Text(cook.phoneNumber.toDisplay()),
+            title: Text(cook.phoneNumber.toHumanString()),
             subtitle: const Text('מספר טלפון'),
           ),
         ],
@@ -75,7 +75,7 @@ class _PhotoURLInput extends StatelessWidget {
 }
 
 extension _XPhoneNumber on String {
-  String toDisplay() {
+  String toHumanString() {
     try {
       return '0${substring(4, 6)}-${substring(6, 9)}-${substring(9)}';
     } on Error {

@@ -221,11 +221,21 @@ class _TagsInput extends StatelessWidget {
           return Row(
             children: [
               for (var tag in Point.defaultTags)
-                InputChip(
-                  label: Text(tag),
-                  onSelected: (selected) =>
-                      context.read<PointFormCubit>().toggleTag(tag),
-                  selected: state.tagsInput.value.contains(tag),
+                Padding(
+                  padding: const EdgeInsets.only(left: 2.0),
+                  child: InputChip(
+                    elevation: 1.0,
+                    selectedColor: Colors.white,
+                    backgroundColor: Colors.white,
+                    label: Text(
+                      tag,
+                      style: theme.textTheme.bodyText2,
+                    ),
+                    onSelected: (selected) =>
+                        context.read<PointFormCubit>().toggleTag(tag),
+                    selected: state.tagsInput.value.contains(tag),
+                    visualDensity: VisualDensity.compact,
+                  ),
                 ),
             ],
           );

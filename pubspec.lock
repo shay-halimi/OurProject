@@ -554,12 +554,12 @@ packages:
     source: hosted
     version: "2.0.1"
   intl:
-    dependency: "direct overridden"
+    dependency: transitive
     description:
       name: intl
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.17.0-nullsafety.2"
+    version: "0.17.0"
   io:
     dependency: transitive
     description:

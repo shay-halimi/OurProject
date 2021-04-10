@@ -89,7 +89,7 @@ class MediaDialogView extends StatelessWidget {
                 final croppedFile = await ImageCropper.cropImage(
                   sourcePath: pickedFile.path,
                   aspectRatioPresets: [
-                    CropAspectRatioPreset.ratio16x9,
+                    CropAspectRatioPreset.square,
                   ],
                   androidUiSettings: const AndroidUiSettings(
                     toolbarTitle: '',
@@ -116,7 +116,7 @@ class MediaDialogView extends StatelessWidget {
             child: BlocBuilder<MediaDialogCubit, MediaDialogState>(
               buildWhen: (previous, current) => previous != current,
               builder: (_, state) {
-                final aspectRatio = 16 / 9;
+                final aspectRatio = MediaWidget.defaultAspectRatio;
                 final maxHeight = MediaQuery.of(context).size.height / 3;
 
                 if (state is MediaDialogInitial) {

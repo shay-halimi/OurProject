@@ -11,8 +11,8 @@ import 'package:provider/provider.dart';
 class MapView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final point =
-        context.select((SelectedPointCubit cubit) => cubit.state.point);
+    final hasPoint = context.select((SelectedPointCubit cubit) =>
+        cubit.state.point.isNotEmpty && cubit.state.count > 1);
     return Scaffold(
       extendBodyBehindAppBar: true,
       resizeToAvoidBottomInset: false,
@@ -25,7 +25,7 @@ class MapView extends StatelessWidget {
               children: [
                 SearchAppBar(),
                 Visibility(
-                  visible: point.isNotEmpty,
+                  visible: hasPoint,
                   child: const PointsBar(),
                 )
               ],
@@ -35,7 +35,7 @@ class MapView extends StatelessWidget {
       ),
       endDrawer: AppDrawer(),
       floatingActionButton: Visibility(
-        visible: point.isEmpty,
+        visible: !hasPoint,
         child: const CreatePointButton(),
       ),
     );

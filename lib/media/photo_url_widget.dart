@@ -18,6 +18,7 @@ class PhotoURLWidget extends StatelessWidget {
   }) : super(key: key);
 
   final String photoURL;
+
   final ValueChanged<String> onPhotoURLChanged;
 
   @override
@@ -40,6 +41,7 @@ class _PhotoURLDialogView extends StatelessWidget {
   }) : super(key: key);
 
   final String photoURL;
+
   final ValueChanged<String> onPhotoURLChanged;
 
   final ImagePicker _picker = ImagePicker();

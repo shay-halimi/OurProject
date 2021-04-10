@@ -25,6 +25,7 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
   }
 
   final PointsBloc _pointsBloc;
+
   StreamSubscription _pointsSubscription;
 
   @override

@@ -15,7 +15,14 @@ class CookWidgetCubit extends Cubit<CookWidgetState> {
         super(CookWidgetInitial());
 
   final CooksRepository _cooksRepository;
+
   StreamSubscription _cookSubscription;
+
+  @override
+  Future<void> close() {
+    _cookSubscription?.cancel();
+    return super.close();
+  }
 
   Future<void> load(String cookId) async {
     emit(CookWidgetLoading(cookId));
@@ -25,11 +32,5 @@ class CookWidgetCubit extends Cubit<CookWidgetState> {
     _cookSubscription = _cooksRepository.cook(cookId).listen((event) {
       emit(CookWidgetLoaded(event));
     });
-  }
-
-  @override
-  Future<void> close() {
-    _cookSubscription?.cancel();
-    return super.close();
   }
 }

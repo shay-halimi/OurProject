@@ -23,8 +23,11 @@ class App extends StatelessWidget {
         super(key: key);
 
   final AuthenticationRepository authenticationRepository;
+
   final PointsRepository pointsRepository;
+
   final LocationServices locationServices;
+
   final CooksRepository cooksRepository;
 
   @override

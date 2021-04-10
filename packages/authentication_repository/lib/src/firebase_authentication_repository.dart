@@ -10,9 +10,8 @@ class FirebaseAuthenticationRepository extends AuthenticationRepository {
     firebase_auth.FirebaseAuth firebaseAuth,
   }) : _firebaseAuth = firebaseAuth ?? firebase_auth.FirebaseAuth.instance;
 
-  /// @todo(matan)
-  /// apple app store shit,
-  /// delete this for production.
+  /// @TODO(Matan) apple app store shit,
+  /// @TODO(Matan) delete this for production.
   static const duckApple = '+972555555555';
 
   final firebase_auth.FirebaseAuth _firebaseAuth;
@@ -85,9 +84,7 @@ extension on firebase_auth.User {
   User get toUser {
     return User(
       id: uid,
-      phoneNumber: phoneNumber.isEmpty
-          ? FirebaseAuthenticationRepository.duckApple
-          : phoneNumber,
+      phoneNumber: phoneNumber ?? FirebaseAuthenticationRepository.duckApple,
     );
   }
 }

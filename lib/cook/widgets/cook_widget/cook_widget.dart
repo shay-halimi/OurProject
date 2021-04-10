@@ -3,7 +3,10 @@ import 'package:cookpoint/cook/cook.dart';
 import 'package:cookpoint/launcher.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:line_awesome_flutter/line_awesome_flutter.dart';
+import 'package:map_launcher/map_launcher.dart' as map_launcher;
+import 'package:map_launcher/map_launcher.dart';
 
 export 'cubit/cubit.dart';
 
@@ -30,7 +33,19 @@ class CookWidget extends StatelessWidget {
             );
           }
 
-          return const LinearProgressIndicator();
+          return Stack(
+            alignment: AlignmentDirectional.bottomCenter,
+            children: [
+              const ListTile(
+                visualDensity: VisualDensity.compact,
+                leading: CircleAvatar(),
+                title: Text(''),
+                subtitle: Text(''),
+                trailing: Icon(LineAwesomeIcons.vertical_ellipsis),
+              ),
+              const LinearProgressIndicator(),
+            ],
+          );
         },
       ),
     );
@@ -54,24 +69,117 @@ class CookWidgetView extends StatelessWidget {
       ),
       title: Text(cook.displayName),
       subtitle: Text(cook.address.name),
-      trailing: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          IconButton(
-            icon: const Icon(LineAwesomeIcons.what_s_app),
-            onPressed: () async => await launcher.whatsapp(cook.phoneNumber),
+      onTap: () => _onTap(context),
+      trailing: const Icon(LineAwesomeIcons.vertical_ellipsis),
+    );
+  }
+
+  Future<void> _onTap(BuildContext context) async {
+    return showModalBottomSheet<map_launcher.AvailableMap>(
+      context: context,
+      builder: (BuildContext context) {
+        return _ActionsDialog(cook: cook);
+      },
+    );
+  }
+}
+
+class _ActionsDialog extends StatelessWidget {
+  const _ActionsDialog({
+    Key key,
+    @required this.cook,
+  }) : super(key: key);
+
+  final Cook cook;
+
+  static const iconSize = 24.0;
+
+  @override
+  Widget build(BuildContext context) {
+    return FutureBuilder<List<AvailableMap>>(
+      future: map_launcher.MapLauncher.installedMaps,
+      builder: (_, snapshot) {
+        return SafeArea(
+          child: SingleChildScrollView(
+            child: Container(
+              child: snapshot.hasData
+                  ? Wrap(
+                      children: [
+                        _phone(context),
+                        _whatsapp(context),
+                        for (var map in snapshot.data) _map(context, map),
+                      ],
+                    )
+                  : const Padding(
+                      padding: EdgeInsets.all(30.0),
+                      child: Center(child: CircularProgressIndicator()),
+                    ),
+            ),
           ),
-          IconButton(
-            icon: const Icon(LineAwesomeIcons.phone),
-            onPressed: () async => await launcher.call(cook.phoneNumber),
-          ),
-          IconButton(
-            icon: const Icon(LineAwesomeIcons.directions),
-            onPressed: () async =>
-                await launcher.directions(context, cook.address),
-          ),
-        ],
+        );
+      },
+    );
+  }
+
+  Widget _map(BuildContext context, map_launcher.AvailableMap map) {
+    return ListTile(
+      title: Text(map.mapName),
+      leading: SvgPicture.asset(
+        map.icon,
+        height: iconSize,
+        width: iconSize,
+      ),
+      onTap: () async {
+        await map
+            .showMarker(
+              coords: map_launcher.Coords(
+                cook.address.latitude,
+                cook.address.longitude,
+              ),
+              title: cook.address.name,
+            )
+            .then((value) => Navigator.of(context).pop());
+      },
+    );
+  }
+
+  Widget _whatsapp(BuildContext context) {
+    return ListTile(
+      onTap: () async {
+        await launcher
+            .whatsapp(cook.phoneNumber)
+            .then((_) => Navigator.of(context).pop());
+      },
+      title: const Text('WhatsApp'),
+      leading: const Icon(
+        LineAwesomeIcons.what_s_app,
+        size: iconSize,
       ),
     );
+  }
+
+  Widget _phone(BuildContext context) {
+    return ListTile(
+      onTap: () async {
+        await launcher
+            .call(cook.phoneNumber)
+            .then((_) => Navigator.of(context).pop());
+      },
+      title: Text(cook.phoneNumber.toHumanString()),
+      leading: const Icon(
+        LineAwesomeIcons.phone,
+        size: iconSize,
+      ),
+    );
+  }
+}
+
+extension _XPhoneNumber on String {
+  String toHumanString() {
+    try {
+      return '0${substring(4, 6)}-${substring(6, 9)}-${substring(9)}';
+    } on Error {
+      return toString();
+    }
   }
 }

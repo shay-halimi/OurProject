@@ -29,10 +29,11 @@ class LocationCubit extends Cubit<LocationState> {
     });
   }
 
-  final LocationServices _locationServices;
-  StreamSubscription<Location> _locationSubscription;
-
   final CookBloc _cookBloc;
+
+  final LocationServices _locationServices;
+
+  StreamSubscription<Location> _locationSubscription;
 
   @override
   Future<void> close() {
@@ -50,8 +51,8 @@ class LocationCubit extends Cubit<LocationState> {
     final location = _cookBloc.state.cook.address.toLocation();
 
     if (location.isEmpty) {
-      /// todo detect user country \ state ..
-      /// todo check in preferences.
+      /// @TODO(Matan) detect user country \ state ..
+      /// @TODO(Matan) check in preferences.
 
       /// Be'er Shevao
       return const Location(31.2431906939, 34.7931751606);

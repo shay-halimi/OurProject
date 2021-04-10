@@ -27,6 +27,7 @@ class PointsBarView extends StatefulWidget {
 
 class _PointsBarViewState extends State<PointsBarView> {
   final CarouselController _carouselController = CarouselController();
+
   final PanelController _panelController = PanelController();
 
   double _height;
@@ -87,9 +88,11 @@ class _PointsBarViewState extends State<PointsBarView> {
                           return Builder(
                             key: ValueKey(point.hashCode),
                             builder: (_) {
-                              return PointWidget(
+                              return PointCard(
                                 point: point,
                                 height: _height ?? minHeight,
+                                minHeight: minHeight,
+                                maxHeight: maxHeight,
                               );
                             },
                           );

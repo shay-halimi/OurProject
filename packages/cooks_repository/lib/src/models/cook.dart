@@ -28,9 +28,13 @@ class Cook {
   }
 
   final String id;
+
   final String displayName;
+
   final String photoURL;
+
   final String phoneNumber;
+
   final Address address;
 
   Cook copyWith({

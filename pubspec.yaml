@@ -3,7 +3,7 @@ description: Cook Here, There, Everywhere.
 
 publish_to: 'none'
 
-version: 1.0.0+48
+version: 1.0.0+490
 
 environment:
   sdk: ">=2.7.0 <3.0.0"
@@ -46,9 +46,6 @@ dependencies:
     path: packages/points_repository
   cooks_repository:
     path: packages/cooks_repository
-
-dependency_overrides:
-  intl: '>=0.17.0-nullsafety.2 <= 0.17.0-nullsafety.2'
 
 dev_dependencies:
   flutter_test:

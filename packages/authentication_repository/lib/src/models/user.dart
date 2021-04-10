@@ -8,6 +8,7 @@ class User extends Equatable {
   }) : assert(id != null);
 
   final String id;
+
   final String phoneNumber;
 
   static const empty = User(

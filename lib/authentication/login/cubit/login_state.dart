@@ -9,8 +9,11 @@ class LoginState extends Equatable {
   });
 
   final PhoneNumberInput phoneNumberInput;
+
   final OTPInput otpInput;
+
   final Verification verification;
+
   final FormzStatus status;
 
   @override
@@ -43,7 +46,7 @@ class PhoneNumberInput
     r'^05\d{8}$',
   );
 
-  /// @todo(matan) migrate to https://github.com/google/libphonenumber
+  /// @TODO(Matan) migrate to https://github.com/google/libphonenumber
   @override
   PhoneNumberInputValidationError validator(String value) {
     return _phoneNumberRegExp.hasMatch(value)

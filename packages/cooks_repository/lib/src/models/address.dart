@@ -19,7 +19,9 @@ class Address {
   }
 
   final String name;
+
   final double latitude;
+
   final double longitude;
 
   static const empty = Address(

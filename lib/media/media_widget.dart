@@ -6,10 +6,15 @@ class MediaWidget extends StatelessWidget {
     Key key,
     this.url,
     this.image,
-    this.aspectRatio = 16 / 9,
+    this.aspectRatio = defaultAspectRatio,
     this.maxHeight = double.infinity,
-  })  : assert(url == null || image == null),
+  })  : assert(
+          url == null || image == null,
+          'can\'t have both image and a url.',
+        ),
         super(key: key);
+
+  static const defaultAspectRatio = 1 / 1;
 
   final String url;
   final ImageProvider image;
@@ -29,8 +34,9 @@ class MediaWidget extends StatelessWidget {
                 image: image ?? CachedNetworkImageProvider(url),
                 fit: BoxFit.cover,
                 loadingBuilder: (_, child, loadingProgress) {
-                  if (loadingProgress == null) return child;
-                  return const Center(child: CircularProgressIndicator());
+                  return loadingProgress == null
+                      ? child
+                      : const Center(child: CircularProgressIndicator());
                 },
               ),
             ),

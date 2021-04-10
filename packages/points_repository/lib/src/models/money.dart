@@ -16,6 +16,7 @@ class Money {
   }
 
   final double amount;
+
   final Currency currency;
 
   Money copyWith({
@@ -51,6 +52,12 @@ class Money {
     };
   }
 
+  String toHumanString() {
+    /// @TODO(Matan) find a better place for this.
+    /// @TODO(Matan) different currencies have different print format.
+    return '${amount.toStringAsFixed(2)} ${currency.symbol}';
+  }
+
   static const empty = Money(amount: 0, currency: Currency.unknown());
 
   bool get isEmpty => this == empty;
@@ -61,25 +68,29 @@ class Money {
 class Currency {
   const Currency._({
     @required this.value,
+    this.symbol = '',
   }) : assert(value != null);
 
   const Currency.unknown() : this._(value: 'XXX');
 
-  const Currency.nis() : this._(value: 'NIS');
+  const Currency.nis() : this._(value: 'NIS', symbol: '₪');
 
   const Currency.fromString(String value) : this._(value: value);
 
   final String value;
+
+  final String symbol;
 
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
       other is Currency &&
           runtimeType == other.runtimeType &&
-          value == other.value;
+          value == other.value &&
+          symbol == other.symbol;
 
   @override
-  int get hashCode => value.hashCode;
+  int get hashCode => value.hashCode ^ symbol.hashCode;
 
   @override
   String toString() {

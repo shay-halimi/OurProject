@@ -30,9 +30,11 @@ class CookBloc extends Bloc<CookEvent, CookState> {
   }
 
   final AuthenticationBloc _authenticationBloc;
+
   final CooksRepository _cooksRepository;
 
   StreamSubscription _authSubscription;
+
   StreamSubscription<Cook> _cookSubscription;
 
   @override

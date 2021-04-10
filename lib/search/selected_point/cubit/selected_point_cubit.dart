@@ -24,21 +24,23 @@ class SelectedPointCubit extends Cubit<SelectedPointState> {
   }
 
   final SearchBloc _searchBloc;
+
   StreamSubscription _searchBlocSubscription;
-
-  void select(Point point) {
-    emit(state.copyWith(
-      point: point,
-    ));
-  }
-
-  void clear() {
-    select(Point.empty);
-  }
 
   @override
   Future<void> close() {
     _searchBlocSubscription?.cancel();
     return super.close();
+  }
+
+  void select(Point point) {
+    emit(state.copyWith(
+      point: point,
+      count: point.isEmpty ? state.count : state.count + 1,
+    ));
+  }
+
+  void clear() {
+    select(Point.empty);
   }
 }

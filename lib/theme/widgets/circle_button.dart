@@ -9,7 +9,9 @@ class CircleButton extends StatelessWidget {
   }) : super(key: key);
 
   final VoidCallback onPressed;
+
   final Widget child;
+
   final Color fillColor;
 
   @override

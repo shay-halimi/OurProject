@@ -29,9 +29,11 @@ class PointsBloc extends Bloc<PointsEvent, PointsState> {
   }
 
   final PointsRepository _pointsRepository;
+
   final CookBloc _cookBloc;
 
   StreamSubscription<List<Point>> _nearbyPointsSubscription;
+
   StreamSubscription<List<Point>> _cookPointsSubscription;
 
   StreamSubscription<CookState> _cookSubscription;

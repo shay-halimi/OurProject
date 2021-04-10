@@ -13,7 +13,7 @@ class PointsPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final height = MediaQuery.of(context).size.height * 1 / 3;
+    final maxHeight = MediaQuery.of(context).size.height * 1 / 3;
 
     return Scaffold(
       appBar: AppBar(title: const Text('התפריט שלי')),
@@ -37,7 +37,7 @@ class PointsPage extends StatelessWidget {
                       children: [
                         MediaWidget(
                           url: point.media.first,
-                          maxHeight: height,
+                          maxHeight: maxHeight,
                         ),
                         ListTile(
                           isThreeLine: true,

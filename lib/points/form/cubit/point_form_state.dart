@@ -11,9 +11,13 @@ class PointFormState extends Equatable {
   });
 
   final TitleInput titleInput;
+
   final DescriptionInput descriptionInput;
+
   final PriceInput priceInput;
+
   final MediaInput mediaInput;
+
   final TagsInput tagsInput;
 
   final FormzStatus status;

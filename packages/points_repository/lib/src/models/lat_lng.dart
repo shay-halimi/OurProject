@@ -18,6 +18,7 @@ class LatLng {
   }
 
   final double latitude;
+
   final double longitude;
 
   LatLng copyWith({
@@ -75,7 +76,8 @@ class LatLng {
     }
   }
 
-  String toDistance(LatLng other) {
+  String toHumanString(LatLng other) {
+    /// @TODO(Matan) find a better place for this.
     return distanceInKM(other).toStringAsFixed(1);
   }
 }
