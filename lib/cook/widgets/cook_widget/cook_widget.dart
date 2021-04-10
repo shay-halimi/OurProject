@@ -28,54 +28,32 @@ class CookWidget extends StatelessWidget {
       child: BlocBuilder<CookWidgetCubit, CookWidgetState>(
         buildWhen: (previous, current) => previous != current,
         builder: (_, state) {
-          if (state is CookWidgetLoaded) {
-            return CookWidgetView(
-              cook: state.cook,
-            );
-          }
+          final cook = state is CookWidgetLoaded ? state.cook : Cook.empty;
 
           return Stack(
             alignment: AlignmentDirectional.bottomCenter,
             children: [
-              const ListTile(
+              ListTile(
                 visualDensity: VisualDensity.compact,
-                leading: CircleAvatar(),
-                title: Text(''),
-                subtitle: Text(''),
-                trailing: Icon(LineAwesomeIcons.vertical_ellipsis),
+                leading: CircleAvatar(
+                  backgroundImage: cook.isEmpty
+                      ? null
+                      : CachedNetworkImageProvider(cook.photoURL),
+                ),
+                title: Text(cook.displayName),
+                subtitle: Text(cook.address.name),
+                onTap: cook.isEmpty ? null : () => _onTap(context, cook),
+                trailing: const Icon(LineAwesomeIcons.chevron_circle_left),
               ),
-              const LinearProgressIndicator(),
+              if (cook.isEmpty) const LinearProgressIndicator(),
             ],
           );
         },
       ),
     );
   }
-}
 
-class CookWidgetView extends StatelessWidget {
-  const CookWidgetView({
-    Key key,
-    @required this.cook,
-  }) : super(key: key);
-
-  final Cook cook;
-
-  @override
-  Widget build(BuildContext context) {
-    return ListTile(
-      visualDensity: VisualDensity.compact,
-      leading: CircleAvatar(
-        backgroundImage: CachedNetworkImageProvider(cook.photoURL),
-      ),
-      title: Text(cook.displayName),
-      subtitle: Text(cook.address.name),
-      onTap: () => _onTap(context),
-      trailing: const Icon(LineAwesomeIcons.vertical_ellipsis),
-    );
-  }
-
-  Future<void> _onTap(BuildContext context) async {
+  Future<void> _onTap(BuildContext context, Cook cook) async {
     return showModalBottomSheet<map_launcher.AvailableMap>(
       context: context,
       builder: (BuildContext context) {

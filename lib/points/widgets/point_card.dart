@@ -15,7 +15,6 @@ class PointCard extends StatelessWidget {
     @required this.height,
     @required this.minHeight,
     @required this.maxHeight,
-    this.elevation = 4.0,
   }) : super(key: key);
 
   final Point point;
@@ -26,19 +25,16 @@ class PointCard extends StatelessWidget {
 
   final double maxHeight;
 
-  final double elevation;
-
   @override
   Widget build(BuildContext context) {
     final center =
         context.select((LocationCubit cubit) => cubit.state.toLatLng());
 
     return Card(
-      elevation: elevation,
       child: Column(
         children: [
           Container(
-            constraints: BoxConstraints(maxHeight: _mediaHeight),
+            constraints: BoxConstraints(maxHeight: _mediaMaxHeight),
             child: Padding(
               padding: const EdgeInsets.all(4.0),
               child: Column(
@@ -116,11 +112,12 @@ class PointCard extends StatelessWidget {
     );
   }
 
-  double get _mediaHeight {
-    final min = minHeight - (elevation * 2);
+  double get _mediaMaxHeight {
+    final padding = 8.0;
+    final min = minHeight;
     final max = height * 0.6;
 
-    return height != minHeight && max > min ? max : min;
+    return (height != minHeight && max > min ? max : min) - padding;
   }
 
   bool get _isCookVisible =>
