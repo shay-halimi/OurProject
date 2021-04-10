@@ -1,5 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cookpoint/cook/cook.dart';
+import 'package:cookpoint/humanz.dart';
 import 'package:cookpoint/launcher.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -165,21 +166,11 @@ class _ActionsDialog extends StatelessWidget {
             .call(cook.phoneNumber)
             .then((_) => Navigator.of(context).pop());
       },
-      title: Text(cook.phoneNumber.toHumanString()),
+      title: Text(humanz.phoneNumber(cook.phoneNumber)),
       leading: const Icon(
         LineAwesomeIcons.phone,
         size: iconSize,
       ),
     );
-  }
-}
-
-extension _XPhoneNumber on String {
-  String toHumanString() {
-    try {
-      return '0${substring(4, 6)}-${substring(6, 9)}-${substring(9)}';
-    } on Error {
-      return toString();
-    }
   }
 }

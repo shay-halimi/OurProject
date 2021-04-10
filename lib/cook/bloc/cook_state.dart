@@ -6,7 +6,7 @@ class CookState extends Equatable {
   const CookState._({
     this.cook = Cook.empty,
     this.status = CookStatus.unknown,
-  });
+  }) : assert(cook != null);
 
   const CookState.loading() : this._(status: CookStatus.loading);
 

@@ -6,7 +6,7 @@ class LoginState extends Equatable {
     this.otpInput = const OTPInput.pure(),
     this.verification = Verification.empty,
     this.status = FormzStatus.pure,
-  });
+  }) : assert(verification != null);
 
   final PhoneNumberInput phoneNumberInput;
 

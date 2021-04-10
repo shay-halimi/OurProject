@@ -75,9 +75,4 @@ class LatLng {
                   2));
     }
   }
-
-  String toHumanString(LatLng other) {
-    /// @TODO(Matan) find a better place for this.
-    return distanceInKM(other).toStringAsFixed(1);
-  }
 }

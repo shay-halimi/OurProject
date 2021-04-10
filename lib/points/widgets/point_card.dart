@@ -1,4 +1,5 @@
 import 'package:cookpoint/cook/cook.dart';
+import 'package:cookpoint/humanz.dart';
 import 'package:cookpoint/location/location.dart';
 import 'package:cookpoint/media/media.dart';
 import 'package:cookpoint/points/points.dart';
@@ -59,12 +60,12 @@ class PointCard extends StatelessWidget {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            TagsWidget(tags: {
-                              '${point.latLng.toHumanString(center)} ק"מ',
-                              ...point.tags
+                            TagsLine(tags: {
+                              humanz.distance(point.latLng, center),
+                              ...point.tags,
                             }),
                             Text(
-                              '${point.price.toHumanString()}',
+                              humanz.money(point.price),
                               style: theme.textTheme.headline6
                                   .copyWith(fontWeight: FontWeight.w300),
                             ),
@@ -106,7 +107,10 @@ class PointCard extends StatelessWidget {
               ],
             ),
           ),
-          if (isOpen) CookWidget(cookId: point.cookId),
+          Visibility(
+            visible: _isCookVisible,
+            child: CookWidget(cookId: point.cookId),
+          ),
         ],
       ),
     );
@@ -116,10 +120,9 @@ class PointCard extends StatelessWidget {
     final min = minHeight - (elevation * 2);
     final max = height * 0.6;
 
-    return isExpanded && max > min ? max : min;
+    return height != minHeight && max > min ? max : min;
   }
 
-  bool get isExpanded => height != minHeight;
-
-  bool get isOpen => height == maxHeight;
+  bool get _isCookVisible =>
+      height > (minHeight + ((maxHeight - minHeight) * 0.6));
 }

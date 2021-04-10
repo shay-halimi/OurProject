@@ -85,7 +85,7 @@ class PointFormCubit extends Cubit<PointFormState> {
   void changePrice(String value) {
     final priceInput = PriceInput.dirty(Money(
       amount: (num.tryParse(value) ?? -1).toDouble(),
-      currency: const Currency.nis(),
+      currency: Currency.ils,
     ));
 
     emit(state.copyWith(

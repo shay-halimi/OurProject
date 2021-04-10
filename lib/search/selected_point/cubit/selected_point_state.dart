@@ -4,7 +4,8 @@ class SelectedPointState extends Equatable {
   const SelectedPointState({
     this.point = Point.empty,
     this.count = 0,
-  }) : assert(point != null);
+  })  : assert(point != null),
+        assert(count != null);
 
   final Point point;
 

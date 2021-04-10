@@ -5,7 +5,8 @@ class User extends Equatable {
   const User({
     @required this.id,
     this.phoneNumber = '',
-  }) : assert(id != null);
+  })  : assert(id != null),
+        assert(phoneNumber != null);
 
   final String id;
 

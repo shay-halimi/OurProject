@@ -1,4 +1,5 @@
 import 'package:cookpoint/cook/cook.dart';
+import 'package:cookpoint/humanz.dart';
 import 'package:cookpoint/media/media.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -41,7 +42,7 @@ class CookPage extends StatelessWidget {
             subtitle: const Text('כתובת'),
           ),
           ListTile(
-            title: Text(cook.phoneNumber.toHumanString()),
+            title: Text(humanz.phoneNumber(cook.phoneNumber)),
             subtitle: const Text('מספר טלפון'),
           ),
         ],
@@ -71,15 +72,5 @@ class _PhotoURLInput extends StatelessWidget {
         );
       },
     );
-  }
-}
-
-extension _XPhoneNumber on String {
-  String toHumanString() {
-    try {
-      return '0${substring(4, 6)}-${substring(6, 9)}-${substring(9)}';
-    } on Error {
-      return toString();
-    }
   }
 }

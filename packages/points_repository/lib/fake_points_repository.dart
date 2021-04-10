@@ -30,15 +30,9 @@ class FakePointsRepository extends PointsRepository {
     emit();
   }
 
-  void emit() {
-    for (var listener in _listeners) listener.add(_points);
-  }
-
   @override
   Stream<List<Point>> near({LatLng latLng, num radiusInKM = 3.14}) async* {
-    await Future<void>.delayed(const Duration(seconds: 1));
-
-    for (var i = 0; i <= 30; i++) {
+    for (var i = 0; i <= 2500; i++) {
       await create(_randPoint.copyWith(
         latLng: LatLng(
           latitude: latLng.latitude + _randKm,
@@ -52,10 +46,8 @@ class FakePointsRepository extends PointsRepository {
 
   @override
   Stream<List<Point>> byCookId(String cookId) async* {
-    await Future<void>.delayed(const Duration(seconds: 1));
-
     if (_points.where((point) => point.cookId == cookId).isEmpty) {
-      for (var i = 0; i <= 3; i++) {
+      for (var i = 0; i <= rand.nextInt(2); i++) {
         await create(_randPoint.copyWith(
           cookId: cookId,
         ));
@@ -79,6 +71,10 @@ class FakePointsRepository extends PointsRepository {
     });
   }
 
+  void emit() {
+    for (var listener in _listeners) listener.add(_points);
+  }
+
   Point get _randPoint {
     final fake = [
       Point.empty.copyWith(
@@ -87,7 +83,7 @@ class FakePointsRepository extends PointsRepository {
             '\n'
             'לפרטים ‏נוספים ‏אפשר ‏להתקשר ‏או ‏לשלוח ‏הודעה ‏לוואטסאפ',
         media: {
-          'https://firebasestorage.googleapis.com/v0/b/flutterapp-8f8db.appspot.com/o/gallery%2F6b81a970-8dec-11eb-9240-0fec2dd2b58d?alt=media&token=413ca2ec-efee-4e8a-9bd3-c880e7ebf6c5'
+          'https://firebasestorage.googleapis.com/v0/b/flutterapp-8f8db.appspot.com/o/gallery%2F23f92010-99bd-11eb-b143-6f1872e3afc6?alt=media&token=922a5aa8-49d8-4361-98de-194acc3b8eaf'
         },
       ),
       Point.empty.copyWith(
@@ -100,7 +96,7 @@ class FakePointsRepository extends PointsRepository {
 הזמנות עד יום חמישי ב18:00
 ניתן לפנות בוואצאפ או בטלפון ''',
         media: {
-          'https://firebasestorage.googleapis.com/v0/b/flutterapp-8f8db.appspot.com/o/gallery%2F273316f0-8dec-11eb-9240-0fec2dd2b58d?alt=media&token=b9213ba2-ffa8-41c4-9911-97f5069edf26'
+          'https://firebasestorage.googleapis.com/v0/b/flutterapp-8f8db.appspot.com/o/gallery%2F8478c220-99bc-11eb-b58d-4be2c58fae05?alt=media&token=c91a5dca-903e-4fb7-a0a3-617add1e321e'
         },
       ),
       Point.empty.copyWith(
@@ -120,7 +116,7 @@ class FakePointsRepository extends PointsRepository {
 תמר 👍🏼🙏
  ''',
         media: {
-          'https://firebasestorage.googleapis.com/v0/b/flutterapp-8f8db.appspot.com/o/gallery%2F66b17410-921b-11eb-b9a6-6bc3d7477c4a?alt=media&token=1ea07f6e-6b6c-4c2a-8ba7-14d1cf2b564c'
+          'https://firebasestorage.googleapis.com/v0/b/flutterapp-8f8db.appspot.com/o/gallery%2F6d1fe400-99bc-11eb-b58d-4be2c58fae05?alt=media&token=a24f8606-7d4b-449d-a4e6-b505ba6fdf19'
         },
       ),
       Point.empty.copyWith(
@@ -128,7 +124,7 @@ class FakePointsRepository extends PointsRepository {
         description: 'קינוחים אישיים חמים היישר מהתנור עם המון אהבה ‏😊‎'
             'לפרטים ‏נוספים ‏אפשר ‏להתקשר ‏או ‏לשלוח ‏הודעה ‏לוואטסאפ ‏',
         media: {
-          'https://firebasestorage.googleapis.com/v0/b/flutterapp-8f8db.appspot.com/o/gallery%2F51979920-8dec-11eb-9240-0fec2dd2b58d?alt=media&token=cf8e2327-594b-4f68-830c-b4ce0778317c'
+          'https://firebasestorage.googleapis.com/v0/b/flutterapp-8f8db.appspot.com/o/gallery%2Fa1043140-99bc-11eb-b58d-4be2c58fae05?alt=media&token=fdbfbc3c-b6b7-467d-b419-4133e6f18e51'
         },
       ),
     ];
@@ -138,7 +134,7 @@ class FakePointsRepository extends PointsRepository {
       cookId: rand.nextInt(999999999).toString(),
       price: Money(
         amount: 10 + (30 * rand.nextDouble()).floorToDouble(),
-        currency: const Currency.nis(),
+        currency: Currency.unknown,
       ),
       tags: Point.defaultTags.where((_) => rand.nextBool()).toSet(),
     );

@@ -1,3 +1,4 @@
+import 'package:cookpoint/humanz.dart';
 import 'package:cookpoint/location/location.dart';
 import 'package:cookpoint/points/points.dart';
 import 'package:cookpoint/search/search.dart';
@@ -167,9 +168,7 @@ class _SearchFieldState extends State<SearchField> {
           return ListTile(
             key: ValueKey(point.hashCode),
             title: Text(point.title),
-            trailing: Text(
-              '${point.latLng.toHumanString(center)} ק"מ',
-            ),
+            trailing: Text(humanz.distance(point.latLng, center)),
           );
         },
         noItemsFoundBuilder: (_) {

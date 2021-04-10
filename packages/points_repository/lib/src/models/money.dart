@@ -52,45 +52,37 @@ class Money {
     };
   }
 
-  String toHumanString() {
-    /// @TODO(Matan) find a better place for this.
-    /// @TODO(Matan) different currencies have different print format.
-    return '${amount.toStringAsFixed(2)} ${currency.symbol}';
-  }
-
-  static const empty = Money(amount: 0, currency: Currency.unknown());
+  static const empty = Money(amount: 0, currency: Currency.unknown);
 
   bool get isEmpty => this == empty;
 
   bool get isNotEmpty => !isEmpty;
 }
 
+/// @TODO(Matan) follow ISO 4217
+/// @TODO(Matan) see https://www.currency-iso.org/dam/downloads/lists/list_one.xml .
 class Currency {
   const Currency._({
     @required this.value,
-    this.symbol = '',
   }) : assert(value != null);
-
-  const Currency.unknown() : this._(value: 'XXX');
-
-  const Currency.nis() : this._(value: 'NIS', symbol: '₪');
 
   const Currency.fromString(String value) : this._(value: value);
 
-  final String value;
+  static const Currency unknown = Currency.fromString('XXX');
 
-  final String symbol;
+  static const Currency ils = Currency.fromString('ILS');
+
+  final String value;
 
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
       other is Currency &&
           runtimeType == other.runtimeType &&
-          value == other.value &&
-          symbol == other.symbol;
+          value == other.value;
 
   @override
-  int get hashCode => value.hashCode ^ symbol.hashCode;
+  int get hashCode => value.hashCode;
 
   @override
   String toString() {
