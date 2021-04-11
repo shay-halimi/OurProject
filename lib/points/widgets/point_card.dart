@@ -3,7 +3,6 @@ import 'package:cookpoint/humanz.dart';
 import 'package:cookpoint/location/location.dart';
 import 'package:cookpoint/media/media.dart';
 import 'package:cookpoint/points/points.dart';
-import 'package:cookpoint/theme/theme.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -29,6 +28,8 @@ class PointCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final center =
         context.select((LocationCubit cubit) => cubit.state.toLatLng());
+
+    final textTheme = Theme.of(context).textTheme;
 
     return Card(
       child: Column(
@@ -62,7 +63,7 @@ class PointCard extends StatelessWidget {
                             }),
                             Text(
                               humanz.money(point.price),
-                              style: theme.textTheme.headline6
+                              style: textTheme.headline6
                                   .copyWith(fontWeight: FontWeight.w300),
                             ),
                           ],
@@ -72,7 +73,7 @@ class PointCard extends StatelessWidget {
                             Expanded(
                               child: Text(
                                 point.title,
-                                style: theme.textTheme.headline6,
+                                style: textTheme.headline6,
                                 maxLines: 2,
                                 overflow: TextOverflow.ellipsis,
                               ),
@@ -95,7 +96,7 @@ class PointCard extends StatelessWidget {
                     Expanded(
                       child: Text(
                         point.description,
-                        style: theme.textTheme.bodyText2,
+                        style: textTheme.bodyText2,
                       ),
                     ),
                   ],

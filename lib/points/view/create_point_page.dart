@@ -45,8 +45,8 @@ class _TooManyPointsPage extends StatelessWidget {
               children: [
                 Expanded(
                   child: Text(
-                    'אין אפשרות להוסיף יותר משלושה מאכלים כרגע',
-                    style: theme.textTheme.headline6,
+                    'אין אפשרות לפרסם יותר משלושה מאכלים כרגע',
+                    style: Theme.of(context).textTheme.headline6,
                     textAlign: TextAlign.center,
                   ),
                 ),

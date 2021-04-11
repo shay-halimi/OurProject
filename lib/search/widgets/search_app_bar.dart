@@ -2,7 +2,6 @@ import 'package:cookpoint/humanz.dart';
 import 'package:cookpoint/location/location.dart';
 import 'package:cookpoint/points/points.dart';
 import 'package:cookpoint/search/search.dart';
-import 'package:cookpoint/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_typeahead/flutter_typeahead.dart';
@@ -18,6 +17,7 @@ class SearchAppBar extends StatelessWidget {
       padding: const EdgeInsets.all(8.0),
       child: Column(
         mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Material(
             borderRadius: BorderRadius.circular(8.0),
@@ -60,26 +60,44 @@ class _TagsFilter extends StatelessWidget {
       buildWhen: (previous, current) => previous != current,
       builder: (_, state) {
         if (state.status == SearchStatus.loaded) {
-          return Row(
-            children: [
-              for (var tag in Point.defaultTags)
-                Padding(
-                  padding: const EdgeInsets.only(left: 2.0),
-                  child: InputChip(
-                    elevation: 2.0,
-                    selectedColor: Colors.white,
-                    backgroundColor: Colors.white,
-                    label: Text(
-                      tag,
-                      style: theme.textTheme.bodyText2,
+          final lengths = <String, int>{};
+
+          for (var point in state.results) {
+            for (var tag in point.tags) {
+              lengths[tag] = (lengths[tag] ?? 0) + 1;
+            }
+          }
+
+          final tags = lengths.keys.toList()
+            ..sort((tag1, tag2) => lengths[tag2].compareTo(lengths[tag1]));
+
+          final textTheme = Theme.of(context).textTheme;
+
+          return SingleChildScrollView(
+            scrollDirection: Axis.horizontal,
+            child: Row(
+              children: [
+                for (var tag in tags)
+                  Padding(
+                    key: ValueKey(tag),
+                    padding: const EdgeInsets.only(left: 2.0),
+                    child: InputChip(
+                      elevation: 2.0,
+                      selectedColor: Colors.white,
+                      backgroundColor: Colors.white,
+                      label: Text(
+                        tag,
+                        style: textTheme.bodyText2,
+                      ),
+                      onSelected: (selected) => context
+                          .read<SearchBloc>()
+                          .add(SearchTagSelected(tag)),
+                      selected: state.tags.contains(tag),
+                      visualDensity: VisualDensity.compact,
                     ),
-                    onSelected: (selected) =>
-                        context.read<SearchBloc>().add(SearchTagSelected(tag)),
-                    selected: state.tags.contains(tag),
-                    visualDensity: VisualDensity.compact,
                   ),
-                ),
-            ],
+              ],
+            ),
           );
         }
 
@@ -122,7 +140,7 @@ class _SearchFieldState extends State<SearchField> {
         context.select((LocationCubit location) => location.state.toLatLng());
 
     return BlocListener<SelectedPointCubit, SelectedPointState>(
-      listenWhen: (previous, current) => previous.point != current.point,
+      listenWhen: (previous, current) => previous != current,
       listener: (_, state) {
         if (state.point.isEmpty && _focusNode.hasFocus) {
           setState(() {

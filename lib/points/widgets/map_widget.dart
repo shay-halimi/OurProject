@@ -24,7 +24,7 @@ class MapWidget extends StatefulWidget {
 }
 
 class _MapWidgetState extends State<MapWidget> {
-  static const double defaultZoom = 16.0;
+  static const double defaultZoom = 15.0;
 
   final Completer<g_maps.GoogleMapController> _controller = Completer();
 

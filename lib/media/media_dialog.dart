@@ -117,7 +117,10 @@ class MediaDialogView extends StatelessWidget {
               buildWhen: (previous, current) => previous != current,
               builder: (_, state) {
                 final aspectRatio = MediaWidget.defaultAspectRatio;
+
                 final maxHeight = MediaQuery.of(context).size.height / 3;
+
+                final textTheme = Theme.of(context).textTheme;
 
                 if (state is MediaDialogInitial) {
                   return AspectRatio(
@@ -132,7 +135,7 @@ class MediaDialogView extends StatelessWidget {
                             child: Center(
                               child: Text(
                                 'בחר/י תמונה',
-                                style: theme.textTheme.bodyText1,
+                                style: textTheme.bodyText1,
                               ),
                             ),
                           )
@@ -155,7 +158,7 @@ class MediaDialogView extends StatelessWidget {
                       child: Center(
                         child: Text(
                           'שגיאה, אמת/י המידע שהזנת ונסה/י שנית.',
-                          style: theme.textTheme.bodyText1,
+                          style: textTheme.bodyText1,
                         ),
                       ),
                     ),

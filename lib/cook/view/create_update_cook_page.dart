@@ -38,7 +38,7 @@ class CookForm extends StatelessWidget {
     return Scaffold(
       resizeToAvoidBottomInset: true,
       appBar: AppBar(
-        title: Text(cook.isEmpty ? 'יצירת מטבח' : 'עדכון מטבח'),
+        title: Text(cook.isEmpty ? 'יצירת חשבון' : 'עדכון חשבון'),
       ),
       body: BlocListener<CookFormCubit, CookFormState>(
         listenWhen: (previous, current) => previous != current,
@@ -55,7 +55,7 @@ class CookForm extends StatelessWidget {
               ScaffoldMessenger.of(context)
                 ..hideCurrentSnackBar()
                 ..showSnackBar(
-                    const SnackBar(content: Text('המטבח עודכן בהצלחה')));
+                    const SnackBar(content: Text('חשבונך עודכן בהצלחה')));
 
               Navigator.of(context).pop();
             }

@@ -1,4 +1,3 @@
-import 'package:cookpoint/theme/theme.dart';
 import 'package:flutter/material.dart';
 
 class TagsLine extends StatelessWidget {
@@ -23,7 +22,7 @@ class TagsLine extends StatelessWidget {
     return Expanded(
       child: Text(
         line,
-        style: theme.textTheme.caption,
+        style: Theme.of(context).textTheme.caption,
         maxLines: 1,
         overflow: TextOverflow.ellipsis,
       ),

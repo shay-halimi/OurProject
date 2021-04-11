@@ -18,7 +18,7 @@ class SelectedPointCubit extends Cubit<SelectedPointState> {
       if (state.status == SearchStatus.loaded) {
         select(state.results.first);
       } else {
-        clear();
+        clear(0);
       }
     });
   }
@@ -33,14 +33,14 @@ class SelectedPointCubit extends Cubit<SelectedPointState> {
     return super.close();
   }
 
-  void select(Point point) {
+  void select(Point point, [int count]) {
     emit(state.copyWith(
       point: point,
-      count: point.isEmpty ? state.count : state.count + 1,
+      count: count ?? state.count + 1,
     ));
   }
 
-  void clear() {
-    select(Point.empty);
+  void clear([int count]) {
+    select(Point.empty, count);
   }
 }

@@ -138,7 +138,7 @@ class _DeleteButton extends StatelessWidget {
       onPressed: () => showDialog<bool>(
           context: context,
           builder: (_) {
-            final style = theme.textTheme.headline6;
+            final style = Theme.of(context).textTheme.headline6;
             return AlertDialog(
               title: const Text('האם את/ה בטוח/ה?'),
               content: RichText(
@@ -229,7 +229,7 @@ class _TagsInput extends StatelessWidget {
                     backgroundColor: Colors.white,
                     label: Text(
                       tag,
-                      style: theme.textTheme.bodyText2,
+                      style: Theme.of(context).textTheme.bodyText2,
                     ),
                     onSelected: (selected) =>
                         context.read<PointFormCubit>().toggleTag(tag),

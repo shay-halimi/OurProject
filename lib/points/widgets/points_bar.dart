@@ -118,7 +118,7 @@ class _PointsCarousel extends StatelessWidget {
     return BlocListener<SelectedPointCubit, SelectedPointState>(
       listenWhen: (previous, current) => previous != current,
       listener: (_, state) {
-        if (points.contains(state.point)) {
+        if (_carouselController.ready && points.contains(state.point)) {
           _carouselController.jumpToPage(points.indexOf(state.point));
         }
       },

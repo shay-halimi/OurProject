@@ -4,7 +4,6 @@ import 'package:cookpoint/humanz.dart';
 import 'package:cookpoint/launcher.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:line_awesome_flutter/line_awesome_flutter.dart';
 import 'package:map_launcher/map_launcher.dart' as map_launcher;
 import 'package:map_launcher/map_launcher.dart';
@@ -71,8 +70,6 @@ class _ActionsDialog extends StatelessWidget {
 
   final Cook cook;
 
-  static const iconSize = 24.0;
-
   @override
   Widget build(BuildContext context) {
     return FutureBuilder<List<AvailableMap>>(
@@ -103,11 +100,7 @@ class _ActionsDialog extends StatelessWidget {
   Widget _map(BuildContext context, map_launcher.AvailableMap map) {
     return ListTile(
       title: Text(map.mapName),
-      leading: SvgPicture.asset(
-        map.icon,
-        height: iconSize,
-        width: iconSize,
-      ),
+      leading: Icon(map.iconData),
       onTap: () async {
         await map
             .showMarker(
@@ -130,10 +123,7 @@ class _ActionsDialog extends StatelessWidget {
             .then((_) => Navigator.of(context).pop());
       },
       title: const Text('WhatsApp'),
-      leading: const Icon(
-        LineAwesomeIcons.what_s_app,
-        size: iconSize,
-      ),
+      leading: const Icon(LineAwesomeIcons.what_s_app),
     );
   }
 
@@ -145,10 +135,19 @@ class _ActionsDialog extends StatelessWidget {
             .then((_) => Navigator.of(context).pop());
       },
       title: Text(humanz.phoneNumber(cook.phoneNumber)),
-      leading: const Icon(
-        LineAwesomeIcons.phone,
-        size: iconSize,
-      ),
+      leading: const Icon(LineAwesomeIcons.phone),
     );
+  }
+}
+
+extension _XMap on map_launcher.AvailableMap {
+  IconData get iconData {
+    switch (mapType) {
+      case MapType.waze:
+        return LineAwesomeIcons.waze;
+
+      default:
+        return LineAwesomeIcons.directions;
+    }
   }
 }

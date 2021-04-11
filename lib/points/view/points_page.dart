@@ -16,7 +16,7 @@ class PointsPage extends StatelessWidget {
     final maxHeight = MediaQuery.of(context).size.height * 1 / 3;
 
     return Scaffold(
-      appBar: AppBar(title: const Text('התפריט שלי')),
+      appBar: AppBar(title: const Text('המטבח שלי')),
       body: BlocBuilder<PointsBloc, PointsState>(
         buildWhen: (previous, current) =>
             previous.cookPoints != current.cookPoints,

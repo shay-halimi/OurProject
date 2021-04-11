@@ -17,7 +17,7 @@ class CookPage extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('המטבח שלי'),
+        title: const Text('חשבון'),
         actions: [
           IconButton(
             icon: const Icon(Icons.edit),
