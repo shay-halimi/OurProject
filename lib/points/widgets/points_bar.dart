@@ -41,8 +41,11 @@ class _PointsBarViewState extends State<PointsBarView> {
 
             return WillPopScope(
               onWillPop: () async {
-                /// @TODO(Matan) fix drawer bug, drawer needs to pop first.
-                if (_panelController.isPanelOpen) {
+                final scaffold = Scaffold.of(context);
+
+                if (scaffold.isDrawerOpen || scaffold.isEndDrawerOpen) {
+                  Navigator.of(context).pop();
+                } else if (_panelController.isPanelOpen) {
                   await _panelController.close();
                 } else {
                   context.read<SelectedPointCubit>().clear();
