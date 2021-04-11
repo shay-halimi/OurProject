@@ -101,6 +101,8 @@ class _PointsCarousel extends StatelessWidget {
 
   final double maxHeight;
 
+  final CarouselController _carouselController = CarouselController();
+
   @override
   Widget build(BuildContext context) {
     final points = context.select((SearchBloc bloc) => bloc.state.results);
@@ -108,33 +110,46 @@ class _PointsCarousel extends StatelessWidget {
     final point =
         context.select((SelectedPointCubit cubit) => cubit.state.point);
 
-    return CarouselSlider(
-      key: ValueKey(points.hashCode),
-      items: points.map(
-        (point) {
-          return Builder(
-            builder: (_) {
-              return PointCard(
-                key: ValueKey(point.hashCode),
-                point: point,
-                height: height ?? minHeight,
-                minHeight: minHeight,
-                maxHeight: maxHeight,
-              );
-            },
-          );
-        },
-      ).toList(),
-      options: CarouselOptions(
-        enableInfiniteScroll: false,
-        initialPage: points.contains(point) ? points.indexOf(point) : 0,
-        onPageChanged: (index, reason) {
-          if (reason == CarouselPageChangedReason.manual) {
-            context.read<SelectedPointCubit>().select(points.elementAt(index));
-          }
-        },
-        viewportFraction: 0.92,
-        height: height ?? minHeight,
+    final page = points.contains(point) ? points.indexOf(point) : 0;
+
+    return BlocListener<SelectedPointCubit, SelectedPointState>(
+      listenWhen: (previous, current) => previous != current,
+      listener: (_, state) {
+        if (points.contains(state.point)) {
+          _carouselController.jumpToPage(points.indexOf(state.point));
+        }
+      },
+      child: CarouselSlider(
+        carouselController: _carouselController,
+        key: ValueKey(points.hashCode),
+        items: points.map(
+          (point) {
+            return Builder(
+              builder: (_) {
+                return PointCard(
+                  key: ValueKey(point.hashCode),
+                  point: point,
+                  height: height ?? minHeight,
+                  minHeight: minHeight,
+                  maxHeight: maxHeight,
+                );
+              },
+            );
+          },
+        ).toList(),
+        options: CarouselOptions(
+          enableInfiniteScroll: false,
+          initialPage: page,
+          onPageChanged: (index, reason) {
+            if (reason == CarouselPageChangedReason.manual) {
+              context
+                  .read<SelectedPointCubit>()
+                  .select(points.elementAt(index));
+            }
+          },
+          viewportFraction: 0.92,
+          height: height ?? minHeight,
+        ),
       ),
     );
   }
