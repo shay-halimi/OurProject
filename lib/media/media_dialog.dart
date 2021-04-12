@@ -79,117 +79,118 @@ class MediaDialogView extends StatelessWidget {
                     ],
                   );
                 }).then((value) async {
-              if (value != null) {
-                final pickedFile = await _picker.getImage(
-                  source: value,
-                );
+              if (value == null) return;
 
-                if (pickedFile == null) return;
+              final pickedFile = await _picker.getImage(
+                source: value,
+              );
 
-                final croppedFile = await ImageCropper.cropImage(
-                  sourcePath: pickedFile.path,
-                  aspectRatioPresets: [
-                    CropAspectRatioPreset.square,
-                  ],
-                  androidUiSettings: const AndroidUiSettings(
-                    toolbarTitle: '',
-                    initAspectRatio: CropAspectRatioPreset.original,
-                    lockAspectRatio: true,
-                  ),
-                  iosUiSettings: const IOSUiSettings(
-                    title: '',
-                    doneButtonTitle: 'המשך',
-                    cancelButtonTitle: 'ביטול',
-                    aspectRatioLockEnabled: true,
-                  ),
-                );
+              if (pickedFile == null) return;
 
-                if (croppedFile == null) return;
+              final croppedFile = await ImageCropper.cropImage(
+                sourcePath: pickedFile.path,
+                aspectRatioPresets: [
+                  CropAspectRatioPreset.square,
+                ],
+                androidUiSettings: const AndroidUiSettings(
+                  toolbarTitle: '',
+                  initAspectRatio: CropAspectRatioPreset.original,
+                  lockAspectRatio: true,
+                ),
+                iosUiSettings: const IOSUiSettings(
+                  title: '',
+                  doneButtonTitle: 'המשך',
+                  cancelButtonTitle: 'ביטול',
+                  aspectRatioLockEnabled: true,
+                ),
+              );
 
-                onMediaChanged(media);
+              if (croppedFile == null) return;
 
-                await context
-                    .read<MediaDialogCubit>()
-                    .fileChanged(File(croppedFile.path));
-              }
+              onMediaChanged(media);
+
+              await context
+                  .read<MediaDialogCubit>()
+                  .fileChanged(File(croppedFile.path));
             }),
-            child: BlocBuilder<MediaDialogCubit, MediaDialogState>(
-              buildWhen: (previous, current) => previous != current,
-              builder: (_, state) {
-                final aspectRatio = MediaWidget.defaultAspectRatio;
+            child: AspectRatio(
+              aspectRatio: MediaWidget.defaultAspectRatio,
+              child: BlocBuilder<MediaDialogCubit, MediaDialogState>(
+                buildWhen: (previous, current) => previous != current,
+                builder: (_, state) {
+                  final maxHeight = MediaQuery.of(context).size.height / 3;
 
-                final maxHeight = MediaQuery.of(context).size.height / 3;
-
-                final textTheme = Theme.of(context).textTheme;
-
-                if (state is MediaDialogInitial) {
-                  return AspectRatio(
-                    aspectRatio: aspectRatio,
-                    child: media.isEmpty
-                        ? Container(
-                            margin: const EdgeInsets.all(8.0),
-                            decoration: BoxDecoration(
-                              border: Border.all(),
-                              borderRadius: borderRadius,
-                            ),
-                            child: Center(
-                              child: Text(
-                                'בחר/י תמונה',
-                                style: textTheme.bodyText1,
-                              ),
-                            ),
+                  if (state is MediaDialogInitial) {
+                    return media.isEmpty
+                        ? _Text(
+                            'בחר/י תמונה',
+                            maxHeight: maxHeight,
                           )
                         : MediaWidget(
                             url: media.first,
-                            aspectRatio: aspectRatio,
+                            maxHeight: maxHeight,
+                          );
+                  } else if (state is MediaDialogError) {
+                    return _Text(
+                      'שגיאה, אמת/י המידע שהזנת ונסה/י שנית.',
+                      maxHeight: maxHeight,
+                    );
+                  } else if (state is MediaDialogLoading) {
+                    return Stack(
+                        alignment: AlignmentDirectional.center,
+                        children: [
+                          MediaWidget(
+                            image: FileImage(state.file),
                             maxHeight: maxHeight,
                           ),
-                  );
-                } else if (state is MediaDialogError) {
-                  return AspectRatio(
-                    aspectRatio: aspectRatio,
-                    child: Container(
-                      constraints: BoxConstraints(maxHeight: maxHeight),
-                      margin: const EdgeInsets.all(8.0),
-                      decoration: BoxDecoration(
-                        border: Border.all(),
-                        borderRadius: borderRadius,
-                      ),
-                      child: Center(
-                        child: Text(
-                          'שגיאה, אמת/י המידע שהזנת ונסה/י שנית.',
-                          style: textTheme.bodyText1,
-                        ),
-                      ),
-                    ),
-                  );
-                } else if (state is MediaDialogLoading) {
-                  return Stack(
-                      alignment: AlignmentDirectional.center,
-                      children: [
-                        MediaWidget(
-                          image: FileImage(state.file),
-                          aspectRatio: aspectRatio,
-                          maxHeight: maxHeight,
-                        ),
-                        const CircularProgressIndicator(),
-                      ]);
-                } else if (state is MediaDialogLoaded) {
-                  return MediaWidget(
-                    url: state.url,
-                    aspectRatio: aspectRatio,
-                    maxHeight: maxHeight,
-                  );
-                }
+                          const CircularProgressIndicator(),
+                        ]);
+                  } else if (state is MediaDialogLoaded) {
+                    return MediaWidget(
+                      url: state.url,
+                      maxHeight: maxHeight,
+                    );
+                  }
 
-                return AspectRatio(
-                  aspectRatio: aspectRatio,
-                  child: const Center(child: CircularProgressIndicator()),
-                );
-              },
+                  return const Center(child: CircularProgressIndicator());
+                },
+              ),
             ),
           ),
         ],
+      ),
+    );
+  }
+}
+
+class _Text extends StatelessWidget {
+  const _Text(
+    this.data, {
+    Key key,
+    this.maxHeight = double.infinity,
+  }) : super(key: key);
+
+  final String data;
+
+  final double maxHeight;
+
+  @override
+  Widget build(BuildContext context) {
+    final textTheme = Theme.of(context).textTheme;
+
+    return Container(
+      constraints: BoxConstraints(maxHeight: maxHeight),
+      margin: const EdgeInsets.all(16.0),
+      decoration: BoxDecoration(
+        border: Border.all(),
+        borderRadius: borderRadius,
+      ),
+      child: Center(
+        child: Text(
+          data,
+          style: textTheme.headline6,
+          textAlign: TextAlign.center,
+        ),
       ),
     );
   }

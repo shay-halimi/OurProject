@@ -14,7 +14,7 @@ class PhotoURLWidget extends StatelessWidget {
   PhotoURLWidget({
     Key key,
     @required this.photoURL,
-    @required this.onPhotoURLChanged,
+    this.onPhotoURLChanged,
   }) : super(key: key);
 
   final String photoURL;
@@ -23,11 +23,14 @@ class PhotoURLWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (_) => MediaDialogCubit(),
-      child: _PhotoURLDialogView(
-        onPhotoURLChanged: onPhotoURLChanged,
-        photoURL: photoURL,
+    return Hero(
+      tag: photoURL,
+      child: BlocProvider(
+        create: (_) => MediaDialogCubit(),
+        child: _PhotoURLDialogView(
+          onPhotoURLChanged: onPhotoURLChanged,
+          photoURL: photoURL,
+        ),
       ),
     );
   }
@@ -37,7 +40,7 @@ class _PhotoURLDialogView extends StatelessWidget {
   _PhotoURLDialogView({
     Key key,
     @required this.photoURL,
-    @required this.onPhotoURLChanged,
+    this.onPhotoURLChanged,
   }) : super(key: key);
 
   final String photoURL;
@@ -53,7 +56,7 @@ class _PhotoURLDialogView extends StatelessWidget {
     return BlocConsumer<MediaDialogCubit, MediaDialogState>(
       listenWhen: (previous, current) => previous != current,
       listener: (_, state) {
-        if (state is MediaDialogLoaded) {
+        if (state is MediaDialogLoaded && onPhotoURLChanged != null) {
           onPhotoURLChanged(state.url);
         }
       },
@@ -65,13 +68,15 @@ class _PhotoURLDialogView extends StatelessWidget {
             BlocBuilder<MediaDialogCubit, MediaDialogState>(
                 builder: (_, state) {
               if (state is MediaDialogInitial) {
-                return photoURL.isNotEmpty
-                    ? CircleAvatar(
-                        radius: radius,
-                        backgroundImage: CachedNetworkImageProvider(photoURL))
-                    : CircleAvatar(
-                        radius: radius,
-                        child: const Text('בחר/י תמונת פרופיל'));
+                return CircleAvatar(
+                  radius: radius,
+                  backgroundImage: photoURL.isNotEmpty
+                      ? CachedNetworkImageProvider(photoURL)
+                      : null,
+                  child: photoURL.isEmpty
+                      ? const Text('בחר/י תמונת פרופיל')
+                      : null,
+                );
               } else if (state is MediaDialogError) {
                 CircleAvatar(
                   radius: radius,
@@ -93,32 +98,34 @@ class _PhotoURLDialogView extends StatelessWidget {
                 radius: radius,
               );
             }),
-            BlocBuilder<MediaDialogCubit, MediaDialogState>(
+            if (onPhotoURLChanged != null)
+              BlocBuilder<MediaDialogCubit, MediaDialogState>(
                 builder: (_, state) {
-              if (state is MediaDialogInitial) {
-                return CircleButton(
-                  onPressed: () => _pickFile(context),
-                  child: photoURL.isEmpty
-                      ? const Icon(Icons.camera_alt)
-                      : const Icon(Icons.edit),
-                );
-              } else if (state is MediaDialogError) {
-                return CircleButton(
-                  onPressed: () => _pickFile(context),
-                  fillColor: Colors.red.withOpacity(0.9),
-                  child: const Icon(Icons.error),
-                );
-              } else if (state is MediaDialogLoaded) {
-                return CircleButton(
-                  onPressed: () => _pickFile(context),
-                  child: const Icon(Icons.edit),
-                );
-              }
+                  if (state is MediaDialogInitial) {
+                    return CircleButton(
+                      onPressed: () => _pickFile(context),
+                      child: photoURL.isEmpty
+                          ? const Icon(Icons.camera_alt)
+                          : const Icon(Icons.edit),
+                    );
+                  } else if (state is MediaDialogError) {
+                    return CircleButton(
+                      onPressed: () => _pickFile(context),
+                      fillColor: Colors.red.withOpacity(0.9),
+                      child: const Icon(Icons.error),
+                    );
+                  } else if (state is MediaDialogLoaded) {
+                    return CircleButton(
+                      onPressed: () => _pickFile(context),
+                      child: const Icon(Icons.edit),
+                    );
+                  }
 
-              return const CircleButton(
-                child: CircularProgressIndicator(),
-              );
-            }),
+                  return const CircleButton(
+                    child: CircularProgressIndicator(),
+                  );
+                },
+              ),
           ],
         );
       },

@@ -7,6 +7,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:formz/formz.dart';
 import 'package:provider/provider.dart';
 
+// @TODO(Matan) marge with CookPage
 class CreateUpdateCookPage extends StatelessWidget {
   static Route route() {
     return MaterialPageRoute<void>(
@@ -62,21 +63,32 @@ class CookForm extends StatelessWidget {
           }
         },
         child: ListView(
-          padding: const EdgeInsets.all(32.0),
+          padding: const EdgeInsets.all(16.0),
           children: [
             const Padding(
-              padding: EdgeInsets.all(32.0),
-              child: Center(child: _PhotoURLInput()),
+              padding: EdgeInsets.all(8.0),
+              child: Center(
+                child: _PhotoURLInput(),
+              ),
             ),
-            const ListTile(
-              title: _DisplayNameInput(),
-            ),
-            const ListTile(
-              title: _AddressInput(),
-            ),
-            Center(
-              child: _SubmitButton(
-                cook: cook,
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Wrap(
+                children: [
+                  const Padding(
+                    padding: EdgeInsets.all(8.0),
+                    child: _DisplayNameInput(),
+                  ),
+                  const Padding(
+                    padding: EdgeInsets.all(8.0),
+                    child: _AddressInput(),
+                  ),
+                  Center(
+                    child: _SubmitButton(
+                      cook: cook,
+                    ),
+                  ),
+                ],
               ),
             ),
           ],
@@ -93,27 +105,24 @@ class _AddressInput extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: BlocBuilder<CookFormCubit, CookFormState>(
-        buildWhen: (previous, current) =>
-            previous.addressInput != current.addressInput,
-        builder: (_, state) {
-          return TextFormField(
-            key: const Key('_AddressInput'),
-            keyboardType: TextInputType.streetAddress,
-            maxLines: 1,
-            onChanged: (value) =>
-                context.read<CookFormCubit>().changeAddressName(value),
-            decoration: InputDecoration(
-              labelText: 'כתובת',
-              errorText: state.addressInput.invalid ? 'לא תקין' : null,
-              helperText: 'שם יישוב, שם רחוב ומספר בית.',
-            ),
-            initialValue: state.addressInput.value.name,
-          );
-        },
-      ),
+    return BlocBuilder<CookFormCubit, CookFormState>(
+      buildWhen: (previous, current) =>
+          previous.addressInput != current.addressInput,
+      builder: (_, state) {
+        return TextFormField(
+          key: const Key('_AddressInput'),
+          keyboardType: TextInputType.streetAddress,
+          maxLines: 1,
+          onChanged: (value) =>
+              context.read<CookFormCubit>().changeAddressName(value),
+          decoration: InputDecoration(
+            labelText: 'כתובת',
+            errorText: state.addressInput.invalid ? 'לא תקין' : null,
+            helperText: 'שם יישוב, שם רחוב ומספר בית.',
+          ),
+          initialValue: state.addressInput.value.name,
+        );
+      },
     );
   }
 }
@@ -125,26 +134,23 @@ class _DisplayNameInput extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: BlocBuilder<CookFormCubit, CookFormState>(
-        buildWhen: (previous, current) =>
-            previous.displayNameInput != current.displayNameInput,
-        builder: (_, state) {
-          return TextFormField(
-            key: const Key('_DisplayNameInput'),
-            keyboardType: TextInputType.text,
-            maxLines: 1,
-            onChanged: (value) =>
-                context.read<CookFormCubit>().changeDisplayName(value),
-            decoration: InputDecoration(
-              labelText: 'שם לתצוגה',
-              errorText: state.displayNameInput.invalid ? 'לא תקין' : null,
-            ),
-            initialValue: state.displayNameInput.value,
-          );
-        },
-      ),
+    return BlocBuilder<CookFormCubit, CookFormState>(
+      buildWhen: (previous, current) =>
+          previous.displayNameInput != current.displayNameInput,
+      builder: (_, state) {
+        return TextFormField(
+          key: const Key('_DisplayNameInput'),
+          keyboardType: TextInputType.text,
+          maxLines: 1,
+          onChanged: (value) =>
+              context.read<CookFormCubit>().changeDisplayName(value),
+          decoration: InputDecoration(
+            labelText: 'שם לתצוגה',
+            errorText: state.displayNameInput.invalid ? 'לא תקין' : null,
+          ),
+          initialValue: state.displayNameInput.value,
+        );
+      },
     );
   }
 }

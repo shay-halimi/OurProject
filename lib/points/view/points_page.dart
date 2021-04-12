@@ -22,8 +22,21 @@ class PointsPage extends StatelessWidget {
             previous.cookPoints != current.cookPoints,
         builder: (_, state) {
           if (state.cookPoints.isEmpty) {
-            return const SplashBody(
-              child: Text('נראה שעדיין לא פרסמת מאכלים.'),
+            return SplashBody(
+              child: Expanded(
+                child: Column(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Text(
+                        'נראה שעדיין לא פרסמת מאכלים.',
+                        style: Theme.of(context).textTheme.headline6,
+                        textAlign: TextAlign.center,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
             );
           }
 

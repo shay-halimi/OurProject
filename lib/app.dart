@@ -116,20 +116,23 @@ class _AppViewState extends State<AppView> {
             if (state.status == InternetStatus.error) {
               return Scaffold(
                 body: SplashBody(
-                  child: Column(
-                    children: [
-                      const Padding(
-                        padding: EdgeInsets.all(8.0),
-                        child: Icon(Icons.wifi_off),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Text(
-                          'שגיאה! בדוק/י שיש חיבור לאינטרנט ונסה/י שנית',
-                          style: Theme.of(context).textTheme.headline6,
+                  child: Expanded(
+                    child: Column(
+                      children: [
+                        const Padding(
+                          padding: EdgeInsets.all(8.0),
+                          child: Icon(Icons.wifi_off),
                         ),
-                      ),
-                    ],
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Text(
+                            'שגיאה! בדוק/י שיש חיבור לאינטרנט ונסה/י שנית',
+                            style: Theme.of(context).textTheme.headline6,
+                            textAlign: TextAlign.center,
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
                 ),
                 floatingActionButton: FloatingActionButton.extended(

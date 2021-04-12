@@ -27,50 +27,37 @@ class CookPage extends StatelessWidget {
         ],
       ),
       body: ListView(
-        padding: const EdgeInsets.all(32.0),
+        padding: const EdgeInsets.all(16.0),
         children: [
-          const Padding(
-            padding: EdgeInsets.all(32.0),
-            child: Center(child: _PhotoURLInput()),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Center(
+              child: PhotoURLWidget(
+                photoURL: cook.photoURL,
+              ),
+            ),
           ),
-          ListTile(
-            title: Text(cook.displayName),
-            subtitle: const Text('שם לתצוגה'),
-          ),
-          ListTile(
-            title: Text(cook.address.name),
-            subtitle: const Text('כתובת'),
-          ),
-          ListTile(
-            title: Text(humanz.phoneNumber(cook.phoneNumber)),
-            subtitle: const Text('מספר טלפון'),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Wrap(
+              children: [
+                ListTile(
+                  title: Text(cook.displayName),
+                  subtitle: const Text('שם לתצוגה'),
+                ),
+                ListTile(
+                  title: Text(cook.address.name),
+                  subtitle: const Text('כתובת'),
+                ),
+                ListTile(
+                  title: Text(humanz.phoneNumber(cook.phoneNumber)),
+                  subtitle: const Text('מספר טלפון'),
+                ),
+              ],
+            ),
           ),
         ],
       ),
-    );
-  }
-}
-
-class _PhotoURLInput extends StatelessWidget {
-  const _PhotoURLInput({
-    Key key,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return BlocBuilder<CookBloc, CookState>(
-      buildWhen: (previous, current) =>
-          previous.cook.photoURL != current.cook.photoURL,
-      builder: (_, state) {
-        return PhotoURLWidget(
-          photoURL: state.cook.photoURL,
-          onPhotoURLChanged: (value) {
-            context.read<CookBloc>().add(CookUpdatedEvent(state.cook.copyWith(
-                  photoURL: value,
-                )));
-          },
-        );
-      },
     );
   }
 }

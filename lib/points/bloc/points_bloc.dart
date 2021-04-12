@@ -20,7 +20,7 @@ class PointsBloc extends Bloc<PointsEvent, PointsState> {
         _cookBloc = cookBloc,
         super(const PointsState()) {
     _cookSubscription = _cookBloc.stream.listen((state) {
-      if (state.status == CookStatus.loaded && state.cook.isNotEmpty) {
+      if (state.status == CookStatus.loaded) {
         add(PointsOfCookRequestedEvent(state.cook));
       } else {
         add(PointsOfCookLoadedEvent(const []));
