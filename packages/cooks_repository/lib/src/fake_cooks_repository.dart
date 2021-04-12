@@ -19,8 +19,8 @@ class FakeCooksRepository implements CooksRepository {
         displayName: _randName,
         address: Address(
           name: _randAddress,
-          latitude: 35,
-          longitude: 17,
+          latitude: 31.2431906939,
+          longitude: 34.7931751606,
         ),
         phoneNumber: '+97212345${1000 + rand.nextInt(8999)}',
         photoURL: 'https://i.pravatar.cc/300#$id',

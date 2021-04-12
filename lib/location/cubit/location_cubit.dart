@@ -48,9 +48,9 @@ class LocationCubit extends Cubit<LocationState> {
   }
 
   Location _getDefaultLocation() {
-    final location = _cookBloc.state.cook.address.toLocation();
+    final address = _cookBloc.state.cook.address;
 
-    if (location.isEmpty) {
+    if (address.isEmpty) {
       /// @TODO(Matan) detect user country \ state ..
       /// @TODO(Matan) check in preferences.
 
@@ -58,7 +58,7 @@ class LocationCubit extends Cubit<LocationState> {
       return const Location(31.2431906939, 34.7931751606);
     }
 
-    return location;
+    return address.toLocation();
   }
 }
 

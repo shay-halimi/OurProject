@@ -3,7 +3,7 @@ description: Cook Here, There, Everywhere.
 
 publish_to: 'none'
 
-version: 1.0.0+500
+version: 1.0.0+501
 
 environment:
   sdk: ">=2.7.0 <3.0.0"
@@ -13,6 +13,14 @@ dependencies:
     sdk: flutter
   flutter_localizations:
     sdk: flutter
+  authentication_repository:
+    path: packages/authentication_repository
+  location_services:
+    path: packages/location_services
+  points_repository:
+    path: packages/points_repository
+  cooks_repository:
+    path: packages/cooks_repository
   firebase_core: ^1.0.2
   firebase_storage: ^8.0.0
   firebase_analytics: ^7.0.1
@@ -37,14 +45,7 @@ dependencies:
   flutter_typeahead: ^3.1.1
   line_awesome_flutter: ^1.0.1
   fuzzy: ^0.3.0
-  authentication_repository:
-    path: packages/authentication_repository
-  location_services:
-    path: packages/location_services
-  points_repository:
-    path: packages/points_repository
-  cooks_repository:
-    path: packages/cooks_repository
+  connectivity: ^3.0.3
 
 dev_dependencies:
   flutter_test:

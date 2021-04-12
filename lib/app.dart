@@ -1,6 +1,7 @@
 import 'package:cookpoint/authentication/authentication.dart';
 import 'package:cookpoint/cook/cook.dart';
 import 'package:cookpoint/home_page.dart';
+import 'package:cookpoint/internet/cubit/cubit.dart';
 import 'package:cookpoint/location/location.dart';
 import 'package:cookpoint/points/points.dart';
 import 'package:cookpoint/splash/splash.dart';
@@ -49,6 +50,9 @@ class App extends StatelessWidget {
       ],
       child: MultiBlocProvider(
         providers: [
+          BlocProvider(
+            create: (_) => InternetCubit()..check(),
+          ),
           BlocProvider(
             create: (_) => AuthenticationBloc(
               authenticationRepository: authenticationRepository,
@@ -105,6 +109,41 @@ class _AppViewState extends State<AppView> {
       navigatorKey: _navigatorKey,
       onGenerateRoute: (_) => SplashPage.route(),
       home: HomePage(),
+      builder: (_, child) {
+        return BlocBuilder<InternetCubit, InternetState>(
+          buildWhen: (previous, current) => previous != current,
+          builder: (_, state) {
+            if (state.status == InternetStatus.error) {
+              return Scaffold(
+                body: SplashBody(
+                  child: Column(
+                    children: [
+                      const Padding(
+                        padding: EdgeInsets.all(8.0),
+                        child: Icon(Icons.wifi_off),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Text(
+                          'שגיאה! בדוק/י שיש חיבור לאינטרנט ונסה/י שנית',
+                          style: Theme.of(context).textTheme.headline6,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                floatingActionButton: FloatingActionButton.extended(
+                  icon: const Icon(Icons.refresh),
+                  label: const Text('נסה/י שנית'),
+                  onPressed: () => context.read<InternetCubit>().check(),
+                ),
+              );
+            }
+
+            return child;
+          },
+        );
+      },
     );
   }
 }

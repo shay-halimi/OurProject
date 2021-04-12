@@ -72,36 +72,38 @@ class PointsBloc extends Bloc<PointsEvent, PointsState> {
   ) async* {
     if (event.latLng.isEmpty) return;
 
+    yield state.copyWith(status: PointsStatus.loading);
+
+    /// @TODO(Matan) This check can kill the cpu on cheap devices
+    /// @TODO(Matan) Find a better way to check for refresh.
     final refresh = state.nearbyPoints
         .map((point) => point.latLng)
         .where((latLng) => latLng.distanceInKM(event.latLng) < event.radiusInKM)
         .isEmpty;
 
-    if (!refresh) {
-      return;
+    if (refresh) {
+      await _nearbyPointsSubscription?.cancel();
+
+      _nearbyPointsSubscription = _pointsRepository
+          .near(latLng: event.latLng, radiusInKM: event.radiusInKM)
+          .listen((nearbyPoints) {
+        add(PointsNearbyLoadedEvent(
+          nearbyPoints
+            ..sort((point1, point2) {
+              final distance1 = point1.latLng.distanceInKM(event.latLng);
+              final distance2 = point2.latLng.distanceInKM(event.latLng);
+
+              if (distance1 == distance2) {
+                return 0;
+              }
+
+              return distance1 < distance2 ? -1 : 1;
+            }),
+        ));
+      });
+    } else {
+      yield state.copyWith(status: PointsStatus.loaded);
     }
-
-    yield state.copyWith(status: PointsStatus.loading);
-
-    await _nearbyPointsSubscription?.cancel();
-
-    _nearbyPointsSubscription = _pointsRepository
-        .near(latLng: event.latLng, radiusInKM: event.radiusInKM)
-        .listen((nearbyPoints) {
-      add(PointsNearbyLoadedEvent(
-        nearbyPoints
-          ..sort((point1, point2) {
-            final distance1 = point1.latLng.distanceInKM(event.latLng);
-            final distance2 = point2.latLng.distanceInKM(event.latLng);
-
-            if (distance1 == distance2) {
-              return 0;
-            }
-
-            return distance1 < distance2 ? -1 : 1;
-          }),
-      ));
-    });
   }
 
   Stream<PointsState> _mapPointsOfCookRequestedEventToState(

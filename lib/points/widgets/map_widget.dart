@@ -45,11 +45,19 @@ class _MapWidgetState extends State<MapWidget> {
 
     g_maps.BitmapDescriptor.fromAssetImage(const ImageConfiguration(),
             'assets/images/mini_marker_$_markerSize.png')
-        .then((value) => setState(() => _pointMarker = value));
+        .then((value) {
+      if (!mounted) return;
+
+      setState(() => _pointMarker = value);
+    });
 
     g_maps.BitmapDescriptor.fromAssetImage(
             const ImageConfiguration(), 'assets/images/marker_$_markerSize.png')
-        .then((value) => setState(() => _selectedPointMarker = value));
+        .then((value) {
+      if (!mounted) return;
+
+      setState(() => _selectedPointMarker = value);
+    });
   }
 
   @override
@@ -75,6 +83,8 @@ class _MapWidgetState extends State<MapWidget> {
             builder: (_, state) {
               return g_maps.GoogleMap(
                 onMapCreated: (controller) async {
+                  if (!mounted) return;
+
                   setState(() {
                     _controller.complete(controller);
                   });
@@ -107,11 +117,15 @@ class _MapWidgetState extends State<MapWidget> {
                 zoomControlsEnabled: false,
                 myLocationButtonEnabled: false,
                 onTap: (_) => context.read<SelectedPointCubit>().clear(),
-                onCameraMove: (position) => setState(() {
-                  _zoom = position.zoom;
-                  _heading = position.bearing;
-                  _center = position.toLatLng();
-                }),
+                onCameraMove: (position) {
+                  if (!mounted) return;
+
+                  setState(() {
+                    _zoom = position.zoom;
+                    _heading = position.bearing;
+                    _center = position.toLatLng();
+                  });
+                },
                 onCameraIdle: () => context
                     .read<PointsBloc>()
                     .add(PointsNearbyRequestedEvent(_center ?? location)),

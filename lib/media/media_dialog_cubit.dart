@@ -12,25 +12,25 @@ class MediaDialogCubit extends Cubit<MediaDialogState> {
   MediaDialogCubit() : super(MediaDialogInitial());
 
   Future<void> fileChanged(File file) async {
-    var reference = FirebaseStorage.instance
+    final reference = FirebaseStorage.instance
         .ref()
         .child('gallery/')
         .child(const Uuid().v1());
 
-    UploadTask task;
+    final task = kIsWeb
+        ? reference.putData(await file.readAsBytes())
+        : reference.putFile(file);
 
-    if (kIsWeb) {
-      task = reference.putData(await file.readAsBytes());
-    } else {
-      task = reference.putFile(file);
-    }
-
-    task.snapshotEvents.listen((TaskSnapshot snapshot) {
+    task.snapshotEvents.listen((TaskSnapshot snapshot) async {
       switch (snapshot?.state) {
         case TaskState.success:
-          snapshot.ref
-              .getDownloadURL()
-              .then((value) => emit(MediaDialogLoaded(value)));
+          try {
+            final url = await snapshot.ref.getDownloadURL();
+
+            emit(MediaDialogLoaded(url));
+          } on Exception {
+            emit(MediaDialogError());
+          }
           break;
 
         case TaskState.running:
@@ -41,7 +41,6 @@ class MediaDialogCubit extends Cubit<MediaDialogState> {
         case TaskState.canceled:
         case TaskState.error:
           emit(MediaDialogError());
-
           break;
       }
     });
