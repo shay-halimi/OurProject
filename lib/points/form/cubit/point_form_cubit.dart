@@ -42,6 +42,7 @@ class PointFormCubit extends Cubit<PointFormState> {
   }
 
   final Point _point;
+
   final PointsBloc _pointsBloc;
 
   Future<void> save() async {

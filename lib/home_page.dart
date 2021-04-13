@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:provider/provider.dart';
 
+import 'selected_point/selected_point.dart';
+
 class HomePage extends StatelessWidget {
   static Route route() {
     return MaterialPageRoute<void>(builder: (_) => HomePage());

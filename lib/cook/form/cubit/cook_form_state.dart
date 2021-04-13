@@ -9,7 +9,9 @@ class CookFormState extends Equatable {
   });
 
   final DisplayNameInput displayNameInput;
+
   final PhotoURLInput photoURLInput;
+
   final AddressInput addressInput;
 
   final FormzStatus status;

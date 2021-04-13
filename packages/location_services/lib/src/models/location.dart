@@ -22,7 +22,9 @@ class Location {
   }
 
   final double latitude;
+
   final double longitude;
+
   final double heading;
 
   static const empty = Location(0.0, 0.0);

@@ -17,8 +17,11 @@ class MediaWidget extends StatelessWidget {
   static const defaultAspectRatio = 1 / 1;
 
   final String url;
+
   final ImageProvider image;
+
   final double aspectRatio;
+
   final double maxHeight;
 
   @override

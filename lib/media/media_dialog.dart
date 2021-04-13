@@ -18,6 +18,7 @@ class MediaDialog extends StatelessWidget {
   }) : super(key: key);
 
   final Set<String> media;
+
   final ValueChanged<Set<String>> onMediaChanged;
 
   @override

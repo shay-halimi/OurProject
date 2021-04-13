@@ -30,6 +30,7 @@ class CookFormCubit extends Cubit<CookFormState> {
   Cook get _cook => _cookBloc.state.cook;
 
   final CookBloc _cookBloc;
+
   final LocationServices _locationServices;
 
   Future<void> save() async {

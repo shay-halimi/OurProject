@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:cookpoint/location/location.dart';
 import 'package:cookpoint/points/points.dart';
 import 'package:cookpoint/search/search.dart';
+import 'package:cookpoint/selected_point/selected_point.dart';
 import 'package:cookpoint/theme/theme.dart';
 import 'package:dough/dough.dart';
 import 'package:flutter/material.dart';

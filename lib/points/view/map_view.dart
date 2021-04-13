@@ -1,6 +1,7 @@
 import 'package:cookpoint/location/location.dart';
 import 'package:cookpoint/points/points.dart';
 import 'package:cookpoint/search/search.dart';
+import 'package:cookpoint/selected_point/selected_point.dart';
 import 'package:cookpoint/splash/splash.dart';
 import 'package:cookpoint/theme/theme.dart';
 import 'package:flutter/foundation.dart';

@@ -46,15 +46,25 @@ class Point {
   }
 
   final String id;
+
   final String cookId;
+
   final LatLng latLng;
+
   final String title;
+
   final String description;
+
   final Money price;
+
   final Set<String> media;
+
   final Set<String> tags;
+
   final Time createdAt;
+
   final Time updatedAt;
+
   final Time deletedAt;
 
   static const empty = Point(
