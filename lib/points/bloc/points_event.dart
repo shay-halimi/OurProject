@@ -74,3 +74,12 @@ class PointDeletedEvent extends PointsEvent {
   @override
   List<Object> get props => [point];
 }
+
+class PointRestoreEvent extends PointsEvent {
+  const PointRestoreEvent(this.point);
+
+  final Point point;
+
+  @override
+  List<Object> get props => [point];
+}

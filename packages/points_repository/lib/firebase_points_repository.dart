@@ -13,12 +13,23 @@ class FirebasePointsRepository extends PointsRepository {
 
   @override
   Future<void> create(Point point) {
-    return _collection.add(point.toEntity().toDocument());
+    return _collection.add(point
+        .copyWith(
+          createdAt: Time.now(),
+          updatedAt: Time.now(),
+        )
+        .toEntity()
+        .toDocument());
   }
 
   @override
   Future<void> update(Point point) {
-    return _collection.doc(point.id).update(point.toEntity().toDocument());
+    return _collection.doc(point.id).update(point
+        .copyWith(
+          updatedAt: Time.now(),
+        )
+        .toEntity()
+        .toDocument());
   }
 
   @override
@@ -42,7 +53,16 @@ class FirebasePointsRepository extends PointsRepository {
 
   @override
   Future<void> delete(Point point) {
-    return _collection.doc(point.id).delete();
+    return update(point.copyWith(
+      deletedAt: Time.now(),
+    ));
+  }
+
+  @override
+  Future<void> restore(Point point) {
+    return update(point.copyWith(
+      deletedAt: Time.empty,
+    ));
   }
 
   @override

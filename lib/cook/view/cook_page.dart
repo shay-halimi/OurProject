@@ -23,7 +23,7 @@ class CookPage extends StatelessWidget {
             icon: const Icon(Icons.edit),
             onPressed: () =>
                 Navigator.of(context).push<void>(CreateUpdateCookPage.route()),
-          )
+          ),
         ],
       ),
       body: ListView(

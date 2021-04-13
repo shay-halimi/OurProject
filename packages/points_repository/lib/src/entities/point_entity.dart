@@ -15,6 +15,9 @@ class PointEntity extends Equatable {
     @required this.price,
     @required this.media,
     @required this.tags,
+    @required this.createdAt,
+    @required this.updatedAt,
+    @required this.deletedAt,
   });
 
   factory PointEntity.fromSnapshot(DocumentSnapshot snap) {
@@ -32,6 +35,9 @@ class PointEntity extends Equatable {
       price: Money.fromJson(snap.data()['price'] as Map<String, Object>),
       media: (snap.data()['media'] as List<Object>).toSet().cast<String>(),
       tags: (snap.data()['tags'] as List<Object>).toSet().cast<String>(),
+      createdAt: Time.fromJson(snap.data()['createdAt'] as Map<String, Object>),
+      updatedAt: Time.fromJson(snap.data()['updatedAt'] as Map<String, Object>),
+      deletedAt: Time.fromJson(snap.data()['deletedAt'] as Map<String, Object>),
     );
   }
 
@@ -43,6 +49,9 @@ class PointEntity extends Equatable {
   final Money price;
   final Set<String> media;
   final Set<String> tags;
+  final Time createdAt;
+  final Time updatedAt;
+  final Time deletedAt;
 
   @override
   List<Object> get props => [
@@ -54,6 +63,9 @@ class PointEntity extends Equatable {
         price,
         media,
         tags,
+        createdAt,
+        updatedAt,
+        deletedAt,
       ];
 
   Map<String, Object> toJson() {
@@ -66,18 +78,33 @@ class PointEntity extends Equatable {
       'price': price.toJson(),
       'media': media,
       'tags': tags,
+      'createdAt': createdAt.toJson(),
+      'updatedAt': updatedAt.toJson(),
+      'deletedAt': deletedAt.toJson(),
     };
   }
 
   Map<String, Object> toDocument() {
+    final geo = GeoFirePoint(latLng.latitude, latLng.longitude);
+
+    /// we can filter firebase only by one field
+    /// this is a workaround to ignore soft-deleted points for geo queries.
+    final geoHash = deletedAt.isEmpty ? geo.hash : '';
+
     return {
       'cookId': cookId,
-      'latLng': GeoFirePoint(latLng.latitude, latLng.longitude).data,
+      'latLng': {
+        'geopoint': geo.geoPoint,
+        'geohash': geoHash,
+      },
       'title': title,
       'description': description,
       'price': price.toJson(),
       'media': media.toList(),
       'tags': tags.toList(),
+      'createdAt': createdAt.toJson(),
+      'updatedAt': updatedAt.toJson(),
+      'deletedAt': deletedAt.toJson(),
     };
   }
 }

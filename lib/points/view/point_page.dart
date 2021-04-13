@@ -54,36 +54,34 @@ class PointForm extends StatelessWidget {
         title: Text(
           point.isEmpty ? 'פרסום מאכל' : 'עדכון ${point.title}',
         ),
-        actions: [
-          _DeleteButton(point: point),
-        ],
       ),
       body: WillPopScope(
         onWillPop: () async {
           if (isPure) return true;
 
           return showDialog<bool>(
-              context: context,
-              builder: (_) {
-                return AlertDialog(
-                  title: const Text('האם לצאת?'),
-                  content: const Text('האם לצאת בלי לשמור את השינויים?'),
-                  actions: [
-                    TextButton(
-                      child: const Text('כן, צא בלי לשמור'),
-                      onPressed: () {
-                        Navigator.of(context).pop(true);
-                      },
-                    ),
-                    ElevatedButton(
-                      child: const Text('לא'),
-                      onPressed: () {
-                        Navigator.of(context).pop(false);
-                      },
-                    ),
-                  ],
-                );
-              });
+            context: context,
+            builder: (_) {
+              return AlertDialog(
+                title: const Text('האם לצאת?'),
+                content: const Text('האם לצאת בלי לשמור את השינויים?'),
+                actions: [
+                  TextButton(
+                    child: const Text('כן, צא בלי לשמור'),
+                    onPressed: () {
+                      Navigator.of(context).pop(true);
+                    },
+                  ),
+                  ElevatedButton(
+                    child: const Text('לא'),
+                    onPressed: () {
+                      Navigator.of(context).pop(false);
+                    },
+                  ),
+                ],
+              );
+            },
+          );
         },
         child: BlocListener<PointFormCubit, PointFormState>(
           listenWhen: (previous, current) => previous != current,
@@ -99,6 +97,18 @@ class PointForm extends StatelessWidget {
             }
 
             if (state.status.isSubmissionSuccess) {
+              ScaffoldMessenger.of(context)
+                ..hideCurrentSnackBar()
+                ..showSnackBar(
+                  SnackBar(
+                    content: Text(
+                      point.isEmpty
+                          ? 'פרסום בהצלחה'
+                          : '${point.title} עודכן בהצלחה',
+                    ),
+                  ),
+                );
+
               Navigator.of(context).pop();
             }
           },
@@ -112,71 +122,13 @@ class PointForm extends StatelessWidget {
                 const _DescriptionInput(),
                 const _PriceInput(),
                 const _TagsInput(),
+                const _AvailableInput(),
                 _SubmitButton(point: point),
               ],
             ),
           ),
         ),
       ),
-    );
-  }
-}
-
-class _DeleteButton extends StatelessWidget {
-  const _DeleteButton({
-    Key key,
-    @required this.point,
-  }) : super(key: key);
-
-  final Point point;
-
-  @override
-  Widget build(BuildContext context) {
-    return IconButton(
-      icon: const Icon(Icons.delete),
-      tooltip: 'מחק',
-      onPressed: () => showDialog<bool>(
-          context: context,
-          builder: (_) {
-            final style = Theme.of(context).textTheme.headline6;
-            return AlertDialog(
-              title: const Text('האם את/ה בטוח/ה?'),
-              content: RichText(
-                  text: TextSpan(children: [
-                TextSpan(
-                  text: 'האם את/ה בטוח/ה שברצונך למחוק את ',
-                  style: style,
-                ),
-                TextSpan(
-                  text: point.title,
-                  style: style.copyWith(fontWeight: FontWeight.w700),
-                ),
-                TextSpan(
-                  text: ' ?',
-                  style: style,
-                ),
-              ])),
-              actions: [
-                TextButton(
-                  child: const Text('כן, מחק לצמיתות'),
-                  onPressed: () {
-                    Navigator.of(context).pop(true);
-                  },
-                ),
-                ElevatedButton(
-                  child: const Text('לא'),
-                  onPressed: () {
-                    Navigator.of(context).pop(false);
-                  },
-                ),
-              ],
-            );
-          }).then((value) {
-        if (value) {
-          context.read<PointsBloc>().add(PointDeletedEvent(point));
-          Navigator.of(context).pop();
-        }
-      }),
     );
   }
 }
@@ -361,6 +313,40 @@ class _MediaInput extends StatelessWidget {
           media: state.mediaInput.value,
           onMediaChanged: (value) =>
               context.read<PointFormCubit>().changeMedia(value),
+        );
+      },
+    );
+  }
+}
+
+class _AvailableInput extends StatelessWidget {
+  const _AvailableInput({
+    Key key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<PointFormCubit, PointFormState>(
+      buildWhen: (previous, current) => previous != current,
+      builder: (_, state) {
+        return SwitchListTile(
+          title: state.isAvailable ? const Text('זמין') : const Text('לא זמין'),
+          subtitle: const Text('מאכלים זמינים מופיעים על המפה עם '
+              'שמכם, כתובתכם ומספר הטלפון איתו נרשמתם.'),
+          value: state.isAvailable,
+          onChanged: (bool value) {
+            if (!value || state.canPublishPoint) {
+              return context.read<PointFormCubit>().changeAvailable(value);
+            }
+
+            ScaffoldMessenger.of(context)
+              ..hideCurrentSnackBar()
+              ..showSnackBar(
+                const SnackBar(
+                  content: Text('רק שלושה מאכלים יכולים להיות זמינים.'),
+                ),
+              );
+          },
         );
       },
     );

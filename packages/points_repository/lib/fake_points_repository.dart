@@ -12,45 +12,81 @@ class FakePointsRepository extends PointsRepository {
 
   @override
   Future<void> create(Point point) async {
-    _points.add(point);
+    _points.add(point.copyWith(
+      id: _randString,
+      createdAt: Time.now(),
+      updatedAt: Time.now(),
+    ));
+
     emit();
   }
 
   @override
   Future<void> update(Point point) async {
-    return Future.wait([
-      delete(point),
-      create(point),
-    ]);
+    _points
+      ..removeWhere((_point) => _point.id == point.id)
+      ..add(point.copyWith(
+        updatedAt: Time.now(),
+      ));
+
+    emit();
   }
 
   @override
   Future<void> delete(Point point) async {
-    _points.removeWhere((_point) => _point.id == point.id);
-    emit();
+    return update(point.copyWith(deletedAt: Time.now()));
+  }
+
+  @override
+  Future<void> restore(Point point) async {
+    return update(point.copyWith(deletedAt: Time.empty));
   }
 
   @override
   Stream<List<Point>> near({LatLng latLng, num radiusInKM = 3.14}) async* {
     for (var i = 0; i <= 314; i++) {
-      await create(_randPoint.copyWith(
+      final point = _randPoint.copyWith(
+        cookId: _randString,
         latLng: LatLng(
           latitude: latLng.latitude + _randDouble,
           longitude: latLng.longitude + _randDouble,
         ),
-      ));
+      );
+
+      await create(point);
+
+      if (rand.nextBool()) {
+        await delete(point);
+      }
     }
 
-    yield* stream();
+    yield* stream().map(
+      (points) => points.where((point) => point.isNotTrashed).toList()
+        ..sort(
+          (point1, point2) {
+            final distance1 = point1.latLng.distanceInKM(latLng);
+            final distance2 = point2.latLng.distanceInKM(latLng);
+
+            if (distance1 == distance2) {
+              return 0;
+            }
+
+            return distance1 < distance2 ? -1 : 1;
+          },
+        ),
+    );
   }
 
   @override
   Stream<List<Point>> byCookId(String cookId) async* {
     if (_points.where((point) => point.cookId == cookId).isEmpty) {
-      for (var i = 0; i <= rand.nextInt(2); i++) {
-        await create(_randPoint.copyWith(
-          cookId: cookId,
-        ));
+      for (var i = 0; i <= 5; i++) {
+        await create(
+          _randPoint.copyWith(
+            cookId: cookId,
+            deletedAt: rand.nextBool() ? Time.empty : Time.now(),
+          ),
+        );
       }
     }
 
@@ -72,7 +108,9 @@ class FakePointsRepository extends PointsRepository {
   }
 
   void emit() {
-    for (var listener in _listeners) listener.add(_points);
+    final list = _points.reversed.toList();
+
+    for (var listener in _listeners) listener.add(list);
   }
 
   Point get _randPoint {
@@ -130,8 +168,6 @@ class FakePointsRepository extends PointsRepository {
     ];
 
     return fake[rand.nextInt(fake.length)].copyWith(
-      id: _randString,
-      cookId: _randString,
       price: Money(
         amount: 10 + (30 * rand.nextDouble()).floorToDouble(),
         currency: Currency.unknown,

@@ -64,6 +64,8 @@ class PointsBloc extends Bloc<PointsEvent, PointsState> {
       yield* _mapPointUpdatedEventToState(event);
     } else if (event is PointDeletedEvent) {
       yield* _mapPointDeletedEventToState(event);
+    } else if (event is PointRestoreEvent) {
+      yield* _mapPointRestoreEventToState(event);
     }
   }
 
@@ -87,19 +89,7 @@ class PointsBloc extends Bloc<PointsEvent, PointsState> {
       _nearbyPointsSubscription = _pointsRepository
           .near(latLng: event.latLng, radiusInKM: event.radiusInKM)
           .listen((nearbyPoints) {
-        add(PointsNearbyLoadedEvent(
-          nearbyPoints
-            ..sort((point1, point2) {
-              final distance1 = point1.latLng.distanceInKM(event.latLng);
-              final distance2 = point2.latLng.distanceInKM(event.latLng);
-
-              if (distance1 == distance2) {
-                return 0;
-              }
-
-              return distance1 < distance2 ? -1 : 1;
-            }),
-        ));
+        add(PointsNearbyLoadedEvent(nearbyPoints));
       });
     } else {
       yield state.copyWith(status: PointsStatus.loaded);
@@ -168,6 +158,12 @@ class PointsBloc extends Bloc<PointsEvent, PointsState> {
     PointDeletedEvent event,
   ) async* {
     await _pointsRepository.delete(event.point);
+  }
+
+  Stream<PointsState> _mapPointRestoreEventToState(
+    PointRestoreEvent event,
+  ) async* {
+    await _pointsRepository.restore(event.point);
   }
 }
 

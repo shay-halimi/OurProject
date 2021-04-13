@@ -14,6 +14,9 @@ class Point {
     @required this.price,
     @required this.media,
     @required this.tags,
+    @required this.createdAt,
+    @required this.updatedAt,
+    @required this.deletedAt,
   })  : assert(id != null),
         assert(cookId != null),
         assert(latLng != null),
@@ -21,7 +24,10 @@ class Point {
         assert(description != null),
         assert(price != null),
         assert(media != null),
-        assert(tags != null);
+        assert(tags != null),
+        assert(createdAt != null),
+        assert(updatedAt != null),
+        assert(deletedAt != null);
 
   factory Point.fromEntity(PointEntity entity) {
     return Point(
@@ -33,6 +39,9 @@ class Point {
       price: entity.price,
       media: entity.media,
       tags: entity.tags,
+      createdAt: entity.createdAt,
+      updatedAt: entity.updatedAt,
+      deletedAt: entity.deletedAt,
     );
   }
 
@@ -44,6 +53,9 @@ class Point {
   final Money price;
   final Set<String> media;
   final Set<String> tags;
+  final Time createdAt;
+  final Time updatedAt;
+  final Time deletedAt;
 
   static const empty = Point(
     id: '',
@@ -54,11 +66,18 @@ class Point {
     price: Money.empty,
     media: {},
     tags: {},
+    createdAt: Time.empty,
+    updatedAt: Time.empty,
+    deletedAt: Time.empty,
   );
 
   bool get isEmpty => this == empty;
 
   bool get isNotEmpty => !isEmpty;
+
+  bool get isTrashed => deletedAt.isNotEmpty;
+
+  bool get isNotTrashed => !isTrashed;
 
   static const Set<String> defaultTags = {'צמחוני', 'טבעוני', 'ללא גלוטן'};
 
@@ -71,6 +90,9 @@ class Point {
     Money price,
     Set<String> media,
     Set<String> tags,
+    Time createdAt,
+    Time updatedAt,
+    Time deletedAt,
   }) {
     return Point(
       id: id ?? this.id,
@@ -81,6 +103,9 @@ class Point {
       price: price ?? this.price,
       media: media ?? this.media,
       tags: tags ?? this.tags,
+      createdAt: createdAt ?? this.createdAt,
+      updatedAt: updatedAt ?? this.updatedAt,
+      deletedAt: deletedAt ?? this.deletedAt,
     );
   }
 
@@ -94,6 +119,9 @@ class Point {
       'price': price.toJson(),
       'media': media,
       'tags': tags,
+      'createdAt': createdAt.toJson(),
+      'updatedAt': updatedAt.toJson(),
+      'deletedAt': deletedAt.toJson(),
     };
   }
 
@@ -107,14 +135,17 @@ class Point {
       price: price,
       media: media,
       tags: tags,
+      createdAt: createdAt,
+      updatedAt: updatedAt,
+      deletedAt: deletedAt,
     );
   }
 
   @override
   String toString() {
-    return 'Point{id: $id, cookId: $cookId, latLng: $latLng,'
-        ' title: $title, description: $description,'
-        ' price: $price, media: $media, tags: $tags}';
+    return '$Point{id: $id, cookId: $cookId, latLng: $latLng, title: $title, '
+        'description: $description, price: $price, media: $media, tags: $tags, '
+        'createdAt: $createdAt, updatedAt: $updatedAt, deletedAt: $deletedAt}';
   }
 
   @override
@@ -129,7 +160,10 @@ class Point {
           description == other.description &&
           price == other.price &&
           media == other.media &&
-          tags == other.tags;
+          tags == other.tags &&
+          createdAt == other.createdAt &&
+          updatedAt == other.updatedAt &&
+          deletedAt == other.deletedAt;
 
   @override
   int get hashCode =>
@@ -140,5 +174,8 @@ class Point {
       description.hashCode ^
       price.hashCode ^
       media.hashCode ^
-      tags.hashCode;
+      tags.hashCode ^
+      createdAt.hashCode ^
+      updatedAt.hashCode ^
+      deletedAt.hashCode;
 }

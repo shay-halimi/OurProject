@@ -75,9 +75,9 @@ class _MapWidgetState extends State<MapWidget> {
           BlocConsumer<SelectedPointCubit, SelectedPointState>(
             listenWhen: (previous, current) => previous != current,
             listener: (_, state) async {
-              if (state.point.isEmpty) return;
-
-              await _focus(state.point.latLng, defaultZoom);
+              if (state.point.isNotEmpty) {
+                await _focus(state.point.latLng, defaultZoom);
+              }
             },
             buildWhen: (previous, current) => previous != current,
             builder: (_, state) {
@@ -126,9 +126,13 @@ class _MapWidgetState extends State<MapWidget> {
                     _center = position.toLatLng();
                   });
                 },
-                onCameraIdle: () => context
-                    .read<PointsBloc>()
-                    .add(PointsNearbyRequestedEvent(_center ?? location)),
+                onCameraIdle: () {
+                  if (state.point.isEmpty) {
+                    context
+                        .read<PointsBloc>()
+                        .add(PointsNearbyRequestedEvent(_center ?? location));
+                  }
+                },
               );
             },
           ),

@@ -11,5 +11,7 @@ abstract class PointsRepository {
 
   Future<void> delete(Point point);
 
+  Future<void> restore(Point point);
+
   Stream<List<Point>> byCookId(String cookId);
 }

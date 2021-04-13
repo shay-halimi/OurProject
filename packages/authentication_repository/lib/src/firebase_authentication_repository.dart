@@ -10,36 +10,32 @@ class FirebaseAuthenticationRepository extends AuthenticationRepository {
     firebase_auth.FirebaseAuth firebaseAuth,
   }) : _firebaseAuth = firebaseAuth ?? firebase_auth.FirebaseAuth.instance;
 
-  /// @TODO(Matan) apple app store shit,
-  /// @TODO(Matan) delete this for production.
-  static const duckApple = '+972555555555';
-
   final firebase_auth.FirebaseAuth _firebaseAuth;
 
   @override
   Future<Verification> sendOTP({String phoneNumber}) async {
     final completer = Completer<Verification>();
 
-    if (phoneNumber == duckApple) {
-      await _firebaseAuth.signInAnonymously();
-    } else {
-      await _firebaseAuth.verifyPhoneNumber(
-        phoneNumber: phoneNumber,
-        timeout: const Duration(
-          seconds: 60,
-        ),
-        verificationCompleted: (phoneAuthCredential) async {
-          await _firebaseAuth.signInWithCredential(phoneAuthCredential);
-        },
-        codeSent: (verificationId, forceResendingToken) {
-          completer.complete(Verification(id: verificationId));
-        },
-        verificationFailed: (error) {
-          completer.completeError(error);
-        },
-        codeAutoRetrievalTimeout: (_) {},
-      );
-    }
+    await _firebaseAuth.verifyPhoneNumber(
+      phoneNumber: phoneNumber,
+      timeout: const Duration(
+        seconds: 60,
+      ),
+      verificationCompleted: (phoneAuthCredential) async {
+        await _firebaseAuth.signInWithCredential(phoneAuthCredential);
+      },
+      codeSent: (verificationId, _) {
+        completer.complete(Verification(id: verificationId));
+      },
+      verificationFailed: (error) {
+        completer.completeError(error);
+      },
+      codeAutoRetrievalTimeout: (_) {
+        if (completer.isCompleted) return;
+
+        completer.completeError(Exception('Code auto retrieval timeout'));
+      },
+    );
 
     return completer.future;
   }
@@ -84,7 +80,7 @@ extension on firebase_auth.User {
   User get toUser {
     return User(
       id: uid,
-      phoneNumber: phoneNumber ?? FirebaseAuthenticationRepository.duckApple,
+      phoneNumber: phoneNumber,
     );
   }
 }

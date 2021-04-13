@@ -7,6 +7,8 @@ class PointFormState extends Equatable {
     this.priceInput = const PriceInput.pure(),
     this.mediaInput = const MediaInput.pure(),
     this.tagsInput = const TagsInput.pure(),
+    this.deleteAtInput = const DeleteAtInput.pure(),
+    this.canPublishPoint = true,
     this.status = FormzStatus.pure,
   });
 
@@ -20,7 +22,13 @@ class PointFormState extends Equatable {
 
   final TagsInput tagsInput;
 
+  final DeleteAtInput deleteAtInput;
+
+  final bool canPublishPoint;
+
   final FormzStatus status;
+
+  bool get isAvailable => deleteAtInput.value.isEmpty;
 
   @override
   List<Object> get props => [
@@ -29,6 +37,8 @@ class PointFormState extends Equatable {
         priceInput,
         mediaInput,
         tagsInput,
+        deleteAtInput,
+        canPublishPoint,
         status,
       ];
 
@@ -38,6 +48,8 @@ class PointFormState extends Equatable {
     PriceInput priceInput,
     MediaInput mediaInput,
     TagsInput tagsInput,
+    DeleteAtInput deleteAtInput,
+    bool canPublishPoint,
     FormzStatus status,
   }) {
     return PointFormState(
@@ -46,6 +58,8 @@ class PointFormState extends Equatable {
       priceInput: priceInput ?? this.priceInput,
       mediaInput: mediaInput ?? this.mediaInput,
       tagsInput: tagsInput ?? this.tagsInput,
+      deleteAtInput: deleteAtInput ?? this.deleteAtInput,
+      canPublishPoint: canPublishPoint ?? this.canPublishPoint,
       status: status ?? this.status,
     );
   }
@@ -115,6 +129,19 @@ class TagsInput extends FormzInput<Set<String>, TagsInputValidationError> {
 
   @override
   TagsInputValidationError validator(Set<String> value) {
+    return null;
+  }
+}
+
+enum DeleteAtInputValidationError { invalid }
+
+class DeleteAtInput extends FormzInput<Time, DeleteAtInputValidationError> {
+  const DeleteAtInput.pure() : super.pure(Time.empty);
+
+  const DeleteAtInput.dirty([Time value = Time.empty]) : super.dirty(value);
+
+  @override
+  DeleteAtInputValidationError validator(Time value) {
     return null;
   }
 }

@@ -3,6 +3,7 @@ import 'package:cookpoint/humanz.dart';
 import 'package:cookpoint/location/location.dart';
 import 'package:cookpoint/media/media.dart';
 import 'package:cookpoint/points/points.dart';
+import 'package:cookpoint/theme/widgets/circle_button.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -29,6 +30,8 @@ class PointCard extends StatelessWidget {
     final center =
         context.select((LocationCubit cubit) => cubit.state.toLatLng());
 
+    final cook = context.select((CookBloc bloc) => bloc.state.cook);
+
     final textTheme = Theme.of(context).textTheme;
 
     return Card(
@@ -41,10 +44,28 @@ class PointCard extends StatelessWidget {
               child: Column(
                 children: [
                   Expanded(
-                    child: Row(
+                    child: Stack(
+                      alignment: AlignmentDirectional.bottomCenter,
                       children: [
-                        Expanded(
-                          child: MediaWidget(url: point.media.first),
+                        Row(
+                          children: [
+                            Expanded(
+                              child: MediaWidget(url: point.media.first),
+                            ),
+                          ],
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: [
+                            if (point.cookId == cook.id)
+                              CircleButton(
+                                child: const Icon(Icons.edit),
+                                onPressed: () {
+                                  Navigator.of(context).push<void>(
+                                      PointPage.route(point: point));
+                                },
+                              ),
+                          ],
                         ),
                       ],
                     ),
