@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 class AppCover extends StatelessWidget {
   const AppCover({
     Key key,
+    this.tag = 'AppCover',
     this.width = 128,
     this.height = 128,
   }) : super(key: key);
@@ -10,10 +11,12 @@ class AppCover extends StatelessWidget {
   final double width;
   final double height;
 
+  final Object tag;
+
   @override
   Widget build(BuildContext context) {
     return Hero(
-      tag: 'AppCover',
+      tag: tag,
       child: Image.asset(
         'assets/images/cover.png',
         width: width,

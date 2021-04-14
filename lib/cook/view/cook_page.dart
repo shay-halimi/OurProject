@@ -6,9 +6,14 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:provider/provider.dart';
 
 class CookPage extends StatelessWidget {
+  const CookPage();
+
   static Route route() {
     return MaterialPageRoute<void>(
-        builder: (_) => CookMiddleware(child: CookPage()));
+      builder: (_) => const CookMiddleware(
+        child: CookPage(),
+      ),
+    );
   }
 
   @override

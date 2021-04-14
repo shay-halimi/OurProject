@@ -7,8 +7,10 @@ import 'package:provider/provider.dart';
 import 'selected_point/selected_point.dart';
 
 class HomePage extends StatelessWidget {
+  const HomePage();
+
   static Route route() {
-    return MaterialPageRoute<void>(builder: (_) => HomePage());
+    return MaterialPageRoute<void>(builder: (_) => const HomePage());
   }
 
   @override

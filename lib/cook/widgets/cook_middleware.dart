@@ -19,7 +19,7 @@ class CookMiddleware extends StatelessWidget {
         bloc.state.status == AuthenticationStatus.unauthenticated);
 
     if (unauthenticated) {
-      return AuthenticationPage();
+      return const AuthenticationPage();
     }
 
     return BlocBuilder<CookBloc, CookState>(
@@ -30,7 +30,7 @@ class CookMiddleware extends StatelessWidget {
             return child;
 
           case CookStatus.error:
-            return CreateUpdateCookPage();
+            return const CreateUpdateCookPage();
 
           default:
             return const SplashPage();

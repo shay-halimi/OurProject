@@ -2,6 +2,7 @@ import 'package:cookpoint/authentication/authentication.dart';
 import 'package:cookpoint/cook/cook.dart';
 import 'package:cookpoint/home_page.dart';
 import 'package:cookpoint/internet/cubit/cubit.dart';
+import 'package:cookpoint/legal/legal.dart';
 import 'package:cookpoint/location/location.dart';
 import 'package:cookpoint/points/points.dart';
 import 'package:cookpoint/splash/splash.dart';
@@ -108,7 +109,9 @@ class _AppViewState extends State<AppView> {
       ],
       navigatorKey: _navigatorKey,
       onGenerateRoute: (_) => SplashPage.route(),
-      home: HomePage(),
+      home: TermsOfServiceMiddleware(
+        child: const HomePage(),
+      ),
       builder: (_, child) {
         return BlocBuilder<InternetCubit, InternetState>(
           buildWhen: (previous, current) => previous != current,

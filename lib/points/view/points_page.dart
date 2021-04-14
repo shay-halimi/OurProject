@@ -39,10 +39,16 @@ class PointsPage extends StatelessWidget {
             );
           }
 
-          return ListView(
-            children: [
-              for (var point in state.cookPoints) PointWidget(point: point),
-            ],
+          return HeroMode(
+            enabled: false,
+            child: ListView(
+              children: [
+                for (var point in state.cookPoints)
+                  PointWidget(
+                    point: point,
+                  ),
+              ],
+            ),
           );
         },
       ),

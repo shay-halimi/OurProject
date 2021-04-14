@@ -9,9 +9,13 @@ import 'package:provider/provider.dart';
 
 // @TODO(Matan) marge with CookPage
 class CreateUpdateCookPage extends StatelessWidget {
+  const CreateUpdateCookPage();
+
   static Route route() {
     return MaterialPageRoute<void>(
-      builder: (_) => CookMiddleware(child: CreateUpdateCookPage()),
+      builder: (_) => const CookMiddleware(
+        child: CreateUpdateCookPage(),
+      ),
     );
   }
 

@@ -33,14 +33,17 @@ class MediaWidget extends StatelessWidget {
           Expanded(
             child: AspectRatio(
               aspectRatio: aspectRatio,
-              child: Image(
-                image: image ?? CachedNetworkImageProvider(url),
-                fit: BoxFit.cover,
-                loadingBuilder: (_, child, loadingProgress) {
-                  return loadingProgress == null
-                      ? child
-                      : const Center(child: CircularProgressIndicator());
-                },
+              child: Hero(
+                tag: url ?? image.hashCode,
+                child: Image(
+                  image: image ?? CachedNetworkImageProvider(url),
+                  fit: BoxFit.cover,
+                  loadingBuilder: (_, child, loadingProgress) {
+                    return loadingProgress == null
+                        ? child
+                        : const Center(child: CircularProgressIndicator());
+                  },
+                ),
               ),
             ),
           ),

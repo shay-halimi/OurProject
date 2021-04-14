@@ -1,6 +1,7 @@
 import 'package:cookpoint/authentication/authentication.dart';
 import 'package:cookpoint/cook/cook.dart';
 import 'package:cookpoint/launcher.dart';
+import 'package:cookpoint/legal/legal.dart';
 import 'package:cookpoint/points/points.dart';
 import 'package:cookpoint/theme/theme.dart';
 import 'package:flutter/material.dart';
@@ -49,21 +50,50 @@ class AppDrawer extends StatelessWidget {
               key: const Key('AppDrawer_AboutUsPage_ListTile'),
               leading: const Icon(Icons.info),
               title: const Text('אודות'),
-              onTap: () => null,
+              onTap: () => showAboutDialog(
+                context: context,
+                applicationIcon: const Padding(
+                  padding: EdgeInsets.all(8.0),
+                  child: AppCover(
+                    tag: '1.0.1',
+                    width: 64,
+                    height: 64,
+                  ),
+                ),
+                applicationVersion: '1.0.1',
+                children: [
+                  const Text('''
+אפליקציית שיתוף האוכל שכבשה את ישראל.
+
+CookPoint הינה אפליקציה לפרסום אוכל ביתי שנצורה עקב קשיי הקורונה.
+מטרתנו העיקרית היא לעזור לתושבים שנפגעו כלכלית ולספק להם פלטפורמה פרסומית כדי שיוכלו להרוויח מהמטבח הפרטי. בו זמנית ברצוננו להפגיש בין המשתמשים כדי לייצר שיח פיזי שנפגע במהלך המגפה.
+
+בפלטפורמה ניתן לראות בשלנים שמוכרים אוכל מהמטבח הפרטי ודרכי התקשרות עימם. ניתן בצורה קלה ומהירה להירשם כבשלן ולפרסם את המאכלים שלי ניתן בכל עת להוריד זמינות של אחד הבישולים ולא להיות חשוף לשאר המשתמשים.
+
+לכל בעיה ו/או בקשה ניתן לפנות אלינו דרך המייל שכתובתו cookpointapp@gmail.com ו/או בטלפון שמספרו 054.306.0964.
+
+שיהיה בתאבון,
+CookPoint
+                  '''),
+                ],
+              ),
             ),
             ListTile(
               dense: true,
               key: const Key('AppDrawer_EmailUs_ListTile'),
               leading: const Icon(Icons.support_agent),
               title: const Text('צרו קשר'),
-              onTap: () async => await launcher.email('cookpointapp@gmail.com'),
+              onTap: () async => await launcher
+                  .launch('https://cookpoint.app/pages/contact-us'),
             ),
             ListTile(
               dense: true,
               key: const Key('AppDrawer_TOSPage_ListTile'),
               leading: const Icon(Icons.description),
               title: const Text('תנאים ומדיניות פרטיות'),
-              onTap: () => null,
+              onTap: () => Navigator.of(context).push<void>(
+                TermsOfService.route(),
+              ),
             ),
           ],
         ),

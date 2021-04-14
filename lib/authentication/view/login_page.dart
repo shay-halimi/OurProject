@@ -3,9 +3,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class LoginPage extends StatelessWidget {
+  const LoginPage();
+
   static Route route() {
     return MaterialPageRoute<void>(
-      builder: (_) => LoginPage(),
+      builder: (_) => const LoginPage(),
       fullscreenDialog: true,
     );
   }
@@ -13,7 +15,7 @@ class LoginPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('התחברות')),
+      appBar: AppBar(title: const Text('הזדהות')),
       resizeToAvoidBottomInset: true,
       body: Padding(
         padding: const EdgeInsets.all(8.0),
