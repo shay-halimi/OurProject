@@ -41,10 +41,10 @@ class LocationCubit extends Cubit<LocationState> {
     return super.close();
   }
 
-  Future<void> locate() async {
+  Future<void> locate([bool openSettings = false]) async {
     emit(const LocationState.loading());
 
-    await _locationServices.locate();
+    await _locationServices.locate(openSettings);
   }
 
   Location _getDefaultLocation() {

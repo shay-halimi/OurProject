@@ -12,33 +12,33 @@ class GeoLocatorLocationServices extends LocationServices {
   Stream<Location> get onLocationChange => _locationController.stream;
 
   @override
-  Future<void> locate() async {
-    geo_locator.LocationPermission permission;
-
+  Future<void> locate([bool openSettings = false]) async {
     try {
-      bool serviceEnabled;
-      serviceEnabled = await geo_locator.Geolocator.isLocationServiceEnabled();
+      final serviceEnabled =
+          await geo_locator.Geolocator.isLocationServiceEnabled();
 
       if (!serviceEnabled) {
-        return _locationController.add(Location.empty);
+        throw Exception('location service disabled');
       }
-    } on UnimplementedError {
-      print('web?');
-    }
 
-    permission = await geo_locator.Geolocator.checkPermission();
-    if (permission == geo_locator.LocationPermission.denied) {
-      permission = await geo_locator.Geolocator.requestPermission();
-      if (permission == geo_locator.LocationPermission.deniedForever) {
-        return _locationController.add(Location.empty);
-      }
+      var permission = await geo_locator.Geolocator.checkPermission();
 
       if (permission == geo_locator.LocationPermission.denied) {
-        return _locationController.add(Location.empty);
-      }
-    }
+        permission = await geo_locator.Geolocator.requestPermission();
 
-    try {
+        if (permission == geo_locator.LocationPermission.deniedForever) {
+          if (openSettings && (await _openSettings())) {
+            return locate(false);
+          }
+
+          throw Exception('location permission denied forever');
+        }
+
+        if (permission == geo_locator.LocationPermission.denied) {
+          throw Exception('location permission denied');
+        }
+      }
+
       final data = await geo_locator.Geolocator.getCurrentPosition();
 
       return _locationController.add(Location(
@@ -47,6 +47,8 @@ class GeoLocatorLocationServices extends LocationServices {
         data.heading,
       ));
     } on Exception {
+      return _locationController.add(Location.empty);
+    } on Error {
       return _locationController.add(Location.empty);
     }
   }
@@ -71,4 +73,8 @@ class GeoLocatorLocationServices extends LocationServices {
       return Location.empty;
     }
   }
+
+  Future<bool> _openSettings() async =>
+      await geo_locator.Geolocator.openAppSettings() ||
+      await geo_locator.Geolocator.openLocationSettings();
 }

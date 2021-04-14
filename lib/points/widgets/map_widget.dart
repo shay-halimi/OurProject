@@ -156,7 +156,7 @@ class _MapWidgetState extends State<MapWidget> {
                           : const Icon(Icons.my_location),
                       onPressed: () {
                         if (isError) {
-                          context.read<LocationCubit>().locate();
+                          context.read<LocationCubit>().locate(true);
                         }
                         return _focus(state.toLatLng(), defaultZoom);
                       },

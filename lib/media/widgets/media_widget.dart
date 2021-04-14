@@ -9,8 +9,10 @@ class MediaWidget extends StatelessWidget {
     this.aspectRatio = defaultAspectRatio,
     this.maxWidth = double.infinity,
     this.maxHeight = double.infinity,
-  })  : assert(url != null && image == null),
-        assert(image != null && url == null),
+  })  : assert(
+          (url != null && image == null) || (image != null && url == null),
+          'need one of an image *or* a url.',
+        ),
         assert(aspectRatio != null && aspectRatio > 0.0),
         assert(maxWidth == null || maxWidth > 0.0),
         assert(maxHeight == null || maxHeight > 0.0),
