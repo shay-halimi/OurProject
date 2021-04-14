@@ -7,11 +7,13 @@ class MediaWidget extends StatelessWidget {
     this.url,
     this.image,
     this.aspectRatio = defaultAspectRatio,
+    this.maxWidth = double.infinity,
     this.maxHeight = double.infinity,
-  })  : assert(
-          url == null || image == null,
-          'can\'t have both image and a url.',
-        ),
+  })  : assert(url != null && image == null),
+        assert(image != null && url == null),
+        assert(aspectRatio != null && aspectRatio > 0.0),
+        assert(maxWidth == null || maxWidth > 0.0),
+        assert(maxHeight == null || maxHeight > 0.0),
         super(key: key);
 
   static const defaultAspectRatio = 1 / 1;
@@ -22,19 +24,24 @@ class MediaWidget extends StatelessWidget {
 
   final double aspectRatio;
 
+  final double maxWidth;
+
   final double maxHeight;
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      constraints: BoxConstraints(maxHeight: maxHeight),
+      constraints: BoxConstraints(
+        maxWidth: maxWidth,
+        maxHeight: maxHeight,
+      ),
       child: Row(
         children: [
           Expanded(
             child: AspectRatio(
               aspectRatio: aspectRatio,
               child: Hero(
-                tag: url ?? image.hashCode,
+                tag: image ?? url,
                 child: Image(
                   image: image ?? CachedNetworkImageProvider(url),
                   fit: BoxFit.cover,

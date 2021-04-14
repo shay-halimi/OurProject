@@ -7,7 +7,9 @@ import 'package:provider/provider.dart';
 import 'selected_point/selected_point.dart';
 
 class HomePage extends StatelessWidget {
-  const HomePage();
+  const HomePage({
+    Key key,
+  }) : super(key: key);
 
   static Route route() {
     return MaterialPageRoute<void>(builder: (_) => const HomePage());
@@ -28,7 +30,7 @@ class HomePage extends StatelessWidget {
           ),
         ),
       ],
-      child: MapView(),
+      child: const MapView(),
     );
   }
 }

@@ -4,7 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
 class AuthenticationPage extends StatelessWidget {
-  const AuthenticationPage();
+  const AuthenticationPage({
+    Key key,
+  }) : super(key: key);
 
   static Route route() {
     return MaterialPageRoute<void>(builder: (_) => const AuthenticationPage());

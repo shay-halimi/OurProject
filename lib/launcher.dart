@@ -1,9 +1,11 @@
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:url_launcher/url_launcher.dart' as url_launcher;
 
-final launcher = _Launcher();
+final launcher = const _Launcher();
 
 class _Launcher {
+  const _Launcher();
+
   Future<void> email(String emailAddress) {
     return launch('mailto:$emailAddress');
   }
@@ -12,7 +14,7 @@ class _Launcher {
     return launch('tel:$phoneNumber');
   }
 
-  Future<void> whatsapp(String phoneNumber) {
+  Future<void> whatsApp(String phoneNumber) {
     return launch('https://wa.me/$phoneNumber');
   }
 

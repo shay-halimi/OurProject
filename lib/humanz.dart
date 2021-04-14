@@ -1,11 +1,14 @@
 import 'package:cookpoint/points/points.dart';
 
-final humanz = _Humanz();
+final humanz = const _Humanz();
 
 /// @TODO(Matan) !!! _Humanz class support *only* Hebrew
 /// @TODO(Matan) make _Humanz international.
 class _Humanz {
-  String money(Money money) => '${money.amount.toStringAsFixed(2)} ₪';
+  const _Humanz();
+
+  String money(Money money, [String symbol = ' ₪']) =>
+      '${money.amount.toStringAsFixed(2)}$symbol';
 
   String phoneNumber(String phoneNumber) {
     try {

@@ -103,7 +103,9 @@ class PriceInput extends FormzInput<Money, PriceInputValidationError> {
 
   @override
   PriceInputValidationError validator(Money value) {
-    return value.amount.floor() > 0 ? null : PriceInputValidationError.invalid;
+    return value.amount.floor() > 0 && value.amount.ceil() < 1000
+        ? null
+        : PriceInputValidationError.invalid;
   }
 }
 

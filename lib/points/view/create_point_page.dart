@@ -3,9 +3,13 @@ import 'package:cookpoint/points/points.dart';
 import 'package:flutter/material.dart';
 
 class CreatePointPage extends StatelessWidget {
+  const CreatePointPage({
+    Key key,
+  }) : super(key: key);
+
   static Route route() {
     return MaterialPageRoute<void>(
-        builder: (_) => CookMiddleware(child: CreatePointPage()));
+        builder: (_) => const CookMiddleware(child: CreatePointPage()));
   }
 
   @override

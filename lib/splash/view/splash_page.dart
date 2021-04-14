@@ -2,7 +2,9 @@ import 'package:cookpoint/theme/theme.dart';
 import 'package:flutter/material.dart';
 
 class SplashPage extends StatelessWidget {
-  const SplashPage();
+  const SplashPage({
+    Key key,
+  }) : super(key: key);
 
   static Route route() {
     return MaterialPageRoute<void>(builder: (_) => const SplashPage());

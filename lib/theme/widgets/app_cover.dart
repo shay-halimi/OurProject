@@ -6,9 +6,13 @@ class AppCover extends StatelessWidget {
     this.tag = 'AppCover',
     this.width = 128,
     this.height = 128,
-  }) : super(key: key);
+  })  : assert(tag != null),
+        assert(width == null || width > 0),
+        assert(height == null || height > 0),
+        super(key: key);
 
   final double width;
+
   final double height;
 
   final Object tag;

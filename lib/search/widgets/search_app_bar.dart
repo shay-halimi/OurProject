@@ -9,6 +9,10 @@ import 'package:flutter_typeahead/flutter_typeahead.dart';
 import 'package:provider/provider.dart';
 
 class SearchAppBar extends StatelessWidget {
+  const SearchAppBar({
+    Key key,
+  }) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     final isLoading = context.select(

@@ -7,9 +7,11 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:formz/formz.dart';
 import 'package:provider/provider.dart';
 
-// @TODO(Matan) marge with CookPage
+/// @TODO(Matan) marge with CookPage
 class CreateUpdateCookPage extends StatelessWidget {
-  const CreateUpdateCookPage();
+  const CreateUpdateCookPage({
+    Key key,
+  }) : super(key: key);
 
   static Route route() {
     return MaterialPageRoute<void>(

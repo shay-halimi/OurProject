@@ -10,6 +10,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:provider/provider.dart';
 
 class MapView extends StatelessWidget {
+  const MapView({
+    Key key,
+  }) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     final showPointsBar = context.select((SelectedPointCubit cubit) =>
@@ -24,7 +28,7 @@ class MapView extends StatelessWidget {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                SearchAppBar(),
+                const SearchAppBar(),
                 Visibility(
                   visible: showPointsBar,
                   child: const PointsBar(),
@@ -34,7 +38,7 @@ class MapView extends StatelessWidget {
           )
         ],
       ),
-      endDrawer: AppDrawer(),
+      endDrawer: const AppDrawer(),
       floatingActionButton: Visibility(
         visible: !showPointsBar,
         child: const CreatePointButton(),

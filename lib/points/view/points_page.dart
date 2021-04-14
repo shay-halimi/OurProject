@@ -5,9 +5,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class PointsPage extends StatelessWidget {
+  const PointsPage({
+    Key key,
+  }) : super(key: key);
+
   static Route route() {
     return MaterialPageRoute<void>(
-        builder: (_) => CookMiddleware(child: PointsPage()));
+        builder: (_) => const CookMiddleware(child: PointsPage()));
   }
 
   @override
@@ -39,16 +43,13 @@ class PointsPage extends StatelessWidget {
             );
           }
 
-          return HeroMode(
-            enabled: false,
-            child: ListView(
-              children: [
-                for (var point in state.cookPoints)
-                  PointWidget(
-                    point: point,
-                  ),
-              ],
-            ),
+          return ListView(
+            children: [
+              for (var point in state.cookPoints)
+                PointWidget(
+                  point: point,
+                ),
+            ],
           );
         },
       ),

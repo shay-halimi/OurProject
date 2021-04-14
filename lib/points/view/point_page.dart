@@ -1,3 +1,4 @@
+import 'package:cookpoint/humanz.dart';
 import 'package:cookpoint/media/media.dart';
 import 'package:cookpoint/points/points.dart';
 import 'package:cookpoint/theme/theme.dart';
@@ -115,12 +116,13 @@ class PointForm extends StatelessWidget {
           child: SafeArea(
             child: ListView(
               children: [
-                const _MediaInput(),
-                ConstrainedBox(
-                    constraints: const BoxConstraints(minHeight: 8.0)),
+                const Padding(
+                  padding: EdgeInsets.only(bottom: 8.0),
+                  child: _MediaInput(),
+                ),
                 const _TitleInput(),
-                const _DescriptionInput(),
                 const _PriceInput(),
+                const _DescriptionInput(),
                 const _TagsInput(),
                 const _AvailableInput(),
                 _SubmitButton(point: point),
@@ -214,6 +216,8 @@ class _PriceInput extends StatelessWidget {
             key: const Key('_PriceInput'),
             keyboardType: TextInputType.number,
             maxLines: null,
+            maxLength: 6,
+            maxLengthEnforcement: MaxLengthEnforcement.enforced,
             onChanged: (value) =>
                 context.read<PointFormCubit>().changePrice(value),
             decoration: InputDecoration(
@@ -224,7 +228,7 @@ class _PriceInput extends StatelessWidget {
             textAlign: TextAlign.end,
             initialValue: state.priceInput.value.isEmpty
                 ? null
-                : state.priceInput.value.amount.toStringAsFixed(2),
+                : humanz.money(state.priceInput.value, ''),
           );
         },
       ),

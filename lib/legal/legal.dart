@@ -1,1 +1,1 @@
-export 'terms_of_service.dart';
+export 'view/terms_of_service.dart';

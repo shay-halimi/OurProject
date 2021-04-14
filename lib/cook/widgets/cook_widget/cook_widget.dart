@@ -119,7 +119,7 @@ class _ActionsDialog extends StatelessWidget {
     return ListTile(
       onTap: () async {
         await launcher
-            .whatsapp(cook.phoneNumber)
+            .whatsApp(cook.phoneNumber)
             .then((_) => Navigator.of(context).pop());
       },
       title: const Text('WhatsApp'),
