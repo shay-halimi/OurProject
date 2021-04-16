@@ -189,7 +189,7 @@ class _SearchFieldState extends State<SearchField> {
         },
         itemBuilder: (_, point) {
           return ListTile(
-            key: ValueKey(point.hashCode),
+            key: ValueKey(point.id),
             title: Text(point.title),
             trailing: Text(humanz.distance(point.latLng, center)),
           );

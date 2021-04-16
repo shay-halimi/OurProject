@@ -16,7 +16,11 @@ class SelectedPointCubit extends Cubit<SelectedPointState> {
         super(const SelectedPointState()) {
     _searchBlocSubscription = _searchBloc.stream.listen((state) {
       if (state.status == SearchStatus.loaded) {
-        select(state.results.first);
+        if (!state.results
+            .map((point) => point.id)
+            .contains(this.state.point.id)) {
+          select(state.results.first);
+        }
       } else {
         clear(0);
       }

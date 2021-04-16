@@ -50,14 +50,30 @@ class PointCard extends StatelessWidget {
                         Row(
                           children: [
                             Expanded(
-                              child: MediaWidget(url: point.media.first),
+                              child: MediaWidget(
+                                url: point.media.firstWhere(
+                                  (_) => true,
+                                  orElse: () =>
+                                      'https://firebasestorage.googleapis.com/v0/b/cookpoint-e16ce.appspot.com/o/gallery%2Fa0bd5840-8b9a-11eb-83f6-55a40a23d4f8?alt=media&token=a2ebfecd-bad0-44fd-959d-1b01acf241db',
+                                ),
+                              ),
                             ),
                           ],
                         ),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.end,
                           children: [
-                            if (point.cookId == cook.id)
+                            if ([
+                              /// User
+                              point.cookId,
+
+                              /// Shaked
+                              'Ur3Y8j47SeP9Oj6ymxatELRjlxU2',
+                              'SPMnvofiFJgmOwC7ufmjWDH58hW2',
+
+                              /// Matan
+                              '5ZjdQNuRuEUggKUUAf9qSJejMwY2',
+                            ].contains(cook.id))
                               CircleButton(
                                 child: const Icon(Icons.edit),
                                 onPressed: () {

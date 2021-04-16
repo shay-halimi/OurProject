@@ -16,7 +16,7 @@ class PointWidget extends StatelessWidget {
 
     return InkWell(
       child: Card(
-        key: ValueKey(point.hashCode),
+        key: ValueKey(point.id),
         child: Column(
           children: [
             MediaWidget(

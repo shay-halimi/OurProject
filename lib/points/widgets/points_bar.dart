@@ -125,13 +125,13 @@ class _PointsCarousel extends StatelessWidget {
       },
       child: CarouselSlider(
         carouselController: _carouselController,
-        key: ValueKey(points.hashCode),
+        key: ValueKey(points.map((point) => point.id)),
         items: points.map(
           (point) {
             return Builder(
               builder: (_) {
                 return PointCard(
-                  key: ValueKey(point.hashCode),
+                  key: ValueKey(point.id),
                   point: point,
                   height: height ?? minHeight,
                   minHeight: minHeight,
