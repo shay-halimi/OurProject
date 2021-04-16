@@ -35,6 +35,9 @@ class PointFormCubit extends Cubit<PointFormState> {
       ));
     } else {
       emit(state.copyWith(
+        deleteAtInput: canPublishPoint
+            ? const DeleteAtInput.pure()
+            : DeleteAtInput.dirty(Time.now()),
         canPublishPoint: canPublishPoint,
       ));
     }
