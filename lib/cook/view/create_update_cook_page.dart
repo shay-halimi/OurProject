@@ -15,6 +15,7 @@ class CreateUpdateCookPage extends StatelessWidget {
 
   static Route route() {
     return MaterialPageRoute<void>(
+      settings: const RouteSettings(name: '/cooks/me/create'),
       builder: (_) => const CookMiddleware(
         child: CreateUpdateCookPage(),
       ),

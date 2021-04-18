@@ -7,7 +7,10 @@ class SplashPage extends StatelessWidget {
   }) : super(key: key);
 
   static Route route() {
-    return MaterialPageRoute<void>(builder: (_) => const SplashPage());
+    return MaterialPageRoute<void>(
+      settings: const RouteSettings(name: '/splash'),
+      builder: (_) => const SplashPage(),
+    );
   }
 
   @override

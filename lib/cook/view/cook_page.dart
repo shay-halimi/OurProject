@@ -12,6 +12,7 @@ class CookPage extends StatelessWidget {
 
   static Route route() {
     return MaterialPageRoute<void>(
+      settings: const RouteSettings(name: '/cooks/me'),
       builder: (_) => const CookMiddleware(
         child: CookPage(),
       ),

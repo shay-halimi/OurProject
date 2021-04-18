@@ -11,7 +11,9 @@ class PointsPage extends StatelessWidget {
 
   static Route route() {
     return MaterialPageRoute<void>(
-        builder: (_) => const CookMiddleware(child: PointsPage()));
+      settings: const RouteSettings(name: '/points'),
+      builder: (_) => const CookMiddleware(child: PointsPage()),
+    );
   }
 
   @override

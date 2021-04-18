@@ -91,8 +91,20 @@ class PointCard extends StatelessWidget {
                     child: Column(
                       children: [
                         Row(
+                          children: [
+                            Expanded(
+                              child: Text(
+                                point.title,
+                                style: textTheme.headline6,
+                                maxLines: 2,
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                            ),
+                          ],
+                        ),
+                        Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          crossAxisAlignment: CrossAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.end,
                           children: [
                             TagsLine(tags: {
                               humanz.distance(point.latLng, center),
@@ -102,18 +114,6 @@ class PointCard extends StatelessWidget {
                               humanz.money(point.price),
                               style: textTheme.headline6
                                   .copyWith(fontWeight: FontWeight.w300),
-                            ),
-                          ],
-                        ),
-                        Row(
-                          children: [
-                            Expanded(
-                              child: Text(
-                                point.title,
-                                style: textTheme.headline6,
-                                maxLines: 2,
-                                overflow: TextOverflow.ellipsis,
-                              ),
                             ),
                           ],
                         ),

@@ -13,7 +13,7 @@ class CreatePointButton extends StatelessWidget {
       tooltip: 'פרסם CookPoint',
       label: const Text('פרסמ/י מאכל'),
       onPressed: () {
-        Navigator.of(context).push<void>(CreatePointPage.route());
+        Navigator.of(context).push<void>(PointPage.route(point: Point.empty));
       },
     );
   }

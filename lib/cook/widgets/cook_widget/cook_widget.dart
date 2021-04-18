@@ -54,7 +54,9 @@ class CookWidget extends StatelessWidget {
   Future<void> _onTap(BuildContext context, Cook cook) async {
     return showModalBottomSheet<map_launcher.AvailableMap>(
       context: context,
-      builder: (BuildContext context) {
+      useRootNavigator: true,
+      routeSettings: RouteSettings(name: '/cooks/${cook.id}'),
+      builder: (_) {
         return _ActionsDialog(cook: cook);
       },
     );

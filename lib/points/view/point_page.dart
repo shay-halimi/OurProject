@@ -18,6 +18,9 @@ class PointPage extends StatelessWidget {
 
   static Route route({@required Point point}) {
     return MaterialPageRoute<void>(
+      settings: RouteSettings(
+        name: point.isEmpty ? '/points/create' : '/points/${point.id}/update',
+      ),
       builder: (_) => PointPage(point: point),
     );
   }
@@ -46,8 +49,7 @@ class PointForm extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final isPure =
-        context.select((PointFormCubit cubit) => cubit.state.status.isPure);
+    final status = context.select((PointFormCubit cubit) => cubit.state.status);
 
     return Scaffold(
       resizeToAvoidBottomInset: true,
@@ -55,10 +57,19 @@ class PointForm extends StatelessWidget {
         title: Text(
           point.isEmpty ? 'פרסום מאכל' : 'עדכון ${point.title}',
         ),
+        actions: [
+          if (point.isNotEmpty)
+            IconButton(
+              icon: const Icon(Icons.save),
+              onPressed: status.isValidated
+                  ? () => context.read<PointFormCubit>().save()
+                  : null,
+            )
+        ],
       ),
       body: WillPopScope(
         onWillPop: () async {
-          if (isPure) return true;
+          if (status.isPure) return true;
 
           return showDialog<bool>(
             context: context,
@@ -74,7 +85,7 @@ class PointForm extends StatelessWidget {
                     },
                   ),
                   ElevatedButton(
-                    child: const Text('לא'),
+                    child: const Text('שמור'),
                     onPressed: () {
                       Navigator.of(context).pop(false);
                     },
@@ -82,7 +93,14 @@ class PointForm extends StatelessWidget {
                 ],
               );
             },
-          );
+          ).then((discard) {
+            if (!discard && status.isValidated) {
+              context.read<PointFormCubit>().save();
+              return true;
+            }
+
+            return discard;
+          });
         },
         child: BlocListener<PointFormCubit, PointFormState>(
           listenWhen: (previous, current) => previous != current,
@@ -172,26 +190,29 @@ class _TagsInput extends StatelessWidget {
       child: BlocBuilder<PointFormCubit, PointFormState>(
         buildWhen: (previous, current) => previous != current,
         builder: (_, state) {
-          return Row(
-            children: [
-              for (var tag in Point.defaultTags)
-                Padding(
-                  padding: const EdgeInsets.only(left: 2.0),
-                  child: InputChip(
-                    elevation: 1.0,
-                    selectedColor: Colors.white,
-                    backgroundColor: Colors.white,
-                    label: Text(
-                      tag,
-                      style: Theme.of(context).textTheme.bodyText2,
+          return SingleChildScrollView(
+            scrollDirection: Axis.horizontal,
+            child: Row(
+              children: [
+                for (var tag in Point.defaultTags)
+                  Padding(
+                    padding: const EdgeInsets.only(left: 2.0),
+                    child: InputChip(
+                      elevation: 1.0,
+                      selectedColor: Colors.white,
+                      backgroundColor: Colors.white,
+                      label: Text(
+                        tag,
+                        style: Theme.of(context).textTheme.bodyText2,
+                      ),
+                      onSelected: (selected) =>
+                          context.read<PointFormCubit>().toggleTag(tag),
+                      selected: state.tagsInput.value.contains(tag),
+                      visualDensity: VisualDensity.compact,
                     ),
-                    onSelected: (selected) =>
-                        context.read<PointFormCubit>().toggleTag(tag),
-                    selected: state.tagsInput.value.contains(tag),
-                    visualDensity: VisualDensity.compact,
                   ),
-                ),
-            ],
+              ],
+            ),
           );
         },
       ),

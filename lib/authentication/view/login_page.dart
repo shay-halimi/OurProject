@@ -9,6 +9,7 @@ class LoginPage extends StatelessWidget {
 
   static Route route() {
     return MaterialPageRoute<void>(
+      settings: const RouteSettings(name: '/authentication/login'),
       builder: (_) => const LoginPage(),
       fullscreenDialog: true,
     );

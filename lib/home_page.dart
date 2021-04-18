@@ -14,6 +14,7 @@ class HomePage extends StatelessWidget {
 
   static Route route() {
     return MaterialPageRoute<void>(
+      settings: const RouteSettings(name: '/'),
       builder: (_) => TermsOfServiceMiddleware(child: const HomePage()),
     );
   }

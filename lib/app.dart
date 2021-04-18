@@ -6,6 +6,8 @@ import 'package:cookpoint/location/location.dart';
 import 'package:cookpoint/points/points.dart';
 import 'package:cookpoint/splash/splash.dart';
 import 'package:cookpoint/theme/theme.dart';
+import 'package:firebase_analytics/firebase_analytics.dart';
+import 'package:firebase_analytics/observer.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
@@ -57,14 +59,12 @@ class App extends StatelessWidget {
             create: (_) => AuthenticationBloc(
               authenticationRepository: authenticationRepository,
             ),
-            lazy: false,
           ),
           BlocProvider(
             create: (_context) => CookBloc(
               cooksRepository: cooksRepository,
               authenticationBloc: _context.read<AuthenticationBloc>(),
             ),
-            lazy: false,
           ),
           BlocProvider(
             create: (_context) => PointsBloc(
@@ -100,6 +100,9 @@ class _AppViewState extends State<AppView> {
     return MaterialApp(
       title: 'CookPoint',
       theme: theme,
+      navigatorObservers: [
+        FirebaseAnalyticsObserver(analytics: FirebaseAnalytics()),
+      ],
       localizationsDelegates: [
         GlobalWidgetsLocalizations.delegate,
         GlobalMaterialLocalizations.delegate,

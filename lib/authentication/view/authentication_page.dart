@@ -9,7 +9,10 @@ class AuthenticationPage extends StatelessWidget {
   }) : super(key: key);
 
   static Route route() {
-    return MaterialPageRoute<void>(builder: (_) => const AuthenticationPage());
+    return MaterialPageRoute<void>(
+      settings: const RouteSettings(name: '/authentication'),
+      builder: (_) => const AuthenticationPage(),
+    );
   }
 
   @override

@@ -14,7 +14,10 @@ class TermsOfService extends StatelessWidget {
   }) : super(key: key);
 
   static Route route() {
-    return MaterialPageRoute<void>(builder: (_) => const TermsOfService());
+    return MaterialPageRoute<void>(
+      settings: const RouteSettings(name: '/legal/terms-of-service'),
+      builder: (_) => const TermsOfService(),
+    );
   }
 
   /// @nullable
@@ -120,7 +123,10 @@ class CookTermsOfService extends StatelessWidget {
   }) : super(key: key);
 
   static Route route() {
-    return MaterialPageRoute<void>(builder: (_) => const CookTermsOfService());
+    return MaterialPageRoute<void>(
+      settings: const RouteSettings(name: '/legal/partners/terms-of-service'),
+      builder: (_) => const CookTermsOfService(),
+    );
   }
 
   /// @nullable

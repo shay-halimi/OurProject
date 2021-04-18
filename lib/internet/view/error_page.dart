@@ -9,7 +9,10 @@ class ErrorPage extends StatelessWidget {
   }) : super(key: key);
 
   static Route route() {
-    return MaterialPageRoute<void>(builder: (_) => const ErrorPage());
+    return MaterialPageRoute<void>(
+      settings: const RouteSettings(name: '/internet/error'),
+      builder: (_) => const ErrorPage(),
+    );
   }
 
   @override
