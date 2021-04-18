@@ -1,8 +1,7 @@
 import 'package:cookpoint/authentication/authentication.dart';
 import 'package:cookpoint/cook/cook.dart';
 import 'package:cookpoint/home_page.dart';
-import 'package:cookpoint/internet/cubit/cubit.dart';
-import 'package:cookpoint/legal/legal.dart';
+import 'package:cookpoint/internet/internet.dart';
 import 'package:cookpoint/location/location.dart';
 import 'package:cookpoint/points/points.dart';
 import 'package:cookpoint/splash/splash.dart';
@@ -94,6 +93,8 @@ class AppView extends StatefulWidget {
 class _AppViewState extends State<AppView> {
   final _navigatorKey = GlobalKey<NavigatorState>();
 
+  NavigatorState get _navigator => _navigatorKey.currentState;
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -108,48 +109,26 @@ class _AppViewState extends State<AppView> {
         const Locale('he', 'IL'),
       ],
       navigatorKey: _navigatorKey,
-      onGenerateRoute: (_) => SplashPage.route(),
-      home: TermsOfServiceMiddleware(
-        child: const HomePage(),
-      ),
       builder: (_, child) {
-        return BlocBuilder<InternetCubit, InternetState>(
-          buildWhen: (previous, current) => previous != current,
-          builder: (_, state) {
-            if (state.status == InternetStatus.error) {
-              return Scaffold(
-                body: SplashBody(
-                  child: Expanded(
-                    child: Column(
-                      children: [
-                        const Padding(
-                          padding: EdgeInsets.all(8.0),
-                          child: Icon(Icons.wifi_off),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Text(
-                            'שגיאה! בדוק/י שיש חיבור לאינטרנט ונסה/י שנית',
-                            style: Theme.of(context).textTheme.headline6,
-                            textAlign: TextAlign.center,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-                floatingActionButton: FloatingActionButton.extended(
-                  icon: const Icon(Icons.refresh),
-                  label: const Text('נסה/י שנית'),
-                  onPressed: () => context.read<InternetCubit>().check(),
-                ),
-              );
+        return BlocListener<InternetCubit, InternetState>(
+          listener: (_, state) {
+            switch (state.status) {
+              case InternetStatus.loaded:
+                _navigator.pushAndRemoveUntil<void>(
+                    HomePage.route(), (_) => false);
+                break;
+              case InternetStatus.error:
+                _navigator.pushAndRemoveUntil<void>(
+                    ErrorPage.route(), (_) => false);
+                break;
+              default:
+                break;
             }
-
-            return child;
           },
+          child: child,
         );
       },
+      onGenerateRoute: (_) => SplashPage.route(),
     );
   }
 }

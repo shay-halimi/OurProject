@@ -24,8 +24,8 @@ class CookWidgetCubit extends Cubit<CookWidgetState> {
     return super.close();
   }
 
-  Future<void> load(String cookId) async {
-    emit(CookWidgetLoading(cookId));
+  Future<void> request(String cookId) async {
+    emit(CookWidgetRequested(cookId));
 
     await _cookSubscription?.cancel();
 

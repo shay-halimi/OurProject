@@ -158,6 +158,8 @@ class PointCard extends StatelessWidget {
     return (height != minHeight && max > min ? max : min) - padding;
   }
 
-  bool get _isCookVisible =>
-      height > (minHeight + ((maxHeight - minHeight) * 0.6));
+  /// @TODO<Matan> CookWidgetCubit request the cook from the server
+  /// @TODO<Matan> Each time the height is changed.
+  /// @TODO<Matan> This is only an hot fix, check git for the original logic.
+  bool get _isCookVisible => height == maxHeight;
 }

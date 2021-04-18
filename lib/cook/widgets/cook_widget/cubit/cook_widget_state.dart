@@ -8,8 +8,8 @@ abstract class CookWidgetState extends Equatable {
 
 class CookWidgetInitial extends CookWidgetState {}
 
-class CookWidgetLoading extends CookWidgetState {
-  CookWidgetLoading(this.cookId);
+class CookWidgetRequested extends CookWidgetState {
+  CookWidgetRequested(this.cookId);
 
   final String cookId;
 

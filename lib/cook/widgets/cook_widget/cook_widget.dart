@@ -6,7 +6,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:line_awesome_flutter/line_awesome_flutter.dart';
 import 'package:map_launcher/map_launcher.dart' as map_launcher;
-import 'package:map_launcher/map_launcher.dart';
 
 export 'cubit/cubit.dart';
 
@@ -23,7 +22,7 @@ class CookWidget extends StatelessWidget {
     return BlocProvider(
       create: (_) => CookWidgetCubit(
         cooksRepository: context.read<CooksRepository>(),
-      )..load(cookId),
+      )..request(cookId),
       child: BlocBuilder<CookWidgetCubit, CookWidgetState>(
         buildWhen: (previous, current) => previous != current,
         builder: (_, state) {
@@ -72,7 +71,7 @@ class _ActionsDialog extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder<List<AvailableMap>>(
+    return FutureBuilder<List<map_launcher.AvailableMap>>(
       future: map_launcher.MapLauncher.installedMaps,
       builder: (_, snapshot) {
         return SafeArea(
@@ -82,7 +81,7 @@ class _ActionsDialog extends StatelessWidget {
                   ? Wrap(
                       children: [
                         _phone(context),
-                        _whatsapp(context),
+                        _whatsApp(context),
                         for (var map in snapshot.data) _map(context, map),
                       ],
                     )
@@ -115,7 +114,7 @@ class _ActionsDialog extends StatelessWidget {
     );
   }
 
-  Widget _whatsapp(BuildContext context) {
+  Widget _whatsApp(BuildContext context) {
     return ListTile(
       onTap: () async {
         await launcher
@@ -143,7 +142,7 @@ class _ActionsDialog extends StatelessWidget {
 extension _XMap on map_launcher.AvailableMap {
   IconData get iconData {
     switch (mapType) {
-      case MapType.waze:
+      case map_launcher.MapType.waze:
         return LineAwesomeIcons.waze;
 
       default:

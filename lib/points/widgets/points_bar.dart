@@ -111,10 +111,11 @@ class _PointsCarousel extends StatelessWidget {
   Widget build(BuildContext context) {
     final points = context.select((SearchBloc bloc) => bloc.state.results);
 
-    final point =
+    final selectedPoint =
         context.select((SelectedPointCubit cubit) => cubit.state.point);
 
-    final page = points.contains(point) ? points.indexOf(point) : 0;
+    final page =
+        points.contains(selectedPoint) ? points.indexOf(selectedPoint) : 0;
 
     return BlocListener<SelectedPointCubit, SelectedPointState>(
       listenWhen: (previous, current) => previous != current,

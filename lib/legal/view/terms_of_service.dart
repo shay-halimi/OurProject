@@ -51,17 +51,10 @@ class TermsOfService extends StatelessWidget {
                 future: _completer.future,
                 builder: (_, snapshot) {
                   if (snapshot.hasData) {
-                    if (snapshot.data) {
-                      return ElevatedButton(
-                        onPressed:
-                            onPressed ?? () => Navigator.of(context).pop(true),
-                        child: const Text('אני מקבל את תנאי השירות'),
-                      );
-                    }
-
-                    return const Text(
-                      'שגיאה לא צפויה, בדוק את החיבור לרשת ונסה שנית.',
-                      textAlign: TextAlign.center,
+                    return ElevatedButton(
+                      onPressed:
+                          onPressed ?? () => Navigator.of(context).pop(true),
+                      child: const Text('אני מקבל/ת את תנאי השירות'),
                     );
                   }
                   return const LinearProgressIndicator();

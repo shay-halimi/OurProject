@@ -87,6 +87,7 @@ class _MapWidgetState extends State<MapWidget> {
                   if (!mounted) return;
 
                   setState(() {
+                    controller.setMapStyle(_mapStyle);
                     _controller.complete(controller);
                   });
 
@@ -219,6 +220,43 @@ class _MapWidgetState extends State<MapWidget> {
 
     return _size;
   }
+
+  String get _mapStyle => '''[
+{
+  "featureType": "administrative",
+  "elementType": "geometry",
+  "stylers": [
+    {
+      "visibility": "off"
+    }
+  ]
+},
+{
+  "featureType": "poi",
+  "stylers": [
+    {
+      "visibility": "off"
+    }
+  ]
+},
+{
+  "featureType": "road",
+  "elementType": "labels.icon",
+  "stylers": [
+    {
+      "visibility": "off"
+    }
+  ]
+},
+{
+  "featureType": "transit",
+  "stylers": [
+    {
+      "visibility": "off"
+    }
+  ]
+}
+]''';
 }
 
 extension _XGMapsCameraPosition on g_maps.CameraPosition {

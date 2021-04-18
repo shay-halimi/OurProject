@@ -191,7 +191,10 @@ class _SearchFieldState extends State<SearchField> {
           return ListTile(
             key: ValueKey(point.id),
             title: Text(point.title),
-            trailing: Text(humanz.distance(point.latLng, center)),
+            trailing: Text(
+              humanz.distance(point.latLng, center),
+              style: Theme.of(context).textTheme.caption,
+            ),
           );
         },
         noItemsFoundBuilder: (_) {
