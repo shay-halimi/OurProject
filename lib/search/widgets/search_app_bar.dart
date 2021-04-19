@@ -65,16 +65,14 @@ class _TagsFilter extends StatelessWidget {
       buildWhen: (previous, current) => previous != current,
       builder: (_, state) {
         if (state.status == SearchStatus.loaded) {
-          final lengths = <String, int>{};
+          final tagsSet = <String>{};
 
           for (var point in state.results) {
-            for (var tag in point.tags) {
-              lengths[tag] = (lengths[tag] ?? 0) + 1;
-            }
+            tagsSet.addAll(point.tags);
           }
 
-          final tags = lengths.keys.toList()
-            ..sort((tag1, tag2) => lengths[tag2].compareTo(lengths[tag1]));
+          final tags = tagsSet.toList()
+            ..sort((tag1, tag2) => tag2.compareTo(tag1));
 
           final textTheme = Theme.of(context).textTheme;
 
@@ -94,7 +92,7 @@ class _TagsFilter extends StatelessWidget {
                         tag,
                         style: textTheme.bodyText2,
                       ),
-                      onSelected: (selected) => context
+                      onSelected: (_) => context
                           .read<SearchBloc>()
                           .add(SearchTagSelected(tag)),
                       selected: state.tags.contains(tag),
