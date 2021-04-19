@@ -110,11 +110,12 @@ class PointCard extends StatelessWidget {
                               humanz.distance(point.latLng, center),
                               ...point.tags,
                             }),
-                            Text(
-                              humanz.money(point.price),
-                              style: textTheme.headline6
-                                  .copyWith(fontWeight: FontWeight.w300),
-                            ),
+                            if (point.price.amount > 0.00)
+                              Text(
+                                humanz.money(point.price),
+                                style: textTheme.headline6
+                                    .copyWith(fontWeight: FontWeight.w300),
+                              ),
                           ],
                         ),
                       ],
