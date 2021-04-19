@@ -74,8 +74,7 @@ class PointForm extends StatelessWidget {
             context: context,
             builder: (_) {
               return AlertDialog(
-                title: const Text('האם לצאת?'),
-                content: const Text('האם לצאת בלי לשמור את השינויים?'),
+                title: const Text('האם לבטל את השינויים?'),
                 actions: [
                   TextButton(
                     child: const Text('שמור'),
@@ -121,7 +120,7 @@ class PointForm extends StatelessWidget {
                   SnackBar(
                     content: Text(
                       point.isEmpty
-                          ? 'פרסום בהצלחה'
+                          ? 'פורסם בהצלחה'
                           : '${point.title} עודכן בהצלחה',
                     ),
                   ),
