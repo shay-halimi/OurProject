@@ -47,6 +47,16 @@ class AppDrawer extends StatelessWidget {
                   PointsPage.route(),
                 ),
               ),
+            ] else ...[
+              ListTile(
+                key: const Key('AppDrawer_PointPage_ListTile'),
+                leading: const Icon(Icons.restaurant),
+                title: const Text('פרסמ/י מאכל'),
+                onTap: () {
+                  Navigator.of(context)
+                      .push<void>(PointPage.route(point: Point.empty));
+                },
+              ),
             ],
             const Divider(),
             ListTile(

@@ -1,3 +1,4 @@
+import 'package:cookpoint/cook/cook.dart';
 import 'package:cookpoint/humanz.dart';
 import 'package:cookpoint/media/media.dart';
 import 'package:cookpoint/points/points.dart';
@@ -21,7 +22,7 @@ class PointPage extends StatelessWidget {
       settings: RouteSettings(
         name: point.isEmpty ? '/points/create' : '/points/${point.id}/update',
       ),
-      builder: (_) => PointPage(point: point),
+      builder: (_) => CookMiddleware(child: PointPage(point: point)),
     );
   }
 

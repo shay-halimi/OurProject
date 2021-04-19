@@ -16,8 +16,6 @@ class MapView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final showPointsBar = context.select((SelectedPointCubit cubit) =>
-        cubit.state.point.isNotEmpty && cubit.state.count > 1);
     return Scaffold(
       extendBodyBehindAppBar: true,
       resizeToAvoidBottomInset: false,
@@ -30,19 +28,16 @@ class MapView extends StatelessWidget {
               children: [
                 const SearchAppBar(),
                 Visibility(
-                  visible: showPointsBar,
+                  visible: context.select((SelectedPointCubit cubit) =>
+                      cubit.state.point.isNotEmpty),
                   child: const PointsBar(),
-                )
+                ),
               ],
             ),
           )
         ],
       ),
       endDrawer: const AppDrawer(),
-      floatingActionButton: Visibility(
-        visible: !showPointsBar,
-        child: const CreatePointButton(),
-      ),
     );
   }
 }
