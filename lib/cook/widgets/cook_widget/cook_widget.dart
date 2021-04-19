@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cookpoint/cook/cook.dart';
 import 'package:cookpoint/humanz.dart';
 import 'package:cookpoint/launcher.dart';
+import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:line_awesome_flutter/line_awesome_flutter.dart';
@@ -52,9 +53,15 @@ class CookWidget extends StatelessWidget {
   }
 
   Future<void> _onTap(BuildContext context, Cook cook) async {
+    await FirebaseAnalytics().logEvent(
+      name: 'add_to_cart',
+      parameters: <String, dynamic>{
+        'cook': cook.id,
+      },
+    );
+
     return showModalBottomSheet<map_launcher.AvailableMap>(
       context: context,
-      useRootNavigator: true,
       routeSettings: RouteSettings(name: '/cooks/${cook.id}'),
       builder: (_) {
         return _ActionsDialog(cook: cook);
@@ -103,6 +110,13 @@ class _ActionsDialog extends StatelessWidget {
       title: Text(map.mapName),
       leading: Icon(map.iconData),
       onTap: () async {
+        await FirebaseAnalytics().logEvent(
+          name: 'purchase',
+          parameters: <String, dynamic>{
+            'cook': cook.id,
+          },
+        );
+
         await map
             .showMarker(
               coords: map_launcher.Coords(
@@ -119,6 +133,13 @@ class _ActionsDialog extends StatelessWidget {
   Widget _whatsApp(BuildContext context) {
     return ListTile(
       onTap: () async {
+        await FirebaseAnalytics().logEvent(
+          name: 'add_payment_info',
+          parameters: <String, dynamic>{
+            'cook': cook.id,
+          },
+        );
+
         await launcher
             .whatsApp(cook.phoneNumber)
             .then((_) => Navigator.of(context).pop());
@@ -131,6 +152,13 @@ class _ActionsDialog extends StatelessWidget {
   Widget _phone(BuildContext context) {
     return ListTile(
       onTap: () async {
+        await FirebaseAnalytics().logEvent(
+          name: 'add_payment_info',
+          parameters: <String, dynamic>{
+            'cook': cook.id,
+          },
+        );
+
         await launcher
             .call(cook.phoneNumber)
             .then((_) => Navigator.of(context).pop());

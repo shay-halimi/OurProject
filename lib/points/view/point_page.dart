@@ -58,13 +58,11 @@ class PointForm extends StatelessWidget {
           point.isEmpty ? 'פרסום מאכל' : 'עדכון ${point.title}',
         ),
         actions: [
-          if (point.isNotEmpty)
+          if (point.isNotEmpty && status.isValidated)
             IconButton(
               icon: const Icon(Icons.save),
-              onPressed: status.isValidated
-                  ? () => context.read<PointFormCubit>().save()
-                  : null,
-            )
+              onPressed: () => context.read<PointFormCubit>().save(),
+            ),
         ],
       ),
       body: WillPopScope(
@@ -79,15 +77,15 @@ class PointForm extends StatelessWidget {
                 content: const Text('האם לצאת בלי לשמור את השינויים?'),
                 actions: [
                   TextButton(
-                    child: const Text('כן, צא בלי לשמור'),
-                    onPressed: () {
-                      Navigator.of(context).pop(true);
-                    },
-                  ),
-                  ElevatedButton(
                     child: const Text('שמור'),
                     onPressed: () {
                       Navigator.of(context).pop(false);
+                    },
+                  ),
+                  ElevatedButton(
+                    child: const Text('בטל את השינויים'),
+                    onPressed: () {
+                      Navigator.of(context).pop(true);
                     },
                   ),
                 ],

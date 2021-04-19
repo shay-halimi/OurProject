@@ -118,6 +118,7 @@ class _MapWidgetState extends State<MapWidget> {
                 mapToolbarEnabled: false,
                 zoomControlsEnabled: false,
                 myLocationButtonEnabled: false,
+                myLocationEnabled: true,
                 onTap: (_) => context.read<SelectedPointCubit>().clear(),
                 onCameraMove: (position) {
                   if (!mounted) return;
