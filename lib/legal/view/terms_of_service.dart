@@ -36,6 +36,7 @@ class TermsOfService extends StatelessWidget {
       ),
       body: SafeArea(
         child: ListView(
+          padding: const EdgeInsets.all(16.0),
           children: [
             Text(body ?? _getDefaultBody()),
             Padding(
