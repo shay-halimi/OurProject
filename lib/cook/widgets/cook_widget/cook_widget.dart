@@ -42,7 +42,7 @@ class CookWidget extends StatelessWidget {
                 title: Text(cook.displayName),
                 subtitle: Text(cook.address.name),
                 onTap: cook.isEmpty ? null : () => _onTap(context, cook),
-                trailing: const Icon(LineAwesomeIcons.chevron_circle_left),
+                trailing: const Icon(LineAwesomeIcons.phone),
               ),
               if (cook.isEmpty) const LinearProgressIndicator(),
             ],

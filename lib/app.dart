@@ -10,6 +10,7 @@ import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_analytics/observer.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 
 class App extends StatelessWidget {
@@ -104,11 +105,13 @@ class _AppViewState extends State<AppView> {
         FirebaseAnalyticsObserver(analytics: FirebaseAnalytics()),
       ],
       localizationsDelegates: [
+        AppLocalizations.delegate,
         GlobalWidgetsLocalizations.delegate,
         GlobalMaterialLocalizations.delegate,
         GlobalCupertinoLocalizations.delegate,
       ],
       supportedLocales: [
+        const Locale('en', 'US'),
         const Locale('he', 'IL'),
       ],
       navigatorKey: _navigatorKey,

@@ -8,7 +8,7 @@ class PointFormState extends Equatable {
     this.mediaInput = const MediaInput.pure(),
     this.tagsInput = const TagsInput.pure(),
     this.deleteAtInput = const DeleteAtInput.pure(),
-    this.canPublishPoint = true,
+    this.canPostPoint = true,
     this.status = FormzStatus.pure,
   });
 
@@ -24,7 +24,7 @@ class PointFormState extends Equatable {
 
   final DeleteAtInput deleteAtInput;
 
-  final bool canPublishPoint;
+  final bool canPostPoint;
 
   final FormzStatus status;
 
@@ -38,7 +38,7 @@ class PointFormState extends Equatable {
         mediaInput,
         tagsInput,
         deleteAtInput,
-        canPublishPoint,
+        canPostPoint,
         status,
       ];
 
@@ -49,7 +49,7 @@ class PointFormState extends Equatable {
     MediaInput mediaInput,
     TagsInput tagsInput,
     DeleteAtInput deleteAtInput,
-    bool canPublishPoint,
+    bool canPostPoint,
     FormzStatus status,
   }) {
     return PointFormState(
@@ -59,7 +59,7 @@ class PointFormState extends Equatable {
       mediaInput: mediaInput ?? this.mediaInput,
       tagsInput: tagsInput ?? this.tagsInput,
       deleteAtInput: deleteAtInput ?? this.deleteAtInput,
-      canPublishPoint: canPublishPoint ?? this.canPublishPoint,
+      canPostPoint: canPostPoint ?? this.canPostPoint,
       status: status ?? this.status,
     );
   }

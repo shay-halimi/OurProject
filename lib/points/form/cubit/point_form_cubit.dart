@@ -20,7 +20,7 @@ class PointFormCubit extends Cubit<PointFormState> {
     final cookAvailablePoints =
         _pointsBloc.state.cookPoints.where((point) => point.isNotTrashed);
 
-    final canPublishPoint =
+    final canPostPoint =
         cookAvailablePoints.contains(_point) || cookAvailablePoints.length < 3;
 
     if (_point.isNotEmpty) {
@@ -31,14 +31,14 @@ class PointFormCubit extends Cubit<PointFormState> {
         mediaInput: MediaInput.dirty(point.media),
         tagsInput: TagsInput.dirty(point.tags),
         deleteAtInput: DeleteAtInput.dirty(point.deletedAt),
-        canPublishPoint: canPublishPoint,
+        canPostPoint: canPostPoint,
       ));
     } else {
       emit(state.copyWith(
-        deleteAtInput: canPublishPoint
+        deleteAtInput: canPostPoint
             ? const DeleteAtInput.pure()
             : DeleteAtInput.dirty(Time.now()),
-        canPublishPoint: canPublishPoint,
+        canPostPoint: canPostPoint,
       ));
     }
   }

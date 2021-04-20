@@ -5,6 +5,7 @@ import 'package:cookpoint/legal/legal.dart';
 import 'package:cookpoint/points/points.dart';
 import 'package:cookpoint/theme/theme.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:package_info/package_info.dart';
 import 'package:provider/provider.dart';
 
@@ -31,7 +32,7 @@ class AppDrawer extends StatelessWidget {
             ListTile(
               key: const Key('AppDrawer_CookPage_ListTile'),
               leading: const Icon(Icons.account_circle),
-              title: const Text('חשבון'),
+              title: Text(AppLocalizations.of(context).accountPageTitle),
               onTap: () => Navigator.of(context).push<void>(
                 CookPage.route(),
               ),
@@ -43,7 +44,7 @@ class AppDrawer extends StatelessWidget {
               ListTile(
                 key: const Key('AppDrawer_CookPointsPage_ListTile'),
                 leading: const Icon(Icons.restaurant),
-                title: const Text('המטבח שלי'),
+                title: Text(AppLocalizations.of(context).pointsPageTitle),
                 onTap: () => Navigator.of(context).push<void>(
                   PointsPage.route(),
                 ),
@@ -52,7 +53,7 @@ class AppDrawer extends StatelessWidget {
               ListTile(
                 key: const Key('AppDrawer_PointPage_ListTile'),
                 leading: const Icon(Icons.restaurant),
-                title: const Text('פרסמ/י מאכל'),
+                title: Text(AppLocalizations.of(context).createPointBtn),
                 onTap: () {
                   Navigator.of(context)
                       .push<void>(PointPage.route(point: Point.empty));
@@ -64,7 +65,7 @@ class AppDrawer extends StatelessWidget {
               dense: true,
               key: const Key('AppDrawer_SendOnWhatsApp_ListTile'),
               leading: const Icon(Icons.share),
-              title: const Text('הזמנ/י חברים'),
+              title: Text(AppLocalizations.of(context).inviteFriendsBtn),
               onTap: () async {
                 await launcher.whatsApp('', 'https://cookpoint.app/');
               },
@@ -73,7 +74,7 @@ class AppDrawer extends StatelessWidget {
               dense: true,
               key: const Key('AppDrawer_AboutUsPage_ListTile'),
               leading: const Icon(Icons.info),
-              title: const Text('אודות'),
+              title: Text(AppLocalizations.of(context).aboutPageTitle),
               onTap: () async {
                 final packageInfo = await PackageInfo.fromPlatform();
 
@@ -99,7 +100,7 @@ class AppDrawer extends StatelessWidget {
               dense: true,
               key: const Key('AppDrawer_EmailUs_ListTile'),
               leading: const Icon(Icons.support_agent),
-              title: const Text('צרו קשר'),
+              title: Text(AppLocalizations.of(context).contactUsPageTitle),
               onTap: () async => await launcher
                   .launch('https://cookpoint.app/pages/contact-us'),
             ),
@@ -107,7 +108,7 @@ class AppDrawer extends StatelessWidget {
               dense: true,
               key: const Key('AppDrawer_TOSPage_ListTile'),
               leading: const Icon(Icons.description),
-              title: const Text('תנאים ומדיניות פרטיות'),
+              title: Text(AppLocalizations.of(context).termsOfServicePageTitle),
               onTap: () => Navigator.of(context).push<void>(
                 TermsOfService.route(),
               ),
@@ -130,7 +131,6 @@ CookPoint הינה אפליקציה לפרסום אוכל ביתי שנוצרה 
 לכל בעיה ו/או בקשה ניתן לפנות אלינו דרך המייל שכתובתו cookpointapp@gmail.com ו/או בטלפון שמספרו 054.306.0964.
 
 שיהיה בתאבון,
-CookPoint
-                ''');
+CookPoint''');
   }
 }

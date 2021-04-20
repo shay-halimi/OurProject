@@ -21,5 +21,5 @@ class _Humanz {
   }
 
   String distance(LatLng from, LatLng to) =>
-      '${from.distanceInKM(to).toStringAsFixed(1)} ק"מ';
+      from.distanceInKM(to).toStringAsFixed(1);
 }

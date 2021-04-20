@@ -1,6 +1,7 @@
 import 'package:cookpoint/internet/internet.dart';
 import 'package:cookpoint/splash/splash.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:provider/provider.dart';
 
 class ErrorPage extends StatelessWidget {
@@ -29,7 +30,7 @@ class ErrorPage extends StatelessWidget {
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Text(
-                  'שגיאה! בדוק/י שיש חיבור לאינטרנט ונסה/י שנית',
+                  AppLocalizations.of(context).internetError,
                   style: Theme.of(context).textTheme.headline6,
                   textAlign: TextAlign.center,
                 ),
@@ -40,7 +41,7 @@ class ErrorPage extends StatelessWidget {
       ),
       floatingActionButton: FloatingActionButton.extended(
         icon: const Icon(Icons.refresh),
-        label: const Text('נסה/י שנית'),
+        label: Text(AppLocalizations.of(context).tryAgainBtn),
         onPressed: () => context.read<InternetCubit>().check(),
       ),
     );

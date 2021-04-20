@@ -6,6 +6,7 @@ import 'package:cookpoint/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:formz/formz.dart';
 import 'package:provider/provider.dart';
 
@@ -56,7 +57,9 @@ class PointForm extends StatelessWidget {
       resizeToAvoidBottomInset: true,
       appBar: AppBar(
         title: Text(
-          point.isEmpty ? 'פרסום מאכל' : 'עדכון ${point.title}',
+          point.isEmpty
+              ? AppLocalizations.of(context).createPointPageTitle
+              : AppLocalizations.of(context).updatePointPageTitle,
         ),
         actions: [
           if (point.isNotEmpty && status.isValidated)
@@ -74,16 +77,17 @@ class PointForm extends StatelessWidget {
             context: context,
             builder: (_) {
               return AlertDialog(
-                title: const Text('האם לבטל את השינויים?'),
+                title:
+                    Text(AppLocalizations.of(context).discardChangesAlertTitle),
                 actions: [
                   TextButton(
-                    child: const Text('שמור'),
+                    child: Text(AppLocalizations.of(context).saveBtn),
                     onPressed: () {
                       Navigator.of(context).pop(false);
                     },
                   ),
                   ElevatedButton(
-                    child: const Text('בטל את השינויים'),
+                    child: Text(AppLocalizations.of(context).discardBtn),
                     onPressed: () {
                       Navigator.of(context).pop(true);
                     },
@@ -106,25 +110,20 @@ class PointForm extends StatelessWidget {
             if (state.status.isSubmissionFailure) {
               ScaffoldMessenger.of(context)
                 ..hideCurrentSnackBar()
-                ..showSnackBar(
-                  const SnackBar(
-                    content: Text('שגיאה, אמת/י המידע שהזנת ונסה/י שנית.'),
-                  ),
-                );
+                ..showSnackBar(SnackBar(
+                    content: Text(AppLocalizations.of(context).error)));
             }
 
             if (state.status.isSubmissionSuccess) {
+              final msg = point.isEmpty
+                  ? state.deleteAtInput.value.isEmpty
+                      ? AppLocalizations.of(context).pointPostedSuccessfully
+                      : AppLocalizations.of(context).pointCreatedSuccessfully
+                  : AppLocalizations.of(context).pointUpdatedSuccessfully;
+
               ScaffoldMessenger.of(context)
                 ..hideCurrentSnackBar()
-                ..showSnackBar(
-                  SnackBar(
-                    content: Text(
-                      point.isEmpty
-                          ? 'פורסם בהצלחה'
-                          : '${point.title} עודכן בהצלחה',
-                    ),
-                  ),
-                );
+                ..showSnackBar(SnackBar(content: Text(msg)));
 
               Navigator.of(context).pop();
             }
@@ -166,7 +165,9 @@ class _SubmitButton extends StatelessWidget {
       builder: (_, state) {
         return AppButton(
           isInProgress: state.status.isSubmissionInProgress,
-          child: Text(point.isEmpty ? 'פרסם' : 'שמור'),
+          child: Text(point.isEmpty
+              ? AppLocalizations.of(context).postBtn
+              : AppLocalizations.of(context).saveBtn),
           onPressed: state.status.isValidated
               ? () => context.read<PointFormCubit>().save()
               : null,
@@ -186,7 +187,7 @@ class _TagsInput extends StatelessWidget {
     return Column(
       children: [
         ListTile(
-          title: const Text('תגיות'),
+          title: Text(AppLocalizations.of(context).tags),
           subtitle: BlocBuilder<PointFormCubit, PointFormState>(
             buildWhen: (previous, current) => previous != current,
             builder: (_, state) {
@@ -244,8 +245,10 @@ class _PriceInput extends StatelessWidget {
             onChanged: (value) =>
                 context.read<PointFormCubit>().changePrice(value),
             decoration: InputDecoration(
-              labelText: 'מחיר',
-              errorText: state.priceInput.invalid ? 'לא תקין' : null,
+              labelText: AppLocalizations.of(context).price,
+              errorText: state.priceInput.invalid
+                  ? AppLocalizations.of(context).invalid
+                  : null,
               suffix: const Text('₪'),
             ),
             textAlign: TextAlign.end,
@@ -281,8 +284,10 @@ class _DescriptionInput extends StatelessWidget {
             onChanged: (value) =>
                 context.read<PointFormCubit>().changeDescription(value),
             decoration: InputDecoration(
-              labelText: 'תיאור',
-              errorText: state.descriptionInput.invalid ? 'לא תקין' : null,
+              labelText: AppLocalizations.of(context).description,
+              errorText: state.descriptionInput.invalid
+                  ? AppLocalizations.of(context).invalid
+                  : null,
             ),
             initialValue: state.descriptionInput.value,
           ),
@@ -314,8 +319,10 @@ class _TitleInput extends StatelessWidget {
             onChanged: (value) =>
                 context.read<PointFormCubit>().changeTitle(value),
             decoration: InputDecoration(
-              labelText: 'שם המאכל',
-              errorText: state.titleInput.invalid ? 'לא תקין' : null,
+              labelText: AppLocalizations.of(context).title,
+              errorText: state.titleInput.invalid
+                  ? AppLocalizations.of(context).invalid
+                  : null,
             ),
             initialValue: state.titleInput.value,
           );
@@ -357,22 +364,21 @@ class _AvailableInput extends StatelessWidget {
       buildWhen: (previous, current) => previous != current,
       builder: (_, state) {
         return SwitchListTile(
-          title: state.isAvailable ? const Text('זמין') : const Text('לא זמין'),
-          subtitle: const Text('מאכלים זמינים מופיעים על המפה עם '
-              'שמכם, כתובתכם ומספר הטלפון איתו נרשמתם.'),
+          title: Text(state.isAvailable
+              ? AppLocalizations.of(context).available
+              : AppLocalizations.of(context).unavailable),
+          subtitle: Text(AppLocalizations.of(context).availableHelperText),
           value: state.isAvailable,
           onChanged: (bool value) {
-            if (!value || state.canPublishPoint) {
+            if (!value || state.canPostPoint) {
               return context.read<PointFormCubit>().changeAvailable(value);
             }
 
             ScaffoldMessenger.of(context)
               ..hideCurrentSnackBar()
-              ..showSnackBar(
-                const SnackBar(
-                  content: Text('רק שלושה מאכלים יכולים להיות זמינים.'),
-                ),
-              );
+              ..showSnackBar(SnackBar(
+                  content:
+                      Text(AppLocalizations.of(context).tooManyPointsError)));
           },
         );
       },

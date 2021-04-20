@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:cookpoint/splash/splash.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class TermsOfService extends StatelessWidget {
@@ -32,7 +33,8 @@ class TermsOfService extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: title ?? const Text('תנאים ומדיניות פרטיות'),
+        title:
+            title ?? Text(AppLocalizations.of(context).termsOfServicePageTitle),
       ),
       body: SafeArea(
         child: Column(
@@ -49,7 +51,8 @@ class TermsOfService extends StatelessWidget {
               padding: const EdgeInsets.all(8.0),
               child: ElevatedButton(
                 onPressed: onPressed ?? () => Navigator.of(context).pop(true),
-                child: const Text('אני מקבל/ת את תנאי השירות'),
+                child:
+                    Text(AppLocalizations.of(context).acceptTermsOfServiceBtn),
               ),
             ),
           ],
@@ -247,7 +250,7 @@ class CookTermsOfService extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return TermsOfService(
-      title: const Text('תנאים ומדיניות פרטיות שותפים'),
+      title: Text(AppLocalizations.of(context).partnersTermsOfServicePageTitle),
       onPressed: onPressed,
       body: _getBody(),
     );

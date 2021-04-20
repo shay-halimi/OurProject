@@ -6,6 +6,7 @@ import 'package:cookpoint/points/points.dart';
 import 'package:cookpoint/theme/widgets/circle_button.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:provider/provider.dart';
 
 class PointCard extends StatelessWidget {
@@ -107,7 +108,8 @@ class PointCard extends StatelessWidget {
                           crossAxisAlignment: CrossAxisAlignment.end,
                           children: [
                             TagsLine(tags: {
-                              humanz.distance(point.latLng, center),
+                              '${humanz.distance(point.latLng, center)} '
+                                  '${AppLocalizations.of(context).km}',
                               ...point.tags,
                             }),
                             if (point.price.amount > 0.00)

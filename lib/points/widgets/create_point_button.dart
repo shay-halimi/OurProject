@@ -1,5 +1,6 @@
 import 'package:cookpoint/points/points.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class CreatePointButton extends StatelessWidget {
   const CreatePointButton({
@@ -10,8 +11,8 @@ class CreatePointButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return FloatingActionButton.extended(
       heroTag: 'FloatingActionButtonCookPoint',
-      tooltip: 'פרסם CookPoint',
-      label: const Text('פרסמ/י מאכל'),
+      tooltip: AppLocalizations.of(context).createPointBtnTooltip,
+      label: Text(AppLocalizations.of(context).createPointBtn),
       onPressed: () {
         Navigator.of(context).push<void>(PointPage.route(point: Point.empty));
       },

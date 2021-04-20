@@ -3,6 +3,7 @@ import 'package:cookpoint/humanz.dart';
 import 'package:cookpoint/media/media.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:provider/provider.dart';
 
 class CookPage extends StatelessWidget {
@@ -25,7 +26,7 @@ class CookPage extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('חשבון'),
+        title: Text(AppLocalizations.of(context).accountPageTitle),
         actions: [
           IconButton(
             icon: const Icon(Icons.edit),
@@ -51,15 +52,15 @@ class CookPage extends StatelessWidget {
               children: [
                 ListTile(
                   title: Text(cook.displayName),
-                  subtitle: const Text('שם לתצוגה'),
+                  subtitle: Text(AppLocalizations.of(context).displayName),
                 ),
                 ListTile(
                   title: Text(cook.address.name),
-                  subtitle: const Text('כתובת'),
+                  subtitle: Text(AppLocalizations.of(context).address),
                 ),
                 ListTile(
                   title: Text(humanz.phoneNumber(cook.phoneNumber)),
-                  subtitle: const Text('מספר טלפון'),
+                  subtitle: Text(AppLocalizations.of(context).phoneNumber),
                 ),
               ],
             ),

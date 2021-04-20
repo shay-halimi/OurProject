@@ -1,6 +1,7 @@
 import 'package:cookpoint/media/media.dart';
 import 'package:cookpoint/points/points.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class PointWidget extends StatelessWidget {
   const PointWidget({
@@ -41,7 +42,9 @@ class PointWidget extends StatelessWidget {
                   Padding(
                     padding: const EdgeInsets.all(4.0),
                     child: Text(
-                      point.isTrashed ? 'לא זמין' : 'זמין',
+                      point.isTrashed
+                          ? AppLocalizations.of(context).unavailable
+                          : AppLocalizations.of(context).available,
                       maxLines: 1,
                       overflow: TextOverflow.fade,
                     ),

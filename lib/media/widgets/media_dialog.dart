@@ -4,6 +4,7 @@ import 'package:cookpoint/media/media.dart';
 import 'package:cookpoint/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
@@ -55,22 +56,24 @@ class MediaDialogView extends StatelessWidget {
                 context: context,
                 builder: (_) {
                   return AlertDialog(
-                    title: const Text('בחר/י מקור תמונה'),
+                    title: Text(AppLocalizations.of(context).imageSourceBtn),
                     actions: <Widget>[
                       TextButton(
-                        child: const Text('בחר/י מהגלריה'),
+                        child: Text(
+                            AppLocalizations.of(context).imageSourceGalleryBtn),
                         onPressed: () {
                           Navigator.of(context).pop(ImageSource.gallery);
                         },
                       ),
                       TextButton(
-                        child: const Text('צלמ/י תמונה חדשה'),
+                        child: Text(
+                            AppLocalizations.of(context).imageSourceCameraBtn),
                         onPressed: () {
                           Navigator.of(context).pop(ImageSource.camera);
                         },
                       ),
                       TextButton(
-                        child: const Text('ביטול'),
+                        child: Text(AppLocalizations.of(context).cancelBtn),
                         onPressed: () {
                           Navigator.of(context).pop();
                         },
@@ -96,10 +99,10 @@ class MediaDialogView extends StatelessWidget {
                   initAspectRatio: CropAspectRatioPreset.original,
                   lockAspectRatio: true,
                 ),
-                iosUiSettings: const IOSUiSettings(
+                iosUiSettings: IOSUiSettings(
                   title: '',
-                  doneButtonTitle: 'המשך',
-                  cancelButtonTitle: 'ביטול',
+                  doneButtonTitle: AppLocalizations.of(context).continueBtn,
+                  cancelButtonTitle: AppLocalizations.of(context).cancelBtn,
                   aspectRatioLockEnabled: true,
                 ),
               );
@@ -122,7 +125,7 @@ class MediaDialogView extends StatelessWidget {
                   if (state is MediaDialogInitial) {
                     return media.isEmpty
                         ? _Text(
-                            'בחר/י תמונה',
+                            AppLocalizations.of(context).pickImageBtn,
                             maxHeight: maxHeight,
                           )
                         : MediaWidget(
@@ -131,7 +134,7 @@ class MediaDialogView extends StatelessWidget {
                           );
                   } else if (state is MediaDialogError) {
                     return _Text(
-                      'שגיאה, אמת/י המידע שהזנת ונסה/י שנית.',
+                      AppLocalizations.of(context).error,
                       maxHeight: maxHeight,
                     );
                   } else if (state is MediaDialogLoading) {

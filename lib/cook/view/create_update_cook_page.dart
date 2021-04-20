@@ -4,6 +4,7 @@ import 'package:cookpoint/media/media.dart';
 import 'package:cookpoint/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:formz/formz.dart';
 import 'package:provider/provider.dart';
 
@@ -46,7 +47,9 @@ class CookForm extends StatelessWidget {
     return Scaffold(
       resizeToAvoidBottomInset: true,
       appBar: AppBar(
-        title: Text(cook.isEmpty ? 'יצירת חשבון' : 'עדכון חשבון'),
+        title: Text(cook.isEmpty
+            ? AppLocalizations.of(context).createAccountPageTitle
+            : AppLocalizations.of(context).updateAccountPageTitle),
       ),
       body: BlocListener<CookFormCubit, CookFormState>(
         listenWhen: (previous, current) => previous != current,
@@ -54,16 +57,17 @@ class CookForm extends StatelessWidget {
           if (state.status.isSubmissionFailure) {
             ScaffoldMessenger.of(context)
               ..hideCurrentSnackBar()
-              ..showSnackBar(const SnackBar(
-                  content: Text('שגיאה, אמת/י המידע שהזנת ונסה/י שנית.')));
+              ..showSnackBar(
+                  SnackBar(content: Text(AppLocalizations.of(context).error)));
           }
 
           if (state.status.isSubmissionSuccess) {
             if (cook.isNotEmpty) {
               ScaffoldMessenger.of(context)
                 ..hideCurrentSnackBar()
-                ..showSnackBar(
-                    const SnackBar(content: Text('חשבונך עודכן בהצלחה')));
+                ..showSnackBar(SnackBar(
+                    content: Text(AppLocalizations.of(context)
+                        .accountUpdatedSuccessfully)));
 
               Navigator.of(context).pop();
             }
@@ -123,9 +127,11 @@ class _AddressInput extends StatelessWidget {
           onChanged: (value) =>
               context.read<CookFormCubit>().changeAddressName(value),
           decoration: InputDecoration(
-            labelText: 'כתובת',
-            errorText: state.addressInput.invalid ? 'לא תקין' : null,
-            helperText: 'שם יישוב, שם רחוב ומספר בית.',
+            labelText: AppLocalizations.of(context).address,
+            errorText: state.addressInput.invalid
+                ? AppLocalizations.of(context).invalid
+                : null,
+            helperText: AppLocalizations.of(context).addressHelperText,
           ),
           initialValue: state.addressInput.value.name,
         );
@@ -152,8 +158,10 @@ class _DisplayNameInput extends StatelessWidget {
           onChanged: (value) =>
               context.read<CookFormCubit>().changeDisplayName(value),
           decoration: InputDecoration(
-            labelText: 'שם לתצוגה',
-            errorText: state.displayNameInput.invalid ? 'לא תקין' : null,
+            labelText: AppLocalizations.of(context).displayName,
+            errorText: state.displayNameInput.invalid
+                ? AppLocalizations.of(context).invalid
+                : null,
           ),
           initialValue: state.displayNameInput.value,
         );
@@ -200,7 +208,9 @@ class _SubmitButton extends StatelessWidget {
         return AppButton(
           key: ValueKey(state.status),
           isInProgress: state.status.isSubmissionInProgress,
-          child: Text(cook.isEmpty ? 'המשך' : 'שמור'),
+          child: Text(cook.isEmpty
+              ? AppLocalizations.of(context).continueBtn
+              : AppLocalizations.of(context).saveBtn),
           onPressed: state.status.isValidated
               ? () => context.read<CookFormCubit>().save()
               : null,

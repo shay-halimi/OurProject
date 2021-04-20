@@ -11,11 +11,12 @@ part 'media_dialog_state.dart';
 class MediaDialogCubit extends Cubit<MediaDialogState> {
   MediaDialogCubit() : super(MediaDialogInitial());
 
+  final _uuid = Uuid();
+
+  final _storage = FirebaseStorage.instance;
+
   Future<void> fileChanged(File file) async {
-    final reference = FirebaseStorage.instance
-        .ref()
-        .child('gallery/')
-        .child(const Uuid().v1());
+    final reference = _storage.ref().child('gallery/').child(_uuid.v1());
 
     final task = kIsWeb
         ? reference.putData(await file.readAsBytes())

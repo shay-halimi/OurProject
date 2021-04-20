@@ -56,10 +56,7 @@ class GeoLocatorLocationServices extends LocationServices {
   @override
   Future<Location> fromAddress(String address) async {
     try {
-      final value = await geo_coding.locationFromAddress(
-        address,
-        localeIdentifier: 'he_IL',
-      );
+      final value = await geo_coding.locationFromAddress(address);
 
       if (value.isEmpty) {
         return Location.empty;

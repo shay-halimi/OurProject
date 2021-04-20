@@ -5,6 +5,7 @@ import 'package:cookpoint/search/search.dart';
 import 'package:cookpoint/selected_point/selected_point.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_typeahead/flutter_typeahead.dart';
 import 'package:provider/provider.dart';
 
@@ -158,7 +159,7 @@ class _SearchFieldState extends State<SearchField> {
           controller: _controller,
           focusNode: _focusNode,
           decoration: InputDecoration(
-            hintText: 'מה בא לך לאכול?',
+            hintText: AppLocalizations.of(context).searchHintText,
             suffixIcon: _controller.value.text.isNotEmpty
                 ? IconButton(
                     icon: const Icon(Icons.close),
@@ -190,14 +191,15 @@ class _SearchFieldState extends State<SearchField> {
             key: ValueKey(point.id),
             title: Text(point.title),
             trailing: Text(
-              humanz.distance(point.latLng, center),
+              '${humanz.distance(point.latLng, center)} '
+              '${AppLocalizations.of(context).km}',
               style: Theme.of(context).textTheme.caption,
             ),
           );
         },
         noItemsFoundBuilder: (_) {
-          return const ListTile(
-            title: Text('אין תוצאות קרובות'),
+          return ListTile(
+            title: Text(AppLocalizations.of(context).searchNoPointsFound),
           );
         },
         onSuggestionSelected: (point) {

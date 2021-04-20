@@ -3,6 +3,7 @@ import 'package:cookpoint/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:formz/formz.dart';
 
 class LoginForm extends StatelessWidget {
@@ -36,11 +37,7 @@ class _PhoneNumberForm extends StatelessWidget {
           ScaffoldMessenger.of(context)
             ..hideCurrentSnackBar()
             ..showSnackBar(
-              const SnackBar(
-                  content: Text(
-                'שגיאה, אמת/י המידע שהזנת ונסה/י שנית.',
-              )),
-            );
+                SnackBar(content: Text(AppLocalizations.of(context).error)));
         }
       },
       child: Column(
@@ -70,7 +67,7 @@ class _PhoneNumberInput extends StatelessWidget {
             initialValue: initialValue,
             key: const Key('PhoneNumberForm__PhoneNumberInput_TextField'),
             keyboardType: TextInputType.phone,
-            textAlign: TextAlign.end,
+            textAlign: TextAlign.left,
             autofocus: true,
             maxLength: 10,
             maxLengthEnforcement: MaxLengthEnforcement.enforced,
@@ -80,9 +77,9 @@ class _PhoneNumberInput extends StatelessWidget {
                 ? () => context.read<LoginCubit>().sendOTP()
                 : null,
             decoration: InputDecoration(
-              labelText: 'מספר טלפון',
+              labelText: AppLocalizations.of(context).phoneNumber,
               errorText: state.phoneNumberInput.invalid
-                  ? 'ספרות בלבד, ללא מקפים או רווחים'
+                  ? AppLocalizations.of(context).phoneNumberError
                   : null,
             ),
           ),
@@ -105,7 +102,7 @@ class _SendOTPButton extends StatelessWidget {
         return AppButton(
           key: ValueKey(state.status),
           isInProgress: state.status.isSubmissionInProgress,
-          child: const Text('המשך'),
+          child: Text(AppLocalizations.of(context).continueBtn),
           onPressed: state.status.isValidated
               ? () => context.read<LoginCubit>().sendOTP()
               : null,
@@ -125,9 +122,7 @@ class _OTPForm extends StatelessWidget {
           ScaffoldMessenger.of(context)
             ..hideCurrentSnackBar()
             ..showSnackBar(
-              const SnackBar(
-                content: Text('שגיאה, אמת/י המידע שהזנת ונסה/י שנית.'),
-              ),
+              SnackBar(content: Text(AppLocalizations.of(context).error)),
             );
         }
       },
@@ -153,7 +148,7 @@ class _ClearVerificationIdButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return TextButton(
       onPressed: () => context.read<LoginCubit>().clearVerification(),
-      child: const Text('אם לא קיבלת SMS מאיתנו, לחצ/י כאן.'),
+      child: Text(AppLocalizations.of(context).sendSMSAgainBtn),
     );
   }
 }
@@ -173,8 +168,10 @@ class _OTPInput extends StatelessWidget {
             autofocus: true,
             onChanged: (otp) => context.read<LoginCubit>().otpChanged(otp),
             decoration: InputDecoration(
-              labelText: 'קוד אימות',
-              errorText: state.otpInput.invalid ? 'קוד אימות לא תקין' : null,
+              labelText: AppLocalizations.of(context).otp,
+              errorText: state.otpInput.invalid
+                  ? AppLocalizations.of(context).otpError
+                  : null,
             ),
             textAlign: TextAlign.end,
             maxLength: 6,
@@ -198,7 +195,7 @@ class _ConfirmPhoneNumberButton extends StatelessWidget {
         return AppButton(
           key: ValueKey(state.status),
           isInProgress: state.status.isSubmissionInProgress,
-          child: const Text('המשך'),
+          child: Text(AppLocalizations.of(context).continueBtn),
           onPressed: state.status.isValidated
               ? () => context.read<LoginCubit>().confirmPhoneNumber()
               : null,
