@@ -35,10 +35,16 @@ class TermsOfService extends StatelessWidget {
         title: title ?? const Text('תנאים ומדיניות פרטיות'),
       ),
       body: SafeArea(
-        child: ListView(
-          padding: const EdgeInsets.all(16.0),
+        child: Column(
           children: [
-            Text(body ?? _getDefaultBody()),
+            Expanded(
+              child: ListView(
+                padding: const EdgeInsets.all(16.0),
+                children: [
+                  Text(body ?? _getDefaultBody()),
+                ],
+              ),
+            ),
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: ElevatedButton(

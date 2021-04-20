@@ -5,6 +5,7 @@ import 'package:cookpoint/legal/legal.dart';
 import 'package:cookpoint/points/points.dart';
 import 'package:cookpoint/theme/theme.dart';
 import 'package:flutter/material.dart';
+import 'package:package_info/package_info.dart';
 import 'package:provider/provider.dart';
 
 class AppDrawer extends StatelessWidget {
@@ -61,24 +62,38 @@ class AppDrawer extends StatelessWidget {
             const Divider(),
             ListTile(
               dense: true,
+              key: const Key('AppDrawer_SendOnWhatsApp_ListTile'),
+              leading: const Icon(Icons.share),
+              title: const Text('הזמנ/י חברים'),
+              onTap: () async {
+                await launcher.whatsApp('', 'https://cookpoint.app/');
+              },
+            ),
+            ListTile(
+              dense: true,
               key: const Key('AppDrawer_AboutUsPage_ListTile'),
               leading: const Icon(Icons.info),
               title: const Text('אודות'),
-              onTap: () => showAboutDialog(
-                context: context,
-                applicationIcon: const Padding(
-                  padding: EdgeInsets.all(8.0),
-                  child: AppCover(
-                    tag: '1.0.1',
-                    width: 64,
-                    height: 64,
+              onTap: () async {
+                final packageInfo = await PackageInfo.fromPlatform();
+
+                showAboutDialog(
+                  context: context,
+                  applicationIcon: const Padding(
+                    padding: EdgeInsets.all(8.0),
+                    child: AppCover(
+                      tag: 'AppDrawer_AboutDialog_AppCover',
+                      width: 64,
+                      height: 64,
+                    ),
                   ),
-                ),
-                applicationVersion: '1.0.1',
-                children: [
-                  _aboutDialogData(),
-                ],
-              ),
+                  applicationVersion:
+                      '${packageInfo.version}+${packageInfo.buildNumber}',
+                  children: [
+                    _aboutDialogData(),
+                  ],
+                );
+              },
             ),
             ListTile(
               dense: true,

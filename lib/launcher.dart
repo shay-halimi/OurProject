@@ -14,8 +14,14 @@ class _Launcher {
     return launch('tel:$phoneNumber');
   }
 
-  Future<void> whatsApp(String phoneNumber) {
-    return launch('https://wa.me/$phoneNumber');
+  Future<void> whatsApp(String phoneNumber, [String text = '']) {
+    final url = Uri.https(
+      'wa.me',
+      '/$phoneNumber',
+      <String, dynamic>{'text': text},
+    );
+
+    return launch(url.toString());
   }
 
   Future<void> launch(String url) async {
