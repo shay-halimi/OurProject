@@ -172,7 +172,7 @@ class FakePointsRepository extends PointsRepository {
         amount: 10 + (30 * rand.nextDouble()).floorToDouble(),
         currency: Currency.unknown,
       ),
-      tags: Point.defaultTags.where((_) => rand.nextBool()).toSet(),
+      tags: {},
     );
   }
 

@@ -1,9 +1,9 @@
 import 'package:cookpoint/authentication/authentication.dart';
+import 'package:cookpoint/generated/l10n.dart';
 import 'package:cookpoint/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:formz/formz.dart';
 
 class LoginForm extends StatelessWidget {
@@ -36,8 +36,7 @@ class _PhoneNumberForm extends StatelessWidget {
         if (state.status.isSubmissionFailure) {
           ScaffoldMessenger.of(context)
             ..hideCurrentSnackBar()
-            ..showSnackBar(
-                SnackBar(content: Text(AppLocalizations.of(context).error)));
+            ..showSnackBar(SnackBar(content: Text(S.of(context).error)));
         }
       },
       child: Column(
@@ -77,9 +76,9 @@ class _PhoneNumberInput extends StatelessWidget {
                 ? () => context.read<LoginCubit>().sendOTP()
                 : null,
             decoration: InputDecoration(
-              labelText: AppLocalizations.of(context).phoneNumber,
+              labelText: S.of(context).phoneNumber,
               errorText: state.phoneNumberInput.invalid
-                  ? AppLocalizations.of(context).phoneNumberError
+                  ? S.of(context).phoneNumberError
                   : null,
             ),
           ),
@@ -102,7 +101,7 @@ class _SendOTPButton extends StatelessWidget {
         return AppButton(
           key: ValueKey(state.status),
           isInProgress: state.status.isSubmissionInProgress,
-          child: Text(AppLocalizations.of(context).continueBtn),
+          child: Text(S.of(context).continueBtn),
           onPressed: state.status.isValidated
               ? () => context.read<LoginCubit>().sendOTP()
               : null,
@@ -122,7 +121,7 @@ class _OTPForm extends StatelessWidget {
           ScaffoldMessenger.of(context)
             ..hideCurrentSnackBar()
             ..showSnackBar(
-              SnackBar(content: Text(AppLocalizations.of(context).error)),
+              SnackBar(content: Text(S.of(context).error)),
             );
         }
       },
@@ -148,7 +147,7 @@ class _ClearVerificationIdButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return TextButton(
       onPressed: () => context.read<LoginCubit>().clearVerification(),
-      child: Text(AppLocalizations.of(context).sendSMSAgainBtn),
+      child: Text(S.of(context).sendSMSAgainBtn),
     );
   }
 }
@@ -168,12 +167,10 @@ class _OTPInput extends StatelessWidget {
             autofocus: true,
             onChanged: (otp) => context.read<LoginCubit>().otpChanged(otp),
             decoration: InputDecoration(
-              labelText: AppLocalizations.of(context).otp,
-              errorText: state.otpInput.invalid
-                  ? AppLocalizations.of(context).otpError
-                  : null,
+              labelText: S.of(context).otp,
+              errorText: state.otpInput.invalid ? S.of(context).otpError : null,
             ),
-            textAlign: TextAlign.end,
+            textAlign: TextAlign.left,
             maxLength: 6,
             maxLengthEnforcement: MaxLengthEnforcement.enforced,
             onEditingComplete: state.status.isValidated
@@ -195,7 +192,7 @@ class _ConfirmPhoneNumberButton extends StatelessWidget {
         return AppButton(
           key: ValueKey(state.status),
           isInProgress: state.status.isSubmissionInProgress,
-          child: Text(AppLocalizations.of(context).continueBtn),
+          child: Text(S.of(context).continueBtn),
           onPressed: state.status.isValidated
               ? () => context.read<LoginCubit>().confirmPhoneNumber()
               : null,

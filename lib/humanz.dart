@@ -13,8 +13,8 @@ class _Humanz {
   String phoneNumber(String phoneNumber) {
     try {
       return '0${phoneNumber.substring(4, 6)}'
-          '.${phoneNumber.substring(6, 9)}'
-          '.${phoneNumber.substring(9)}';
+          '-${phoneNumber.substring(6, 9)}'
+          '-${phoneNumber.substring(9)}';
     } on Error {
       return phoneNumber;
     }

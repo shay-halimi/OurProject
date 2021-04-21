@@ -3,7 +3,7 @@ description: Cook Here, There, Everywhere.
 
 publish_to: 'none'
 
-version: 1.0.5+511
+version: 1.0.6+512
 
 environment:
   sdk: ">=2.7.0 <3.0.0"
@@ -13,8 +13,6 @@ dependencies:
     sdk: flutter
   flutter_localizations:
     sdk: flutter
-  intl:
-  intl_translation:
   authentication_repository:
     path: packages/authentication_repository
   location_services:
@@ -58,13 +56,6 @@ dev_dependencies:
     sdk: flutter
   bloc_test: ^8.0.0
 
-dependency_overrides:
-  intl: ^0.17.0
-  intl_translation:
-    git:
-      url: git://github.com/dart-lang/intl_translation.git
-      ref: 1a18d5a676ce94918f486ef699cb479f7578fdb6
-
 flutter:
   uses-material-design: true
   generate: true
@@ -79,3 +70,6 @@ flutter:
     - assets/images/marker_128.png
     - assets/images/marker_192.png
     - assets/images/marker_256.png
+
+flutter_intl:
+  enabled: true

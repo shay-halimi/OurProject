@@ -4,6 +4,7 @@ import 'package:cookpoint/authentication/authentication.dart';
 import 'package:cookpoint/cook/cook.dart';
 import 'package:cookpoint/location/location.dart';
 import 'package:cookpoint/points/points.dart';
+import 'package:cookpoint/settings/settings.dart';
 import 'package:cookpoint/simple_bloc_observer.dart';
 import 'package:equatable/equatable.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -15,6 +16,7 @@ void main() async {
   await Firebase.initializeApp();
   EquatableConfig.stringify = kDebugMode;
   Bloc.observer = SimpleBlocObserver();
+  await SettingsCubit.initialize();
   runApp(App(
     authenticationRepository: FirebaseAuthenticationRepository(),
     pointsRepository: FirebasePointsRepository(),

@@ -1,4 +1,5 @@
 import 'package:cookpoint/cook/cook.dart';
+import 'package:cookpoint/generated/l10n.dart';
 import 'package:cookpoint/humanz.dart';
 import 'package:cookpoint/location/location.dart';
 import 'package:cookpoint/media/media.dart';
@@ -6,7 +7,6 @@ import 'package:cookpoint/points/points.dart';
 import 'package:cookpoint/theme/widgets/circle_button.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:provider/provider.dart';
 
 class PointCard extends StatelessWidget {
@@ -109,7 +109,7 @@ class PointCard extends StatelessWidget {
                           children: [
                             TagsLine(tags: {
                               '${humanz.distance(point.latLng, center)} '
-                                  '${AppLocalizations.of(context).km}',
+                                  '${S.of(context).km}',
                               ...point.tags,
                             }),
                             if (point.price.amount > 0.00)

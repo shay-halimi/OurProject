@@ -1,12 +1,13 @@
 import 'package:cookpoint/cook/cook.dart';
+import 'package:cookpoint/generated/l10n.dart';
 import 'package:cookpoint/humanz.dart';
+import 'package:cookpoint/legal/legal.dart';
 import 'package:cookpoint/media/media.dart';
 import 'package:cookpoint/points/points.dart';
 import 'package:cookpoint/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:formz/formz.dart';
 import 'package:provider/provider.dart';
 
@@ -23,7 +24,11 @@ class PointPage extends StatelessWidget {
       settings: RouteSettings(
         name: point.isEmpty ? '/points/create' : '/points/${point.id}/update',
       ),
-      builder: (_) => CookMiddleware(child: PointPage(point: point)),
+      builder: (_) => CookMiddleware(
+        child: CookTermsOfServiceMiddleware(
+          child: PointPage(point: point),
+        ),
+      ),
     );
   }
 
@@ -58,8 +63,8 @@ class PointForm extends StatelessWidget {
       appBar: AppBar(
         title: Text(
           point.isEmpty
-              ? AppLocalizations.of(context).createPointPageTitle
-              : AppLocalizations.of(context).updatePointPageTitle,
+              ? S.of(context).createPointPageTitle
+              : S.of(context).updatePointPageTitle,
         ),
         actions: [
           if (point.isNotEmpty && status.isValidated)
@@ -77,17 +82,16 @@ class PointForm extends StatelessWidget {
             context: context,
             builder: (_) {
               return AlertDialog(
-                title:
-                    Text(AppLocalizations.of(context).discardChangesAlertTitle),
+                title: Text(S.of(context).discardChangesAlertTitle),
                 actions: [
                   TextButton(
-                    child: Text(AppLocalizations.of(context).saveBtn),
+                    child: Text(S.of(context).saveBtn),
                     onPressed: () {
                       Navigator.of(context).pop(false);
                     },
                   ),
                   ElevatedButton(
-                    child: Text(AppLocalizations.of(context).discardBtn),
+                    child: Text(S.of(context).discardBtn),
                     onPressed: () {
                       Navigator.of(context).pop(true);
                     },
@@ -110,16 +114,15 @@ class PointForm extends StatelessWidget {
             if (state.status.isSubmissionFailure) {
               ScaffoldMessenger.of(context)
                 ..hideCurrentSnackBar()
-                ..showSnackBar(SnackBar(
-                    content: Text(AppLocalizations.of(context).error)));
+                ..showSnackBar(SnackBar(content: Text(S.of(context).error)));
             }
 
             if (state.status.isSubmissionSuccess) {
               final msg = point.isEmpty
                   ? state.deleteAtInput.value.isEmpty
-                      ? AppLocalizations.of(context).pointPostedSuccessfully
-                      : AppLocalizations.of(context).pointCreatedSuccessfully
-                  : AppLocalizations.of(context).pointUpdatedSuccessfully;
+                      ? S.of(context).pointPostedSuccessfully
+                      : S.of(context).pointCreatedSuccessfully
+                  : S.of(context).pointUpdatedSuccessfully;
 
               ScaffoldMessenger.of(context)
                 ..hideCurrentSnackBar()
@@ -165,9 +168,8 @@ class _SubmitButton extends StatelessWidget {
       builder: (_, state) {
         return AppButton(
           isInProgress: state.status.isSubmissionInProgress,
-          child: Text(point.isEmpty
-              ? AppLocalizations.of(context).postBtn
-              : AppLocalizations.of(context).saveBtn),
+          child: Text(
+              point.isEmpty ? S.of(context).postBtn : S.of(context).saveBtn),
           onPressed: state.status.isValidated
               ? () => context.read<PointFormCubit>().save()
               : null,
@@ -184,10 +186,17 @@ class _TagsInput extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final tags = {
+      Tag.vegan: S.of(context).vegan,
+      Tag.vegetarian: S.of(context).vegetarian,
+      Tag.glutenFree: S.of(context).glutenFree,
+      Tag.kosher: S.of(context).kosher,
+    };
+
     return Column(
       children: [
         ListTile(
-          title: Text(AppLocalizations.of(context).tags),
+          title: Text(S.of(context).tags),
           subtitle: BlocBuilder<PointFormCubit, PointFormState>(
             buildWhen: (previous, current) => previous != current,
             builder: (_, state) {
@@ -195,20 +204,23 @@ class _TagsInput extends StatelessWidget {
                 scrollDirection: Axis.horizontal,
                 child: Row(
                   children: [
-                    for (var tag in Point.defaultTags)
+                    for (var tag in tags.entries)
                       Padding(
+                        key: Key(tag.value),
                         padding: const EdgeInsets.only(left: 2.0),
                         child: InputChip(
                           elevation: 1.0,
                           selectedColor: Colors.white,
                           backgroundColor: Colors.white,
                           label: Text(
-                            tag,
+                            tag.value,
                             style: Theme.of(context).textTheme.bodyText2,
                           ),
-                          onSelected: (selected) =>
-                              context.read<PointFormCubit>().toggleTag(tag),
-                          selected: state.tagsInput.value.contains(tag),
+                          onSelected: (selected) => context
+                              .read<PointFormCubit>()
+                              .toggleTag(tag.key.title),
+                          selected:
+                              state.tagsInput.value.contains(tag.key.title),
                           visualDensity: VisualDensity.compact,
                         ),
                       ),
@@ -245,13 +257,12 @@ class _PriceInput extends StatelessWidget {
             onChanged: (value) =>
                 context.read<PointFormCubit>().changePrice(value),
             decoration: InputDecoration(
-              labelText: AppLocalizations.of(context).price,
-              errorText: state.priceInput.invalid
-                  ? AppLocalizations.of(context).invalid
-                  : null,
+              labelText: S.of(context).price,
+              errorText:
+                  state.priceInput.invalid ? S.of(context).invalid : null,
               suffix: const Text('₪'),
             ),
-            textAlign: TextAlign.end,
+            textAlign: TextAlign.left,
             initialValue: state.priceInput.value.isEmpty
                 ? null
                 : humanz.money(state.priceInput.value, ''),
@@ -284,10 +295,9 @@ class _DescriptionInput extends StatelessWidget {
             onChanged: (value) =>
                 context.read<PointFormCubit>().changeDescription(value),
             decoration: InputDecoration(
-              labelText: AppLocalizations.of(context).description,
-              errorText: state.descriptionInput.invalid
-                  ? AppLocalizations.of(context).invalid
-                  : null,
+              labelText: S.of(context).description,
+              errorText:
+                  state.descriptionInput.invalid ? S.of(context).invalid : null,
             ),
             initialValue: state.descriptionInput.value,
           ),
@@ -319,10 +329,9 @@ class _TitleInput extends StatelessWidget {
             onChanged: (value) =>
                 context.read<PointFormCubit>().changeTitle(value),
             decoration: InputDecoration(
-              labelText: AppLocalizations.of(context).title,
-              errorText: state.titleInput.invalid
-                  ? AppLocalizations.of(context).invalid
-                  : null,
+              labelText: S.of(context).title,
+              errorText:
+                  state.titleInput.invalid ? S.of(context).invalid : null,
             ),
             initialValue: state.titleInput.value,
           );
@@ -365,9 +374,9 @@ class _AvailableInput extends StatelessWidget {
       builder: (_, state) {
         return SwitchListTile(
           title: Text(state.isAvailable
-              ? AppLocalizations.of(context).available
-              : AppLocalizations.of(context).unavailable),
-          subtitle: Text(AppLocalizations.of(context).availableHelperText),
+              ? S.of(context).available
+              : S.of(context).unavailable),
+          subtitle: Text(S.of(context).availableHelperText),
           value: state.isAvailable,
           onChanged: (bool value) {
             if (!value || state.canPostPoint) {
@@ -376,9 +385,8 @@ class _AvailableInput extends StatelessWidget {
 
             ScaffoldMessenger.of(context)
               ..hideCurrentSnackBar()
-              ..showSnackBar(SnackBar(
-                  content:
-                      Text(AppLocalizations.of(context).tooManyPointsError)));
+              ..showSnackBar(
+                  SnackBar(content: Text(S.of(context).tooManyPointsError)));
           },
         );
       },

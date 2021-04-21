@@ -1,10 +1,10 @@
 import 'package:cookpoint/cook/cook.dart';
+import 'package:cookpoint/generated/l10n.dart';
 import 'package:cookpoint/location/location.dart';
 import 'package:cookpoint/media/media.dart';
 import 'package:cookpoint/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:formz/formz.dart';
 import 'package:provider/provider.dart';
 
@@ -48,8 +48,8 @@ class CookForm extends StatelessWidget {
       resizeToAvoidBottomInset: true,
       appBar: AppBar(
         title: Text(cook.isEmpty
-            ? AppLocalizations.of(context).createAccountPageTitle
-            : AppLocalizations.of(context).updateAccountPageTitle),
+            ? S.of(context).createAccountPageTitle
+            : S.of(context).updateAccountPageTitle),
       ),
       body: BlocListener<CookFormCubit, CookFormState>(
         listenWhen: (previous, current) => previous != current,
@@ -57,8 +57,7 @@ class CookForm extends StatelessWidget {
           if (state.status.isSubmissionFailure) {
             ScaffoldMessenger.of(context)
               ..hideCurrentSnackBar()
-              ..showSnackBar(
-                  SnackBar(content: Text(AppLocalizations.of(context).error)));
+              ..showSnackBar(SnackBar(content: Text(S.of(context).error)));
           }
 
           if (state.status.isSubmissionSuccess) {
@@ -66,8 +65,7 @@ class CookForm extends StatelessWidget {
               ScaffoldMessenger.of(context)
                 ..hideCurrentSnackBar()
                 ..showSnackBar(SnackBar(
-                    content: Text(AppLocalizations.of(context)
-                        .accountUpdatedSuccessfully)));
+                    content: Text(S.of(context).accountUpdatedSuccessfully)));
 
               Navigator.of(context).pop();
             }
@@ -127,11 +125,10 @@ class _AddressInput extends StatelessWidget {
           onChanged: (value) =>
               context.read<CookFormCubit>().changeAddressName(value),
           decoration: InputDecoration(
-            labelText: AppLocalizations.of(context).address,
-            errorText: state.addressInput.invalid
-                ? AppLocalizations.of(context).invalid
-                : null,
-            helperText: AppLocalizations.of(context).addressHelperText,
+            labelText: S.of(context).address,
+            errorText:
+                state.addressInput.invalid ? S.of(context).invalid : null,
+            helperText: S.of(context).addressHelperText,
           ),
           initialValue: state.addressInput.value.name,
         );
@@ -158,10 +155,9 @@ class _DisplayNameInput extends StatelessWidget {
           onChanged: (value) =>
               context.read<CookFormCubit>().changeDisplayName(value),
           decoration: InputDecoration(
-            labelText: AppLocalizations.of(context).displayName,
-            errorText: state.displayNameInput.invalid
-                ? AppLocalizations.of(context).invalid
-                : null,
+            labelText: S.of(context).displayName,
+            errorText:
+                state.displayNameInput.invalid ? S.of(context).invalid : null,
           ),
           initialValue: state.displayNameInput.value,
         );
@@ -208,9 +204,8 @@ class _SubmitButton extends StatelessWidget {
         return AppButton(
           key: ValueKey(state.status),
           isInProgress: state.status.isSubmissionInProgress,
-          child: Text(cook.isEmpty
-              ? AppLocalizations.of(context).continueBtn
-              : AppLocalizations.of(context).saveBtn),
+          child: Text(
+              cook.isEmpty ? S.of(context).continueBtn : S.of(context).saveBtn),
           onPressed: state.status.isValidated
               ? () => context.read<CookFormCubit>().save()
               : null,

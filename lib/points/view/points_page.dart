@@ -1,9 +1,9 @@
 import 'package:cookpoint/cook/cook.dart';
+import 'package:cookpoint/generated/l10n.dart';
 import 'package:cookpoint/points/points.dart';
 import 'package:cookpoint/splash/splash.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class PointsPage extends StatelessWidget {
   const PointsPage({
@@ -21,7 +21,7 @@ class PointsPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(AppLocalizations.of(context).pointsPageTitle),
+        title: Text(S.of(context).pointsPageTitle),
       ),
       body: BlocBuilder<PointsBloc, PointsState>(
         buildWhen: (previous, current) =>
@@ -35,7 +35,8 @@ class PointsPage extends StatelessWidget {
                     Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: Text(
-                        AppLocalizations.of(context)
+                        S
+                            .of(context)
                             .looks_like_you_haven_t_posted_any_points_yet,
                         style: Theme.of(context).textTheme.headline6,
                         textAlign: TextAlign.center,

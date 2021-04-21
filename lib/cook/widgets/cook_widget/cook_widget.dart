@@ -1,5 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cookpoint/cook/cook.dart';
+import 'package:cookpoint/generated/l10n.dart';
 import 'package:cookpoint/humanz.dart';
 import 'package:cookpoint/launcher.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
@@ -41,8 +42,10 @@ class CookWidget extends StatelessWidget {
                 ),
                 title: Text(cook.displayName),
                 subtitle: Text(cook.address.name),
-                onTap: cook.isEmpty ? null : () => _onTap(context, cook),
-                trailing: const Icon(LineAwesomeIcons.phone),
+                trailing: TextButton(
+                  child: Text(S.of(context).orderNow),
+                  onPressed: cook.isEmpty ? null : () => _onTap(context, cook),
+                ),
               ),
               if (cook.isEmpty) const LinearProgressIndicator(),
             ],
@@ -89,6 +92,14 @@ class _ActionsDialog extends StatelessWidget {
               child: snapshot.hasData
                   ? Wrap(
                       children: [
+                        ListTile(
+                          leading: CircleAvatar(
+                            backgroundImage:
+                                CachedNetworkImageProvider(cook.photoURL),
+                          ),
+                          title: Text(cook.displayName),
+                          subtitle: Text(cook.address.name),
+                        ),
                         _phone(context),
                         _whatsApp(context),
                         for (var map in snapshot.data) _map(context, map),
@@ -107,6 +118,7 @@ class _ActionsDialog extends StatelessWidget {
 
   Widget _map(BuildContext context, map_launcher.AvailableMap map) {
     return ListTile(
+      visualDensity: VisualDensity.compact,
       title: Text(map.mapName),
       leading: Icon(map.iconData),
       onTap: () async {
@@ -132,6 +144,7 @@ class _ActionsDialog extends StatelessWidget {
 
   Widget _whatsApp(BuildContext context) {
     return ListTile(
+      visualDensity: VisualDensity.compact,
       onTap: () async {
         await FirebaseAnalytics().logEvent(
           name: 'add_payment_info',
@@ -151,6 +164,7 @@ class _ActionsDialog extends StatelessWidget {
 
   Widget _phone(BuildContext context) {
     return ListTile(
+      visualDensity: VisualDensity.compact,
       onTap: () async {
         await FirebaseAnalytics().logEvent(
           name: 'add_payment_info',

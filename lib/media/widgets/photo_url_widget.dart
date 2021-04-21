@@ -1,11 +1,11 @@
 import 'dart:io';
 
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:cookpoint/generated/l10n.dart';
 import 'package:cookpoint/media/media.dart';
 import 'package:cookpoint/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
@@ -74,13 +74,13 @@ class _PhotoURLDialogView extends StatelessWidget {
                       ? CachedNetworkImageProvider(photoURL)
                       : null,
                   child: photoURL.isEmpty
-                      ? Text(AppLocalizations.of(context).pickImageBtn)
+                      ? Text(S.of(context).pickImageBtn)
                       : null,
                 );
               } else if (state is MediaDialogError) {
                 CircleAvatar(
                   radius: radius,
-                  child: Text(AppLocalizations.of(context).error),
+                  child: Text(S.of(context).error),
                 );
               } else if (state is MediaDialogLoading) {
                 return CircleAvatar(
@@ -153,8 +153,8 @@ class _PhotoURLDialogView extends StatelessWidget {
           ),
           iosUiSettings: IOSUiSettings(
             title: '',
-            doneButtonTitle: AppLocalizations.of(context).continueBtn,
-            cancelButtonTitle: AppLocalizations.of(context).cancelBtn,
+            doneButtonTitle: S.of(context).continueBtn,
+            cancelButtonTitle: S.of(context).cancelBtn,
             aspectRatioLockEnabled: true,
           ),
         );
@@ -175,22 +175,22 @@ class _PhotoURLDialogView extends StatelessWidget {
       context: context,
       builder: (_) {
         return AlertDialog(
-          title: Text(AppLocalizations.of(context).imageSourceBtn),
+          title: Text(S.of(context).imageSourceBtn),
           actions: <Widget>[
             TextButton(
-              child: Text(AppLocalizations.of(context).imageSourceGalleryBtn),
+              child: Text(S.of(context).imageSourceGalleryBtn),
               onPressed: () {
                 Navigator.of(context).pop(ImageSource.gallery);
               },
             ),
             TextButton(
-              child: Text(AppLocalizations.of(context).imageSourceCameraBtn),
+              child: Text(S.of(context).imageSourceCameraBtn),
               onPressed: () {
                 Navigator.of(context).pop(ImageSource.camera);
               },
             ),
             TextButton(
-              child: Text(AppLocalizations.of(context).cancelBtn),
+              child: Text(S.of(context).cancelBtn),
               onPressed: () {
                 Navigator.of(context).pop();
               },

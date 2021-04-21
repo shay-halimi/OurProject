@@ -1,16 +1,17 @@
 import 'package:cookpoint/authentication/authentication.dart';
 import 'package:cookpoint/cook/cook.dart';
+import 'package:cookpoint/generated/l10n.dart';
 import 'package:cookpoint/home_page.dart';
 import 'package:cookpoint/internet/internet.dart';
 import 'package:cookpoint/location/location.dart';
 import 'package:cookpoint/points/points.dart';
+import 'package:cookpoint/settings/cubit/cubit.dart';
 import 'package:cookpoint/splash/splash.dart';
 import 'package:cookpoint/theme/theme.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_analytics/observer.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 
 class App extends StatelessWidget {
@@ -57,6 +58,9 @@ class App extends StatelessWidget {
             create: (_) => InternetCubit()..check(),
           ),
           BlocProvider(
+            create: (_) => SettingsCubit(),
+          ),
+          BlocProvider(
             create: (_) => AuthenticationBloc(
               authenticationRepository: authenticationRepository,
             ),
@@ -98,43 +102,65 @@ class _AppViewState extends State<AppView> {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'CookPoint',
-      theme: theme,
-      navigatorObservers: [
-        FirebaseAnalyticsObserver(analytics: FirebaseAnalytics()),
-      ],
-      localizationsDelegates: [
-        AppLocalizations.delegate,
-        GlobalWidgetsLocalizations.delegate,
-        GlobalMaterialLocalizations.delegate,
-        GlobalCupertinoLocalizations.delegate,
-      ],
-      supportedLocales: [
-        const Locale('en', 'US'),
-        const Locale('he', 'IL'),
-      ],
-      navigatorKey: _navigatorKey,
-      builder: (_, child) {
-        return BlocListener<InternetCubit, InternetState>(
-          listener: (_, state) {
-            switch (state.status) {
-              case InternetStatus.loaded:
-                _navigator.pushAndRemoveUntil<void>(
-                    HomePage.route(), (_) => false);
-                break;
-              case InternetStatus.error:
-                _navigator.pushAndRemoveUntil<void>(
-                    ErrorPage.route(), (_) => false);
-                break;
-              default:
-                break;
-            }
+    return BlocBuilder<SettingsCubit, SettingsState>(
+      buildWhen: (previous, current) => previous.locale != current.locale,
+      builder: (_, settings) {
+        return MaterialApp(
+          title: 'CookPoint',
+          theme: theme,
+          navigatorObservers: [
+            FirebaseAnalyticsObserver(analytics: FirebaseAnalytics()),
+          ],
+          localizationsDelegates: [
+            S.delegate,
+            GlobalWidgetsLocalizations.delegate,
+            GlobalMaterialLocalizations.delegate,
+            GlobalCupertinoLocalizations.delegate,
+          ],
+          supportedLocales: [
+            const Locale('en', 'US'),
+            const Locale('he', 'IL'),
+          ],
+          locale: settings.locale.toLocale(),
+          navigatorKey: _navigatorKey,
+          builder: (_, child) {
+            return BlocListener<InternetCubit, InternetState>(
+              listener: (_, state) {
+                switch (state.status) {
+                  case InternetStatus.loaded:
+                    _navigator.pushAndRemoveUntil<void>(
+                        HomePage.route(), (_) => false);
+                    break;
+                  case InternetStatus.error:
+                    _navigator.pushAndRemoveUntil<void>(
+                        ErrorPage.route(), (_) => false);
+                    break;
+                  default:
+                    break;
+                }
+              },
+              child: child,
+            );
           },
-          child: child,
+          onGenerateRoute: (_) => SplashPage.route(),
         );
       },
-      onGenerateRoute: (_) => SplashPage.route(),
     );
+  }
+}
+
+extension _XSettingsLocale on SettingsLocale {
+  /// @nullable
+  Locale toLocale() {
+    switch (this) {
+      case SettingsLocale.hebrew:
+        return const Locale('he', 'IL');
+
+      case SettingsLocale.english:
+        return const Locale('en', 'US');
+
+      default:
+        return null;
+    }
   }
 }

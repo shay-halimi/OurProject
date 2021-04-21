@@ -89,13 +89,6 @@ class Point {
 
   bool get isNotTrashed => !isTrashed;
 
-  static const Set<String> defaultTags = {
-    'צמחוני',
-    'טבעוני',
-    'ללא גלוטן',
-    'כשר',
-  };
-
   Point copyWith({
     String id,
     String cookId,

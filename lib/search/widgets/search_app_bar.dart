@@ -1,3 +1,4 @@
+import 'package:cookpoint/generated/l10n.dart';
 import 'package:cookpoint/humanz.dart';
 import 'package:cookpoint/location/location.dart';
 import 'package:cookpoint/points/points.dart';
@@ -5,7 +6,6 @@ import 'package:cookpoint/search/search.dart';
 import 'package:cookpoint/selected_point/selected_point.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_typeahead/flutter_typeahead.dart';
 import 'package:provider/provider.dart';
 
@@ -62,41 +62,39 @@ class _TagsFilter extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final tags = {
+      Tag.vegan: S.of(context).vegan,
+      Tag.vegetarian: S.of(context).vegetarian,
+      Tag.glutenFree: S.of(context).glutenFree,
+      Tag.kosher: S.of(context).kosher,
+    };
+
     return BlocBuilder<SearchBloc, SearchState>(
       buildWhen: (previous, current) => previous != current,
       builder: (_, state) {
         if (state.status == SearchStatus.loaded) {
-          final tagsSet = <String>{};
-
-          for (var point in state.results) {
-            tagsSet.addAll(point.tags);
-          }
-
-          final tags = tagsSet.toList()
-            ..sort((tag1, tag2) => tag2.compareTo(tag1));
-
           final textTheme = Theme.of(context).textTheme;
 
           return SingleChildScrollView(
             scrollDirection: Axis.horizontal,
             child: Row(
               children: [
-                for (var tag in tags)
+                for (var tag in tags.entries)
                   Padding(
-                    key: ValueKey(tag),
+                    key: Key(tag.value),
                     padding: const EdgeInsets.only(left: 2.0),
                     child: InputChip(
                       elevation: 2.0,
                       selectedColor: Colors.white,
                       backgroundColor: Colors.white,
                       label: Text(
-                        tag,
+                        tag.value,
                         style: textTheme.bodyText2,
                       ),
                       onSelected: (_) => context
                           .read<SearchBloc>()
-                          .add(SearchTagSelected(tag)),
-                      selected: state.tags.contains(tag),
+                          .add(SearchTagSelected(tag.key.title)),
+                      selected: state.tags.contains(tag.key.title),
                       visualDensity: VisualDensity.compact,
                     ),
                   ),
@@ -159,7 +157,7 @@ class _SearchFieldState extends State<SearchField> {
           controller: _controller,
           focusNode: _focusNode,
           decoration: InputDecoration(
-            hintText: AppLocalizations.of(context).searchHintText,
+            hintText: S.of(context).searchHintText,
             suffixIcon: _controller.value.text.isNotEmpty
                 ? IconButton(
                     icon: const Icon(Icons.close),
@@ -192,14 +190,14 @@ class _SearchFieldState extends State<SearchField> {
             title: Text(point.title),
             trailing: Text(
               '${humanz.distance(point.latLng, center)} '
-              '${AppLocalizations.of(context).km}',
+              '${S.of(context).km}',
               style: Theme.of(context).textTheme.caption,
             ),
           );
         },
         noItemsFoundBuilder: (_) {
           return ListTile(
-            title: Text(AppLocalizations.of(context).searchNoPointsFound),
+            title: Text(S.of(context).searchNoPointsFound),
           );
         },
         onSuggestionSelected: (point) {
