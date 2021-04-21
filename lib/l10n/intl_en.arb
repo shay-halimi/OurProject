@@ -1,79 +1,51 @@
 {
   "orderNow": "Order now",
-
   "km": "km",
-
   "vegan": "vegan",
   "vegetarian": "vegetarian",
   "glutenFree": "gluten-free",
   "kosher": "kosher",
-
   "contactUsPageTitle": "Contact Us",
-
   "aboutPageTitle": "About",
-
   "inviteFriendsBtn": "Invite Friends",
-
   "searchNoPointsFound": "No nearby results",
   "searchHintText": "What's for dinner?",
-
   "pointsPageTitle": "My kitchen",
-
   "looks_like_you_haven_t_posted_any_points_yet": "Looks like you haven't posted any points yet.",
-
   "tooManyPointsError": "Only three points can be available.",
-
   "unavailable": "Unavailable",
-
   "available": "Available",
   "availableHelperText": "Available points appear on the map with your name, address and the phone number you registered with.",
-
   "tags": "Tags",
   "price": "Price",
   "description": "Description",
   "title": "Title",
-
   "discardChangesAlertTitle": "Discard Changes?",
-
   "updatePointPageTitle": "Update Point",
   "pointUpdatedSuccessfully": "Successfully updated",
-
   "createPointPageTitle": "Create Point",
   "pointPostedSuccessfully": "Successfully posted",
   "pointCreatedSuccessfully": "Successfully created",
-
   "pickImageBtn": "Select image",
   "imageSourceBtn": "Select image source",
   "imageSourceGalleryBtn": "Gallery",
   "imageSourceCameraBtn": "Camera",
-
   "partnersTermsOfServicePageTitle": "Affiliate Terms & Privacy Policy",
-
   "termsOfServicePageTitle": "Terms & Privacy Policy",
-
   "accountPageTitle": "Account",
-
   "updateAccountPageTitle": "Update Account",
   "accountUpdatedSuccessfully": "Successfully updated",
-
   "createAccountPageTitle": "Create Account",
-
   "loginPageTitle": "Login",
-
   "displayName": "Display name",
-
   "address": "Address",
   "addressHelperText": "City, street and house number.",
-
   "otp": "Verification Code",
   "otpError": "Invalid verification code",
-
   "phoneNumber": "Phone Number",
   "phoneNumberError": "Digits only, no hyphens or spaces",
-
   "createPointBtnTooltip": "Add food point",
   "createPointBtn": "Add point",
-
   "acceptTermsOfServiceBtn": "I accept the terms of service",
   "sendSMSAgainBtn": "If you have not received an SMS from us, click here.",
   "discardBtn": "Discard changed",
@@ -82,9 +54,7 @@
   "continueBtn": "Continue",
   "cancelBtn": "Cancel",
   "tryAgainBtn": "Try again",
-
   "internetError": "Error! Check your internet connection and try again.",
-
   "invalid": "Invalid",
   "error": "Error! Check your input and try again."
 }

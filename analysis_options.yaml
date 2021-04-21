@@ -4,6 +4,7 @@ analyzer:
     implicit-dynamic: false
   errors:
     close_sinks: ignore
+  exclude: [lib/generated/**]
 
 linter:
   rules:

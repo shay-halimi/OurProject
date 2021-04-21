@@ -2,7 +2,7 @@ import 'package:cookpoint/points/points.dart';
 
 final humanz = const _Humanz();
 
-/// @TODO(Matan) !!! _Humanz class support *only* Hebrew
+/// @TODO(Matan) !!! _Humanz class support *only* he_IL
 /// @TODO(Matan) make _Humanz international.
 class _Humanz {
   const _Humanz();

@@ -1,79 +1,51 @@
 {
   "orderNow": "הזמן עכשיו",
-
   "km": "ק\"מ",
-
   "vegan": "טִבעוֹנִי",
   "vegetarian": "צִמחוֹנִי",
   "glutenFree": "ללא גלוטן",
   "kosher": "כשר",
-
   "contactUsPageTitle": "צרו קשר",
-
   "aboutPageTitle": "אודות",
-
   "inviteFriendsBtn": "הזמנ/י חברים",
-
   "searchNoPointsFound": "אין תוצאות קרובות",
   "searchHintText": "מה בא לך לאכול?",
-
   "pointsPageTitle": "המטבח שלי",
-
   "looks_like_you_haven_t_posted_any_points_yet": "נראה שעדיין לא פרסמת מאכלים.",
-
   "tooManyPointsError": "רק שלושה מאכלים יכולים להיות זמינים.",
-
   "unavailable": "לא זמין",
-
   "available": "זמין",
   "availableHelperText": "מאכלים זמינים מופיעים על המפה עם שמכם, כתובתכם ומספר הטלפון איתו נרשמתם.",
-
   "tags": "תגיות",
   "price": "מחיר",
   "description": "תיאור",
   "title": "שם המאכל",
-
   "discardChangesAlertTitle": "האם לבטל את השינויים?",
-
   "updatePointPageTitle": "עדכון מאכל",
   "pointUpdatedSuccessfully": "עודכן בהצלחה",
-
   "createPointPageTitle": "פרסום מאכל",
   "pointPostedSuccessfully": "פורסם בהצלחה",
   "pointCreatedSuccessfully": "נשמר בהצלחה",
-
   "pickImageBtn": "בחר/י תמונה",
   "imageSourceBtn": "בחר/י מקור תמונה",
   "imageSourceGalleryBtn": "בחר/י מהגלריה",
   "imageSourceCameraBtn": "צלמ/י תמונה חדשה",
-
   "partnersTermsOfServicePageTitle": "תנאים ומדיניות פרטיות שותפים",
-
   "termsOfServicePageTitle": "תנאים ומדיניות פרטיות",
-
   "accountPageTitle": "חשבון",
-
   "updateAccountPageTitle": "עדכון חשבון",
   "accountUpdatedSuccessfully": "חשבונך עודכן בהצלחה",
-
   "createAccountPageTitle": "יצירת חשבון",
-
   "loginPageTitle": "הזדהות",
-
   "displayName": "שם לתצוגה",
-
   "address": "כתובת",
   "addressHelperText": "שם יישוב, שם רחוב ומספר בית.",
-
   "otp": "קוד אימות",
   "otpError": "קוד אימות לא תקין",
-
   "phoneNumber": "מספר טלפון",
   "phoneNumberError": "ספרות בלבד, ללא מקפים או רווחים",
-
   "createPointBtnTooltip": "פרסמ/י CookPoint",
   "createPointBtn": "פרסמ/י מאכל",
-
   "acceptTermsOfServiceBtn": "אני מקבל/ת את תנאי השירות",
   "sendSMSAgainBtn": "אם לא קיבלת SMS מאיתנו, לחצ/י כאן.",
   "discardBtn": "בטל את השינויים",
@@ -82,9 +54,7 @@
   "continueBtn": "המשך",
   "cancelBtn": "ביטול",
   "tryAgainBtn": "נסה/י שנית",
-
   "internetError": "שגיאה! בדוק/י שיש חיבור לאינטרנט ונסה/י שנית",
-
   "invalid": "לא תקין",
   "error": "שגיאה, אמת/י המידע שהזנת ונסה/י שנית."
 }

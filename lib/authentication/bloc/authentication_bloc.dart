@@ -17,7 +17,7 @@ class AuthenticationBloc
         _authenticationRepository = authenticationRepository,
         super(const AuthenticationState.unknown()) {
     _userSubscription = _authenticationRepository.user.listen(
-      (user) => add(AuthenticationUserChanged(user)),
+      (user) => add(AuthenticationUserChangedEvent(user)),
     );
   }
 
@@ -35,15 +35,15 @@ class AuthenticationBloc
   Stream<AuthenticationState> mapEventToState(
     AuthenticationEvent event,
   ) async* {
-    if (event is AuthenticationUserChanged) {
+    if (event is AuthenticationUserChangedEvent) {
       yield _mapAuthenticationUserChangedEventToState(event);
-    } else if (event is AuthenticationLogoutRequested) {
+    } else if (event is AuthenticationLogoutRequestedEvent) {
       unawaited(_authenticationRepository.logOut());
     }
   }
 
   AuthenticationState _mapAuthenticationUserChangedEventToState(
-    AuthenticationUserChanged event,
+    AuthenticationUserChangedEvent event,
   ) {
     return event.user.isNotEmpty
         ? AuthenticationState.authenticated(event.user)

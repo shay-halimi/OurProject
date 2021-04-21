@@ -40,7 +40,7 @@ class AppDrawer extends StatelessWidget {
               ),
               onLongPress: () => context
                   .read<AuthenticationBloc>()
-                  .add(AuthenticationLogoutRequested()),
+                  .add(AuthenticationLogoutRequestedEvent()),
             ),
             if (authenticated) ...[
               ListTile(
