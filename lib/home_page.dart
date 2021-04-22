@@ -1,4 +1,3 @@
-import 'package:cookpoint/legal/legal.dart';
 import 'package:cookpoint/points/points.dart';
 import 'package:cookpoint/search/search.dart';
 import 'package:flutter/material.dart';
@@ -15,7 +14,7 @@ class HomePage extends StatelessWidget {
   static Route route() {
     return MaterialPageRoute<void>(
       settings: const RouteSettings(name: '/'),
-      builder: (_) => TermsOfServiceMiddleware(child: const HomePage()),
+      builder: (_) => const HomePage(),
     );
   }
 

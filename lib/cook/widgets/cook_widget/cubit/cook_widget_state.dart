@@ -8,15 +8,6 @@ abstract class CookWidgetState extends Equatable {
 
 class CookWidgetInitial extends CookWidgetState {}
 
-class CookWidgetRequested extends CookWidgetState {
-  CookWidgetRequested(this.cookId);
-
-  final String cookId;
-
-  @override
-  List<Object> get props => [cookId];
-}
-
 class CookWidgetLoaded extends CookWidgetState {
   CookWidgetLoaded(this.cook);
 

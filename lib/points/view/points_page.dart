@@ -23,42 +23,53 @@ class PointsPage extends StatelessWidget {
       appBar: AppBar(
         title: Text(S.of(context).pointsPageTitle),
       ),
-      body: BlocBuilder<PointsBloc, PointsState>(
-        buildWhen: (previous, current) =>
-            previous.cookPoints != current.cookPoints,
-        builder: (_, state) {
-          if (state.cookPoints.isEmpty) {
-            return SplashBody(
-              child: Expanded(
-                child: Column(
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Text(
-                        S
-                            .of(context)
-                            .looks_like_you_haven_t_posted_any_points_yet,
-                        style: Theme.of(context).textTheme.headline6,
-                        textAlign: TextAlign.center,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            );
-          }
-
-          return ListView(
-            children: [
-              for (var point in state.cookPoints)
-                PointWidget(
-                  point: point,
-                ),
-            ],
-          );
-        },
-      ),
+      body: const PointsPageBody(),
       floatingActionButton: const CreatePointButton(),
+    );
+  }
+}
+
+class PointsPageBody extends StatelessWidget {
+  const PointsPageBody({
+    Key key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<PointsBloc, PointsState>(
+      buildWhen: (previous, current) =>
+          previous.cookPoints != current.cookPoints,
+      builder: (_, state) {
+        if (state.cookPoints.isEmpty) {
+          return SplashBody(
+            child: Expanded(
+              child: Column(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Text(
+                      S
+                          .of(context)
+                          .looks_like_you_haven_t_posted_any_points_yet,
+                      style: Theme.of(context).textTheme.headline6,
+                      textAlign: TextAlign.center,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          );
+        }
+
+        return ListView(
+          children: [
+            for (var point in state.cookPoints)
+              PointWidget(
+                point: point,
+              ),
+          ],
+        );
+      },
     );
   }
 }

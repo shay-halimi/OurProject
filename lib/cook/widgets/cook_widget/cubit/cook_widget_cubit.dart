@@ -10,9 +10,15 @@ part 'cook_widget_state.dart';
 class CookWidgetCubit extends Cubit<CookWidgetState> {
   CookWidgetCubit({
     @required CooksRepository cooksRepository,
+    @required String cookId,
   })  : assert(cooksRepository != null),
+        assert(cookId != null),
         _cooksRepository = cooksRepository,
-        super(CookWidgetInitial());
+        super(CookWidgetInitial()) {
+    _cookSubscription = _cooksRepository.cook(cookId).listen((event) {
+      emit(CookWidgetLoaded(event));
+    });
+  }
 
   final CooksRepository _cooksRepository;
 
@@ -22,15 +28,5 @@ class CookWidgetCubit extends Cubit<CookWidgetState> {
   Future<void> close() {
     _cookSubscription?.cancel();
     return super.close();
-  }
-
-  Future<void> request(String cookId) async {
-    emit(CookWidgetRequested(cookId));
-
-    await _cookSubscription?.cancel();
-
-    _cookSubscription = _cooksRepository.cook(cookId).listen((event) {
-      emit(CookWidgetLoaded(event));
-    });
   }
 }

@@ -1,4 +1,5 @@
 {
+  "explore": "קרוב",
   "orderNow": "הזמן עכשיו",
   "km": "ק\"מ",
   "vegan": "טִבעוֹנִי",
@@ -36,7 +37,7 @@
   "updateAccountPageTitle": "עדכון חשבון",
   "accountUpdatedSuccessfully": "חשבונך עודכן בהצלחה",
   "createAccountPageTitle": "יצירת חשבון",
-  "loginPageTitle": "הזדהות",
+  "loginPageTitle": "התחברות",
   "displayName": "שם לתצוגה",
   "address": "כתובת",
   "addressHelperText": "שם יישוב, שם רחוב ומספר בית.",

@@ -3,11 +3,14 @@ import 'package:cookpoint/cook/cook.dart';
 import 'package:cookpoint/generated/l10n.dart';
 import 'package:cookpoint/humanz.dart';
 import 'package:cookpoint/launcher.dart';
+import 'package:cookpoint/location/location.dart';
+import 'package:cookpoint/points/points.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:line_awesome_flutter/line_awesome_flutter.dart';
 import 'package:map_launcher/map_launcher.dart' as map_launcher;
+import 'package:provider/provider.dart';
 
 export 'cubit/cubit.dart';
 
@@ -21,10 +24,14 @@ class CookWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final center =
+        context.select((LocationCubit cubit) => cubit.state.toLatLng());
+
     return BlocProvider(
       create: (_) => CookWidgetCubit(
+        cookId: cookId,
         cooksRepository: context.read<CooksRepository>(),
-      )..request(cookId),
+      ),
       child: BlocBuilder<CookWidgetCubit, CookWidgetState>(
         buildWhen: (previous, current) => previous != current,
         builder: (_, state) {
@@ -34,14 +41,25 @@ class CookWidget extends StatelessWidget {
             alignment: AlignmentDirectional.bottomCenter,
             children: [
               ListTile(
-                visualDensity: VisualDensity.compact,
+                visualDensity: const VisualDensity(
+                  horizontal: VisualDensity.minimumDensity,
+                  vertical: VisualDensity.minimumDensity,
+                ),
                 leading: CircleAvatar(
                   backgroundImage: cook.isEmpty
                       ? null
                       : CachedNetworkImageProvider(cook.photoURL),
                 ),
                 title: Text(cook.displayName),
-                subtitle: Text(cook.address.name),
+                subtitle: cook.address.isNotEmpty
+                    ? TagsLine(
+                        tags: {
+                          '${humanz.distance(cook.address.toLatLng(), center)} '
+                              '${S.of(context).km}',
+                          cook.address.name,
+                        },
+                      )
+                    : Container(),
                 trailing: TextButton(
                   child: Text(S.of(context).orderNow),
                   onPressed: cook.isEmpty ? null : () => _onTap(context, cook),
@@ -92,14 +110,6 @@ class _ActionsDialog extends StatelessWidget {
               child: snapshot.hasData
                   ? Wrap(
                       children: [
-                        ListTile(
-                          leading: CircleAvatar(
-                            backgroundImage:
-                                CachedNetworkImageProvider(cook.photoURL),
-                          ),
-                          title: Text(cook.displayName),
-                          subtitle: Text(cook.address.name),
-                        ),
                         _phone(context),
                         _whatsApp(context),
                         for (var map in snapshot.data) _map(context, map),
@@ -192,5 +202,14 @@ extension _XMap on map_launcher.AvailableMap {
       default:
         return LineAwesomeIcons.directions;
     }
+  }
+}
+
+extension _XAddress on Address {
+  LatLng toLatLng() {
+    return LatLng(
+      latitude: latitude,
+      longitude: longitude,
+    );
   }
 }

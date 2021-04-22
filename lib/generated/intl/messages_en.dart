@@ -41,6 +41,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "discardChangesAlertTitle" : MessageLookupByLibrary.simpleMessage("Discard Changes?"),
     "displayName" : MessageLookupByLibrary.simpleMessage("Display name"),
     "error" : MessageLookupByLibrary.simpleMessage("Error! Check your input and try again."),
+    "explore" : MessageLookupByLibrary.simpleMessage("Explore"),
     "glutenFree" : MessageLookupByLibrary.simpleMessage("gluten-free"),
     "imageSourceBtn" : MessageLookupByLibrary.simpleMessage("Select image source"),
     "imageSourceCameraBtn" : MessageLookupByLibrary.simpleMessage("Camera"),

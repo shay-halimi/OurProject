@@ -25,6 +25,8 @@ class CookBloc extends Bloc<CookEvent, CookState> {
         _cookSubscription = _cooksRepository.cook(state.user.id).listen((cook) {
           add(CookLoadedEvent(cook));
         });
+      } else {
+        add(const CookLoadedEvent(Cook.empty));
       }
     });
   }

@@ -65,6 +65,9 @@ class _MapWidgetState extends State<MapWidget> {
   Widget build(BuildContext context) {
     final points = context.select((SearchBloc bloc) => bloc.state.results);
 
+    final selectedPoint =
+        context.select((SelectedPointCubit cubit) => cubit.state.point);
+
     final location =
         context.select((LocationCubit cubit) => cubit.state).toLatLng();
 
@@ -91,7 +94,10 @@ class _MapWidgetState extends State<MapWidget> {
                     _controller.complete(controller);
                   });
 
-                  await _focus(location, _zoom);
+                  await _focus(
+                    selectedPoint.isEmpty ? location : selectedPoint.latLng,
+                    _zoom,
+                  );
                 },
                 initialCameraPosition: g_maps.CameraPosition(
                   target: location.toGMapsLatLng(),

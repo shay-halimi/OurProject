@@ -1,4 +1,5 @@
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:cookpoint/cook/cook.dart';
 import 'package:cookpoint/points/points.dart';
 import 'package:cookpoint/search/search.dart';
 import 'package:cookpoint/selected_point/selected_point.dart';
@@ -29,16 +30,13 @@ class PointsBarView extends StatefulWidget {
 class _PointsBarViewState extends State<PointsBarView> {
   final PanelController _panelController = PanelController();
 
-  double _height;
-
   @override
   Widget build(BuildContext context) {
     return Expanded(
       child: SafeArea(
         child: LayoutBuilder(
           builder: (_, constraints) {
-            final maxHeight = constraints.maxHeight;
-            final minHeight = constraints.maxHeight * 0.54;
+            final height = constraints.maxHeight;
 
             return WillPopScope(
               onWillPop: () async {
@@ -46,7 +44,8 @@ class _PointsBarViewState extends State<PointsBarView> {
 
                 if (scaffold.isDrawerOpen || scaffold.isEndDrawerOpen) {
                   Navigator.of(context).pop();
-                } else if (_panelController.isPanelOpen) {
+                } else if (_panelController.isAttached &&
+                    _panelController.isPanelOpen) {
                   await _panelController.close();
                 } else {
                   context.read<SelectedPointCubit>().clear();
@@ -63,22 +62,14 @@ class _PointsBarViewState extends State<PointsBarView> {
                   padding: EdgeInsets.zero,
                   margin: EdgeInsets.zero,
                   borderRadius: BorderRadius.zero,
-                  minHeight: minHeight,
-                  maxHeight: maxHeight,
+                  maxHeight: height,
+                  minHeight: height * 0.54,
                   boxShadow: [],
                   color: Colors.transparent,
-                  onPanelSlide: (position) {
-                    setState(() {
-                      _height =
-                          minHeight + (position * (maxHeight - minHeight));
-                    });
-                  },
                   panel: Align(
                     alignment: Alignment.topCenter,
                     child: _PointsCarousel(
-                      height: _height,
-                      minHeight: minHeight,
-                      maxHeight: maxHeight,
+                      height: height,
                     ),
                   ),
                 ),
@@ -95,15 +86,9 @@ class _PointsCarousel extends StatelessWidget {
   _PointsCarousel({
     Key key,
     @required this.height,
-    @required this.minHeight,
-    @required this.maxHeight,
   }) : super(key: key);
 
   final double height;
-
-  final double minHeight;
-
-  final double maxHeight;
 
   final CarouselController _carouselController = CarouselController();
 
@@ -111,32 +96,51 @@ class _PointsCarousel extends StatelessWidget {
   Widget build(BuildContext context) {
     final points = context.select((SearchBloc bloc) => bloc.state.results);
 
+    final cookIds = points.map((point) => point.cookId).toSet().toList();
+
     final selectedPoint =
         context.select((SelectedPointCubit cubit) => cubit.state.point);
 
-    final page =
-        points.contains(selectedPoint) ? points.indexOf(selectedPoint) : 0;
+    final page = cookIds.contains(selectedPoint.cookId)
+        ? cookIds.indexOf(selectedPoint.cookId)
+        : 0;
 
     return BlocListener<SelectedPointCubit, SelectedPointState>(
       listenWhen: (previous, current) => previous != current,
       listener: (_, state) {
-        if (_carouselController.ready && points.contains(state.point)) {
-          _carouselController.jumpToPage(points.indexOf(state.point));
+        if (_carouselController.ready && cookIds.contains(state.point.cookId)) {
+          _carouselController.jumpToPage(cookIds.indexOf(state.point.cookId));
         }
       },
       child: CarouselSlider(
         carouselController: _carouselController,
-        key: ValueKey(points.map((point) => point.id)),
-        items: points.map(
-          (point) {
+        key: ValueKey(cookIds),
+        items: cookIds.map(
+          (cookId) {
+            final cookPoints = {
+              if (selectedPoint.cookId == cookId) selectedPoint,
+              ...points.where((point) => point.cookId == cookId),
+            };
+
             return Builder(
+              key: ValueKey(cookPoints),
               builder: (_) {
-                return PointCard(
-                  key: ValueKey(point.id),
-                  point: point,
-                  height: height ?? minHeight,
-                  minHeight: minHeight,
-                  maxHeight: maxHeight,
+                return Card(
+                  child: Column(
+                    children: [
+                      CookWidget(cookId: cookId),
+                      Expanded(
+                        child: ListView(
+                          children: [
+                            for (var cookPoint in cookPoints)
+                              PointCard(
+                                point: cookPoint,
+                              ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
                 );
               },
             );
@@ -147,13 +151,12 @@ class _PointsCarousel extends StatelessWidget {
           initialPage: page,
           onPageChanged: (index, reason) {
             if (reason == CarouselPageChangedReason.manual) {
-              context
-                  .read<SelectedPointCubit>()
-                  .select(points.elementAt(index));
+              context.read<SelectedPointCubit>().select(points.firstWhere(
+                  (point) => point.cookId == cookIds.elementAt(index)));
             }
           },
           viewportFraction: 0.92,
-          height: height ?? minHeight,
+          height: height,
         ),
       ),
     );

@@ -22,8 +22,6 @@ class CookPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final cook = context.select((CookBloc bloc) => bloc.state.cook);
-
     return Scaffold(
       appBar: AppBar(
         title: Text(S.of(context).accountPageTitle),
@@ -35,7 +33,22 @@ class CookPage extends StatelessWidget {
           ),
         ],
       ),
-      body: ListView(
+      body: const CookPageBody(),
+    );
+  }
+}
+
+class CookPageBody extends StatelessWidget {
+  const CookPageBody({
+    Key key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    final cook = context.select((CookBloc bloc) => bloc.state.cook);
+
+    return SafeArea(
+      child: ListView(
         padding: const EdgeInsets.all(16.0),
         children: [
           Padding(

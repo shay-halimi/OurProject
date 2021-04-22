@@ -44,19 +44,23 @@ class FakePointsRepository extends PointsRepository {
 
   @override
   Stream<List<Point>> near({LatLng latLng, num radiusInKM = 3.14}) async* {
-    for (var i = 0; i <= 314; i++) {
-      final point = _randPoint.copyWith(
-        cookId: _randString,
-        latLng: LatLng(
-          latitude: latLng.latitude + _randDouble,
-          longitude: latLng.longitude + _randDouble,
-        ),
-      );
+    for (var i = 0; i <= 2; i++) {
+      final cookId = _randString;
 
-      await create(point);
+      for (var i = 0; i <= rand.nextInt(5); i++) {
+        final point = _randPoint.copyWith(
+          cookId: cookId,
+          latLng: LatLng(
+            latitude: latLng.latitude + _randDouble,
+            longitude: latLng.longitude + _randDouble,
+          ),
+        );
 
-      if (rand.nextBool()) {
-        await delete(point);
+        await create(point);
+
+        if (rand.nextBool()) {
+          await delete(point);
+        }
       }
     }
 

@@ -21,12 +21,23 @@ class LoginPage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(title: Text(S.of(context).loginPageTitle)),
       resizeToAvoidBottomInset: true,
-      body: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: BlocProvider(
-          create: (_) => LoginCubit(context.read<AuthenticationRepository>()),
-          child: const LoginForm(),
-        ),
+      body: const LoginPageBody(),
+    );
+  }
+}
+
+class LoginPageBody extends StatelessWidget {
+  const LoginPageBody({
+    Key key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: BlocProvider(
+        create: (_) => LoginCubit(context.read<AuthenticationRepository>()),
+        child: const LoginForm(),
       ),
     );
   }

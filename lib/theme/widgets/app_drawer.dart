@@ -1,9 +1,6 @@
-import 'package:cookpoint/authentication/authentication.dart';
-import 'package:cookpoint/cook/cook.dart';
 import 'package:cookpoint/generated/l10n.dart';
 import 'package:cookpoint/launcher.dart';
 import 'package:cookpoint/legal/legal.dart';
-import 'package:cookpoint/points/points.dart';
 import 'package:cookpoint/settings/settings.dart';
 import 'package:cookpoint/theme/theme.dart';
 import 'package:flutter/material.dart';
@@ -18,9 +15,6 @@ class AppDrawer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final authenticated = context.select((AuthenticationBloc bloc) =>
-        bloc.state.status == AuthenticationStatus.authenticated);
-
     return Drawer(
       child: Center(
         child: ListView(
@@ -30,38 +24,6 @@ class AppDrawer extends StatelessWidget {
               padding: EdgeInsets.all(32.0),
               child: AppCover(),
             ),
-            const Divider(),
-            ListTile(
-              key: const Key('AppDrawer_CookPage_ListTile'),
-              leading: const Icon(Icons.account_circle),
-              title: Text(S.of(context).accountPageTitle),
-              onTap: () => Navigator.of(context).push<void>(
-                CookPage.route(),
-              ),
-              onLongPress: () => context
-                  .read<AuthenticationBloc>()
-                  .add(AuthenticationLogoutRequestedEvent()),
-            ),
-            if (authenticated) ...[
-              ListTile(
-                key: const Key('AppDrawer_CookPointsPage_ListTile'),
-                leading: const Icon(Icons.restaurant),
-                title: Text(S.of(context).pointsPageTitle),
-                onTap: () => Navigator.of(context).push<void>(
-                  PointsPage.route(),
-                ),
-              ),
-            ] else ...[
-              ListTile(
-                key: const Key('AppDrawer_PointPage_ListTile'),
-                leading: const Icon(Icons.restaurant),
-                title: Text(S.of(context).createPointBtn),
-                onTap: () {
-                  Navigator.of(context)
-                      .push<void>(PointPage.route(point: Point.empty));
-                },
-              ),
-            ],
             const Divider(),
             ListTile(
               dense: true,

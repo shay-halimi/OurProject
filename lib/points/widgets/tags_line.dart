@@ -19,13 +19,11 @@ class TagsLine extends StatelessWidget {
       line += tags.elementAt(i);
     }
 
-    return Expanded(
-      child: Text(
-        line,
-        style: Theme.of(context).textTheme.caption,
-        maxLines: 1,
-        overflow: TextOverflow.ellipsis,
-      ),
+    return Text(
+      line,
+      style: Theme.of(context).textTheme.caption,
+      maxLines: 1,
+      overflow: TextOverflow.ellipsis,
     );
   }
 }
