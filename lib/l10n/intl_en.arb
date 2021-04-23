@@ -1,4 +1,6 @@
 {
+  "andCountMorePoints": "& {count} more points",
+  "andOneMorePoint": "& one more point",
   "explore": "Explore",
   "orderNow": "Order now",
   "km": "km",
@@ -12,7 +14,7 @@
   "searchNoPointsFound": "No nearby results",
   "searchHintText": "What's for dinner?",
   "pointsPageTitle": "My kitchen",
-  "looks_like_you_haven_t_posted_any_points_yet": "Looks like you haven't posted any points yet.",
+  "looksLikeYouHaveNotPostedAnyPointsYet": "Looks like you haven't posted any points yet.",
   "tooManyPointsError": "Only three points can be available.",
   "unavailable": "Unavailable",
   "available": "Available",

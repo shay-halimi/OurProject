@@ -19,6 +19,8 @@ typedef String MessageIfAbsent(String messageStr, List<dynamic> args);
 class MessageLookup extends MessageLookupByLibrary {
   String get localeName => 'he';
 
+  static m0(count) => "ועוד ${count} מאכלים";
+
   final messages = _notInlinedMessages(_notInlinedMessages);
   static _notInlinedMessages(_) => <String, Function> {
     "aboutPageTitle" : MessageLookupByLibrary.simpleMessage("אודות"),
@@ -27,6 +29,8 @@ class MessageLookup extends MessageLookupByLibrary {
     "accountUpdatedSuccessfully" : MessageLookupByLibrary.simpleMessage("חשבונך עודכן בהצלחה"),
     "address" : MessageLookupByLibrary.simpleMessage("כתובת"),
     "addressHelperText" : MessageLookupByLibrary.simpleMessage("שם יישוב, שם רחוב ומספר בית."),
+    "andCountMorePoints" : m0,
+    "andOneMorePoint" : MessageLookupByLibrary.simpleMessage("ומאכל אחד נוסף"),
     "available" : MessageLookupByLibrary.simpleMessage("זמין"),
     "availableHelperText" : MessageLookupByLibrary.simpleMessage("מאכלים זמינים מופיעים על המפה עם שמכם, כתובתכם ומספר הטלפון איתו נרשמתם."),
     "cancelBtn" : MessageLookupByLibrary.simpleMessage("ביטול"),
@@ -52,7 +56,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "km" : MessageLookupByLibrary.simpleMessage("ק\"מ"),
     "kosher" : MessageLookupByLibrary.simpleMessage("כשר"),
     "loginPageTitle" : MessageLookupByLibrary.simpleMessage("התחברות"),
-    "looks_like_you_haven_t_posted_any_points_yet" : MessageLookupByLibrary.simpleMessage("נראה שעדיין לא פרסמת מאכלים."),
+    "looksLikeYouHaveNotPostedAnyPointsYet" : MessageLookupByLibrary.simpleMessage("נראה שעדיין לא פרסמת מאכלים."),
     "orderNow" : MessageLookupByLibrary.simpleMessage("הזמן עכשיו"),
     "otp" : MessageLookupByLibrary.simpleMessage("קוד אימות"),
     "otpError" : MessageLookupByLibrary.simpleMessage("קוד אימות לא תקין"),

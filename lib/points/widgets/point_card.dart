@@ -38,7 +38,6 @@ class PointCard extends StatelessWidget {
     );
 
     return Card(
-      margin: const EdgeInsets.all(4.0),
       child: Stack(
         alignment: AlignmentDirectional.topEnd,
         children: [
@@ -46,10 +45,7 @@ class PointCard extends StatelessWidget {
             children: [
               Stack(
                 children: [
-                  const AspectRatio(
-                    aspectRatio: 16 / 9,
-                    child: Center(child: CircularProgressIndicator()),
-                  ),
+                  const LinearProgressIndicator(),
                   Row(
                     children: [
                       Expanded(
@@ -84,8 +80,21 @@ class PointCard extends StatelessWidget {
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Row(
+                  children: [
+                    Expanded(
+                      child: Text(
+                        point.description,
+                        style: textTheme.bodyText2,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  crossAxisAlignment: CrossAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.end,
                   children: [
                     Expanded(
                       child: TagsLine(
@@ -98,19 +107,6 @@ class PointCard extends StatelessWidget {
                         style: textTheme.headline6
                             .copyWith(fontWeight: FontWeight.w300),
                       ),
-                  ],
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Row(
-                  children: [
-                    Expanded(
-                      child: Text(
-                        point.description,
-                        style: textTheme.bodyText2,
-                      ),
-                    ),
                   ],
                 ),
               ),

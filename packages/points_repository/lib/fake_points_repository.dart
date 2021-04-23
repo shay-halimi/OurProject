@@ -176,7 +176,9 @@ class FakePointsRepository extends PointsRepository {
         amount: 10 + (30 * rand.nextDouble()).floorToDouble(),
         currency: Currency.unknown,
       ),
-      tags: {},
+      tags: ['ללא גלוטן', 'כשר', 'צמחוני', 'טבעוני']
+          .where((_) => rand.nextBool())
+          .toSet(),
     );
   }
 

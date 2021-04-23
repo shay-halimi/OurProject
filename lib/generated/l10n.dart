@@ -35,6 +35,26 @@ class S {
     return Localizations.of<S>(context, S);
   }
 
+  /// `& {count} more points`
+  String andCountMorePoints(Object count) {
+    return Intl.message(
+      '& $count more points',
+      name: 'andCountMorePoints',
+      desc: '',
+      args: [count],
+    );
+  }
+
+  /// `& one more point`
+  String get andOneMorePoint {
+    return Intl.message(
+      '& one more point',
+      name: 'andOneMorePoint',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Explore`
   String get explore {
     return Intl.message(
@@ -166,10 +186,10 @@ class S {
   }
 
   /// `Looks like you haven't posted any points yet.`
-  String get looks_like_you_haven_t_posted_any_points_yet {
+  String get looksLikeYouHaveNotPostedAnyPointsYet {
     return Intl.message(
       'Looks like you haven\'t posted any points yet.',
-      name: 'looks_like_you_haven_t_posted_any_points_yet',
+      name: 'looksLikeYouHaveNotPostedAnyPointsYet',
       desc: '',
       args: [],
     );

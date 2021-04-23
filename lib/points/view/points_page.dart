@@ -48,9 +48,7 @@ class PointsPageBody extends StatelessWidget {
                   Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: Text(
-                      S
-                          .of(context)
-                          .looks_like_you_haven_t_posted_any_points_yet,
+                      S.of(context).looksLikeYouHaveNotPostedAnyPointsYet,
                       style: Theme.of(context).textTheme.headline6,
                       textAlign: TextAlign.center,
                     ),

@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cookpoint/generated/l10n.dart';
 import 'package:cookpoint/humanz.dart';
 import 'package:cookpoint/location/location.dart';
@@ -122,6 +123,8 @@ class _SearchFieldState extends State<SearchField> {
   TextEditingController _controller;
   FocusNode _focusNode;
 
+  final Map<String, int> cookPointsLengths = {};
+
   @override
   void initState() {
     super.initState();
@@ -134,6 +137,19 @@ class _SearchFieldState extends State<SearchField> {
     super.dispose();
     _controller.dispose();
     _focusNode.dispose();
+  }
+
+  Widget _loadingBuilder(
+    BuildContext context,
+    Widget child,
+    ImageChunkEvent loadingProgress,
+  ) {
+    return loadingProgress == null
+        ? child
+        : const AspectRatio(
+            aspectRatio: 1 / 1,
+            child: Center(child: CircularProgressIndicator()),
+          );
   }
 
   @override
@@ -182,12 +198,39 @@ class _SearchFieldState extends State<SearchField> {
           elevation: 0.0,
         ),
         suggestionsCallback: (_) async {
-          return context.read<SearchBloc>().state.results;
+          return context.read<SearchBloc>().state.results.take(30);
         },
         itemBuilder: (_, point) {
+          final cookPointsLength = cookPointsLengths[point.cookId] ??= context
+              .read<SearchBloc>()
+              .state
+              .results
+              .where((element) => element.cookId == point.cookId)
+              .length;
+
+          final subtitle = cookPointsLength == 1
+              ? ''
+              : cookPointsLengths.length > 2
+                  ? S.of(context).andOneMorePoint
+                  : S.of(context).andCountMorePoints(cookPointsLength);
+
           return ListTile(
+            leading: ConstrainedBox(
+              constraints: const BoxConstraints(
+                minWidth: 64,
+                minHeight: 64,
+                maxWidth: 64,
+                maxHeight: 64,
+              ),
+              child: Image(
+                image: CachedNetworkImageProvider(point.media.first),
+                fit: BoxFit.cover,
+                loadingBuilder: _loadingBuilder,
+              ),
+            ),
             key: ValueKey(point.id),
             title: Text(point.title),
+            subtitle: Text(subtitle),
             trailing: Text(
               '${humanz.distance(point.latLng, center)} '
               '${S.of(context).km}',

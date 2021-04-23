@@ -1,4 +1,6 @@
 {
+  "andCountMorePoints": "ועוד {count} מאכלים",
+  "andOneMorePoint": "ומאכל אחד נוסף",
   "explore": "קרוב",
   "orderNow": "הזמן עכשיו",
   "km": "ק\"מ",
@@ -12,7 +14,7 @@
   "searchNoPointsFound": "אין תוצאות קרובות",
   "searchHintText": "מה בא לך לאכול?",
   "pointsPageTitle": "המטבח שלי",
-  "looks_like_you_haven_t_posted_any_points_yet": "נראה שעדיין לא פרסמת מאכלים.",
+  "looksLikeYouHaveNotPostedAnyPointsYet": "נראה שעדיין לא פרסמת מאכלים.",
   "tooManyPointsError": "רק שלושה מאכלים יכולים להיות זמינים.",
   "unavailable": "לא זמין",
   "available": "זמין",

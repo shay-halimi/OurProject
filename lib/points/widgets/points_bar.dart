@@ -14,7 +14,10 @@ class PointsBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const PointsBarView();
+    return BlocProvider(
+      create: (_) => PointsBarCubit(),
+      child: const PointsBarView(),
+    );
   }
 }
 
@@ -33,50 +36,52 @@ class _PointsBarViewState extends State<PointsBarView> {
   @override
   Widget build(BuildContext context) {
     return Expanded(
-      child: SafeArea(
-        child: LayoutBuilder(
-          builder: (_, constraints) {
-            final height = constraints.maxHeight;
+      child: LayoutBuilder(
+        builder: (_, constraints) {
+          final height = constraints.maxHeight;
 
-            return WillPopScope(
-              onWillPop: () async {
-                final scaffold = Scaffold.of(context);
+          return WillPopScope(
+            onWillPop: () async {
+              final scaffold = Scaffold.of(context);
 
-                if (scaffold.isDrawerOpen || scaffold.isEndDrawerOpen) {
-                  Navigator.of(context).pop();
-                } else if (_panelController.isAttached &&
-                    _panelController.isPanelOpen) {
-                  await _panelController.close();
-                } else {
-                  context.read<SelectedPointCubit>().clear();
-                }
+              if (scaffold.isDrawerOpen || scaffold.isEndDrawerOpen) {
+                Navigator.of(context).pop();
+              } else if (_panelController.isAttached &&
+                  _panelController.isPanelOpen) {
+                await _panelController.close();
+              } else {
+                context.read<SelectedPointCubit>().clear();
+              }
 
-                return false;
-              },
-              child: GestureDetector(
-                onTap: () async => _panelController.isPanelOpen
-                    ? await _panelController.close()
-                    : await _panelController.open(),
-                child: SlidingUpPanel(
-                  controller: _panelController,
-                  padding: EdgeInsets.zero,
-                  margin: EdgeInsets.zero,
-                  borderRadius: BorderRadius.zero,
-                  maxHeight: height,
-                  minHeight: height * 0.54,
-                  boxShadow: [],
-                  color: Colors.transparent,
-                  panel: Align(
-                    alignment: Alignment.topCenter,
-                    child: _PointsCarousel(
-                      height: height,
-                    ),
-                  ),
+              return false;
+            },
+            child: SlidingUpPanel(
+              controller: _panelController,
+              padding: EdgeInsets.zero,
+              margin: EdgeInsets.zero,
+              borderRadius: BorderRadius.zero,
+              maxHeight: height,
+              minHeight: height * 0.54,
+              boxShadow: [],
+              color: Colors.transparent,
+              panel: Align(
+                alignment: Alignment.topCenter,
+                child: _PointsCarousel(
+                  height: height,
+                  onHeaderTap: () async => _panelController.isPanelOpen
+                      ? await _panelController.close()
+                      : await _panelController.open(),
                 ),
               ),
-            );
-          },
-        ),
+              onPanelOpened: () {
+                context.read<PointsBarCubit>().enable();
+              },
+              onPanelClosed: () {
+                context.read<PointsBarCubit>().disable();
+              },
+            ),
+          );
+        },
       ),
     );
   }
@@ -86,9 +91,12 @@ class _PointsCarousel extends StatelessWidget {
   _PointsCarousel({
     Key key,
     @required this.height,
+    @required this.onHeaderTap,
   }) : super(key: key);
 
   final double height;
+
+  final VoidCallback onHeaderTap;
 
   final CarouselController _carouselController = CarouselController();
 
@@ -125,22 +133,18 @@ class _PointsCarousel extends StatelessWidget {
             return Builder(
               key: ValueKey(cookPoints),
               builder: (_) {
-                return Card(
-                  child: Column(
-                    children: [
-                      CookWidget(cookId: cookId),
-                      Expanded(
-                        child: ListView(
-                          children: [
-                            for (var cookPoint in cookPoints)
-                              PointCard(
-                                point: cookPoint,
-                              ),
-                          ],
-                        ),
+                return Column(
+                  children: [
+                    GestureDetector(
+                      onTap: onHeaderTap,
+                      child: Card(
+                        child: CookWidget(cookId: cookId),
                       ),
-                    ],
-                  ),
+                    ),
+                    Expanded(
+                      child: Feed(cookPoints: cookPoints),
+                    ),
+                  ],
                 );
               },
             );
@@ -159,6 +163,37 @@ class _PointsCarousel extends StatelessWidget {
           height: height,
         ),
       ),
+    );
+  }
+}
+
+class Feed extends StatelessWidget {
+  const Feed({
+    Key key,
+    @required this.cookPoints,
+  }) : super(key: key);
+
+  final Set<Point> cookPoints;
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<PointsBarCubit, PointsBarState>(
+      buildWhen: (previous, current) => previous != current,
+      builder: (_, state) {
+        return ListView(
+          physics: state.status == PointsBarStatus.scrollable
+              ? null
+              : const NeverScrollableScrollPhysics(),
+          children: [
+            for (var cookPoint in cookPoints)
+              PointCard(
+                key: ValueKey(cookPoint.id),
+                point: cookPoint,
+              ),
+            SafeArea(child: Container()),
+          ],
+        );
+      },
     );
   }
 }

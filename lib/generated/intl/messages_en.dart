@@ -19,6 +19,8 @@ typedef String MessageIfAbsent(String messageStr, List<dynamic> args);
 class MessageLookup extends MessageLookupByLibrary {
   String get localeName => 'en';
 
+  static m0(count) => "& ${count} more points";
+
   final messages = _notInlinedMessages(_notInlinedMessages);
   static _notInlinedMessages(_) => <String, Function> {
     "aboutPageTitle" : MessageLookupByLibrary.simpleMessage("About"),
@@ -27,6 +29,8 @@ class MessageLookup extends MessageLookupByLibrary {
     "accountUpdatedSuccessfully" : MessageLookupByLibrary.simpleMessage("Successfully updated"),
     "address" : MessageLookupByLibrary.simpleMessage("Address"),
     "addressHelperText" : MessageLookupByLibrary.simpleMessage("City, street and house number."),
+    "andCountMorePoints" : m0,
+    "andOneMorePoint" : MessageLookupByLibrary.simpleMessage("& one more point"),
     "available" : MessageLookupByLibrary.simpleMessage("Available"),
     "availableHelperText" : MessageLookupByLibrary.simpleMessage("Available points appear on the map with your name, address and the phone number you registered with."),
     "cancelBtn" : MessageLookupByLibrary.simpleMessage("Cancel"),
@@ -52,7 +56,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "km" : MessageLookupByLibrary.simpleMessage("km"),
     "kosher" : MessageLookupByLibrary.simpleMessage("kosher"),
     "loginPageTitle" : MessageLookupByLibrary.simpleMessage("Login"),
-    "looks_like_you_haven_t_posted_any_points_yet" : MessageLookupByLibrary.simpleMessage("Looks like you haven\'t posted any points yet."),
+    "looksLikeYouHaveNotPostedAnyPointsYet" : MessageLookupByLibrary.simpleMessage("Looks like you haven\'t posted any points yet."),
     "orderNow" : MessageLookupByLibrary.simpleMessage("Order now"),
     "otp" : MessageLookupByLibrary.simpleMessage("Verification Code"),
     "otpError" : MessageLookupByLibrary.simpleMessage("Invalid verification code"),
