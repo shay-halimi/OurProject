@@ -82,7 +82,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "unavailable" : MessageLookupByLibrary.simpleMessage("לא זמין"),
     "updateAccountPageTitle" : MessageLookupByLibrary.simpleMessage("עדכון חשבון"),
     "updatePointPageTitle" : MessageLookupByLibrary.simpleMessage("עדכון מאכל"),
-    "vegan" : MessageLookupByLibrary.simpleMessage("טִבעוֹנִי"),
-    "vegetarian" : MessageLookupByLibrary.simpleMessage("צִמחוֹנִי")
+    "vegan" : MessageLookupByLibrary.simpleMessage("טבעוני"),
+    "vegetarian" : MessageLookupByLibrary.simpleMessage("צמחוני")
   };
 }

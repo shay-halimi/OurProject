@@ -192,10 +192,9 @@ class Feed extends StatelessWidget {
           children: [
             for (var cookPoint in cookPoints)
               PointCard(
-                key: ValueKey(cookPoint.id),
+                key: Key(cookPoint.id),
                 point: cookPoint,
               ),
-            SafeArea(child: Container()),
           ],
         );
       },

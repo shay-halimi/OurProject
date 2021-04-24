@@ -266,6 +266,7 @@ class _PriceInput extends StatelessWidget {
             initialValue: state.priceInput.value.isEmpty
                 ? null
                 : humanz.money(state.priceInput.value, ''),
+            onEditingComplete: () => FocusScope.of(context).nextFocus(),
           );
         },
       ),
@@ -300,6 +301,7 @@ class _DescriptionInput extends StatelessWidget {
                   state.descriptionInput.invalid ? S.of(context).invalid : null,
             ),
             initialValue: state.descriptionInput.value,
+            onEditingComplete: () => FocusScope.of(context).nextFocus(),
           ),
         );
       },
@@ -334,6 +336,7 @@ class _TitleInput extends StatelessWidget {
                   state.titleInput.invalid ? S.of(context).invalid : null,
             ),
             initialValue: state.titleInput.value,
+            onEditingComplete: () => FocusScope.of(context).nextFocus(),
           );
         },
       ),

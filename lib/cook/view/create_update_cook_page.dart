@@ -131,6 +131,7 @@ class _AddressInput extends StatelessWidget {
             helperText: S.of(context).addressHelperText,
           ),
           initialValue: state.addressInput.value.name,
+          onEditingComplete: () => FocusScope.of(context).nextFocus(),
         );
       },
     );
@@ -160,6 +161,7 @@ class _DisplayNameInput extends StatelessWidget {
                 state.displayNameInput.invalid ? S.of(context).invalid : null,
           ),
           initialValue: state.displayNameInput.value,
+          onEditingComplete: () => FocusScope.of(context).nextFocus(),
         );
       },
     );
