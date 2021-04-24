@@ -45,7 +45,10 @@ class PointCard extends StatelessWidget {
             children: [
               Stack(
                 children: [
-                  const LinearProgressIndicator(),
+                  const Padding(
+                    padding: EdgeInsets.all(8.0),
+                    child: LinearProgressIndicator(),
+                  ),
                   Row(
                     children: [
                       Expanded(
