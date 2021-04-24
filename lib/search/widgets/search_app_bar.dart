@@ -121,9 +121,10 @@ class SearchField extends StatefulWidget {
 
 class _SearchFieldState extends State<SearchField> {
   TextEditingController _controller;
+
   FocusNode _focusNode;
 
-  final Map<String, int> cookPointsLengths = {};
+  List<Point> results;
 
   @override
   void initState() {
@@ -166,7 +167,7 @@ class _SearchFieldState extends State<SearchField> {
           });
         }
       },
-      child: TypeAheadField<Point>(
+      child: TypeAheadField<MapEntry<String, List<Point>>>(
         getImmediateSuggestions: false,
         suggestionsBoxVerticalOffset: 1.0,
         textFieldConfiguration: TextFieldConfiguration(
@@ -197,22 +198,27 @@ class _SearchFieldState extends State<SearchField> {
           borderRadius: BorderRadius.circular(8.0),
           elevation: 0.0,
         ),
-        suggestionsCallback: (_) async {
-          return context.read<SearchBloc>().state.results.take(30);
-        },
-        itemBuilder: (_, point) {
-          final cookPointsLength = cookPointsLengths[point.cookId] ??= context
-              .read<SearchBloc>()
-              .state
-              .results
-              .where((element) => element.cookId == point.cookId)
-              .length;
+        suggestionsCallback: (_) {
+          final results = context.read<SearchBloc>().state.results;
 
-          final subtitle = cookPointsLength == 1
+          final cooksPoints = <String, List<Point>>{};
+
+          for (var point in results) {
+            (cooksPoints[point.cookId] ??= [])..add(point);
+          }
+
+          return cooksPoints.entries;
+        },
+        itemBuilder: (_, cookPoints) {
+          final point = cookPoints.value.first;
+
+          final length = cookPoints.value.length;
+
+          final subtitle = length == 1
               ? ''
-              : cookPointsLengths.length > 2
+              : length == 2
                   ? S.of(context).andOneMorePoint
-                  : S.of(context).andCountMorePoints(cookPointsLength);
+                  : S.of(context).andCountMorePoints(length - 1);
 
           return ListTile(
             leading: ConstrainedBox(
@@ -239,13 +245,17 @@ class _SearchFieldState extends State<SearchField> {
           );
         },
         noItemsFoundBuilder: (_) {
-          return ListTile(
-            title: Text(S.of(context).searchNoPointsFound),
-          );
+          if (context.read<SearchBloc>().state.status == SearchStatus.loaded) {
+            return ListTile(
+              title: Text(S.of(context).searchNoPointsFound),
+            );
+          }
+
+          return Container();
         },
-        onSuggestionSelected: (point) {
+        onSuggestionSelected: (cookPoints) {
           setState(() {});
-          context.read<SelectedPointCubit>().select(point);
+          context.read<SelectedPointCubit>().select(cookPoints.value.first);
         },
       ),
     );

@@ -125,10 +125,15 @@ class _PointsCarousel extends StatelessWidget {
         key: ValueKey(cookIds),
         items: cookIds.map(
           (cookId) {
-            final cookPoints = {
-              if (selectedPoint.cookId == cookId) selectedPoint,
-              ...points.where((point) => point.cookId == cookId),
-            };
+            final cookPoints =
+                points.where((point) => point.cookId == cookId).toList()
+                  ..sort((point1, point2) {
+                    if (point1.id == selectedPoint.id) return -1;
+
+                    if (point2.id == selectedPoint.id) return 1;
+
+                    return 0;
+                  });
 
             return Builder(
               key: ValueKey(cookPoints),
@@ -173,7 +178,7 @@ class Feed extends StatelessWidget {
     @required this.cookPoints,
   }) : super(key: key);
 
-  final Set<Point> cookPoints;
+  final List<Point> cookPoints;
 
   @override
   Widget build(BuildContext context) {

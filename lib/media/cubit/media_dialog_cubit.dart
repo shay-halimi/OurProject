@@ -11,7 +11,7 @@ part 'media_dialog_state.dart';
 class MediaDialogCubit extends Cubit<MediaDialogState> {
   MediaDialogCubit() : super(MediaDialogInitial());
 
-  final _uuid = Uuid();
+  final _uuid = const Uuid();
 
   final _storage = FirebaseStorage.instance;
 
