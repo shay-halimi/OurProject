@@ -113,60 +113,52 @@ class _PointsCarousel extends StatelessWidget {
         ? cookIds.indexOf(selectedPoint.cookId)
         : 0;
 
-    return BlocListener<SelectedPointCubit, SelectedPointState>(
-      listenWhen: (previous, current) => previous != current,
-      listener: (_, state) {
-        if (_carouselController.ready && cookIds.contains(state.point.cookId)) {
-          _carouselController.jumpToPage(cookIds.indexOf(state.point.cookId));
-        }
-      },
-      child: CarouselSlider(
-        carouselController: _carouselController,
-        key: ValueKey(cookIds),
-        items: cookIds.map(
-          (cookId) {
-            final cookPoints =
-                points.where((point) => point.cookId == cookId).toList()
-                  ..sort((point1, point2) {
-                    if (point1.id == selectedPoint.id) return -1;
+    return CarouselSlider(
+      carouselController: _carouselController,
+      key: ValueKey(cookIds),
+      items: cookIds.map(
+        (cookId) {
+          final cookPoints =
+              points.where((point) => point.cookId == cookId).toList()
+                ..sort((point1, point2) {
+                  if (point1.id == selectedPoint.id) return -1;
 
-                    if (point2.id == selectedPoint.id) return 1;
+                  if (point2.id == selectedPoint.id) return 1;
 
-                    return 0;
-                  });
+                  return 0;
+                });
 
-            return Builder(
-              key: ValueKey(cookPoints),
-              builder: (_) {
-                return Column(
-                  children: [
-                    GestureDetector(
-                      onTap: onHeaderTap,
-                      child: Card(
-                        child: CookWidget(cookId: cookId),
-                      ),
+          return Builder(
+            key: ValueKey(cookPoints),
+            builder: (_) {
+              return Column(
+                children: [
+                  GestureDetector(
+                    onTap: onHeaderTap,
+                    child: Card(
+                      child: CookWidget(cookId: cookId),
                     ),
-                    Expanded(
-                      child: Feed(cookPoints: cookPoints),
-                    ),
-                  ],
-                );
-              },
-            );
-          },
-        ).toList(),
-        options: CarouselOptions(
-          enableInfiniteScroll: false,
-          initialPage: page,
-          onPageChanged: (index, reason) {
-            if (reason == CarouselPageChangedReason.manual) {
-              context.read<SelectedPointCubit>().select(points.firstWhere(
-                  (point) => point.cookId == cookIds.elementAt(index)));
-            }
-          },
-          viewportFraction: 0.92,
-          height: height,
-        ),
+                  ),
+                  Expanded(
+                    child: Feed(cookPoints: cookPoints),
+                  ),
+                ],
+              );
+            },
+          );
+        },
+      ).toList(),
+      options: CarouselOptions(
+        enableInfiniteScroll: false,
+        initialPage: page,
+        onPageChanged: (index, reason) {
+          if (reason == CarouselPageChangedReason.manual) {
+            context.read<SelectedPointCubit>().select(points.firstWhere(
+                (point) => point.cookId == cookIds.elementAt(index)));
+          }
+        },
+        viewportFraction: 0.92,
+        height: height,
       ),
     );
   }
