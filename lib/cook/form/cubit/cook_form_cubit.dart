@@ -67,7 +67,7 @@ class CookFormCubit extends Cubit<CookFormState> {
   }
 
   void changeDisplayName(String value) {
-    final displayNameInput = DisplayNameInput.dirty(value);
+    final displayNameInput = DisplayNameInput.dirty(value.trim());
     emit(state.copyWith(
       displayNameInput: displayNameInput,
       status: Formz.validate([
@@ -92,7 +92,7 @@ class CookFormCubit extends Cubit<CookFormState> {
 
   void changeAddressName(String value) async {
     changeAddress(Address.empty.copyWith(
-      name: value,
+      name: value.trim(),
     ));
   }
 

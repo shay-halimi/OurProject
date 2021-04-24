@@ -58,7 +58,7 @@ class PointFormCubit extends Cubit<PointFormState> {
   }
 
   void changeTitle(String value) {
-    final titleInput = TitleInput.dirty(value);
+    final titleInput = TitleInput.dirty(value.trim());
 
     emit(state.copyWith(
       titleInput: titleInput,
@@ -74,7 +74,7 @@ class PointFormCubit extends Cubit<PointFormState> {
   }
 
   void changeDescription(String value) {
-    final descriptionInput = DescriptionInput.dirty(value);
+    final descriptionInput = DescriptionInput.dirty(value.trim());
 
     emit(state.copyWith(
       descriptionInput: descriptionInput,
@@ -91,7 +91,7 @@ class PointFormCubit extends Cubit<PointFormState> {
 
   void changePrice(String value) {
     final priceInput = PriceInput.dirty(Money(
-      amount: (num.tryParse(value) ?? -1).toDouble(),
+      amount: (num.tryParse(value.trim()) ?? -1).toDouble(),
       currency: Currency.ils,
     ));
 

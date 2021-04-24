@@ -15,7 +15,7 @@ class LoginCubit extends Cubit<LoginState> {
   final AuthenticationRepository _authenticationRepository;
 
   void phoneNumberChanged(String value) {
-    final input = PhoneNumberInput.dirty(value);
+    final input = PhoneNumberInput.dirty(value.trim());
     emit(state.copyWith(
       phoneNumberInput: input,
       status: Formz.validate([input]),
@@ -23,7 +23,7 @@ class LoginCubit extends Cubit<LoginState> {
   }
 
   void otpChanged(String value) {
-    final input = OTPInput.dirty(value);
+    final input = OTPInput.dirty(value.trim());
     emit(state.copyWith(
       otpInput: input,
       status: Formz.validate([input]),
