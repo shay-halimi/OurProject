@@ -55,30 +55,32 @@ class _PointsBarViewState extends State<PointsBarView> {
 
               return false;
             },
-            child: SlidingUpPanel(
-              controller: _panelController,
-              padding: EdgeInsets.zero,
-              margin: EdgeInsets.zero,
-              borderRadius: BorderRadius.zero,
-              maxHeight: height,
-              minHeight: height * 0.54,
-              boxShadow: [],
-              color: Colors.transparent,
-              panel: Align(
-                alignment: Alignment.topCenter,
-                child: _PointsCarousel(
-                  height: height,
-                  onHeaderTap: () async => _panelController.isPanelOpen
-                      ? await _panelController.close()
-                      : await _panelController.open(),
+            child: GestureDetector(
+              onTap: () async => _panelController.isPanelOpen
+                  ? await _panelController.close()
+                  : await _panelController.open(),
+              child: SlidingUpPanel(
+                controller: _panelController,
+                padding: EdgeInsets.zero,
+                margin: EdgeInsets.zero,
+                borderRadius: BorderRadius.zero,
+                maxHeight: height,
+                minHeight: height * 0.54,
+                boxShadow: [],
+                color: Colors.transparent,
+                panel: Align(
+                  alignment: Alignment.topCenter,
+                  child: _PointsCarousel(
+                    height: height,
+                  ),
                 ),
+                onPanelOpened: () {
+                  context.read<PointsBarCubit>().enable();
+                },
+                onPanelClosed: () {
+                  context.read<PointsBarCubit>().disable();
+                },
               ),
-              onPanelOpened: () {
-                context.read<PointsBarCubit>().enable();
-              },
-              onPanelClosed: () {
-                context.read<PointsBarCubit>().disable();
-              },
             ),
           );
         },
@@ -91,12 +93,9 @@ class _PointsCarousel extends StatelessWidget {
   _PointsCarousel({
     Key key,
     @required this.height,
-    @required this.onHeaderTap,
   }) : super(key: key);
 
   final double height;
-
-  final VoidCallback onHeaderTap;
 
   final CarouselController _carouselController = CarouselController();
 
@@ -133,11 +132,8 @@ class _PointsCarousel extends StatelessWidget {
             builder: (_) {
               return Column(
                 children: [
-                  GestureDetector(
-                    onTap: onHeaderTap,
-                    child: Card(
-                      child: CookWidget(cookId: cookId),
-                    ),
+                  Card(
+                    child: CookWidget(cookId: cookId),
                   ),
                   Expanded(
                     child: Feed(cookPoints: cookPoints),
