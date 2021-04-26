@@ -51,56 +51,59 @@ class CookForm extends StatelessWidget {
             ? S.of(context).createAccountPageTitle
             : S.of(context).updateAccountPageTitle),
       ),
-      body: BlocListener<CookFormCubit, CookFormState>(
-        listenWhen: (previous, current) => previous != current,
-        listener: (_, state) {
-          if (state.status.isSubmissionFailure) {
-            ScaffoldMessenger.of(context)
-              ..hideCurrentSnackBar()
-              ..showSnackBar(SnackBar(content: Text(S.of(context).error)));
-          }
-
-          if (state.status.isSubmissionSuccess) {
-            if (cook.isNotEmpty) {
+      body: GestureDetector(
+        onTap: () => FocusScope.of(context).unfocus(),
+        child: BlocListener<CookFormCubit, CookFormState>(
+          listenWhen: (previous, current) => previous != current,
+          listener: (_, state) {
+            if (state.status.isSubmissionFailure) {
               ScaffoldMessenger.of(context)
                 ..hideCurrentSnackBar()
-                ..showSnackBar(SnackBar(
-                    content: Text(S.of(context).accountUpdatedSuccessfully)));
-
-              Navigator.of(context).pop();
+                ..showSnackBar(SnackBar(content: Text(S.of(context).error)));
             }
-          }
-        },
-        child: ListView(
-          padding: const EdgeInsets.all(16.0),
-          children: [
-            const Padding(
-              padding: EdgeInsets.all(8.0),
-              child: Center(
-                child: _PhotoURLInput(),
+
+            if (state.status.isSubmissionSuccess) {
+              if (cook.isNotEmpty) {
+                ScaffoldMessenger.of(context)
+                  ..hideCurrentSnackBar()
+                  ..showSnackBar(SnackBar(
+                      content: Text(S.of(context).accountUpdatedSuccessfully)));
+
+                Navigator.of(context).pop();
+              }
+            }
+          },
+          child: ListView(
+            padding: const EdgeInsets.all(16.0),
+            children: [
+              const Padding(
+                padding: EdgeInsets.all(8.0),
+                child: Center(
+                  child: _PhotoURLInput(),
+                ),
               ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Wrap(
-                children: [
-                  const Padding(
-                    padding: EdgeInsets.all(8.0),
-                    child: _DisplayNameInput(),
-                  ),
-                  const Padding(
-                    padding: EdgeInsets.all(8.0),
-                    child: _AddressInput(),
-                  ),
-                  Center(
-                    child: _SubmitButton(
-                      cook: cook,
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Wrap(
+                  children: [
+                    const Padding(
+                      padding: EdgeInsets.all(8.0),
+                      child: _DisplayNameInput(),
                     ),
-                  ),
-                ],
+                    const Padding(
+                      padding: EdgeInsets.all(8.0),
+                      child: _AddressInput(),
+                    ),
+                    Center(
+                      child: _SubmitButton(
+                        cook: cook,
+                      ),
+                    ),
+                  ],
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );

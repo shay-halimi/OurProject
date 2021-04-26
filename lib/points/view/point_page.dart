@@ -74,77 +74,80 @@ class PointForm extends StatelessWidget {
             ),
         ],
       ),
-      body: WillPopScope(
-        onWillPop: () async {
-          if (status.isPure) return true;
+      body: GestureDetector(
+        onTap: () => FocusScope.of(context).unfocus(),
+        child: WillPopScope(
+          onWillPop: () async {
+            if (status.isPure) return true;
 
-          return showDialog<bool>(
-            context: context,
-            builder: (_) {
-              return AlertDialog(
-                title: Text(S.of(context).discardChangesAlertTitle),
-                actions: [
-                  TextButton(
-                    child: Text(S.of(context).saveBtn),
-                    onPressed: () {
-                      Navigator.of(context).pop(false);
-                    },
-                  ),
-                  ElevatedButton(
-                    child: Text(S.of(context).discardBtn),
-                    onPressed: () {
-                      Navigator.of(context).pop(true);
-                    },
-                  ),
-                ],
-              );
-            },
-          ).then((discard) {
-            if (!discard && status.isValidated) {
-              context.read<PointFormCubit>().save();
-              return true;
-            }
+            return showDialog<bool>(
+              context: context,
+              builder: (_) {
+                return AlertDialog(
+                  title: Text(S.of(context).discardChangesAlertTitle),
+                  actions: [
+                    TextButton(
+                      child: Text(S.of(context).saveBtn),
+                      onPressed: () {
+                        Navigator.of(context).pop(false);
+                      },
+                    ),
+                    ElevatedButton(
+                      child: Text(S.of(context).discardBtn),
+                      onPressed: () {
+                        Navigator.of(context).pop(true);
+                      },
+                    ),
+                  ],
+                );
+              },
+            ).then((discard) {
+              if (!discard && status.isValidated) {
+                context.read<PointFormCubit>().save();
+                return true;
+              }
 
-            return discard;
-          });
-        },
-        child: BlocListener<PointFormCubit, PointFormState>(
-          listenWhen: (previous, current) => previous != current,
-          listener: (_, state) {
-            if (state.status.isSubmissionFailure) {
-              ScaffoldMessenger.of(context)
-                ..hideCurrentSnackBar()
-                ..showSnackBar(SnackBar(content: Text(S.of(context).error)));
-            }
-
-            if (state.status.isSubmissionSuccess) {
-              final msg = point.isEmpty
-                  ? state.deleteAtInput.value.isEmpty
-                      ? S.of(context).pointPostedSuccessfully
-                      : S.of(context).pointCreatedSuccessfully
-                  : S.of(context).pointUpdatedSuccessfully;
-
-              ScaffoldMessenger.of(context)
-                ..hideCurrentSnackBar()
-                ..showSnackBar(SnackBar(content: Text(msg)));
-
-              Navigator.of(context).pop();
-            }
+              return discard;
+            });
           },
-          child: SafeArea(
-            child: ListView(
-              children: [
-                const Padding(
-                  padding: EdgeInsets.only(bottom: 8.0),
-                  child: _MediaInput(),
-                ),
-                const _TitleInput(),
-                const _PriceInput(),
-                const _DescriptionInput(),
-                const _TagsInput(),
-                const _AvailableInput(),
-                _SubmitButton(point: point),
-              ],
+          child: BlocListener<PointFormCubit, PointFormState>(
+            listenWhen: (previous, current) => previous != current,
+            listener: (_, state) {
+              if (state.status.isSubmissionFailure) {
+                ScaffoldMessenger.of(context)
+                  ..hideCurrentSnackBar()
+                  ..showSnackBar(SnackBar(content: Text(S.of(context).error)));
+              }
+
+              if (state.status.isSubmissionSuccess) {
+                final msg = point.isEmpty
+                    ? state.deleteAtInput.value.isEmpty
+                        ? S.of(context).pointPostedSuccessfully
+                        : S.of(context).pointCreatedSuccessfully
+                    : S.of(context).pointUpdatedSuccessfully;
+
+                ScaffoldMessenger.of(context)
+                  ..hideCurrentSnackBar()
+                  ..showSnackBar(SnackBar(content: Text(msg)));
+
+                Navigator.of(context).pop();
+              }
+            },
+            child: SafeArea(
+              child: ListView(
+                children: [
+                  const Padding(
+                    padding: EdgeInsets.only(bottom: 8.0),
+                    child: _MediaInput(),
+                  ),
+                  const _TitleInput(),
+                  const _PriceInput(),
+                  const _DescriptionInput(),
+                  const _TagsInput(),
+                  const _AvailableInput(),
+                  _SubmitButton(point: point),
+                ],
+              ),
             ),
           ),
         ),

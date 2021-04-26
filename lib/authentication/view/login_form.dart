@@ -13,16 +13,23 @@ class LoginForm extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<LoginCubit, LoginState>(
-      buildWhen: (previous, current) =>
-          previous.verification != current.verification,
-      builder: (_, state) {
-        if (state.verification.isEmpty) {
-          return _PhoneNumberForm();
-        }
+    return GestureDetector(
+      onTap: () => FocusScope.of(context).unfocus(),
+      child: Center(
+        child: SingleChildScrollView(
+          child: BlocBuilder<LoginCubit, LoginState>(
+            buildWhen: (previous, current) =>
+                previous.verification != current.verification,
+            builder: (_, state) {
+              if (state.verification.isEmpty) {
+                return _PhoneNumberForm();
+              }
 
-        return _OTPForm();
-      },
+              return _OTPForm();
+            },
+          ),
+        ),
+      ),
     );
   }
 }
@@ -40,11 +47,19 @@ class _PhoneNumberForm extends StatelessWidget {
         }
       },
       child: Column(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
-          const AppCover(),
-          _PhoneNumberInput(),
-          const _SendOTPButton(),
+          const Padding(
+            padding: EdgeInsets.all(8.0),
+            child: AppCover(),
+          ),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: _PhoneNumberInput(),
+          ),
+          const Padding(
+            padding: EdgeInsets.all(8.0),
+            child: _SendOTPButton(),
+          ),
         ],
       ),
     );
@@ -126,12 +141,23 @@ class _OTPForm extends StatelessWidget {
         }
       },
       child: Column(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
-          const AppCover(),
-          _OTPInput(),
-          _ConfirmPhoneNumberButton(),
-          const _ClearVerificationIdButton(),
+          const Padding(
+            padding: EdgeInsets.all(8.0),
+            child: AppCover(),
+          ),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: _OTPInput(),
+          ),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: _ConfirmPhoneNumberButton(),
+          ),
+          const Padding(
+            padding: EdgeInsets.all(8.0),
+            child: _ClearVerificationIdButton(),
+          ),
         ],
       ),
     );

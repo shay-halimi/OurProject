@@ -57,7 +57,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "kosher" : MessageLookupByLibrary.simpleMessage("כשר"),
     "loginPageTitle" : MessageLookupByLibrary.simpleMessage("התחברות"),
     "looksLikeYouHaveNotPostedAnyPointsYet" : MessageLookupByLibrary.simpleMessage("נראה שעדיין לא פרסמת מאכלים."),
-    "orderNow" : MessageLookupByLibrary.simpleMessage("הזמן עכשיו"),
+    "orderNow" : MessageLookupByLibrary.simpleMessage("הזמנ/י עכשיו"),
     "otp" : MessageLookupByLibrary.simpleMessage("קוד אימות"),
     "otpError" : MessageLookupByLibrary.simpleMessage("קוד אימות לא תקין"),
     "partnersTermsOfServicePageTitle" : MessageLookupByLibrary.simpleMessage("תנאים ומדיניות פרטיות שותפים"),

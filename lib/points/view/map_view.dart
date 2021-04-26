@@ -67,8 +67,7 @@ class _MapViewState extends State<MapView> {
     ];
 
     return Scaffold(
-      extendBodyBehindAppBar: true,
-      resizeToAvoidBottomInset: false,
+      resizeToAvoidBottomInset: _currentIndex != 0,
       appBar: _appBars[_currentIndex],
       body: _bodies[_currentIndex],
       endDrawer: const AppDrawer(),
