@@ -1,11 +1,9 @@
 import 'package:cookpoint/authentication/authentication.dart';
 import 'package:cookpoint/cook/cook.dart';
-import 'package:cookpoint/cook/view/cook_page.dart';
 import 'package:cookpoint/generated/l10n.dart';
 import 'package:cookpoint/location/location.dart';
 import 'package:cookpoint/points/points.dart';
 import 'package:cookpoint/search/search.dart';
-import 'package:cookpoint/selected_point/selected_point.dart';
 import 'package:cookpoint/splash/splash.dart';
 import 'package:cookpoint/theme/theme.dart';
 import 'package:flutter/foundation.dart';
@@ -13,16 +11,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:provider/provider.dart';
 
-class MapView extends StatefulWidget {
-  const MapView({
+class PointsMap extends StatefulWidget {
+  const PointsMap({
     Key key,
   }) : super(key: key);
 
   @override
-  _MapViewState createState() => _MapViewState();
+  _PointsMapState createState() => _PointsMapState();
 }
 
-class _MapViewState extends State<MapView> {
+class _PointsMapState extends State<PointsMap> {
   int _currentIndex = 0;
 
   @override
@@ -30,34 +28,25 @@ class _MapViewState extends State<MapView> {
     final authenticated = context.select((AuthenticationBloc bloc) =>
         bloc.state.status == AuthenticationStatus.authenticated);
 
-    final authAppBar = AppBar(title: Text(S.of(context).loginPageTitle));
-
     final _appBars = <PreferredSizeWidget>[
       null,
       authenticated
           ? AppBar(
               title: Text(S.of(context).pointsPageTitle),
-              actions: [
-                IconButton(
-                  icon: const Icon(Icons.add),
-                  onPressed: () => Navigator.of(context)
-                      .push<void>(PointPage.route(point: Point.empty)),
-                ),
-              ],
             )
-          : authAppBar,
+          : null,
       authenticated
           ? AppBar(
               title: Text(S.of(context).accountPageTitle),
               actions: [
                 IconButton(
                   icon: const Icon(Icons.edit),
-                  onPressed: () => Navigator.of(context)
-                      .push<void>(CreateUpdateCookPage.route()),
+                  onPressed: () =>
+                      Navigator.of(context).push<void>(CookFormPage.route()),
                 ),
               ],
             )
-          : authAppBar,
+          : null,
     ];
 
     final _bodies = <Widget>[
@@ -73,7 +62,6 @@ class _MapViewState extends State<MapView> {
       endDrawer: const AppDrawer(),
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: _currentIndex,
-        type: BottomNavigationBarType.fixed,
         onTap: _onBottomNavigationBarItemTapped,
         items: [
           BottomNavigationBarItem(
@@ -81,7 +69,7 @@ class _MapViewState extends State<MapView> {
             label: S.of(context).explore,
           ),
           BottomNavigationBarItem(
-            icon: const Icon(Icons.restaurant_menu),
+            icon: const Icon(Icons.restaurant),
             label: S.of(context).pointsPageTitle,
           ),
           BottomNavigationBarItem(
@@ -122,7 +110,7 @@ class MapViewBody extends StatelessWidget {
               case LocationStatus.loading:
                 return const SplashBody();
               default:
-                return MapWidget(
+                return PointsMapWidget(
                   pixelRatio: MediaQuery.of(context).devicePixelRatio,
                 );
             }
@@ -135,7 +123,7 @@ class MapViewBody extends StatelessWidget {
               const SearchAppBar(),
               Visibility(
                 visible: context.select(
-                    (SelectedPointCubit cubit) => cubit.state.point.isNotEmpty),
+                    (SearchBloc bloc) => bloc.state.selected.isNotEmpty),
                 child: const PointsBar(),
               ),
             ],

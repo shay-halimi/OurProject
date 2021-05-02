@@ -10,11 +10,13 @@ class Cook {
     @required this.displayName,
     @required this.photoURL,
     @required this.phoneNumber,
+    @required this.about,
     @required this.address,
   })  : assert(id != null),
         assert(displayName != null),
         assert(photoURL != null),
         assert(phoneNumber != null),
+        assert(about != null),
         assert(address != null);
 
   factory Cook.fromEntity(CookEntity entity) {
@@ -23,18 +25,16 @@ class Cook {
       displayName: entity.displayName,
       photoURL: entity.photoURL,
       phoneNumber: entity.phoneNumber,
+      about: entity.about,
       address: entity.address,
     );
   }
 
   final String id;
-
   final String displayName;
-
   final String photoURL;
-
   final String phoneNumber;
-
+  final String about;
   final Address address;
 
   Cook copyWith({
@@ -42,6 +42,7 @@ class Cook {
     String displayName,
     String photoURL,
     String phoneNumber,
+    String about,
     Address address,
   }) {
     return Cook(
@@ -49,6 +50,7 @@ class Cook {
       displayName: displayName ?? this.displayName,
       photoURL: photoURL ?? this.photoURL,
       phoneNumber: phoneNumber ?? this.phoneNumber,
+      about: about ?? this.about,
       address: address ?? this.address,
     );
   }
@@ -62,6 +64,7 @@ class Cook {
           displayName == other.displayName &&
           photoURL == other.photoURL &&
           phoneNumber == other.phoneNumber &&
+          about == other.about &&
           address == other.address;
 
   @override
@@ -70,13 +73,13 @@ class Cook {
       displayName.hashCode ^
       photoURL.hashCode ^
       phoneNumber.hashCode ^
+      about.hashCode ^
       address.hashCode;
 
   @override
   String toString() {
-    return 'Cook{id: $id, displayName: $displayName, '
-        'photoURL: $photoURL, phoneNumber: $phoneNumber, '
-        'address: $address}';
+    return 'Cook{id: $id, displayName: $displayName, photoURL: $photoURL, '
+        'phoneNumber: $phoneNumber, about: $about, address: $address}';
   }
 
   CookEntity toEntity() {
@@ -85,6 +88,7 @@ class Cook {
       displayName: displayName,
       photoURL: photoURL,
       phoneNumber: phoneNumber,
+      about: '',
       address: address,
     );
   }
@@ -94,6 +98,7 @@ class Cook {
     displayName: '',
     photoURL: '',
     phoneNumber: '',
+    about: '',
     address: Address.empty,
   );
 

@@ -21,6 +21,8 @@ class MessageLookup extends MessageLookupByLibrary {
 
   static m0(count) => "ועוד ${count} מאכלים";
 
+  static m1(km) => "${km} ק\"מ";
+
   final messages = _notInlinedMessages(_notInlinedMessages);
   static _notInlinedMessages(_) => <String, Function> {
     "aboutPageTitle" : MessageLookupByLibrary.simpleMessage("אודות"),
@@ -41,6 +43,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "createPointBtnTooltip" : MessageLookupByLibrary.simpleMessage("פרסמ/י CookPoint"),
     "createPointPageTitle" : MessageLookupByLibrary.simpleMessage("פרסום מאכל"),
     "description" : MessageLookupByLibrary.simpleMessage("תיאור"),
+    "directionsBtn" : MessageLookupByLibrary.simpleMessage("נווט/י"),
     "discardBtn" : MessageLookupByLibrary.simpleMessage("בטל את השינויים"),
     "discardChangesAlertTitle" : MessageLookupByLibrary.simpleMessage("האם לבטל את השינויים?"),
     "displayName" : MessageLookupByLibrary.simpleMessage("שם לתצוגה"),
@@ -53,14 +56,16 @@ class MessageLookup extends MessageLookupByLibrary {
     "internetError" : MessageLookupByLibrary.simpleMessage("שגיאה! בדוק/י שיש חיבור לאינטרנט ונסה/י שנית"),
     "invalid" : MessageLookupByLibrary.simpleMessage("לא תקין"),
     "inviteFriendsBtn" : MessageLookupByLibrary.simpleMessage("הזמנ/י חברים"),
-    "km" : MessageLookupByLibrary.simpleMessage("ק\"מ"),
+    "kmFromYou" : m1,
     "kosher" : MessageLookupByLibrary.simpleMessage("כשר"),
     "loginPageTitle" : MessageLookupByLibrary.simpleMessage("התחברות"),
     "looksLikeYouHaveNotPostedAnyPointsYet" : MessageLookupByLibrary.simpleMessage("נראה שעדיין לא פרסמת מאכלים."),
-    "orderNow" : MessageLookupByLibrary.simpleMessage("הזמנ/י עכשיו"),
+    "menuBtn" : MessageLookupByLibrary.simpleMessage("תפריט"),
+    "orderBtn" : MessageLookupByLibrary.simpleMessage("הזמנ/י עכשיו"),
     "otp" : MessageLookupByLibrary.simpleMessage("קוד אימות"),
     "otpError" : MessageLookupByLibrary.simpleMessage("קוד אימות לא תקין"),
     "partnersTermsOfServicePageTitle" : MessageLookupByLibrary.simpleMessage("תנאים ומדיניות פרטיות שותפים"),
+    "phoneBtn" : MessageLookupByLibrary.simpleMessage("חייג/י"),
     "phoneNumber" : MessageLookupByLibrary.simpleMessage("מספר טלפון"),
     "phoneNumberError" : MessageLookupByLibrary.simpleMessage("ספרות בלבד, ללא מקפים או רווחים"),
     "pickImageBtn" : MessageLookupByLibrary.simpleMessage("בחר/י תמונה"),
@@ -71,18 +76,19 @@ class MessageLookup extends MessageLookupByLibrary {
     "postBtn" : MessageLookupByLibrary.simpleMessage("פרסם"),
     "price" : MessageLookupByLibrary.simpleMessage("מחיר"),
     "saveBtn" : MessageLookupByLibrary.simpleMessage("שמור"),
-    "searchHintText" : MessageLookupByLibrary.simpleMessage("מה בא לך לאכול?"),
+    "searchHintText" : MessageLookupByLibrary.simpleMessage("מה אוכלים?"),
     "searchNoPointsFound" : MessageLookupByLibrary.simpleMessage("אין תוצאות קרובות"),
+    "searchThisAreaBtn" : MessageLookupByLibrary.simpleMessage("חפש/י באזור זה"),
     "sendSMSAgainBtn" : MessageLookupByLibrary.simpleMessage("אם לא קיבלת SMS מאיתנו, לחצ/י כאן."),
     "tags" : MessageLookupByLibrary.simpleMessage("תגיות"),
     "termsOfServicePageTitle" : MessageLookupByLibrary.simpleMessage("תנאים ומדיניות פרטיות"),
     "title" : MessageLookupByLibrary.simpleMessage("שם המאכל"),
-    "tooManyPointsError" : MessageLookupByLibrary.simpleMessage("רק שלושה מאכלים יכולים להיות זמינים."),
     "tryAgainBtn" : MessageLookupByLibrary.simpleMessage("נסה/י שנית"),
     "unavailable" : MessageLookupByLibrary.simpleMessage("לא זמין"),
     "updateAccountPageTitle" : MessageLookupByLibrary.simpleMessage("עדכון חשבון"),
     "updatePointPageTitle" : MessageLookupByLibrary.simpleMessage("עדכון מאכל"),
     "vegan" : MessageLookupByLibrary.simpleMessage("טבעוני"),
-    "vegetarian" : MessageLookupByLibrary.simpleMessage("צמחוני")
+    "vegetarian" : MessageLookupByLibrary.simpleMessage("צמחוני"),
+    "whatsAppBtn" : MessageLookupByLibrary.simpleMessage("WhatsApp")
   };
 }

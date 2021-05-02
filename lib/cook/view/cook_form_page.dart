@@ -4,21 +4,21 @@ import 'package:cookpoint/location/location.dart';
 import 'package:cookpoint/media/media.dart';
 import 'package:cookpoint/theme/theme.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:formz/formz.dart';
 import 'package:provider/provider.dart';
 
-/// @TODO(Matan) marge with CookPage
-class CreateUpdateCookPage extends StatelessWidget {
-  const CreateUpdateCookPage({
+class CookFormPage extends StatelessWidget {
+  const CookFormPage({
     Key key,
   }) : super(key: key);
 
   static Route route() {
     return MaterialPageRoute<void>(
-      settings: const RouteSettings(name: '/cooks/me/create'),
+      settings: const RouteSettings(name: '/cooks/create'),
       builder: (_) => const CookMiddleware(
-        child: CreateUpdateCookPage(),
+        child: CookFormPage(),
       ),
     );
   }
@@ -94,6 +94,8 @@ class CookForm extends StatelessWidget {
                       padding: EdgeInsets.all(8.0),
                       child: _AddressInput(),
                     ),
+
+                    /// todo about
                     Center(
                       child: _SubmitButton(
                         cook: cook,
@@ -156,6 +158,8 @@ class _DisplayNameInput extends StatelessWidget {
           key: const Key('_DisplayNameInput'),
           keyboardType: TextInputType.text,
           maxLines: 1,
+          maxLength: state.displayNameInput.maxLength,
+          maxLengthEnforcement: MaxLengthEnforcement.enforced,
           onChanged: (value) =>
               context.read<CookFormCubit>().changeDisplayName(value),
           decoration: InputDecoration(

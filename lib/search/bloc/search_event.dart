@@ -29,8 +29,17 @@ class SearchTagSelected extends SearchEvent {
   List<Object> get props => [tag];
 }
 
-class SearchPointsUpdated extends SearchEvent {
-  const SearchPointsUpdated(this.points);
+class SearchResultSelected extends SearchEvent {
+  const SearchResultSelected(this.selected);
+
+  final Point selected;
+
+  @override
+  List<Object> get props => [selected];
+}
+
+class SearchResultsUpdated extends SearchEvent {
+  const SearchResultsUpdated(this.points);
 
   final List<Point> points;
 
@@ -38,8 +47,8 @@ class SearchPointsUpdated extends SearchEvent {
   List<Object> get props => [points];
 }
 
-class SearchPointsRequested extends SearchEvent {
-  const SearchPointsRequested();
+class SearchResultsRequested extends SearchEvent {
+  const SearchResultsRequested();
 
   @override
   List<Object> get props => [];

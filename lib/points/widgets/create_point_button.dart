@@ -14,7 +14,8 @@ class CreatePointButton extends StatelessWidget {
       tooltip: S.of(context).createPointBtnTooltip,
       label: Text(S.of(context).createPointBtn),
       onPressed: () {
-        Navigator.of(context).push<void>(PointPage.route(point: Point.empty));
+        Navigator.of(context)
+            .push<void>(PointFormPage.route(point: Point.empty));
       },
     );
   }

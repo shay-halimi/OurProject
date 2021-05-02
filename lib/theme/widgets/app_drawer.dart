@@ -65,8 +65,7 @@ class AppDrawer extends StatelessWidget {
               key: const Key('AppDrawer_EmailUs_ListTile'),
               leading: const Icon(Icons.support_agent),
               title: Text(S.of(context).contactUsPageTitle),
-              onTap: () async => await launcher
-                  .launch('https://cookpoint.app/pages/contact-us'),
+              onTap: () async => await launcher.whatsApp('+972538808053'),
             ),
             ListTile(
               dense: true,

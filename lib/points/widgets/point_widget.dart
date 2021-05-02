@@ -64,7 +64,7 @@ class PointWidget extends StatelessWidget {
         ),
       ),
       onTap: () => Navigator.of(context).push<void>(
-        PointPage.route(point: point),
+        PointFormPage.route(point: point),
       ),
     );
   }

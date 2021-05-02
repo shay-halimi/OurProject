@@ -23,7 +23,10 @@ class FakeCooksRepository implements CooksRepository {
           longitude: 34.7931751606,
         ),
         phoneNumber: '+97212345${1000 + rand.nextInt(8999)}',
-        photoURL: 'https://i.pravatar.cc/300#$id',
+        about:
+            'בין 40₪-60₪.‏🔹המחיר לפי ק״ג. לא חייב לקנות ק״ג🔹‎מוזמנים למסעדת פאטיו בכל יום בין השעות 10:00-14:00. ובכל יום שישי למכירת האוכל שלנו בנקודות המכירה: ‏🔸קניון ‏דרך ‏הים, ‏עתלית.‏🔸מסעדת ‏פאטיו ‏(אתגר ‏5, ‏טירת ‏כרמל)08:00-14:00 לפרטים/הזמנות/סגירת תאריך לקייטרינג/משלוחים‏📞 ‎‏',
+        photoURL:
+            'https://firebasestorage.googleapis.com/v0/b/cookpoint-e16ce.appspot.com/o/logo.png?alt=media&token=7566ed32-d1d1-47ec-ae2c-3d805f38f935',
       ));
     }
 

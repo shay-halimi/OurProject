@@ -5,8 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:provider/provider.dart';
 
-import 'selected_point/selected_point.dart';
-
 class HomePage extends StatelessWidget {
   const HomePage({
     Key key,
@@ -28,13 +26,8 @@ class HomePage extends StatelessWidget {
             pointsBloc: context.read<PointsBloc>(),
           ),
         ),
-        BlocProvider(
-          create: (_context) => SelectedPointCubit(
-            searchBloc: _context.read<SearchBloc>(),
-          ),
-        ),
       ],
-      child: const MapView(),
+      child: const PointsMap(),
     );
   }
 }

@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:authentication_repository/authentication_repository.dart';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:meta/meta.dart';
 import 'package:pedantic/pedantic.dart';
 
@@ -36,6 +37,7 @@ class AuthenticationBloc
     AuthenticationEvent event,
   ) async* {
     if (event is AuthenticationUserChangedEvent) {
+      await FirebaseAnalytics().setUserId(event.user.id);
       yield _mapAuthenticationUserChangedEventToState(event);
     } else if (event is AuthenticationLogoutRequestedEvent) {
       unawaited(_authenticationRepository.logOut());

@@ -10,6 +10,7 @@ class CookEntity extends Equatable {
     @required this.displayName,
     @required this.photoURL,
     @required this.phoneNumber,
+    @required this.about,
     @required this.address,
   });
 
@@ -19,6 +20,7 @@ class CookEntity extends Equatable {
       displayName: json['displayName'] as String,
       photoURL: json['photoURL'] as String,
       phoneNumber: json['phoneNumber'] as String,
+      about: json['json'] as String,
       address: Address.fromJson(json['address'] as Map<String, Object>),
     );
   }
@@ -29,6 +31,7 @@ class CookEntity extends Equatable {
       displayName: snap.data()['displayName'] as String,
       photoURL: snap.data()['photoURL'] as String,
       phoneNumber: snap.data()['phoneNumber'] as String,
+      about: (snap.data()['about'] ?? '') as String,
       address: Address.fromJson(snap.data()['address'] as Map<String, Object>),
     );
   }
@@ -37,15 +40,23 @@ class CookEntity extends Equatable {
   final String displayName;
   final String photoURL;
   final String phoneNumber;
+  final String about;
   final Address address;
 
   @override
-  List<Object> get props => [id, displayName, photoURL, phoneNumber, address];
+  List<Object> get props => [
+        id,
+        displayName,
+        photoURL,
+        phoneNumber,
+        about,
+        address,
+      ];
 
   @override
   String toString() {
-    return 'CookEntity{id: $id, displayName: $displayName, '
-        'photoURL: $photoURL, phoneNumber: $phoneNumber, address: $address}';
+    return 'CookEntity{id: $id, displayName: $displayName, photoURL: $photoURL,'
+        ' phoneNumber: $phoneNumber, about: $about, address: $address}';
   }
 
   Map<String, Object> toJson() {
@@ -54,6 +65,7 @@ class CookEntity extends Equatable {
       'displayName': displayName,
       'photoURL': photoURL,
       'phoneNumber': phoneNumber,
+      'about': about,
       'address': address.toJson(),
     };
   }
@@ -63,6 +75,7 @@ class CookEntity extends Equatable {
       'displayName': displayName,
       'photoURL': photoURL,
       'phoneNumber': phoneNumber,
+      'about': about,
       'address': address.toJson(),
     };
   }

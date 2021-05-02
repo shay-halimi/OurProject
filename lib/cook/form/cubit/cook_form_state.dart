@@ -4,6 +4,7 @@ class CookFormState extends Equatable {
   const CookFormState({
     this.displayNameInput = const DisplayNameInput.pure(),
     this.photoURLInput = const PhotoURLInput.pure(),
+    this.aboutInput = const AboutInput.pure(),
     this.addressInput = const AddressInput.pure(),
     this.status = FormzStatus.pure,
   });
@@ -11,6 +12,8 @@ class CookFormState extends Equatable {
   final DisplayNameInput displayNameInput;
 
   final PhotoURLInput photoURLInput;
+
+  final AboutInput aboutInput;
 
   final AddressInput addressInput;
 
@@ -20,6 +23,7 @@ class CookFormState extends Equatable {
   List<Object> get props => [
         displayNameInput,
         photoURLInput,
+        aboutInput,
         addressInput,
         status,
       ];
@@ -27,12 +31,14 @@ class CookFormState extends Equatable {
   CookFormState copyWith({
     DisplayNameInput displayNameInput,
     PhotoURLInput photoURLInput,
+    AboutInput aboutInput,
     AddressInput addressInput,
     FormzStatus status,
   }) {
     return CookFormState(
       displayNameInput: displayNameInput ?? this.displayNameInput,
       photoURLInput: photoURLInput ?? this.photoURLInput,
+      aboutInput: aboutInput ?? this.aboutInput,
       addressInput: addressInput ?? this.addressInput,
       status: status ?? this.status,
     );
@@ -46,9 +52,15 @@ class DisplayNameInput extends FormzInput<String, DisplayNameValidationError> {
 
   const DisplayNameInput.dirty([String value = '']) : super.dirty(value);
 
+  int get minLength => 1;
+
+  int get maxLength => 32;
+
   @override
   DisplayNameValidationError validator(String value) {
-    return (value.length > 1 && value.length < 50 && !value.contains('\n'))
+    return (value.length > minLength &&
+            value.length < maxLength &&
+            !value.contains('\n'))
         ? null
         : DisplayNameValidationError.invalid;
   }
@@ -73,6 +85,25 @@ class PhotoURLInput extends FormzInput<String, PhotoURLInputValidationError> {
     }
 
     return PhotoURLInputValidationError.invalid;
+  }
+}
+
+enum AboutInputValidationError { invalid }
+
+class AboutInput extends FormzInput<String, AboutInputValidationError> {
+  const AboutInput.pure() : super.pure('');
+
+  const AboutInput.dirty([String value = '']) : super.dirty(value);
+
+  int get maxLength => 256;
+
+  @override
+  AboutInputValidationError validator(String value) {
+    if (value.length < maxLength) {
+      return null;
+    }
+
+    return AboutInputValidationError.invalid;
   }
 }
 

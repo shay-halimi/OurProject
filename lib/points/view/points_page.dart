@@ -1,7 +1,6 @@
 import 'package:cookpoint/cook/cook.dart';
 import 'package:cookpoint/generated/l10n.dart';
 import 'package:cookpoint/points/points.dart';
-import 'package:cookpoint/splash/splash.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -40,27 +39,16 @@ class PointsPageBody extends StatelessWidget {
       buildWhen: (previous, current) =>
           previous.cookPoints != current.cookPoints,
       builder: (_, state) {
-        if (state.cookPoints.isEmpty) {
-          return SplashBody(
-            child: Expanded(
-              child: Column(
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Text(
-                      S.of(context).looksLikeYouHaveNotPostedAnyPointsYet,
-                      style: Theme.of(context).textTheme.headline6,
-                      textAlign: TextAlign.center,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          );
-        }
-
         return ListView(
           children: [
+            Card(
+              child: ListTile(
+                onTap: () => Navigator.of(context)
+                    .push<void>(PointFormPage.route(point: Point.empty)),
+                leading: const Icon(Icons.add),
+                title: Text(S.of(context).createPointBtn),
+              ),
+            ),
             for (var point in state.cookPoints)
               PointWidget(
                 point: point,

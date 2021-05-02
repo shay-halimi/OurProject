@@ -30,7 +30,7 @@ class CookMiddleware extends StatelessWidget {
             return child;
 
           case CookStatus.error:
-            return const CreateUpdateCookPage();
+            return const CookFormPage();
 
           default:
             return const SplashPage();

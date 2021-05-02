@@ -8,7 +8,6 @@ class PointFormState extends Equatable {
     this.mediaInput = const MediaInput.pure(),
     this.tagsInput = const TagsInput.pure(),
     this.deleteAtInput = const DeleteAtInput.pure(),
-    this.canPostPoint = true,
     this.status = FormzStatus.pure,
   });
 
@@ -24,11 +23,9 @@ class PointFormState extends Equatable {
 
   final DeleteAtInput deleteAtInput;
 
-  final bool canPostPoint;
-
   final FormzStatus status;
 
-  bool get isAvailable => deleteAtInput.value.isEmpty;
+  bool get available => deleteAtInput.value.isEmpty;
 
   @override
   List<Object> get props => [
@@ -38,7 +35,6 @@ class PointFormState extends Equatable {
         mediaInput,
         tagsInput,
         deleteAtInput,
-        canPostPoint,
         status,
       ];
 
@@ -49,7 +45,6 @@ class PointFormState extends Equatable {
     MediaInput mediaInput,
     TagsInput tagsInput,
     DeleteAtInput deleteAtInput,
-    bool canPostPoint,
     FormzStatus status,
   }) {
     return PointFormState(
@@ -59,7 +54,6 @@ class PointFormState extends Equatable {
       mediaInput: mediaInput ?? this.mediaInput,
       tagsInput: tagsInput ?? this.tagsInput,
       deleteAtInput: deleteAtInput ?? this.deleteAtInput,
-      canPostPoint: canPostPoint ?? this.canPostPoint,
       status: status ?? this.status,
     );
   }
@@ -72,9 +66,11 @@ class TitleInput extends FormzInput<String, TitleValidationError> {
 
   const TitleInput.dirty([String value = '']) : super.dirty(value);
 
+  int get maxLength => 60;
+
   @override
   TitleValidationError validator(String value) {
-    return value.isNotEmpty && value.length < 60 && !value.contains('\n')
+    return value.isNotEmpty && value.length < maxLength && !value.contains('\n')
         ? null
         : TitleValidationError.invalid;
   }
@@ -88,9 +84,13 @@ class DescriptionInput
 
   const DescriptionInput.dirty([String value = '']) : super.dirty(value);
 
+  int get maxLength => 512;
+
   @override
   DescriptionInputValidationError validator(String value) {
-    return value.length < 1000 ? null : DescriptionInputValidationError.invalid;
+    return value.length < maxLength
+        ? null
+        : DescriptionInputValidationError.invalid;
   }
 }
 

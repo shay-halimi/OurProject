@@ -2,7 +2,6 @@ import 'dart:io';
 
 import 'package:cookpoint/generated/l10n.dart';
 import 'package:cookpoint/media/media.dart';
-import 'package:cookpoint/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_cropper/image_cropper.dart';
@@ -89,19 +88,14 @@ class MediaDialogView extends StatelessWidget {
 
               final croppedFile = await ImageCropper.cropImage(
                 sourcePath: pickedFile.path,
-                aspectRatioPresets: [
-                  CropAspectRatioPreset.square,
-                ],
                 androidUiSettings: const AndroidUiSettings(
                   toolbarTitle: '',
-                  initAspectRatio: CropAspectRatioPreset.original,
-                  lockAspectRatio: true,
+                  initAspectRatio: CropAspectRatioPreset.square,
                 ),
                 iosUiSettings: IOSUiSettings(
                   title: '',
                   doneButtonTitle: S.of(context).continueBtn,
                   cancelButtonTitle: S.of(context).cancelBtn,
-                  aspectRatioLockEnabled: true,
                 ),
               );
 
@@ -181,10 +175,6 @@ class _Text extends StatelessWidget {
     return Container(
       constraints: BoxConstraints(maxHeight: maxHeight),
       margin: const EdgeInsets.all(16.0),
-      decoration: BoxDecoration(
-        border: Border.all(),
-        borderRadius: borderRadius,
-      ),
       child: Center(
         child: Text(
           data,

@@ -1,11 +1,8 @@
 import 'package:carousel_slider/carousel_slider.dart';
-import 'package:cookpoint/cook/cook.dart';
 import 'package:cookpoint/points/points.dart';
 import 'package:cookpoint/search/search.dart';
-import 'package:cookpoint/selected_point/selected_point.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:sliding_up_panel/sliding_up_panel.dart';
 
 class PointsBar extends StatelessWidget {
   const PointsBar({
@@ -14,178 +11,79 @@ class PointsBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (_) => PointsBarCubit(),
-      child: const PointsBarView(),
-    );
+    return const PointsCarousel();
   }
 }
 
-class PointsBarView extends StatefulWidget {
-  const PointsBarView({
+class PointsCarousel extends StatefulWidget {
+  const PointsCarousel({
     Key key,
   }) : super(key: key);
 
   @override
-  _PointsBarViewState createState() => _PointsBarViewState();
+  _PointsCarouselState createState() => _PointsCarouselState();
 }
 
-class _PointsBarViewState extends State<PointsBarView> {
-  final PanelController _panelController = PanelController();
+class _PointsCarouselState extends State<PointsCarousel> {
+  CarouselController controller;
 
   @override
-  Widget build(BuildContext context) {
-    return Expanded(
-      child: LayoutBuilder(
-        builder: (_, constraints) {
-          final height = constraints.maxHeight;
-
-          return WillPopScope(
-            onWillPop: () async {
-              final scaffold = Scaffold.of(context);
-
-              if (scaffold.isDrawerOpen || scaffold.isEndDrawerOpen) {
-                Navigator.of(context).pop();
-              } else if (_panelController.isAttached &&
-                  _panelController.isPanelOpen) {
-                await _panelController.close();
-              } else {
-                context.read<SelectedPointCubit>().clear();
-              }
-
-              return false;
-            },
-            child: GestureDetector(
-              onTap: () async => _panelController.isPanelOpen
-                  ? await _panelController.close()
-                  : await _panelController.open(),
-              child: SlidingUpPanel(
-                controller: _panelController,
-                padding: EdgeInsets.zero,
-                margin: EdgeInsets.zero,
-                borderRadius: BorderRadius.zero,
-                maxHeight: height,
-                minHeight: height * 0.54,
-                boxShadow: [],
-                color: Colors.transparent,
-                panel: Align(
-                  alignment: Alignment.topCenter,
-                  child: _PointsCarousel(
-                    height: height,
-                  ),
-                ),
-                onPanelOpened: () {
-                  context.read<PointsBarCubit>().enable();
-                },
-                onPanelClosed: () {
-                  context.read<PointsBarCubit>().disable();
-                },
-              ),
-            ),
-          );
-        },
-      ),
-    );
+  void initState() {
+    controller = CarouselController();
+    super.initState();
   }
-}
-
-class _PointsCarousel extends StatelessWidget {
-  _PointsCarousel({
-    Key key,
-    @required this.height,
-  }) : super(key: key);
-
-  final double height;
-
-  final CarouselController _carouselController = CarouselController();
 
   @override
   Widget build(BuildContext context) {
     final points = context.select((SearchBloc bloc) => bloc.state.results);
 
-    final cookIds = points.map((point) => point.cookId).toSet().toList();
+    final selected = context.select((SearchBloc bloc) => bloc.state.selected);
 
-    final selectedPoint =
-        context.select((SelectedPointCubit cubit) => cubit.state.point);
+    final page = points.contains(selected) ? points.indexOf(selected) : 0;
 
-    final page = cookIds.contains(selectedPoint.cookId)
-        ? cookIds.indexOf(selectedPoint.cookId)
-        : 0;
-
-    return CarouselSlider(
-      carouselController: _carouselController,
-      key: ValueKey(cookIds),
-      items: cookIds.map(
-        (cookId) {
-          final cookPoints =
-              points.where((point) => point.cookId == cookId).toList()
-                ..sort((point1, point2) {
-                  if (point1.id == selectedPoint.id) return -1;
-
-                  if (point2.id == selectedPoint.id) return 1;
-
-                  return 0;
-                });
-
-          return Builder(
-            key: ValueKey(cookPoints),
-            builder: (_) {
-              return Column(
-                children: [
-                  Card(
-                    child: CookWidget(cookId: cookId),
-                  ),
-                  Expanded(
-                    child: Feed(cookPoints: cookPoints),
-                  ),
-                ],
-              );
-            },
-          );
-        },
-      ).toList(),
-      options: CarouselOptions(
-        enableInfiniteScroll: false,
-        initialPage: page,
-        onPageChanged: (index, reason) {
-          if (reason == CarouselPageChangedReason.manual) {
-            context.read<SelectedPointCubit>().select(points.firstWhere(
-                (point) => point.cookId == cookIds.elementAt(index)));
-          }
-        },
-        viewportFraction: 0.92,
-        height: height,
-      ),
-    );
-  }
-}
-
-class Feed extends StatelessWidget {
-  const Feed({
-    Key key,
-    @required this.cookPoints,
-  }) : super(key: key);
-
-  final List<Point> cookPoints;
-
-  @override
-  Widget build(BuildContext context) {
-    return BlocBuilder<PointsBarCubit, PointsBarState>(
-      buildWhen: (previous, current) => previous != current,
-      builder: (_, state) {
-        return ListView(
-          physics: state.status == PointsBarStatus.scrollable
-              ? null
-              : const NeverScrollableScrollPhysics(),
-          children: [
-            for (var cookPoint in cookPoints)
-              PointCard(
-                key: Key(cookPoint.id),
-                point: cookPoint,
-              ),
-          ],
-        );
+    return BlocListener<SearchBloc, SearchState>(
+      listenWhen: (previous, current) => previous != current,
+      listener: (_, state) async {
+        if (controller.ready && points.contains(state.selected)) {
+          await controller.animateToPage(points.indexOf(state.selected));
+        }
       },
+      child: CarouselSlider(
+        carouselController: controller,
+        key: ValueKey(points.hashCode),
+        items: points.map(
+          (point) {
+            return Builder(
+              key: Key(point.id),
+              builder: (context) {
+                return InkWell(
+                  onTap: () => Navigator.of(context).push<void>(
+                    PointPage.route(
+                      point: point,
+                    ),
+                  ),
+                  child: PointCard(
+                    point: point,
+                  ),
+                );
+              },
+            );
+          },
+        ).toList(),
+        options: CarouselOptions(
+          enableInfiniteScroll: false,
+          initialPage: page,
+          onPageChanged: (index, reason) {
+            if (reason == CarouselPageChangedReason.manual) {
+              final result = points.elementAt(index);
+
+              context.read<SearchBloc>().add(SearchResultSelected(result));
+            }
+          },
+          viewportFraction: 0.92,
+          aspectRatio: PointCard.aspectRatio,
+        ),
+      ),
     );
   }
 }

@@ -1,10 +1,9 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cookpoint/generated/l10n.dart';
 import 'package:cookpoint/humanz.dart';
+import 'package:cookpoint/imagez.dart';
 import 'package:cookpoint/location/location.dart';
 import 'package:cookpoint/points/points.dart';
 import 'package:cookpoint/search/search.dart';
-import 'package:cookpoint/selected_point/selected_point.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_typeahead/flutter_typeahead.dart';
@@ -129,7 +128,10 @@ class _SearchFieldState extends State<SearchField> {
   @override
   void initState() {
     super.initState();
-    _controller = TextEditingController();
+
+    final term = context.read<SearchBloc>().state.term;
+
+    _controller = TextEditingController(text: term);
     _focusNode = FocusNode();
   }
 
@@ -158,16 +160,18 @@ class _SearchFieldState extends State<SearchField> {
     final center =
         context.select((LocationCubit location) => location.state.toLatLng());
 
-    return BlocListener<SelectedPointCubit, SelectedPointState>(
+    final points = context.select((PointsBloc bloc) => bloc.state.nearbyPoints);
+
+    return BlocListener<SearchBloc, SearchState>(
       listenWhen: (previous, current) => previous != current,
       listener: (_, state) {
-        if (state.point.isEmpty && _focusNode.hasFocus) {
+        if (state.selected.isEmpty && _focusNode.hasFocus) {
           setState(() {
             _focusNode.unfocus();
           });
         }
       },
-      child: TypeAheadField<MapEntry<String, List<Point>>>(
+      child: TypeAheadField<Point>(
         getImmediateSuggestions: false,
         suggestionsBoxVerticalOffset: 1.0,
         textFieldConfiguration: TextFieldConfiguration(
@@ -189,7 +193,7 @@ class _SearchFieldState extends State<SearchField> {
                 : null,
             border: InputBorder.none,
           ),
-          onChanged: (value) {
+          onChanged: (value) async {
             setState(() {});
             context.read<SearchBloc>().add(SearchTermUpdated(value));
           },
@@ -199,20 +203,11 @@ class _SearchFieldState extends State<SearchField> {
           elevation: 0.0,
         ),
         suggestionsCallback: (_) {
-          final results = context.read<SearchBloc>().state.results;
-
-          final cooksPoints = <String, List<Point>>{};
-
-          for (var point in results) {
-            (cooksPoints[point.cookId] ??= [])..add(point);
-          }
-
-          return cooksPoints.entries;
+          return context.read<SearchBloc>().state.results;
         },
-        itemBuilder: (_, cookPoints) {
-          final point = cookPoints.value.first;
-
-          final length = cookPoints.value.length;
+        itemBuilder: (_, item) {
+          final length =
+              points.where((point) => point.cookId == item.cookId).length;
 
           final subtitle = length == 1
               ? ''
@@ -229,17 +224,16 @@ class _SearchFieldState extends State<SearchField> {
                 maxHeight: 64,
               ),
               child: Image(
-                image: CachedNetworkImageProvider(point.media.first),
+                image: imagez.url(item.media.first),
                 fit: BoxFit.cover,
                 loadingBuilder: _loadingBuilder,
               ),
             ),
-            key: ValueKey(point.id),
-            title: Text(point.title),
+            key: Key(item.id),
+            title: Text(item.title),
             subtitle: Text(subtitle),
             trailing: Text(
-              '${humanz.distance(point.latLng, center)} '
-              '${S.of(context).km}',
+              S.of(context).kmFromYou(humanz.distance(item.latLng, center)),
               style: Theme.of(context).textTheme.caption,
             ),
           );
@@ -253,9 +247,9 @@ class _SearchFieldState extends State<SearchField> {
 
           return Container();
         },
-        onSuggestionSelected: (cookPoints) {
+        onSuggestionSelected: (result) {
           setState(() {});
-          context.read<SelectedPointCubit>().select(cookPoints.value.first);
+          context.read<SearchBloc>().add(SearchResultSelected(result));
         },
       ),
     );

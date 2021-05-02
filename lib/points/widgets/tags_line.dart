@@ -21,7 +21,6 @@ class TagsLine extends StatelessWidget {
 
     return Text(
       line,
-      style: Theme.of(context).textTheme.caption,
       maxLines: 1,
       overflow: TextOverflow.ellipsis,
     );

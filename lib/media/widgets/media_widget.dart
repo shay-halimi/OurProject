@@ -1,4 +1,4 @@
-import 'package:cached_network_image/cached_network_image.dart';
+import 'package:cookpoint/imagez.dart';
 import 'package:flutter/material.dart';
 
 class MediaWidget extends StatelessWidget {
@@ -45,7 +45,7 @@ class MediaWidget extends StatelessWidget {
               child: Hero(
                 tag: image ?? url,
                 child: Image(
-                  image: image ?? CachedNetworkImageProvider(url),
+                  image: image ?? imagez.url(url),
                   fit: BoxFit.cover,
                   loadingBuilder: (_, child, loadingProgress) {
                     return loadingProgress == null

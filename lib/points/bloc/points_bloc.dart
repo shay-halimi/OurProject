@@ -76,24 +76,13 @@ class PointsBloc extends Bloc<PointsEvent, PointsState> {
 
     yield state.copyWith(status: PointsStatus.loading);
 
-    /// @TODO(Matan) This check can kill the cpu on cheap devices
-    /// @TODO(Matan) Find a better way to check for refresh.
-    final refresh = state.nearbyPoints
-        .map((point) => point.latLng)
-        .where((latLng) => latLng.distanceInKM(event.latLng) < event.radiusInKM)
-        .isEmpty;
+    await _nearbyPointsSubscription?.cancel();
 
-    if (refresh) {
-      await _nearbyPointsSubscription?.cancel();
-
-      _nearbyPointsSubscription = _pointsRepository
-          .near(latLng: event.latLng, radiusInKM: event.radiusInKM)
-          .listen((nearbyPoints) {
-        add(PointsNearbyLoadedEvent(nearbyPoints));
-      });
-    } else {
-      yield state.copyWith(status: PointsStatus.loaded);
-    }
+    _nearbyPointsSubscription = _pointsRepository
+        .near(latLng: event.latLng, radiusInKM: event.radiusInKM)
+        .listen((nearbyPoints) {
+      add(PointsNearbyLoadedEvent(nearbyPoints));
+    });
   }
 
   Stream<PointsState> _mapPointsOfCookRequestedEventToState(

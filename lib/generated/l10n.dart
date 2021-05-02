@@ -35,6 +35,46 @@ class S {
     return Localizations.of<S>(context, S);
   }
 
+  /// `WhatsApp`
+  String get whatsAppBtn {
+    return Intl.message(
+      'WhatsApp',
+      name: 'whatsAppBtn',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Call`
+  String get phoneBtn {
+    return Intl.message(
+      'Call',
+      name: 'phoneBtn',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Navigate`
+  String get directionsBtn {
+    return Intl.message(
+      'Navigate',
+      name: 'directionsBtn',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Search this area`
+  String get searchThisAreaBtn {
+    return Intl.message(
+      'Search this area',
+      name: 'searchThisAreaBtn',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `& {count} more points`
   String andCountMorePoints(Object count) {
     return Intl.message(
@@ -65,23 +105,33 @@ class S {
     );
   }
 
-  /// `Order now`
-  String get orderNow {
+  /// `Menu`
+  String get menuBtn {
     return Intl.message(
-      'Order now',
-      name: 'orderNow',
+      'Menu',
+      name: 'menuBtn',
       desc: '',
       args: [],
     );
   }
 
-  /// `km`
-  String get km {
+  /// `Order now`
+  String get orderBtn {
     return Intl.message(
-      'km',
-      name: 'km',
+      'Order now',
+      name: 'orderBtn',
       desc: '',
       args: [],
+    );
+  }
+
+  /// `{km} km`
+  String kmFromYou(Object km) {
+    return Intl.message(
+      '$km km',
+      name: 'kmFromYou',
+      desc: '',
+      args: [km],
     );
   }
 
@@ -165,10 +215,10 @@ class S {
     );
   }
 
-  /// `What's for dinner?`
+  /// `What are we eating?`
   String get searchHintText {
     return Intl.message(
-      'What\'s for dinner?',
+      'What are we eating?',
       name: 'searchHintText',
       desc: '',
       args: [],
@@ -190,16 +240,6 @@ class S {
     return Intl.message(
       'Looks like you haven\'t posted any points yet.',
       name: 'looksLikeYouHaveNotPostedAnyPointsYet',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Only three points can be available.`
-  String get tooManyPointsError {
-    return Intl.message(
-      'Only three points can be available.',
-      name: 'tooManyPointsError',
       desc: '',
       args: [],
     );

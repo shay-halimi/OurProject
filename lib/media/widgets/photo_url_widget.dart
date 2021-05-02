@@ -1,7 +1,7 @@
 import 'dart:io';
 
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cookpoint/generated/l10n.dart';
+import 'package:cookpoint/imagez.dart';
 import 'package:cookpoint/media/media.dart';
 import 'package:cookpoint/theme/theme.dart';
 import 'package:flutter/material.dart';
@@ -70,9 +70,8 @@ class _PhotoURLDialogView extends StatelessWidget {
               if (state is MediaDialogInitial) {
                 return CircleAvatar(
                   radius: radius,
-                  backgroundImage: photoURL.isNotEmpty
-                      ? CachedNetworkImageProvider(photoURL)
-                      : null,
+                  backgroundImage:
+                      photoURL.isNotEmpty ? imagez.url(photoURL) : null,
                   child: photoURL.isEmpty
                       ? Text(S.of(context).pickImageBtn)
                       : null,
@@ -90,7 +89,7 @@ class _PhotoURLDialogView extends StatelessWidget {
               } else if (state is MediaDialogLoaded) {
                 return CircleAvatar(
                   radius: radius,
-                  backgroundImage: CachedNetworkImageProvider(state.url),
+                  backgroundImage: imagez.url(state.url),
                 );
               }
 
@@ -148,7 +147,6 @@ class _PhotoURLDialogView extends StatelessWidget {
           ],
           androidUiSettings: const AndroidUiSettings(
             toolbarTitle: '',
-            initAspectRatio: CropAspectRatioPreset.original,
             lockAspectRatio: true,
           ),
           iosUiSettings: IOSUiSettings(

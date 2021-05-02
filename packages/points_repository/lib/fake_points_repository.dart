@@ -44,7 +44,7 @@ class FakePointsRepository extends PointsRepository {
 
   @override
   Stream<List<Point>> near({LatLng latLng, num radiusInKM = 3.14}) async* {
-    for (var i = 0; i <= 2; i++) {
+    for (var i = 0; i <= radiusInKM; i++) {
       final cookId = _randString;
 
       for (var i = 0; i <= rand.nextInt(5); i++) {
@@ -84,11 +84,10 @@ class FakePointsRepository extends PointsRepository {
   @override
   Stream<List<Point>> byCookId(String cookId) async* {
     if (_points.where((point) => point.cookId == cookId).isEmpty) {
-      for (var i = 0; i <= 5; i++) {
+      for (var i = 0; i <= 3; i++) {
         await create(
           _randPoint.copyWith(
             cookId: cookId,
-            deletedAt: rand.nextBool() ? Time.empty : Time.now(),
           ),
         );
       }

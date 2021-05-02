@@ -21,6 +21,8 @@ class MessageLookup extends MessageLookupByLibrary {
 
   static m0(count) => "& ${count} more points";
 
+  static m1(km) => "${km} km";
+
   final messages = _notInlinedMessages(_notInlinedMessages);
   static _notInlinedMessages(_) => <String, Function> {
     "aboutPageTitle" : MessageLookupByLibrary.simpleMessage("About"),
@@ -41,6 +43,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "createPointBtnTooltip" : MessageLookupByLibrary.simpleMessage("Add food point"),
     "createPointPageTitle" : MessageLookupByLibrary.simpleMessage("Create Point"),
     "description" : MessageLookupByLibrary.simpleMessage("Description"),
+    "directionsBtn" : MessageLookupByLibrary.simpleMessage("Navigate"),
     "discardBtn" : MessageLookupByLibrary.simpleMessage("Discard changed"),
     "discardChangesAlertTitle" : MessageLookupByLibrary.simpleMessage("Discard Changes?"),
     "displayName" : MessageLookupByLibrary.simpleMessage("Display name"),
@@ -53,14 +56,16 @@ class MessageLookup extends MessageLookupByLibrary {
     "internetError" : MessageLookupByLibrary.simpleMessage("Error! Check your internet connection and try again."),
     "invalid" : MessageLookupByLibrary.simpleMessage("Invalid"),
     "inviteFriendsBtn" : MessageLookupByLibrary.simpleMessage("Invite Friends"),
-    "km" : MessageLookupByLibrary.simpleMessage("km"),
+    "kmFromYou" : m1,
     "kosher" : MessageLookupByLibrary.simpleMessage("kosher"),
     "loginPageTitle" : MessageLookupByLibrary.simpleMessage("Login"),
     "looksLikeYouHaveNotPostedAnyPointsYet" : MessageLookupByLibrary.simpleMessage("Looks like you haven\'t posted any points yet."),
-    "orderNow" : MessageLookupByLibrary.simpleMessage("Order now"),
+    "menuBtn" : MessageLookupByLibrary.simpleMessage("Menu"),
+    "orderBtn" : MessageLookupByLibrary.simpleMessage("Order now"),
     "otp" : MessageLookupByLibrary.simpleMessage("Verification Code"),
     "otpError" : MessageLookupByLibrary.simpleMessage("Invalid verification code"),
     "partnersTermsOfServicePageTitle" : MessageLookupByLibrary.simpleMessage("Affiliate Terms & Privacy Policy"),
+    "phoneBtn" : MessageLookupByLibrary.simpleMessage("Call"),
     "phoneNumber" : MessageLookupByLibrary.simpleMessage("Phone Number"),
     "phoneNumberError" : MessageLookupByLibrary.simpleMessage("Digits only, no hyphens or spaces"),
     "pickImageBtn" : MessageLookupByLibrary.simpleMessage("Select image"),
@@ -71,18 +76,19 @@ class MessageLookup extends MessageLookupByLibrary {
     "postBtn" : MessageLookupByLibrary.simpleMessage("Post"),
     "price" : MessageLookupByLibrary.simpleMessage("Price"),
     "saveBtn" : MessageLookupByLibrary.simpleMessage("Save"),
-    "searchHintText" : MessageLookupByLibrary.simpleMessage("What\'s for dinner?"),
+    "searchHintText" : MessageLookupByLibrary.simpleMessage("What are we eating?"),
     "searchNoPointsFound" : MessageLookupByLibrary.simpleMessage("No nearby results"),
+    "searchThisAreaBtn" : MessageLookupByLibrary.simpleMessage("Search this area"),
     "sendSMSAgainBtn" : MessageLookupByLibrary.simpleMessage("If you have not received an SMS from us, click here."),
     "tags" : MessageLookupByLibrary.simpleMessage("Tags"),
     "termsOfServicePageTitle" : MessageLookupByLibrary.simpleMessage("Terms & Privacy Policy"),
     "title" : MessageLookupByLibrary.simpleMessage("Title"),
-    "tooManyPointsError" : MessageLookupByLibrary.simpleMessage("Only three points can be available."),
     "tryAgainBtn" : MessageLookupByLibrary.simpleMessage("Try again"),
     "unavailable" : MessageLookupByLibrary.simpleMessage("Unavailable"),
     "updateAccountPageTitle" : MessageLookupByLibrary.simpleMessage("Update Account"),
     "updatePointPageTitle" : MessageLookupByLibrary.simpleMessage("Update Point"),
     "vegan" : MessageLookupByLibrary.simpleMessage("vegan"),
-    "vegetarian" : MessageLookupByLibrary.simpleMessage("vegetarian")
+    "vegetarian" : MessageLookupByLibrary.simpleMessage("vegetarian"),
+    "whatsAppBtn" : MessageLookupByLibrary.simpleMessage("WhatsApp")
   };
 }
