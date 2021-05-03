@@ -1,8 +1,7 @@
 import 'dart:async';
-import 'dart:math';
 
 import 'package:bloc/bloc.dart';
-import 'package:cookpoint/points/points.dart';
+import 'package:cookpoint/foods/foods.dart';
 import 'package:equatable/equatable.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/cupertino.dart';
@@ -13,58 +12,59 @@ part 'search_state.dart';
 
 class SearchBloc extends Bloc<SearchEvent, SearchState> {
   SearchBloc({
-    @required PointsBloc pointsBloc,
-  })  : assert(pointsBloc != null),
-        _pointsBloc = pointsBloc,
+    @required FoodsBloc foodsBloc,
+  })  : assert(foodsBloc != null),
+        _foodsBloc = foodsBloc,
         super(const SearchState()) {
-    _pointsSubscription = pointsBloc.stream.listen((state) {
-      if (state.nearbyPoints.isNotEmpty) {
-        add(SearchResultsUpdated(state.nearbyPoints));
+    _foodsSubscription = foodsBloc.stream.listen((state) {
+      if (state.nearbyFoods.isNotEmpty) {
+        add(SearchResultsUpdated(state.nearbyFoods));
       } else {
         add(const SearchResultsRequested());
       }
     });
   }
 
-  final PointsBloc _pointsBloc;
+  final FoodsBloc _foodsBloc;
 
-  StreamSubscription _pointsSubscription;
+  StreamSubscription _foodsSubscription;
 
   @override
   Future<void> close() {
-    _pointsSubscription?.cancel();
+    _foodsSubscription?.cancel();
     return super.close();
   }
 
-  List<Point> _filter(List<Point> points, String term, Set<String> tags) {
+  List<Food> _filter(List<Food> foods, String term, Set<String> tags) {
     final filtered =
-        points.where((point) => point.tags.containsAll(tags)).toList();
+        foods.where((food) => food.tags.containsAll(tags)).toList();
 
-    final results = Fuzzy<Point>(
+    final results = Fuzzy<Food>(
       filtered,
       options: FuzzyOptions(
         findAllMatches: true,
         tokenize: true,
         threshold: 0.2,
         keys: [
-          WeightedKey<Point>(
+          WeightedKey<Food>(
             name: 'title',
-            getter: (point) => point.title,
+            getter: (food) => food.title,
             weight: 100.0,
           ),
-          WeightedKey<Point>(
+          WeightedKey<Food>(
             name: 'description',
-            getter: (point) => point.description,
+            getter: (food) => food.description,
             weight: 50.0,
           ),
         ],
       ),
     ).search(term);
 
-    final cookIds = results.map((r) => r.item.cookId).toSet();
+    final restaurantIds = results.map((r) => r.item.restaurantId).toSet();
 
-    return cookIds.map((cookId) {
-      final result = results.firstWhere((r) => r.item.cookId == cookId);
+    return restaurantIds.map((restaurantId) {
+      final result =
+          results.firstWhere((r) => r.item.restaurantId == restaurantId);
 
       return result.item;
     }).toList();
@@ -80,7 +80,7 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
       await FirebaseAnalytics().logSearch(searchTerm: event.term);
 
       final results = _filter(
-        _nearbyPoints,
+        _nearbyFoods,
         event.term,
         state.tags,
       );
@@ -89,7 +89,7 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
         status: SearchStatus.loaded,
         term: event.term,
         results: results,
-        selected: results.isEmpty ? Point.empty : results.first,
+        selected: results.isEmpty ? Food.empty : results.first,
       );
     } else if (event is SearchTermCleared) {
       yield* mapEventToState(const SearchTermUpdated(''));
@@ -103,7 +103,7 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
       }
 
       final results = _filter(
-        _nearbyPoints,
+        _nearbyFoods,
         state.term,
         tags,
       );
@@ -112,11 +112,11 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
         status: SearchStatus.loaded,
         tags: tags,
         results: results,
-        selected: results.isEmpty ? Point.empty : results.first,
+        selected: results.isEmpty ? Food.empty : results.first,
       );
     } else if (event is SearchResultsUpdated) {
       final results = _filter(
-        event.points,
+        event.foods,
         state.term,
         state.tags,
       );
@@ -124,11 +124,11 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
       yield state.copyWith(
         status: SearchStatus.loaded,
         results: results,
-        selected: results.isEmpty ? Point.empty : results.first,
+        selected: results.isEmpty ? Food.empty : results.first,
       );
     } else if (event is SearchResultSelected) {
       await FirebaseAnalytics()
-          .logSelectContent(contentType: 'point', itemId: event.selected.id);
+          .logSelectContent(contentType: 'food', itemId: event.selected.id);
 
       yield state.copyWith(
         status: SearchStatus.loaded,
@@ -137,5 +137,5 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
     }
   }
 
-  List<Point> get _nearbyPoints => _pointsBloc.state.nearbyPoints;
+  List<Food> get _nearbyFoods => _foodsBloc.state.nearbyFoods;
 }

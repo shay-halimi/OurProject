@@ -1,4 +1,4 @@
-import 'package:cookpoint/points/points.dart';
+import 'package:cookpoint/foods/foods.dart';
 
 final humanz = const _Humanz();
 

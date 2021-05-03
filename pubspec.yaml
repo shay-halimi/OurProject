@@ -3,7 +3,7 @@ description: Cook Here, There, Everywhere.
 
 publish_to: 'none'
 
-version: 1.0.9+520
+version: 1.0.9+521
 
 environment:
   sdk: ">=2.7.0 <3.0.0"
@@ -17,10 +17,10 @@ dependencies:
     path: packages/authentication_repository
   location_services:
     path: packages/location_services
-  points_repository:
-    path: packages/points_repository
-  cooks_repository:
-    path: packages/cooks_repository
+  foods_repository:
+    path: packages/foods_repository
+  restaurants_repository:
+    path: packages/restaurants_repository
   firebase_core: ^1.0.4
   firebase_storage: ^8.0.4
   firebase_analytics: ^8.0.1

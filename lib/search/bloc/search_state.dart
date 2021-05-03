@@ -5,7 +5,7 @@ enum SearchStatus { loading, loaded, unknown, error }
 class SearchState extends Equatable {
   const SearchState({
     this.results = const [],
-    this.selected = Point.empty,
+    this.selected = Food.empty,
     this.tags = const {},
     this.term = '',
     this.status = SearchStatus.unknown,
@@ -14,9 +14,9 @@ class SearchState extends Equatable {
         assert(tags != null),
         assert(term != null);
 
-  final List<Point> results;
+  final List<Food> results;
 
-  final Point selected;
+  final Food selected;
 
   final Set<String> tags;
 
@@ -29,8 +29,8 @@ class SearchState extends Equatable {
 
   SearchState copyWith({
     SearchStatus status,
-    List<Point> results,
-    Point selected,
+    List<Food> results,
+    Food selected,
     Set<String> tags,
     String term,
   }) {

@@ -19,7 +19,7 @@ typedef String MessageIfAbsent(String messageStr, List<dynamic> args);
 class MessageLookup extends MessageLookupByLibrary {
   String get localeName => 'en';
 
-  static m0(count) => "& ${count} more points";
+  static m0(count) => "& ${count} more foods";
 
   static m1(km) => "${km} km";
 
@@ -31,17 +31,16 @@ class MessageLookup extends MessageLookupByLibrary {
     "accountUpdatedSuccessfully" : MessageLookupByLibrary.simpleMessage("Successfully updated"),
     "address" : MessageLookupByLibrary.simpleMessage("Address"),
     "addressHelperText" : MessageLookupByLibrary.simpleMessage("City, street and house number."),
-    "andCountMorePoints" : m0,
-    "andOneMorePoint" : MessageLookupByLibrary.simpleMessage("& one more point"),
+    "andCountMoreFoods" : m0,
+    "andOneMoreFood" : MessageLookupByLibrary.simpleMessage("& one more food"),
     "available" : MessageLookupByLibrary.simpleMessage("Available"),
-    "availableHelperText" : MessageLookupByLibrary.simpleMessage("Available points appear on the map with your name, address and the phone number you registered with."),
+    "availableHelperText" : MessageLookupByLibrary.simpleMessage("Available foods appear on the map with your name, address and the phone number you registered with."),
     "cancelBtn" : MessageLookupByLibrary.simpleMessage("Cancel"),
     "contactUsPageTitle" : MessageLookupByLibrary.simpleMessage("Contact Us"),
     "continueBtn" : MessageLookupByLibrary.simpleMessage("Continue"),
     "createAccountPageTitle" : MessageLookupByLibrary.simpleMessage("Create Account"),
-    "createPointBtn" : MessageLookupByLibrary.simpleMessage("Add point"),
-    "createPointBtnTooltip" : MessageLookupByLibrary.simpleMessage("Add food point"),
-    "createPointPageTitle" : MessageLookupByLibrary.simpleMessage("Create Point"),
+    "createFoodBtn" : MessageLookupByLibrary.simpleMessage("Add food"),
+    "createFoodPageTitle" : MessageLookupByLibrary.simpleMessage("Create Food"),
     "description" : MessageLookupByLibrary.simpleMessage("Description"),
     "directionsBtn" : MessageLookupByLibrary.simpleMessage("Navigate"),
     "discardBtn" : MessageLookupByLibrary.simpleMessage("Discard changed"),
@@ -49,6 +48,10 @@ class MessageLookup extends MessageLookupByLibrary {
     "displayName" : MessageLookupByLibrary.simpleMessage("Display name"),
     "error" : MessageLookupByLibrary.simpleMessage("Error! Check your input and try again."),
     "explore" : MessageLookupByLibrary.simpleMessage("Explore"),
+    "foodCreatedSuccessfully" : MessageLookupByLibrary.simpleMessage("Successfully created"),
+    "foodPostedSuccessfully" : MessageLookupByLibrary.simpleMessage("Successfully posted"),
+    "foodUpdatedSuccessfully" : MessageLookupByLibrary.simpleMessage("Successfully updated"),
+    "foodsPageTitle" : MessageLookupByLibrary.simpleMessage("My kitchen"),
     "glutenFree" : MessageLookupByLibrary.simpleMessage("gluten-free"),
     "imageSourceBtn" : MessageLookupByLibrary.simpleMessage("Select image source"),
     "imageSourceCameraBtn" : MessageLookupByLibrary.simpleMessage("Camera"),
@@ -59,7 +62,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "kmFromYou" : m1,
     "kosher" : MessageLookupByLibrary.simpleMessage("kosher"),
     "loginPageTitle" : MessageLookupByLibrary.simpleMessage("Login"),
-    "looksLikeYouHaveNotPostedAnyPointsYet" : MessageLookupByLibrary.simpleMessage("Looks like you haven\'t posted any points yet."),
+    "looksLikeYouHaveNotPostedAnyFoodsYet" : MessageLookupByLibrary.simpleMessage("Looks like you haven\'t posted any foods yet."),
     "menuBtn" : MessageLookupByLibrary.simpleMessage("Menu"),
     "orderBtn" : MessageLookupByLibrary.simpleMessage("Order now"),
     "otp" : MessageLookupByLibrary.simpleMessage("Verification Code"),
@@ -69,15 +72,11 @@ class MessageLookup extends MessageLookupByLibrary {
     "phoneNumber" : MessageLookupByLibrary.simpleMessage("Phone Number"),
     "phoneNumberError" : MessageLookupByLibrary.simpleMessage("Digits only, no hyphens or spaces"),
     "pickImageBtn" : MessageLookupByLibrary.simpleMessage("Select image"),
-    "pointCreatedSuccessfully" : MessageLookupByLibrary.simpleMessage("Successfully created"),
-    "pointPostedSuccessfully" : MessageLookupByLibrary.simpleMessage("Successfully posted"),
-    "pointUpdatedSuccessfully" : MessageLookupByLibrary.simpleMessage("Successfully updated"),
-    "pointsPageTitle" : MessageLookupByLibrary.simpleMessage("My kitchen"),
     "postBtn" : MessageLookupByLibrary.simpleMessage("Post"),
     "price" : MessageLookupByLibrary.simpleMessage("Price"),
     "saveBtn" : MessageLookupByLibrary.simpleMessage("Save"),
     "searchHintText" : MessageLookupByLibrary.simpleMessage("What are we eating?"),
-    "searchNoPointsFound" : MessageLookupByLibrary.simpleMessage("No nearby results"),
+    "searchNoFoodsFound" : MessageLookupByLibrary.simpleMessage("No nearby results"),
     "searchThisAreaBtn" : MessageLookupByLibrary.simpleMessage("Search this area"),
     "sendSMSAgainBtn" : MessageLookupByLibrary.simpleMessage("If you have not received an SMS from us, click here."),
     "tags" : MessageLookupByLibrary.simpleMessage("Tags"),
@@ -86,7 +85,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "tryAgainBtn" : MessageLookupByLibrary.simpleMessage("Try again"),
     "unavailable" : MessageLookupByLibrary.simpleMessage("Unavailable"),
     "updateAccountPageTitle" : MessageLookupByLibrary.simpleMessage("Update Account"),
-    "updatePointPageTitle" : MessageLookupByLibrary.simpleMessage("Update Point"),
+    "updateFoodPageTitle" : MessageLookupByLibrary.simpleMessage("Update Food"),
     "vegan" : MessageLookupByLibrary.simpleMessage("vegan"),
     "vegetarian" : MessageLookupByLibrary.simpleMessage("vegetarian"),
     "whatsAppBtn" : MessageLookupByLibrary.simpleMessage("WhatsApp")

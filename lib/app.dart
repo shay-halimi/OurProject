@@ -1,10 +1,10 @@
 import 'package:cookpoint/authentication/authentication.dart';
-import 'package:cookpoint/cook/cook.dart';
+import 'package:cookpoint/foods/foods.dart';
 import 'package:cookpoint/generated/l10n.dart';
 import 'package:cookpoint/home_page.dart';
 import 'package:cookpoint/internet/internet.dart';
 import 'package:cookpoint/location/location.dart';
-import 'package:cookpoint/points/points.dart';
+import 'package:cookpoint/restaurant/restaurant.dart';
 import 'package:cookpoint/settings/cubit/cubit.dart';
 import 'package:cookpoint/splash/splash.dart';
 import 'package:cookpoint/theme/theme.dart';
@@ -18,22 +18,22 @@ class App extends StatelessWidget {
   const App({
     Key key,
     @required this.authenticationRepository,
-    @required this.pointsRepository,
+    @required this.foodsRepository,
     @required this.locationServices,
-    @required this.cooksRepository,
+    @required this.restaurantsRepository,
   })  : assert(authenticationRepository != null),
-        assert(pointsRepository != null),
+        assert(foodsRepository != null),
         assert(locationServices != null),
-        assert(cooksRepository != null),
+        assert(restaurantsRepository != null),
         super(key: key);
 
   final AuthenticationRepository authenticationRepository;
 
-  final PointsRepository pointsRepository;
+  final FoodsRepository foodsRepository;
 
   final LocationServices locationServices;
 
-  final CooksRepository cooksRepository;
+  final RestaurantsRepository restaurantsRepository;
 
   @override
   Widget build(BuildContext context) {
@@ -43,13 +43,13 @@ class App extends StatelessWidget {
           value: authenticationRepository,
         ),
         RepositoryProvider.value(
-          value: pointsRepository,
+          value: foodsRepository,
         ),
         RepositoryProvider.value(
           value: locationServices,
         ),
         RepositoryProvider.value(
-          value: cooksRepository,
+          value: restaurantsRepository,
         ),
       ],
       child: MultiBlocProvider(
@@ -66,21 +66,20 @@ class App extends StatelessWidget {
             ),
           ),
           BlocProvider(
-            create: (_context) => CookBloc(
-              cooksRepository: cooksRepository,
+            create: (_context) => RestaurantBloc(
+              restaurantsRepository: restaurantsRepository,
               authenticationBloc: _context.read<AuthenticationBloc>(),
             ),
           ),
           BlocProvider(
-            create: (_context) => PointsBloc(
-              pointsRepository: pointsRepository,
-              cookBloc: _context.read<CookBloc>(),
+            create: (_context) => FoodsBloc(
+              foodsRepository: foodsRepository,
+              restaurantBloc: _context.read<RestaurantBloc>(),
             ),
           ),
           BlocProvider(
-            create: (_context) => LocationCubit(
+            create: (_) => LocationCubit(
               locationServices: locationServices,
-              cookBloc: _context.read<CookBloc>(),
             )..locate(),
           ),
         ],

@@ -127,13 +127,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.0.1"
-  cooks_repository:
-    dependency: "direct main"
-    description:
-      path: "packages/cooks_repository"
-      relative: true
-    source: path
-    version: "1.0.1+5"
   crypto:
     dependency: transitive
     description:
@@ -364,6 +357,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "8.0.6"
+  foods_repository:
+    dependency: "direct main"
+    description:
+      path: "packages/foods_repository"
+      relative: true
+    source: path
+    version: "1.0.0+6"
   formz:
     dependency: "direct main"
     description:
@@ -395,7 +395,7 @@ packages:
   geoflutterfire:
     dependency: transitive
     description:
-      path: "packages/points_repository/packages/geoflutterfire"
+      path: "packages/foods_repository/packages/geoflutterfire"
       relative: true
     source: path
     version: "2.2.2+1"
@@ -637,13 +637,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.0.0"
-  points_repository:
-    dependency: "direct main"
-    description:
-      path: "packages/points_repository"
-      relative: true
-    source: path
-    version: "1.0.0+5"
   process:
     dependency: transitive
     description:
@@ -658,6 +651,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "5.0.0"
+  restaurants_repository:
+    dependency: "direct main"
+    description:
+      path: "packages/restaurants_repository"
+      relative: true
+    source: path
+    version: "1.0.1+6"
   rxdart:
     dependency: transitive
     description:

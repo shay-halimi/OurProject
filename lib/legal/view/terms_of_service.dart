@@ -229,8 +229,8 @@ class TermsOfServiceMiddleware extends StatelessWidget {
   }
 }
 
-class CookTermsOfService extends StatelessWidget {
-  const CookTermsOfService({
+class RestaurantTermsOfService extends StatelessWidget {
+  const RestaurantTermsOfService({
     Key key,
     this.onPressed,
   }) : super(key: key);
@@ -238,7 +238,7 @@ class CookTermsOfService extends StatelessWidget {
   static Route route() {
     return MaterialPageRoute<void>(
       settings: const RouteSettings(name: '/legal/partners/terms-of-service'),
-      builder: (_) => const CookTermsOfService(),
+      builder: (_) => const RestaurantTermsOfService(),
     );
   }
 
@@ -347,8 +347,8 @@ COOKPOINT היא אפליקציה המשמשת כפלטפורמה נוחה לב�
   }
 }
 
-class CookTermsOfServiceMiddleware extends StatelessWidget {
-  CookTermsOfServiceMiddleware({
+class RestaurantTermsOfServiceMiddleware extends StatelessWidget {
+  RestaurantTermsOfServiceMiddleware({
     Key key,
     this.child,
   }) : super(key: key);
@@ -371,7 +371,7 @@ class CookTermsOfServiceMiddleware extends StatelessWidget {
             if (snapshot.hasData) {
               return snapshot.data
                   ? child
-                  : CookTermsOfService(onPressed: _accept);
+                  : RestaurantTermsOfService(onPressed: _accept);
             }
 
             return const SplashPage();

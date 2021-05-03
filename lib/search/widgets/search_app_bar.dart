@@ -1,8 +1,8 @@
+import 'package:cookpoint/foods/foods.dart';
 import 'package:cookpoint/generated/l10n.dart';
 import 'package:cookpoint/humanz.dart';
 import 'package:cookpoint/imagez.dart';
 import 'package:cookpoint/location/location.dart';
-import 'package:cookpoint/points/points.dart';
 import 'package:cookpoint/search/search.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -123,7 +123,7 @@ class _SearchFieldState extends State<SearchField> {
 
   FocusNode _focusNode;
 
-  List<Point> results;
+  List<Food> results;
 
   @override
   void initState() {
@@ -160,7 +160,7 @@ class _SearchFieldState extends State<SearchField> {
     final center =
         context.select((LocationCubit location) => location.state.toLatLng());
 
-    final points = context.select((PointsBloc bloc) => bloc.state.nearbyPoints);
+    final foods = context.select((FoodsBloc bloc) => bloc.state.nearbyFoods);
 
     return BlocListener<SearchBloc, SearchState>(
       listenWhen: (previous, current) => previous != current,
@@ -171,7 +171,7 @@ class _SearchFieldState extends State<SearchField> {
           });
         }
       },
-      child: TypeAheadField<Point>(
+      child: TypeAheadField<Food>(
         getImmediateSuggestions: false,
         suggestionsBoxVerticalOffset: 1.0,
         textFieldConfiguration: TextFieldConfiguration(
@@ -206,14 +206,15 @@ class _SearchFieldState extends State<SearchField> {
           return context.read<SearchBloc>().state.results;
         },
         itemBuilder: (_, item) {
-          final length =
-              points.where((point) => point.cookId == item.cookId).length;
+          final length = foods
+              .where((food) => food.restaurantId == item.restaurantId)
+              .length;
 
           final subtitle = length == 1
               ? ''
               : length == 2
-                  ? S.of(context).andOneMorePoint
-                  : S.of(context).andCountMorePoints(length - 1);
+                  ? S.of(context).andOneMoreFood
+                  : S.of(context).andCountMoreFoods(length - 1);
 
           return ListTile(
             leading: ConstrainedBox(
@@ -241,7 +242,7 @@ class _SearchFieldState extends State<SearchField> {
         noItemsFoundBuilder: (_) {
           if (context.read<SearchBloc>().state.status == SearchStatus.loaded) {
             return ListTile(
-              title: Text(S.of(context).searchNoPointsFound),
+              title: Text(S.of(context).searchNoFoodsFound),
             );
           }
 

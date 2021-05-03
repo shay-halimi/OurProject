@@ -1,9 +1,9 @@
 import 'package:bloc/bloc.dart';
 import 'package:cookpoint/app.dart';
 import 'package:cookpoint/authentication/authentication.dart';
-import 'package:cookpoint/cook/cook.dart';
+import 'package:cookpoint/foods/foods.dart';
 import 'package:cookpoint/location/location.dart';
-import 'package:cookpoint/points/points.dart';
+import 'package:cookpoint/restaurant/restaurant.dart';
 import 'package:cookpoint/settings/settings.dart';
 import 'package:cookpoint/simple_bloc_observer.dart';
 import 'package:equatable/equatable.dart';
@@ -19,8 +19,8 @@ void main() async {
   await SettingsCubit.initialize();
   runApp(App(
     authenticationRepository: FirebaseAuthenticationRepository(),
-    pointsRepository: FirebasePointsRepository(),
+    foodsRepository: FirebaseFoodsRepository(),
     locationServices: GeoLocatorLocationServices(),
-    cooksRepository: FirebaseCooksRepository(),
+    restaurantsRepository: FirebaseRestaurantsRepository(),
   ));
 }

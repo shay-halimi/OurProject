@@ -75,21 +75,21 @@ class S {
     );
   }
 
-  /// `& {count} more points`
-  String andCountMorePoints(Object count) {
+  /// `& {count} more foods`
+  String andCountMoreFoods(Object count) {
     return Intl.message(
-      '& $count more points',
-      name: 'andCountMorePoints',
+      '& $count more foods',
+      name: 'andCountMoreFoods',
       desc: '',
       args: [count],
     );
   }
 
-  /// `& one more point`
-  String get andOneMorePoint {
+  /// `& one more food`
+  String get andOneMoreFood {
     return Intl.message(
-      '& one more point',
-      name: 'andOneMorePoint',
+      '& one more food',
+      name: 'andOneMoreFood',
       desc: '',
       args: [],
     );
@@ -206,10 +206,10 @@ class S {
   }
 
   /// `No nearby results`
-  String get searchNoPointsFound {
+  String get searchNoFoodsFound {
     return Intl.message(
       'No nearby results',
-      name: 'searchNoPointsFound',
+      name: 'searchNoFoodsFound',
       desc: '',
       args: [],
     );
@@ -226,20 +226,20 @@ class S {
   }
 
   /// `My kitchen`
-  String get pointsPageTitle {
+  String get foodsPageTitle {
     return Intl.message(
       'My kitchen',
-      name: 'pointsPageTitle',
+      name: 'foodsPageTitle',
       desc: '',
       args: [],
     );
   }
 
-  /// `Looks like you haven't posted any points yet.`
-  String get looksLikeYouHaveNotPostedAnyPointsYet {
+  /// `Looks like you haven't posted any foods yet.`
+  String get looksLikeYouHaveNotPostedAnyFoodsYet {
     return Intl.message(
-      'Looks like you haven\'t posted any points yet.',
-      name: 'looksLikeYouHaveNotPostedAnyPointsYet',
+      'Looks like you haven\'t posted any foods yet.',
+      name: 'looksLikeYouHaveNotPostedAnyFoodsYet',
       desc: '',
       args: [],
     );
@@ -265,10 +265,10 @@ class S {
     );
   }
 
-  /// `Available points appear on the map with your name, address and the phone number you registered with.`
+  /// `Available foods appear on the map with your name, address and the phone number you registered with.`
   String get availableHelperText {
     return Intl.message(
-      'Available points appear on the map with your name, address and the phone number you registered with.',
+      'Available foods appear on the map with your name, address and the phone number you registered with.',
       name: 'availableHelperText',
       desc: '',
       args: [],
@@ -325,51 +325,51 @@ class S {
     );
   }
 
-  /// `Update Point`
-  String get updatePointPageTitle {
+  /// `Update Food`
+  String get updateFoodPageTitle {
     return Intl.message(
-      'Update Point',
-      name: 'updatePointPageTitle',
+      'Update Food',
+      name: 'updateFoodPageTitle',
       desc: '',
       args: [],
     );
   }
 
   /// `Successfully updated`
-  String get pointUpdatedSuccessfully {
+  String get foodUpdatedSuccessfully {
     return Intl.message(
       'Successfully updated',
-      name: 'pointUpdatedSuccessfully',
+      name: 'foodUpdatedSuccessfully',
       desc: '',
       args: [],
     );
   }
 
-  /// `Create Point`
-  String get createPointPageTitle {
+  /// `Create Food`
+  String get createFoodPageTitle {
     return Intl.message(
-      'Create Point',
-      name: 'createPointPageTitle',
+      'Create Food',
+      name: 'createFoodPageTitle',
       desc: '',
       args: [],
     );
   }
 
   /// `Successfully posted`
-  String get pointPostedSuccessfully {
+  String get foodPostedSuccessfully {
     return Intl.message(
       'Successfully posted',
-      name: 'pointPostedSuccessfully',
+      name: 'foodPostedSuccessfully',
       desc: '',
       args: [],
     );
   }
 
   /// `Successfully created`
-  String get pointCreatedSuccessfully {
+  String get foodCreatedSuccessfully {
     return Intl.message(
       'Successfully created',
-      name: 'pointCreatedSuccessfully',
+      name: 'foodCreatedSuccessfully',
       desc: '',
       args: [],
     );
@@ -555,21 +555,11 @@ class S {
     );
   }
 
-  /// `Add food point`
-  String get createPointBtnTooltip {
+  /// `Add food`
+  String get createFoodBtn {
     return Intl.message(
-      'Add food point',
-      name: 'createPointBtnTooltip',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Add point`
-  String get createPointBtn {
-    return Intl.message(
-      'Add point',
-      name: 'createPointBtn',
+      'Add food',
+      name: 'createFoodBtn',
       desc: '',
       args: [],
     );
