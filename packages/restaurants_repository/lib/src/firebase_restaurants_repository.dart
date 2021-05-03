@@ -7,7 +7,7 @@ import 'restaurants_repository.dart';
 class FirebaseRestaurantsRepository implements RestaurantsRepository {
   FirebaseRestaurantsRepository();
 
-  final _collection = FirebaseFirestore.instance.collection('restaurants');
+  final _collection = FirebaseFirestore.instance.collection('cooks');
 
   @override
   Stream<Restaurant> restaurant(String id) {
