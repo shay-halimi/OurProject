@@ -14,19 +14,15 @@ class RestaurantWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Stack(
-      alignment: AlignmentDirectional.bottomCenter,
-      children: [
-        ListTile(
-          contentPadding: EdgeInsets.zero,
-          leading: CircleAvatar(
-            backgroundImage:
-                restaurant.isEmpty ? null : imagez.url(restaurant.photoURL),
-          ),
-          title: Text(restaurant.displayName),
-        ),
-        if (restaurant.isEmpty) const LinearProgressIndicator(),
-      ],
+    return ListTile(
+      contentPadding: EdgeInsets.zero,
+      leading: CircleAvatar(
+        backgroundImage:
+            restaurant.isEmpty ? null : imagez.url(restaurant.photoURL),
+      ),
+      title: restaurant.isEmpty
+          ? const LinearProgressIndicator()
+          : Text(restaurant.displayName),
     );
   }
 }

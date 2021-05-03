@@ -15,7 +15,7 @@ class FoodCard extends StatelessWidget {
 
   final Food food;
 
-  static const double aspectRatio = 4 / 3;
+  static const double aspectRatio = 3 / 2;
 
   @override
   Widget build(BuildContext context) {
@@ -64,23 +64,20 @@ class _Footer extends StatelessWidget {
     final center =
         context.select((LocationCubit cubit) => cubit.state.toLatLng());
 
-    return Container(
-      color: Colors.white.withOpacity(0.92),
-      child: Stack(
-        alignment: AlignmentDirectional.bottomCenter,
-        children: [
-          ListTile(
-              title: Text(food.title),
-              subtitle: TagsLine(
-                tags: {
-                  S.of(context).kmFromYou(humanz.distance(food.latLng, center)),
-                  ...food.tags,
-                },
-              ),
-              trailing:
-                  food.price.isEmpty ? null : Text(humanz.money(food.price))),
-        ],
+    return ListTile(
+      title: Text(food.title),
+      subtitle: TagsLine(
+        tags: {
+          S.of(context).kmFromYou(humanz.distance(food.latLng, center)),
+          ...food.tags,
+        },
       ),
+      trailing: food.price.isEmpty
+          ? null
+          : Text(
+              humanz.money(food.price),
+              style: Theme.of(context).textTheme.bodyText1,
+            ),
     );
   }
 }

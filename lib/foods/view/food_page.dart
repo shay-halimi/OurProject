@@ -57,6 +57,8 @@ class FoodPage extends StatelessWidget {
                         ? state.restaurant
                         : Restaurant.empty;
 
+                    final height = MediaQuery.of(context).size.height;
+
                     return Card(
                       margin: EdgeInsets.zero,
                       child: Column(
@@ -67,9 +69,8 @@ class FoodPage extends StatelessWidget {
                               Expanded(
                                 child: Container(
                                   constraints: BoxConstraints(
-                                    maxHeight:
-                                        MediaQuery.of(context).size.height *
-                                            0.8,
+                                    minHeight: height * 0.2,
+                                    maxHeight: height * 0.8,
                                   ),
                                   child: Image(
                                     image: imagez.url(food.media.first),
